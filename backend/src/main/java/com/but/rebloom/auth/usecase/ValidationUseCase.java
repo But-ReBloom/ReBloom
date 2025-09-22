@@ -1,5 +1,6 @@
 package com.but.rebloom.auth.usecase;
 
+import com.but.rebloom.auth.dto.request.LoginRequest;
 import com.but.rebloom.auth.dto.request.SignupRequest;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.AlreadyUsingIdException;
@@ -11,6 +12,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ValidationUseCase {
     private final UserRepository userRepository;
+
+    public void checkNull(LoginRequest loginRequest) {
+        String userEmail = loginRequest.getUserEmail();
+        String userPassword = loginRequest.getUserPassword();
+
+        if (userEmail.isEmpty() || userPassword.isEmpty()) {
+            throw new IllegalArgumentException("빈 값이 존재");
+        }
+    }
 
     public void checkNull(SignupRequest signupRequest) {
         String userEmail = signupRequest.getUserEmail();
