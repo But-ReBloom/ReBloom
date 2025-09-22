@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d7bae20c-61bd-4648-b2a5-3ff619ac6d14" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/dto/request/LoginRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/jwt/JwtAuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/jwt/JwtFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/jwt/JwtTokenProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/jwt/JwtUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/common/exception/TokenExpiredException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/config/JwtConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/controller/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/usecase/LoginUseCase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/common/handler/GlobalExceptionHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,7 +126,7 @@
       <workItem from="1747868560098" duration="5000" />
       <workItem from="1758543372467" duration="430000" />
       <workItem from="1758543819331" duration="112000" />
-      <workItem from="1758543946191" duration="5410000" />
+      <workItem from="1758543946191" duration="7182000" />
     </task>
     <servers />
   </component>
