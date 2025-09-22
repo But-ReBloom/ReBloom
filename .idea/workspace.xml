@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d7bae20c-61bd-4648-b2a5-3ff619ac6d14" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/domain/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/domain/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +41,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -54,7 +58,11 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
     "Gradle.Build rebloom.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.ReBloomApplication.executor": "Run",
     "git-widget-placeholder": "feature/auth",
@@ -114,7 +122,7 @@
       <workItem from="1747868560098" duration="5000" />
       <workItem from="1758543372467" duration="430000" />
       <workItem from="1758543819331" duration="112000" />
-      <workItem from="1758543946191" duration="2184000" />
+      <workItem from="1758543946191" duration="2936000" />
     </task>
     <servers />
   </component>
