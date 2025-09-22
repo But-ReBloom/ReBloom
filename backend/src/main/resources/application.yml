@@ -1,0 +1,3 @@
+jwt:
+  secret: "dfhlj243oiumiomu0fcg234905f90890e809f8ke3r-=ertv"
+  expiration: 3600
