@@ -11,12 +11,12 @@ public class JwtTokenProvider extends JwtUtil {
         super(secretKey, expiration);
     }
 
-    public String generateToken(String publicId) {
+    public String generateToken(String userEmail) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration);
 
         return Jwts.builder()
-                .setSubject(publicId)
+                .setSubject(userEmail)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS256)
