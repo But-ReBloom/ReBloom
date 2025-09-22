@@ -1,4 +1,4 @@
-package com.but.rebloom.domain;
+package com.but.rebloom.auth.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
