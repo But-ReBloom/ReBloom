@@ -2,6 +2,7 @@ package com.but.rebloom.auth.usecase;
 
 import com.but.rebloom.auth.dto.request.SignupRequest;
 import com.but.rebloom.auth.repository.UserRepository;
+import com.but.rebloom.common.exception.AlreadyUsingIdException;
 import com.but.rebloom.common.exception.IllegalArgumentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,13 @@ public class ValidationUseCase {
     public void checkUserName(String userName) {
         if (userName.length() < 4 || userName.length() > 20) {
             throw new IllegalArgumentException("이름 오류");
+        }
+    }
+
+    public void checkExistAccount(String userEmail, String userId) {
+        if (userRepository.existsByUserEmail(userEmail) ||
+                userRepository.existsByUserId(userId)) {
+            throw new AlreadyUsingIdException("이미 존재함");
         }
     }
 }
