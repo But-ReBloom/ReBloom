@@ -1,6 +1,6 @@
-package com.but.rebloom.repository;
+package com.but.rebloom.auth.repository;
 
-import com.but.rebloom.domain.User;
+import com.but.rebloom.auth.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
