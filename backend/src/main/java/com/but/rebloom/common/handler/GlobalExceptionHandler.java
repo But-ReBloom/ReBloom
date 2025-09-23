@@ -1,21 +1,59 @@
 package com.but.rebloom.common.handler;
 
 import com.but.rebloom.common.exception.AlreadyUsingIdException;
+import com.but.rebloom.common.exception.TokenExpiredException;
+import com.but.rebloom.common.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Map;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AlreadyUsingIdException.class)
-    public ResponseEntity<String> handleAlready(AlreadyUsingIdException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    public ResponseEntity<Object> handleAlready(AlreadyUsingIdException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "success", false,
+                        "error_name", "AlreadyUsingIdException",
+                        "message", e.getMessage()
+                ));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegal(Exception e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+    public ResponseEntity<Object> handleIllegal(IllegalArgumentException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "success", false,
+                        "error_name", "IllegalArgumentException",
+                        "message", e.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Object> handleIllegal(UserNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "success", false,
+                        "error_name", "UserNotFoundException",
+                        "message", e.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<Object> handleIllegal(TokenExpiredException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "success", false,
+                        "error_name", "TokenExpiredException",
+                        "message", e.getMessage()
+                ));
     }
 }
