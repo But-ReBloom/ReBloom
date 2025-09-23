@@ -1,11 +1,16 @@
-HELP.md
-.gradle
+### Gradle ###
+.gradle/
 build/
 !backend/gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### STS ###
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+### STS / Eclipse ###
 .apt_generated
 .classpath
 .factorypath
@@ -14,54 +19,23 @@ build/
 .springBeans
 .sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-### IntelliJ IDEA ###
-backend/.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
 
 ### VS Code ###
 .vscode/
 
-### Resources - Do not upload ###
-**/src/main/resources/**
-**/src/test/resources/**
-
-### Configuration Files - Do not upload ###
-*.yml
-*.yaml
-application*.properties
-bootstrap*.properties
-
-### Additional excludes ###
-# Logs
+### Logs / Temp ###
 *.log
-
-# Database
 *.db
 *.sqlite
-
-# Environment variables
 .env
 
-# OS generated files
+### OS ###
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
 ehthumbs.db
 Thumbs.db
+
+### Spring Boot Config (do not upload sensitive configs) ###
+src/main/resources/application.yml
+src/main/resources/application-*.yml
+src/main/resources/bootstrap.yml
+src/main/resources/bootstrap-*.yml
