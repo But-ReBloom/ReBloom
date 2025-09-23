@@ -35,3 +35,33 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Resources - Do not upload ###
+**/src/main/resources/**
+**/src/test/resources/**
+
+### Configuration Files - Do not upload ###
+*.yml
+*.yaml
+application*.properties
+bootstrap*.properties
+
+### Additional excludes ###
+# Logs
+*.log
+
+# Database
+*.db
+*.sqlite
+
+# Environment variables
+.env
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
