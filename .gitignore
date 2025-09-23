@@ -35,7 +35,5 @@ ehthumbs.db
 Thumbs.db
 
 ### Spring Boot Config (do not upload sensitive configs) ###
-backend/src/main/resources/application.yml
-backend/src/main/resources/application-*.yml
-backend/src/main/resources/bootstrap.yml
-backend/src/main/resources/bootstrap-*.yml
+
+**/src/main/resources/application.yml
