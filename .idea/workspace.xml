@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d7bae20c-61bd-4648-b2a5-3ff619ac6d14" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/common/handler/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/common/handler/GlobalExceptionHandler.java" afterDir="false" />
-    </list>
+    <list default="true" id="d7bae20c-61bd-4648-b2a5-3ff619ac6d14" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -124,7 +122,7 @@
       <workItem from="1747868560098" duration="5000" />
       <workItem from="1758543372467" duration="430000" />
       <workItem from="1758543819331" duration="112000" />
-      <workItem from="1758543946191" duration="15383000" />
+      <workItem from="1758543946191" duration="15715000" />
     </task>
     <servers />
   </component>
