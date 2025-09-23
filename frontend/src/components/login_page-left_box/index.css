@@ -1,0 +1,39 @@
+*{
+    background: none;
+}
+
+.logo{
+    margin-top: 144px;
+    width: 400px;
+}
+.left_box{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.text-box{
+    margin-top: 120px;
+}
+
+p{
+    margin: 0;
+    color: white;
+}
+
+.find-your-taste{
+    font-family: none;
+    font-size: 50px;
+    font-weight: bolder;
+}
+
+.Use-Re-Bloom-to-find-your-taste{
+    font-family: none;
+    font-size: 20px;
+}
+
+.and-you-will-blooming-again{
+    font-family: none;
+    font-size: 20px;
+}

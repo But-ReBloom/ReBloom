@@ -10,14 +10,15 @@ function Body() {
                     <p id='intro-big'>Taste Management Platform</p>
                     <p id='intro-small'><b>Find your taste, and do related activities</b></p>
                 </div>
-                
-                <Link to="/login"><button id='go-findTaste-button'>Taste Activity</button></Link>
-                <Link to="/login" id='go-findTaste_Hobbytest'>
-                    <div id="intro-buttons">
-                        <p>Discover your taste</p>
-                        <img src={arrow} alt="" />
-                    </div>
-                </Link>
+                <div className="body-buttons">
+                    <Link to="/login"><button id='go-findTaste-button'>Taste Activity</button></Link>
+                    <Link to="/login" id='go-findTaste_Hobbytest'>
+                        <div id="intro-buttons">
+                            <p>Discover your taste</p>
+                            <img src={arrow} alt="" />
+                        </div>
+                    </Link>
+                </div>
             </div>
         </>
     );
