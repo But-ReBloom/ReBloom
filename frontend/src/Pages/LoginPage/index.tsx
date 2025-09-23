@@ -1,7 +1,13 @@
+import Left_box from "../../components/login_page-left_box";
+import Right_box from "../../components/login_page-right_box";
+
 function LoginPage() {
 return (
     <>
-        <h1>Login Page</h1>
+    <div className="login_box">
+        <Left_box />
+        <Right_box />
+    </div>
     </>
 );
 }
