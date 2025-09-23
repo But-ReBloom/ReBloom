@@ -5,12 +5,10 @@
     font-display: swap;
 }
 .header-container{
-    background-color: #9eceff;
-    padding: 8px 20px;
+    padding: 16px 36px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #e0e0e0;
     width: 100%;
     height: 80px;
     position: fixed;
@@ -45,13 +43,14 @@
     bottom: -4px; /* 글자 밑 여백 */
     width: 0;     /* 처음에는 0 */
     height: 2px;  /* 밑줄 두께 */
-    background-color: #005eff;
+    background-color: #3E55BF;
     transition: width 0.3s ease;
 }
 
 .header-menu ul li a:hover {
+    width: 100%;
     font-size: 24px;
-    color: #005eff;
+    color: #3E55BF;
     transform: scale(1.5);
 }
 
@@ -67,22 +66,13 @@
 }
 
 .login-button{
-    background-color: white;
-    color: #50b9ff;
-    border: none;
+    background: linear-gradient(90deg, #41a6ff, #3E55BF);
+    color: #ffffff;
     padding: 8px 16px;
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease;
-}
-.about-button{
-    background-color: white;
-    color: #50b9ff;
-    border: none;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
+    border: 1px solid #dedede;
 }
 
 #login-box_button{
@@ -91,8 +81,8 @@
 }
 
 #login-box_button:hover{
-    color: white;
-    background-color: #30acff;
+    background: white;
+    color: #50b9ff;
     transform: scale(1.1);
 }
 
@@ -104,4 +94,10 @@
 .logo-svg{
     width: 160px;
     margin: 0;
+}
+
+#header-right{
+    display: flex;
+    align-items: center;
+    gap: 476px;
 }

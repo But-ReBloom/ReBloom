@@ -5,12 +5,12 @@ import LoginPage from "./Pages/LoginPage";
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <App/>
+        element: <App/>,
     },
-    {
-        path: "/Login",
-        element: <LoginPage/>
-    }
+    { 
+        path: "/login", 
+        element: <LoginPage/>,
+    },
 ])
 
 export default router;
