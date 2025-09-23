@@ -15,9 +15,9 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AlreadyUsingIdException.class)
-    public ResponseEntity<Object> handleAlready(AlreadyUsingIdException e) {
+    public ResponseEntity<Object> handleAlreadyUsing(AlreadyUsingIdException e) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.CONFLICT)
                 .body(Map.of(
                         "success", false,
                         "error_name", "AlreadyUsingIdException",
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Object> handleIllegal(IllegalArgumentException e) {
+    public ResponseEntity<Object> handleIllegalArgs(IllegalArgumentException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of(
@@ -37,9 +37,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> handleIllegal(UserNotFoundException e) {
+    public ResponseEntity<Object> handleNotFound(UserNotFoundException e) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.NOT_FOUND)
                 .body(Map.of(
                         "success", false,
                         "error_name", "UserNotFoundException",
@@ -48,9 +48,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(TokenExpiredException.class)
-    public ResponseEntity<Object> handleIllegal(TokenExpiredException e) {
+    public ResponseEntity<Object> handleTokenExpired(TokenExpiredException e) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of(
                         "success", false,
                         "error_name", "TokenExpiredException",
@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(WrongVerifiedCodeException.class)
-    public ResponseEntity<Object> handleIllegal(WrongVerifiedCodeException e) {
+    public ResponseEntity<Object> handleWrongCode(WrongVerifiedCodeException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of(
