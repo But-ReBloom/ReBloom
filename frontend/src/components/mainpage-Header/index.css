@@ -1,0 +1,107 @@
+*{
+    font-family: 'PyeojinGothic';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2504-1@1.0/PyeojinGothic-Bold.woff2') format('woff2');
+    font-weight: 600;
+    font-display: swap;
+}
+.header-container{
+    background-color: #9eceff;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e0e0e0;
+    width: 100%;
+    height: 80px;
+    position: fixed;
+    opacity: 1;
+}
+.header-container .scrolled{
+    opacity: 0.5;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header-menu ul{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 40px;
+    list-style: none;
+}
+
+.header-menu ul li a {
+    text-decoration: none;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.header-menu ul li a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px; /* 글자 밑 여백 */
+    width: 0;     /* 처음에는 0 */
+    height: 2px;  /* 밑줄 두께 */
+    background-color: #005eff;
+    transition: width 0.3s ease;
+}
+
+.header-menu ul li a:hover {
+    font-size: 24px;
+    color: #005eff;
+    transform: scale(1.5);
+}
+
+.header-menu ul li a:hover::after {
+    width: 100%; /* hover 시 왼쪽→오른쪽으로 슈욱 */
+}
+
+
+.login-box{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.login-button{
+    background-color: white;
+    color: #50b9ff;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+.about-button{
+    background-color: white;
+    color: #50b9ff;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+#login-box_button{
+    border-radius: 999px;
+    transition: all 0.3s ease;
+}
+
+#login-box_button:hover{
+    color: white;
+    background-color: #30acff;
+    transform: scale(1.1);
+}
+
+#login-box_button a{
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-svg{
+    width: 160px;
+    margin: 0;
+}
