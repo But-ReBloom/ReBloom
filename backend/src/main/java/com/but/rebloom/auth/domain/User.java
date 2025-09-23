@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 @Table(name = "users")
 public class User {
-
+    // 테이블 속성 연결
     @Id
     @Column(name = "email", unique = true, nullable = false)
     private String userEmail;
@@ -27,14 +27,14 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    @Builder.Default
+    @Builder.Default    // 기본값 설정
     private Role userRole = Role.USER;
 
     @Column(name = "tier_point")
-    @Builder.Default
+    @Builder.Default    // 기본값 설정
     private Integer userTierPoint = 0;
 
     @Column(name = "point")
-    @Builder.Default
+    @Builder.Default    // 기본값 설정
     private Integer userPoint = 0;
 }

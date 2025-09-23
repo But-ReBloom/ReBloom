@@ -1,6 +1,6 @@
 package com.but.rebloom.common.handler;
 
-import com.but.rebloom.common.exception.AlreadyUsingIdException;
+import com.but.rebloom.common.exception.AlreadyUsingException;
 import com.but.rebloom.common.exception.TokenExpiredException;
 import com.but.rebloom.common.exception.UserNotFoundException;
 import com.but.rebloom.common.exception.WrongVerifiedCodeException;
@@ -14,10 +14,10 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AlreadyUsingIdException.class)
-    public ResponseEntity<Object> handleAlreadyUsing(AlreadyUsingIdException e) {
+    @ExceptionHandler(AlreadyUsingException.class)
+    public ResponseEntity<Object> handleAlreadyUsing(AlreadyUsingException e) {
         return ResponseEntity
-                .status(HttpStatus.CONFLICT)
+                .status(HttpStatus.CONFLICT)    // 409
                 .body(Map.of(
                         "success", false,
                         "error_name", "AlreadyUsingIdException",
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgs(IllegalArgumentException e) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.BAD_REQUEST) // 400
                 .body(Map.of(
                         "success", false,
                         "error_name", "IllegalArgumentException",
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Object> handleNotFound(UserNotFoundException e) {
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.NOT_FOUND)   // 404
                 .body(Map.of(
                         "success", false,
                         "error_name", "UserNotFoundException",
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TokenExpiredException.class)
     public ResponseEntity<Object> handleTokenExpired(TokenExpiredException e) {
         return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
+                .status(HttpStatus.UNAUTHORIZED)    // 401
                 .body(Map.of(
                         "success", false,
                         "error_name", "TokenExpiredException",
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WrongVerifiedCodeException.class)
     public ResponseEntity<Object> handleWrongCode(WrongVerifiedCodeException e) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.BAD_REQUEST) // 400
                 .body(Map.of(
                         "success", false,
                         "error_name", "WrongVerifiedCodeException",

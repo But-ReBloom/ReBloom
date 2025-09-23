@@ -14,13 +14,10 @@ import lombok.Setter;
 public class SignupRequest {
     @NonNull
     private String userEmail;
-
     @NonNull
     private String userId;
-
     @NonNull
     private String userPassword;
-
     @NonNull
     private String userName;
 }

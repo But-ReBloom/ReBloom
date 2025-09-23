@@ -15,7 +15,9 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class EmailUseCase {
+    // 이메일 전송용
     private JavaMailSender mailSender;
+    // 이메일-인증코드 저장용
     private final Map<String, String> codeMap = new HashMap<>();
 
     // 생성자 DI
@@ -23,10 +25,12 @@ public class EmailUseCase {
         this.mailSender = mailSender;
     }
 
+    // 인증 코드 생성
     private String generateCode() {
         return String.format("%06d", new Random().nextInt(1000000));
     }
 
+    // 인증 코드 전송
     public String sendVerificationEmail(SendVerificationEmailRequest emailRequest) {
         String code = generateCode();
         codeMap.put(emailRequest.getUserEmail(), code);
@@ -40,6 +44,7 @@ public class EmailUseCase {
         return code;
     }
 
+    // 인증 코드 검증
     public void verifyCode(VerifyCodeRequest verifyCodeRequest) {
         if (!codeMap.get(verifyCodeRequest.getEmail()).equals(verifyCodeRequest.getCode())) {
             throw new WrongVerifiedCodeException("잘못된 인증 코드");

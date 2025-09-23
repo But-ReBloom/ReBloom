@@ -4,7 +4,6 @@ import com.but.rebloom.auth.dto.request.LoginRequest;
 import com.but.rebloom.auth.dto.request.SendVerificationEmailRequest;
 import com.but.rebloom.auth.dto.request.SignupRequest;
 import com.but.rebloom.auth.dto.request.VerifyCodeRequest;
-import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.auth.usecase.EmailUseCase;
 import com.but.rebloom.auth.usecase.LoginUseCase;
 import com.but.rebloom.auth.usecase.SignupUseCase;
@@ -21,12 +20,16 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
+    // 이메일 인증 부분에 이용
     private final EmailUseCase emailUseCase;
+    // 회원가입 부분에 이용
     private final SignupUseCase signupUseCase;
+    // 로그인 부분에 이용
     private final LoginUseCase loginUseCase;
 
     @PostMapping("/email/send")
     public ResponseEntity<Object> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
+        // 인증 코드 저장함
         String code = emailUseCase.sendVerificationEmail(sendVerificationEmailRequest);
         return ResponseEntity.ok(Map.of(
                 "success", true,
@@ -37,6 +40,7 @@ public class AuthController {
 
     @PostMapping("/email/verify")
     public ResponseEntity<Object> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
+        // 인증 코드 인증 로직 실행
         emailUseCase.verifyCode(verifyCodeRequest);
         return ResponseEntity.ok(Map.of(
                 "success", true,
@@ -46,6 +50,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody SignupRequest signupRequest) {
+        // 회원가입 로직 실행
         signupUseCase.signup(signupRequest);
         return ResponseEntity.ok(Map.of(
                 "success", true,
@@ -56,6 +61,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
+        // 로그인 로직 실행
         loginUseCase.login(loginRequest);
         return ResponseEntity.ok(Map.of(
                 "success", true,
