@@ -11,6 +11,7 @@ public class JwtTokenProvider extends JwtUtil {
         super(secretKey, expiration);
     }
 
+    // 토큰 생성
     public String generateToken(String userEmail) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration);

@@ -19,6 +19,7 @@ public class JwtConfig {
     private String secret;
     private Long expiration;
 
+    // DI
     @Bean
     public JwtUtil jwtUtil() {
         return new JwtUtil(secret, expiration);
