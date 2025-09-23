@@ -1,3 +1,0 @@
-jwt:
-  secret: "6124877roui4u2pr89038o29584f89tr"
-  expiration: 3600000
