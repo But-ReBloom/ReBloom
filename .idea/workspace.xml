@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d7bae20c-61bd-4648-b2a5-3ff619ac6d14" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/dto/request/SendEmailRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/common/handler/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/common/handler/GlobalExceptionHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,8 +40,8 @@
       <list>
         <option value="Enum" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="Exception" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -125,7 +125,7 @@
       <workItem from="1747868560098" duration="5000" />
       <workItem from="1758543372467" duration="430000" />
       <workItem from="1758543819331" duration="112000" />
-      <workItem from="1758543946191" duration="10944000" />
+      <workItem from="1758543946191" duration="12828000" />
     </task>
     <servers />
   </component>
