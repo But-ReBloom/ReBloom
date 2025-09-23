@@ -1,8 +1,9 @@
 package com.but.rebloom.auth.usecase;
 
 import com.but.rebloom.auth.dto.request.SendVerificationEmailRequest;
+import com.but.rebloom.auth.dto.request.VerifyCodeRequest;
+import com.but.rebloom.common.exception.WrongVerifiedCodeException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -39,11 +40,9 @@ public class EmailUseCase {
         return code;
     }
 
-    public Boolean verifyCode(String email, String inputCode) {
-        if (codeMap.get(email).equals(inputCode)) {
-            return true;
-        } else {
-            return false;
+    public void verifyCode(VerifyCodeRequest verifyCodeRequest) {
+        if (!codeMap.get(verifyCodeRequest.getEmail()).equals(verifyCodeRequest.getCode())) {
+            throw new WrongVerifiedCodeException("잘못된 인증 코드");
         }
     }
 }

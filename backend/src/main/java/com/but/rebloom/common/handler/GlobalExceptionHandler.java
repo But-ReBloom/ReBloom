@@ -3,6 +3,7 @@ package com.but.rebloom.common.handler;
 import com.but.rebloom.common.exception.AlreadyUsingIdException;
 import com.but.rebloom.common.exception.TokenExpiredException;
 import com.but.rebloom.common.exception.UserNotFoundException;
+import com.but.rebloom.common.exception.WrongVerifiedCodeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -53,6 +54,17 @@ public class GlobalExceptionHandler {
                 .body(Map.of(
                         "success", false,
                         "error_name", "TokenExpiredException",
+                        "message", e.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(WrongVerifiedCodeException.class)
+    public ResponseEntity<Object> handleIllegal(WrongVerifiedCodeException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "success", false,
+                        "error_name", "WrongVerifiedCodeException",
                         "message", e.getMessage()
                 ));
     }
