@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SendEmailRequest {
+public class SendVerificationEmailRequest {
     @NonNull
     private String userEmail;
 }
