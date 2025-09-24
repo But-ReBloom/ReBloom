@@ -76,7 +76,7 @@ public class EmailUseCase {
             throw new WrongVerifiedCodeException("만료된 인증 코드");
         }
 
-        // 코드가 일치 확인
+        // 코드 일치 확인
         if (verifyCodeRequest.getCode().equals(userCode.getCode())) {
             throw new WrongVerifiedCodeException("잘못된 인증 코드");
         }
