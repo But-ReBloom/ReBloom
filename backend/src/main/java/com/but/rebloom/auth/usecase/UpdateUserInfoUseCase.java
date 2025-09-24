@@ -2,6 +2,7 @@ package com.but.rebloom.auth.usecase;
 
 import com.but.rebloom.auth.dto.request.SendVerificationEmailRequest;
 import com.but.rebloom.auth.dto.request.UpdateIdRequest;
+import com.but.rebloom.auth.dto.request.UpdatePwRequest;
 import com.but.rebloom.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,8 +15,6 @@ public class UpdateUserInfoUseCase {
     private final UserRepository userRepository;
     // 비밀번호 암호화
     private final PasswordEncoder passwordEncoder;
-    // 이메일 인증
-    private final EmailUseCase emailUseCase;
     // 예외 분리
     private final ValidationUseCase validationUseCase;
 
@@ -34,5 +33,19 @@ public class UpdateUserInfoUseCase {
         userRepository.updateUserId(userEmail, userId);
 
         return userId;
+    }
+
+    public void updateUserPassword(UpdatePwRequest updatePwRequest) {
+        String userPassword = updatePwRequest.getUserPassword();
+        String userEmail = updatePwRequest.getUserEmail();
+
+        validationUseCase.checkNull(userEmail);
+        validationUseCase.checkUserEmail(userEmail);
+
+        validationUseCase.checkNull(userPassword);
+        validationUseCase.checkUserPassword(userPassword);
+
+        // 디비 수정
+        userRepository.updateUserId(userEmail, passwordEncoder.encode(userPassword));
     }
 }
