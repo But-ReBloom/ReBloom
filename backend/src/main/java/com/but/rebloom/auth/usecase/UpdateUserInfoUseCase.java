@@ -19,10 +19,6 @@ public class UpdateUserInfoUseCase {
     // 예외 분리
     private final ValidationUseCase validationUseCase;
 
-    public void hostEmailVerifyWithUserId(UpdateIdRequest updateIdRequest, SendVerificationEmailRequest sendVerificationEmailRequest) {
-        emailUseCase.sendVerificationEmail(sendVerificationEmailRequest);
-    }
-
     public String updateUserId(UpdateIdRequest updateIdRequest, SendVerificationEmailRequest sendVerificationEmailRequest) {
         String userId = updateIdRequest.getUserId();
 
@@ -30,10 +26,12 @@ public class UpdateUserInfoUseCase {
         validationUseCase.checkUserId(userId);
         validationUseCase.checkUserId(userId);
 
+        // 이메일 인증 진행
         emailUseCase.sendVerificationEmail(sendVerificationEmailRequest);
 
+        // 디비 수정
         userRepository.updateUserId(sendVerificationEmailRequest.getUserEmail(), userId);
 
-        return "";
+        return userId;
     }
 }
