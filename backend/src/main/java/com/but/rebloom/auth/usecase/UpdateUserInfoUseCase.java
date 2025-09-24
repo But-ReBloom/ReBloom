@@ -23,5 +23,6 @@ public class UpdateUserInfoUseCase {
 
         validationUseCase.checkNull(userId);
         validationUseCase.checkUserId(userId);
+        validationUseCase.checkUserId(userId);
     }
 }
