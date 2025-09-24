@@ -1,6 +1,6 @@
-import Left_box from "../../components/login_page-left_box";
-import Right_box from "../../components/login_page-right_box";
-import './index.css';
+import Left_box from "../../components/loginpage-left_box/Lplb";
+import Right_box from "../../components/loginpage-right_box/Lprb";
+import './LP.css';
 function LoginPage() {
 return (
     <>

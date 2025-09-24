@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import './index.css';
+import './mph.css';
 import logo from '../../assets/images/Rebloom-logo.svg';
 import { Link } from "react-router-dom";
 
@@ -30,8 +30,8 @@ function Header() {
                             <li><a href="">마이페이지</a></li>
                         </ul>
                     </div>
-                    <div className="login-box">
-                        <Link to="/login"><button className='login-button' id='login-box_button'>Login</button></Link>
+                    <div className="go-login-button">
+                        <Link to="/login"><button className='login-button-go-lp' id='login-box_button'>Login</button></Link>
                     </div>
                 </div>
             </div>

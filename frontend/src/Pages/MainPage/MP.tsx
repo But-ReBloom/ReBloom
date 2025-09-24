@@ -1,6 +1,6 @@
-import Header from "../../components/mainpage-Header";
-import Body from "../../components/mainpage-Body";
-import './index.css';
+import Header from "../../components/mainpage-Header/mph";
+import Body from "../../components/mainpage-Body/mpb";
+import './MP.css';
 
 function MainPage() {
     return (

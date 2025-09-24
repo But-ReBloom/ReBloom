@@ -1,5 +1,5 @@
 import logo from '../../assets/images/Rebloom-logo.svg';
-import './index.css';
+import './Lplb.css';
 
 function Left_box() {
     return (

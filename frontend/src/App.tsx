@@ -1,4 +1,4 @@
-import MainPage from './Pages/MainPage'
+import MainPage from './Pages/MainPage/MP'
 import './App.css'
 import { Outlet } from "react-router";
 
