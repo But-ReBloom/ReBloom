@@ -71,6 +71,7 @@ public class AuthController {
 
     @PostMapping("/update/id")
     public ResponseEntity<Object> updateUserId(@RequestBody UpdateIdRequest updateIdRequest) {
+        // 아이디 변경 및 반환
         String newUserId = updateUserInfoUseCase.updateUserId(updateIdRequest);
         return ResponseEntity.ok(Map.of(
                 "success", true,
