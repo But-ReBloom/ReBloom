@@ -21,13 +21,17 @@ public class UpdateUserInfoUseCase {
 
     public String updateUserId(UpdateIdRequest updateIdRequest) {
         String userId = updateIdRequest.getUserId();
+        String userEmail = updateIdRequest.getUserEmail();
+
+        validationUseCase.checkNull(userEmail);
+        validationUseCase.checkUserEmail(userEmail);
 
         validationUseCase.checkNull(userId);
         validationUseCase.checkUserId(userId);
-        validationUseCase.checkUserId(userId);
+        validationUseCase.checkExistAccountByUserId(userId);
 
         // 디비 수정
-        userRepository.updateUserId(sendVerificationEmailRequest.getUserEmail(), userId);
+        userRepository.updateUserId(userEmail, userId);
 
         return userId;
     }
