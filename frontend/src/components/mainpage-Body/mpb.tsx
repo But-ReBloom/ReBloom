@@ -1,4 +1,4 @@
-import './index.css';
+import './mpb.css';
 import arrow from '../../assets/images/arrow.svg';
 import { Link } from 'react-router-dom';
 

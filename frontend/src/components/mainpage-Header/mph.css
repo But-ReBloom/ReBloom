@@ -58,14 +58,7 @@
     width: 100%; /* hover 시 왼쪽→오른쪽으로 슈욱 */
 }
 
-
-.login-box{
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.login-button{
+.login-button-go-lp{
     background: linear-gradient(90deg, #41a6ff, #3E55BF);
     color: #ffffff;
     padding: 8px 16px;
