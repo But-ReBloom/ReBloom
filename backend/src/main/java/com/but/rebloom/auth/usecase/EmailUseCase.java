@@ -19,10 +19,13 @@ public class EmailUseCase {
     private JavaMailSender mailSender;
     // 이메일-인증코드 저장용
     private final Map<String, String> codeMap = new HashMap<>();
+    // 예외 호출
+    private ValidationUseCase validationUseCase;
 
     // 생성자 DI
-    public EmailUseCase(JavaMailSender mailSender) {
+    public EmailUseCase(JavaMailSender mailSender, ValidationUseCase validationUseCase) {
         this.mailSender = mailSender;
+        this.validationUseCase = validationUseCase;
     }
 
     // 인증 코드 생성
@@ -32,6 +35,8 @@ public class EmailUseCase {
 
     // 인증 코드 전송
     public String sendVerificationEmail(SendVerificationEmailRequest emailRequest) {
+        validationUseCase.checkUserEmail(emailRequest.getUserEmail());
+
         String code = generateCode();
         codeMap.put(emailRequest.getUserEmail(), code);
         SimpleMailMessage message = new SimpleMailMessage();
