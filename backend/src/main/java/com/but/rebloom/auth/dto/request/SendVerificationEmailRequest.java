@@ -1,6 +1,7 @@
 package com.but.rebloom.auth.dto.request;
 
 import com.but.rebloom.auth.domain.VerificationPurpose;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -8,8 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SendVerificationEmailRequest {
-    @NonNull
+    @NotNull
     private String userEmail;
-    @NonNull
+    @NotNull
     private VerificationPurpose purpose;
 }

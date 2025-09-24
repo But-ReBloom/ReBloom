@@ -1,23 +1,18 @@
 package com.but.rebloom.auth.dto.request;
 
-import com.but.rebloom.auth.domain.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.Builder;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class SignupRequest {
-    @NonNull
+    @NotNull
     private String userEmail;
-    @NonNull
+    @NotNull
     private String userId;
-    @NonNull
+    @NotNull
     private String userPassword;
-    @NonNull
+    @NotNull
     private String userName;
 }

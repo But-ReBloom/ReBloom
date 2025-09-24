@@ -1,14 +1,14 @@
 package com.but.rebloom.auth.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class LoginRequest {
-    @NonNull
+    @NotNull
     private String userEmail;
-    @NonNull
+    @NotNull
     private String userPassword;
 }
