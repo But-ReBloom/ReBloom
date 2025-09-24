@@ -14,6 +14,13 @@ public class ValidationUseCase {
     // 디비 이용
     private final UserRepository userRepository;
 
+    // 널 값 확인 - 한 요소
+    public <T> void checkNull(T element) {
+        if (element == null || element.toString().trim().isEmpty()) {
+            throw new IllegalArgumentException("빈 값이 존재");
+        }
+    }
+
     // 널 값 확인 - 로그인
     public void checkNull(LoginRequest loginRequest) {
         String userEmail = loginRequest.getUserEmail();
