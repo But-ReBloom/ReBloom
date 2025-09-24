@@ -24,6 +24,7 @@ public class UpdateUserInfoUseCase {
 
         validationUseCase.checkNull(userEmail);
         validationUseCase.checkUserEmail(userEmail);
+        validationUseCase.checkExistAccountByUserEmail(userEmail);
 
         validationUseCase.checkNull(userId);
         validationUseCase.checkUserId(userId);
@@ -41,6 +42,7 @@ public class UpdateUserInfoUseCase {
 
         validationUseCase.checkNull(userEmail);
         validationUseCase.checkUserEmail(userEmail);
+        validationUseCase.checkExistAccountByUserEmail(userEmail);
 
         validationUseCase.checkNull(userPassword);
         validationUseCase.checkUserPassword(userPassword);

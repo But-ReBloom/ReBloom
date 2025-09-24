@@ -84,7 +84,7 @@ public class ValidationUseCase {
 
     // 이름 확인
     public void checkUserName(String userName) {
-        if (userName.length() < 4 || userName.length() > 20) {
+        if (userName.length() < 1 || userName.length() > 20) {
             throw new IllegalArgumentException("이름 오류");
         }
     }
