@@ -1,12 +1,10 @@
 package com.but.rebloom.auth.controller;
 
-import com.but.rebloom.auth.dto.request.LoginRequest;
-import com.but.rebloom.auth.dto.request.SendVerificationEmailRequest;
-import com.but.rebloom.auth.dto.request.SignupRequest;
-import com.but.rebloom.auth.dto.request.VerifyCodeRequest;
+import com.but.rebloom.auth.dto.request.*;
 import com.but.rebloom.auth.usecase.EmailUseCase;
 import com.but.rebloom.auth.usecase.LoginUseCase;
 import com.but.rebloom.auth.usecase.SignupUseCase;
+import com.but.rebloom.auth.usecase.UpdateUserInfoUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +24,8 @@ public class AuthController {
     private final SignupUseCase signupUseCase;
     // 로그인 부분에 이용
     private final LoginUseCase loginUseCase;
+    // 정보 수정 부분에 이용
+    private final UpdateUserInfoUseCase updateUserInfoUseCase;
 
     @PostMapping("/email/send")
     public ResponseEntity<Object> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
@@ -66,6 +66,16 @@ public class AuthController {
         return ResponseEntity.ok(Map.of(
                 "success", true,
                 "userEmail", loginRequest.getUserEmail()
+        ));
+    }
+
+    @PostMapping("/update/id")
+    public ResponseEntity<Object> updateUserId(@RequestBody UpdateIdRequest updateIdRequest) {
+        String newUserId = updateUserInfoUseCase.updateUserId(updateIdRequest);
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "userEmail", updateIdRequest.getUserEmail(),
+                "userNewId", newUserId
         ));
     }
 }
