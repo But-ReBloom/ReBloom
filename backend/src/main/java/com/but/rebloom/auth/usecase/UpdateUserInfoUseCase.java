@@ -19,7 +19,9 @@ public class UpdateUserInfoUseCase {
     private final ValidationUseCase validationUseCase;
 
     public String UpdateUserId(UpdateIdRequest updateIdRequest) {
-//        validationUseCase.
-        return "";
+        String userId = updateIdRequest.getUserId();
+
+        validationUseCase.checkNull(userId);
+        validationUseCase.checkUserId(userId);
     }
 }

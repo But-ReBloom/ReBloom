@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d7bae20c-61bd-4648-b2a5-3ff619ac6d14" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/dto/request/UpdateIdRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/usecase/UpdateUserInfoUseCase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/usecase/UpdateUserInfoUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/usecase/UpdateUserInfoUseCase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/usecase/ValidationUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/usecase/ValidationUseCase.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -140,7 +139,7 @@
       <workItem from="1758543946191" duration="15715000" />
       <workItem from="1758625105532" duration="2647000" />
       <workItem from="1758629964382" duration="343000" />
-      <workItem from="1758630314613" duration="9861000" />
+      <workItem from="1758630314613" duration="10649000" />
     </task>
     <servers />
   </component>

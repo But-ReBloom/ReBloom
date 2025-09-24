@@ -96,4 +96,16 @@ public class ValidationUseCase {
             throw new AlreadyUsingException("이미 존재함");
         }
     }
+
+    public void checkExistAccountByUserEmail(String userEmail) {
+        if (userRepository.existsByUserEmail(userEmail)) {
+            throw new AlreadyUsingException("이미 존재함");
+        }
+    }
+
+    public void checkExistAccountByUserId(String userId) {
+        if (userRepository.existsByUserId(userId)) {
+            throw new AlreadyUsingException("이미 존재함");
+        }
+    }
 }
