@@ -1,13 +1,14 @@
-import Header from "../../components/mainpage-Header/mph";
-import Body from "../../components/mainpage-Body/mpb";
-import './MP.css';
+import Header from "../../components/mainpage-Header/mph.tsx";
+import { Body } from "../../components/mainpage-Body/mpb.tsx";
+
+import * as S from "./style.ts";
 
 function MainPage() {
     return (
-        <div className="mainpage-container">
+        <S.MainPage_Container>
             <Header />
             <Body />
-        </div>
+        </S.MainPage_Container>
     );
 }
 
