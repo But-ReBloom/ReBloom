@@ -79,4 +79,14 @@ public class AuthController {
                 "userNewId", newUserId
         ));
     }
+
+    @PostMapping("/update/pw")
+    public ResponseEntity<Object> updateUserId(@RequestBody UpdatePwRequest updatePwRequest) {
+        // 비밀번호 변경
+        updateUserInfoUseCase.updateUserPassword(updatePwRequest);
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "userEmail", updatePwRequest.getUserEmail()
+        ));
+    }
 }
