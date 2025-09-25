@@ -20,17 +20,11 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class EmailUseCase {
     // 이메일 전송용
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
     // 이메일-인증코드 저장용
     private final Map<String, Map<VerificationPurpose, CodeInfo>> codeMap = new HashMap<>();
     // 예외 호출
-    private ValidationUseCase validationUseCase;
-
-    // 생성자 DI
-    public EmailUseCase(JavaMailSender mailSender, ValidationUseCase validationUseCase) {
-        this.mailSender = mailSender;
-        this.validationUseCase = validationUseCase;
-    }
+    private final ValidationUseCase validationUseCase;
 
     // 인증 코드 생성
     private String generateCode() {
@@ -77,7 +71,9 @@ public class EmailUseCase {
         }
 
         // 코드 일치 확인
-        if (verifyCodeRequest.getCode().equals(userCode.getCode())) {
+        if (verifyCodeRequest.getCode() == userCode.getCode()) {
+            System.out.println(verifyCodeRequest.getCode());
+            System.out.println(userCode.getCode());
             throw new WrongVerifiedCodeException("잘못된 인증 코드");
         }
     }
