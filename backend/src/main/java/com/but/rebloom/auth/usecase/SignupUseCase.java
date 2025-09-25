@@ -18,7 +18,7 @@ public class SignupUseCase {
     private final ValidationUseCase validationUseCase;
 
     // 회원가입
-    public void signup(SignupRequest signupRequest) {
+    public User signup(SignupRequest signupRequest) {
         // 기본 예외 처리
         validationUseCase.checkNull(signupRequest);
 
@@ -43,6 +43,6 @@ public class SignupUseCase {
                 .build();
 
         // 유저 등록
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 }
