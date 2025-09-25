@@ -40,7 +40,17 @@ export const InputBox = styled.div`
   width: 100%;
 `;
 
-export const InputLabel = styled.p`
+export const Input_title = styled.button`
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    background: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+`;
+
+export const InputLabel = styled.label`
   color: black;
   margin: 8px 4px;
 `;
@@ -66,8 +76,8 @@ export const ButtonBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: end;
-  gap: 60px;
-  margin-top: 4px;
+  gap: 40px;
+  margin-top: 0;
 `;
 
 export const LoginButton = styled.button`
@@ -96,12 +106,10 @@ export const LoginButton = styled.button`
 export const ForgotPassword = styled(Link)`
   font-size: 14px;
   cursor: pointer;
-  color: #000;
   text-decoration: none;
 
   &:hover {
     text-decoration: underline;
-    color:rgb(79, 38, 202);
   }
 `;
 
@@ -111,6 +119,7 @@ export const OAuthFamily = styled.div`
   gap: 20px;
   border: none;
   margin-top: 20px;
+  margin-bottom: 40px;
 `;
 
 export const OAuthButton = styled.button`

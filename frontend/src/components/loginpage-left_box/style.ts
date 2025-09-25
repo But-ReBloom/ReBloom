@@ -6,6 +6,7 @@ export const LeftBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-right: 200px;
 `;
 
 export const Logo = styled.img`
