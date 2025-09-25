@@ -1,6 +1,8 @@
 package com.but.rebloom.auth.controller;
 
+import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.*;
+import com.but.rebloom.auth.dto.response.SignupResponse;
 import com.but.rebloom.auth.usecase.EmailUseCase;
 import com.but.rebloom.auth.usecase.LoginUseCase;
 import com.but.rebloom.auth.usecase.SignupUseCase;
@@ -51,12 +53,8 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody SignupRequest signupRequest) {
         // 회원가입 로직 실행
-        signupUseCase.signup(signupRequest);
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "userId", signupRequest.getUserId(),
-                "userEmail", signupRequest.getUserEmail()
-        ));
+        User user = signupUseCase.signup(signupRequest);
+        return ResponseEntity.ok(SignupResponse.from(user));
     }
 
     @PostMapping("/login")
