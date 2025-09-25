@@ -1,8 +1,11 @@
 import * as S from "./style.ts";
 import Dodum from "../../assets/images/dodamdodam.svg";
 import Google from "../../assets/images/Google.svg";
+import { useNavigate } from "react-router-dom";
 
 function Right_box() {
+  const navigate = useNavigate();
+
   return (
     <S.LoginContainer>
       <S.LoginTextBox>
@@ -13,7 +16,7 @@ function Right_box() {
       <S.InputBox>
         <div>
           <S.InputLabel>Email</S.InputLabel>
-          <S.Input type="text" placeholder="Enter your Email" />
+          <S.Input type="text" placeholder="Enter your Email" autoFocus />
         </div>
         <div>
           <S.InputLabel>Password</S.InputLabel>
@@ -23,17 +26,18 @@ function Right_box() {
 
       <S.ButtonBox>
         <S.ForgotPassword to="/">Forgot password?</S.ForgotPassword>
-        <S.LoginButton>Log In</S.LoginButton>
+        <S.LoginButton onClick={() => { navigate('/'); }}>Log In</S.LoginButton>
       </S.ButtonBox>
 
       <S.OAuthFamily>
         <S.OAuthButton>
-          <img src={Dodum} alt="Dodum" />
+        <img src={Google} alt="Google" />
         </S.OAuthButton>
         <S.OAuthButton>
-          <img src={Google} alt="Google" />
+        <img src={Dodum} alt="Dodum" />
         </S.OAuthButton>
       </S.OAuthFamily>
+      <S.SignUpTag onClick={() => { navigate('/signup'); }}>Haven't you signed up yet?</S.SignUpTag>
     </S.LoginContainer>
   );
 }

@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
-import LoginPage from "./Pages/LoginPage/LP";
+import LoginPage from "./Pages/loginpage/LP.tsx";
+import SignUpPage from "./Pages/signuppage/SUP.tsx";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
         <span>찾을 수 없습니다</span>
       </>
     ),
+  },
+  {
+    path: "/signup",
+    element: <SignUpPage />,
   },
 ]);
 
