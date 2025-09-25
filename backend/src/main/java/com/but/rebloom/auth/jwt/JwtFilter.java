@@ -24,11 +24,13 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
 
+
         // 필터 지정
         if (path.equals("/favicon.ico") ||
                 path.startsWith("/.well-known/") ||
                 path.equals("/") ||
                 path.startsWith("/auth/") ||
+                path.startsWith("/email/") ||
                 path.startsWith("/swagger-ui/") ||
                 path.startsWith("/v3/api-docs/") ||
                 path.startsWith("/api-docs")) {
