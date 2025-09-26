@@ -37,6 +37,8 @@ Thumbs.db
 ### Resources (무조건 무시) ###
 **/src/main/resources/
 **/src/test/resources/
+**/src/main/java/com/but/rebloom/auth/usecase/GoogleOAuthUseCase.java
+**/src/main/java/com/but/rebloom/auth/usecase/EmailUseCase.java
 
 ### Spring Boot Config (민감 설정) ###
 application*.yml
