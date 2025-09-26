@@ -22,7 +22,7 @@ public class UpdateUserInfoUseCase {
     // 예외 분리
     private final ValidationUseCase validationUseCase;
 
-    public String updateUserId(UpdateIdRequest updateIdRequest) {
+    public User updateUserId(UpdateIdRequest updateIdRequest) {
         String userId = updateIdRequest.getUserId();
         String userEmail = updateIdRequest.getUserEmail();
 
@@ -40,7 +40,7 @@ public class UpdateUserInfoUseCase {
         // 디비 수정
         userRepository.updateUserId(userEmail, userId);
 
-        return userId;
+        return user;
     }
 
     public void updateUserPassword(UpdatePwRequest updatePwRequest) {
