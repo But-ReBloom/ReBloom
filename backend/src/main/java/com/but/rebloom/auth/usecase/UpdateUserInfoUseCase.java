@@ -1,12 +1,16 @@
 package com.but.rebloom.auth.usecase;
 
+import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.SendVerificationEmailRequest;
 import com.but.rebloom.auth.dto.request.UpdateIdRequest;
 import com.but.rebloom.auth.dto.request.UpdatePwRequest;
 import com.but.rebloom.auth.repository.UserRepository;
+import com.but.rebloom.common.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +28,10 @@ public class UpdateUserInfoUseCase {
 
         validationUseCase.checkNull(userEmail);
         validationUseCase.checkUserEmail(userEmail);
-        validationUseCase.checkExistAccountByUserEmail(userEmail);
+
+        Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
+        User user = optionalUser.orElseThrow(() ->
+                new UserNotFoundException("이메일이 조회되지 않음"));
 
         validationUseCase.checkNull(userId);
         validationUseCase.checkUserId(userId);
@@ -42,7 +49,10 @@ public class UpdateUserInfoUseCase {
 
         validationUseCase.checkNull(userEmail);
         validationUseCase.checkUserEmail(userEmail);
-        validationUseCase.checkExistAccountByUserEmail(userEmail);
+
+        Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
+        User user = optionalUser.orElseThrow(() ->
+                new UserNotFoundException("이메일이 조회되지 않음"));
 
         validationUseCase.checkNull(userPassword);
         validationUseCase.checkUserPassword(userPassword);
