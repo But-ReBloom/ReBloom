@@ -2,6 +2,8 @@ package com.but.rebloom.auth.controller;
 
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.*;
+import com.but.rebloom.auth.dto.response.LoginResponse;
+import com.but.rebloom.auth.dto.response.SendVerificationEmailResponse;
 import com.but.rebloom.auth.dto.response.SignupResponse;
 import com.but.rebloom.auth.usecase.EmailUseCase;
 import com.but.rebloom.auth.usecase.LoginUseCase;
@@ -32,12 +34,8 @@ public class AuthController {
     @PostMapping("/email/send")
     public ResponseEntity<Object> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
         // 인증 코드 저장함
-        String code = emailUseCase.sendVerificationEmail(sendVerificationEmailRequest);
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "userEmail", sendVerificationEmailRequest.getUserEmail(),
-                "code", code
-        ));
+        Map<User, String> response = emailUseCase.sendVerificationEmail(sendVerificationEmailRequest);
+        return ResponseEntity.ok(SendVerificationEmailResponse.from(response));
     }
 
     @PostMapping("/email/verify")
@@ -60,11 +58,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
         // 로그인 로직 실행
-        loginUseCase.login(loginRequest);
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "userEmail", loginRequest.getUserEmail()
-        ));
+        Map<User, Object> loginResponse = loginUseCase.login(loginRequest);
+        return ResponseEntity.ok(LoginResponse.from(loginResponse));
     }
 
     @PostMapping("/update/id")

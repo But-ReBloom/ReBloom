@@ -6,9 +6,11 @@ import com.but.rebloom.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.mapping.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -24,7 +26,7 @@ public class LoginUseCase {
     private final JwtTokenProvider jwtTokenProvider;
 
     // 로그인, 토큰 반환
-    public String login(LoginRequest loginRequest) {
+    public Map<User, Object> login(LoginRequest loginRequest) {
         // 기본 예외 확인
         validationUseCase.checkNull(loginRequest);
 
@@ -48,6 +50,6 @@ public class LoginUseCase {
         }
 
         // 토큰 생성 및 반환
-        return jwtTokenProvider.generateToken(String.valueOf(user.getUserEmail()));
+        return Map.of(user, jwtTokenProvider.generateToken(String.valueOf(user.getUserEmail())));
     }
 }

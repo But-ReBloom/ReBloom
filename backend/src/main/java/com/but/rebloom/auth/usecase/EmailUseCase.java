@@ -1,8 +1,11 @@
 package com.but.rebloom.auth.usecase;
 
+import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.domain.VerificationPurpose;
 import com.but.rebloom.auth.dto.request.SendVerificationEmailRequest;
 import com.but.rebloom.auth.dto.request.VerifyCodeRequest;
+import com.but.rebloom.auth.repository.UserRepository;
+import com.but.rebloom.common.exception.UserNotFoundException;
 import com.but.rebloom.common.exception.WrongVerifiedCodeException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -25,6 +29,7 @@ public class EmailUseCase {
     private final Map<String, Map<VerificationPurpose, CodeInfo>> codeMap = new HashMap<>();
     // 예외 호출
     private final ValidationUseCase validationUseCase;
+    private final UserRepository userRepository;
 
     // 인증 코드 생성
     private String generateCode() {
@@ -32,7 +37,7 @@ public class EmailUseCase {
     }
 
     // 인증 코드 전송
-    public String sendVerificationEmail(SendVerificationEmailRequest emailRequest) {
+    public Map<User, String> sendVerificationEmail(SendVerificationEmailRequest emailRequest) {
         validationUseCase.checkUserEmail(emailRequest.getUserEmail());
 
         String code = generateCode();
@@ -48,7 +53,15 @@ public class EmailUseCase {
         message.setText("ReBloom 인증코드: " + code);
 
         mailSender.send(message);
-        return code;
+
+        Optional<User> optionalUser  = userRepository.findByUserEmail(emailRequest.getUserEmail());
+        if (optionalUser.isEmpty()) {
+            throw new UserNotFoundException("유저가 조회되지 않음");
+        }
+
+        User user = optionalUser.get();
+
+        return Map.of(user, code);
     }
 
     // 인증 코드 검증
