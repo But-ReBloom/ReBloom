@@ -70,6 +70,26 @@ export const ButtonBox = styled.div`
   margin-top: 4px;
 `;
 
+export const Forgots = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+export const Forgot_a = styled(Link)`
+  margin: 0px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #000;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    color:rgb(79, 38, 202);
+  }
+`; 
+
 export const LoginButton = styled.button`
   width: 60vh;
   height: 50px;
@@ -93,24 +113,12 @@ export const LoginButton = styled.button`
   }
 `;
 
-export const ForgotPassword = styled(Link)`
-  font-size: 14px;
-  cursor: pointer;
-  color: #000;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-    color:rgb(79, 38, 202);
-  }
-`;
-
 export const OAuthFamily = styled.div`
   display: flex;
   flex-direction: row;
   gap: 20px;
   border: none;
-  margin-top: 20px;
+  margin-top: 40px;
 `;
 
 export const OAuthButton = styled.button`
@@ -136,7 +144,7 @@ export const OAuthButton = styled.button`
   }
 `;
 
-export const SignUpTag = styled.p`
+export const SignUpTag = styled.a`
   cursor: pointer;
   margin-top: 20px;
   font-size: 14px;
