@@ -1,5 +1,6 @@
 package com.but.rebloom.auth.usecase;
 
+import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.SignupRequest;
 import com.but.rebloom.auth.repository.UserRepository;
@@ -40,6 +41,7 @@ public class SignupUseCase {
                 .userId(userId)
                 .userPassword(passwordEncoder.encode(userPassword))
                 .userName(userName)
+                .provider(Provider.SELF)
                 .build();
 
         // 유저 등록
