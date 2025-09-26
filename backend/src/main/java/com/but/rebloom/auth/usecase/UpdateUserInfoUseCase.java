@@ -43,7 +43,7 @@ public class UpdateUserInfoUseCase {
         return user;
     }
 
-    public void updateUserPassword(UpdatePwRequest updatePwRequest) {
+    public User updateUserPassword(UpdatePwRequest updatePwRequest) {
         String userPassword = updatePwRequest.getUserPassword();
         String userEmail = updatePwRequest.getUserEmail();
 
@@ -59,5 +59,7 @@ public class UpdateUserInfoUseCase {
 
         // 디비 수정
         userRepository.updateUserId(userEmail, passwordEncoder.encode(userPassword));
+
+        return user;
     }
 }
