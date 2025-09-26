@@ -65,7 +65,7 @@ public class EmailUseCase {
     }
 
     // 인증 코드 검증
-    public void verifyCode(VerifyCodeRequest verifyCodeRequest) {
+    public Map<User, String> verifyCode(VerifyCodeRequest verifyCodeRequest) {
         // 보낸 인증 코드 저장
         CodeInfo userCode = codeMap.get(verifyCodeRequest.getUserEmail()).get(verifyCodeRequest.getPurpose());
 
@@ -89,6 +89,15 @@ public class EmailUseCase {
             System.out.println(userCode.getCode());
             throw new WrongVerifiedCodeException("잘못된 인증 코드");
         }
+
+        Optional<User> optionalUser = userRepository.findByUserEmail(verifyCodeRequest.getUserEmail());
+        if (optionalUser.isEmpty()) {
+            throw new UserNotFoundException("유저가 조회 되지 않음");
+        }
+
+        User user = optionalUser.get();
+
+        return Map.of(user, verifyCodeRequest.getCode());
     }
 
     // 만료시간 저장
