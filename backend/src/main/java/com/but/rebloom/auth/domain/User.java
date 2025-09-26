@@ -37,4 +37,7 @@ public class User {
     @Column(name = "point")
     @Builder.Default    // 기본값 설정
     private Integer userPoint = 0;
+
+    @Column(name = "provider")
+    private Provider provider;
 }
