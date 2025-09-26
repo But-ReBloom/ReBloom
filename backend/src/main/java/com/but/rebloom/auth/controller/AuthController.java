@@ -5,6 +5,7 @@ import com.but.rebloom.auth.dto.request.*;
 import com.but.rebloom.auth.dto.response.LoginResponse;
 import com.but.rebloom.auth.dto.response.SendVerificationEmailResponse;
 import com.but.rebloom.auth.dto.response.SignupResponse;
+import com.but.rebloom.auth.dto.response.VerifyCodeResponse;
 import com.but.rebloom.auth.usecase.EmailUseCase;
 import com.but.rebloom.auth.usecase.LoginUseCase;
 import com.but.rebloom.auth.usecase.SignupUseCase;
@@ -41,11 +42,8 @@ public class AuthController {
     @PostMapping("/email/verify")
     public ResponseEntity<Object> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
         // 인증 코드 인증 로직 실행
-        emailUseCase.verifyCode(verifyCodeRequest);
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "code", verifyCodeRequest.getCode()
-        ));
+        Map<User, String> response = emailUseCase.verifyCode(verifyCodeRequest);
+        return ResponseEntity.ok(VerifyCodeResponse.from(response));
     }
 
     @PostMapping("/signup")
