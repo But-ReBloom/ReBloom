@@ -20,8 +20,6 @@ public class GoogleUserInfoResponse {
     @NotNull
     private String name;
     @NotNull
-    private String picture;
-    @NotNull
     private String accessToken;
     @NotNull
     private Provider provider;
@@ -35,7 +33,6 @@ public class GoogleUserInfoResponse {
                 .id(googleUser.getId())
                 .email(googleUser.getEmail())
                 .name(googleUser.getName())
-                .picture(googleUser.getPicture())
                 .accessToken(googleUser.getAccessToken())
                 .provider(user.getProvider())
                 .build();

@@ -50,7 +50,6 @@ public class GoogleOAuthUseCase {
                 .id(googleUser.getId())
                 .email(googleUser.getEmail())
                 .name(googleUser.getName())
-                .picture(googleUser.getPicture())
                 .accessToken(jwt)
                 .provider(user.getProvider())
                 .build();
