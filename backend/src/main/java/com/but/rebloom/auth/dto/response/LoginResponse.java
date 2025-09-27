@@ -21,17 +21,4 @@ public class LoginResponse {
     private Provider provider;
     @NotNull
     private String token;
-
-    public static LoginResponse from(Map<User, Object> response) {
-        Map.Entry<User, Object> entry = response.entrySet().iterator().next();
-        User user = entry.getKey();
-        String token = String.valueOf(entry.getValue());
-
-        return LoginResponse.builder()
-                .success(true)
-                .userEmail(user.getUserEmail())
-                .provider(user.getProvider())
-                .token(token)
-                .build();
-    }
 }
