@@ -110,7 +110,7 @@ public class GoogleOAuthUseCase {
             JsonNode jsonNode = objectMapper.readTree(body);
             return jsonNode.get("access_token").asText();
         } catch (Exception e) {
-            throw new WrongVerifiedCodeException("Failed to extract access token");
+            throw new WrongVerifiedCodeException("액세스 토큰 오류");
         }
     }
 }
