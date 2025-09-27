@@ -1,5 +1,5 @@
 package com.but.rebloom;
-s
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,5 +9,4 @@ public class ReBloomApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ReBloomApplication.class, args);
 	}
-
 }
