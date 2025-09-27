@@ -84,7 +84,7 @@ public class EmailUseCase {
         }
 
         // 코드 일치 확인
-        if (verifyCodeRequest.getCode() == userCode.getCode()) {
+        if (!verifyCodeRequest.getCode().equals(userCode.getCode())) {
             System.out.println(verifyCodeRequest.getCode());
             System.out.println(userCode.getCode());
             throw new WrongVerifiedCodeException("잘못된 인증 코드");
