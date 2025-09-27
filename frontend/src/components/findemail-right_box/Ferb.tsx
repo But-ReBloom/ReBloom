@@ -1,9 +1,12 @@
 import * as S from "./style.ts";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Ferb() {
+    const navigate = useNavigate();
+
     const users = [
         { id: "testuser", password: "1234", email: "testuser@example.com" },
         { id: "yongjun", password: "abcd", email: "yongjun@example.com" },
@@ -15,21 +18,21 @@ export default function Ferb() {
 
     const handleSubmit = (event?: React.FormEvent) => {
         if (event) event.preventDefault();
-
         
-
         const user = users.find(
             (u) => u.id === userid && u.password === password
         );
 
         if (user) {
-            toast.success(`이메일 찾기 성공! 이메일은: ${user.email}`);
+            toast.success(`환영합니다! ${user.id}님!`);
+  
+            setTimeout(() => {
+                navigate("/login", { replace: true });
+            }, 4500);
+  
         } else  {
             toast.error("아이디 또는 비밀번호가 올바르지 않습니다.");
-        } 
-        // if (!userid || !password) {
-        //     toast.error("공백은 입력하실 수 없습니다.");
-        // }
+        }
     };
 
     return (
@@ -66,7 +69,7 @@ export default function Ferb() {
             Send
             </S.Send>
         </S.LoginContainer>
-        <ToastContainer position="top-center" autoClose={2000} />
+        <ToastContainer position="top-right" autoClose={3000} />
         </>
     );
 }
