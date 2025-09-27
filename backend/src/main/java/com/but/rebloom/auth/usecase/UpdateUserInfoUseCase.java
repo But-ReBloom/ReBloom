@@ -58,7 +58,7 @@ public class UpdateUserInfoUseCase {
         validationUseCase.checkUserPassword(userPassword);
 
         // 디비 수정
-        userRepository.updateUserId(userEmail, passwordEncoder.encode(userPassword));
+        userRepository.updateUserPassword(userEmail, passwordEncoder.encode(userPassword));
 
         return user;
     }
