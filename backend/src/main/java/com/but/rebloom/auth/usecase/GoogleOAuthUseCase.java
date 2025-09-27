@@ -32,7 +32,7 @@ public class GoogleOAuthUseCase {
     private String clientSecret;
 
     // 인증 코드 추출
-    public Map<User, Object> execute(String authorizationCode) {
+    public GoogleUserInfoResponse execute(String authorizationCode) {
         String accessToken = getAccessToken(authorizationCode);
         GoogleUserInfoResponse googleUser = getUserInfo(accessToken);
 
@@ -58,7 +58,13 @@ public class GoogleOAuthUseCase {
         Map<User, Object> response = new HashMap<>();
         response.put(user, completeResponse);
 
-        return response;
+        return GoogleUserInfoResponse.builder()
+                .id(googleUser.getId())
+                .email(googleUser.getEmail())
+                .name(googleUser.getName())
+                .accessToken(googleUser.getAccessToken())
+                .provider(user.getProvider())
+                .build();
     }
 
     // Jwt랑 비슷하게 이해

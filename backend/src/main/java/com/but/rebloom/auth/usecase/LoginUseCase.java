@@ -3,6 +3,7 @@ package com.but.rebloom.auth.usecase;
 import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.LoginRequest;
+import com.but.rebloom.auth.dto.response.LoginResponse;
 import com.but.rebloom.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.IllegalArgumentException;
@@ -28,7 +29,7 @@ public class LoginUseCase {
     private final JwtTokenProvider jwtTokenProvider;
 
     // 로그인, 토큰 반환
-    public Map<User, Object> login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) {
         // 기본 예외 확인
         validationUseCase.checkNull(loginRequest);
 
@@ -56,6 +57,12 @@ public class LoginUseCase {
         }
 
         // 토큰 생성 및 반환
-        return Map.of(user, jwtTokenProvider.generateToken(String.valueOf(user.getUserEmail())));
+//        return Map.of(user, jwtTokenProvider.generateToken(String.valueOf(user.getUserEmail())));
+
+        return LoginResponse.builder()
+                .userEmail(user.getUserEmail())
+                .provider(user.getProvider())
+                .token(jwtTokenProvider.generateToken(String.valueOf(user.getUserEmail())))
+                .build();
     }
 }

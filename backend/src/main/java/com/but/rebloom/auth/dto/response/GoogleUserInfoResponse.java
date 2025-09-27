@@ -23,18 +23,4 @@ public class GoogleUserInfoResponse {
     private String accessToken;
     @NotNull
     private Provider provider;
-
-    public static GoogleUserInfoResponse from(Map<User, Object> response) {
-        Map.Entry<User, Object> entry = response.entrySet().iterator().next();
-        User user = entry.getKey();
-        GoogleUserInfoResponse googleUser = (GoogleUserInfoResponse) entry.getValue();
-
-        return GoogleUserInfoResponse.builder()
-                .id(googleUser.getId())
-                .email(googleUser.getEmail())
-                .name(googleUser.getName())
-                .accessToken(googleUser.getAccessToken())
-                .provider(user.getProvider())
-                .build();
-    }
 }

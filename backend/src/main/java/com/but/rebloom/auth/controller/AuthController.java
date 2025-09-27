@@ -50,16 +50,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Object> googleLogin(@RequestBody LoginRequest loginRequest) {
         // 로그인 로직 실행
-        Map<User, Object> loginResponse = loginUseCase.login(loginRequest);
-        return ResponseEntity.ok(LoginResponse.from(loginResponse));
+        LoginResponse loginResponse = loginUseCase.login(loginRequest);
+        return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/login/google")
     public ResponseEntity<GoogleUserInfoResponse> login(@RequestBody GoogleLoginRequest request) {
-        Map<User, Object> response = googleOAuthUseCase.execute(request.getAuthorizationCode());
-        return ResponseEntity.ok(GoogleUserInfoResponse.from(response));
+        GoogleUserInfoResponse response = googleOAuthUseCase.execute(request.getAuthorizationCode());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/update/id")
