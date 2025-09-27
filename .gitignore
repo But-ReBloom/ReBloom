@@ -34,6 +34,12 @@ bin/
 ehthumbs.db
 Thumbs.db
 
-### Spring Boot Config (do not upload sensitive configs) ###
+### Resources (무조건 무시) ###
+**/src/main/resources/
+**/src/test/resources/
 
-**/src/main/resources/application.yml
+### Spring Boot Config (민감 설정) ###
+application*.yml
+bootstrap*.yml
+application*.properties
+bootstrap*.properties
