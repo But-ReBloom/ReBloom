@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d7bae20c-61bd-4648-b2a5-3ff619ac6d14" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/dto/request/FindIdRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/dto/response/FindIdResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/usecase/FindUserInfoUseCase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/dto/response/GoogleUserInfoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/dto/response/GoogleUserInfoResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/dto/response/LoginResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/dto/response/LoginResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/usecase/GoogleOAuthUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/usecase/GoogleOAuthUseCase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/usecase/LoginUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/auth/usecase/LoginUseCase.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,7 +162,7 @@
       <workItem from="1758625105532" duration="2647000" />
       <workItem from="1758629964382" duration="343000" />
       <workItem from="1758630314613" duration="27691000" />
-      <workItem from="1758789321961" duration="40025000" />
+      <workItem from="1758789321961" duration="42082000" />
     </task>
     <servers />
   </component>

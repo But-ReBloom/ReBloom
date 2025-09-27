@@ -1,0 +1,43 @@
+package com.but.rebloom.auth.usecase;
+
+import com.but.rebloom.auth.domain.User;
+import com.but.rebloom.auth.dto.request.FindIdRequest;
+import com.but.rebloom.auth.repository.UserRepository;
+import com.but.rebloom.common.exception.UserNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class FindUserInfoUseCase {
+    // 디비 접근
+    private final UserRepository userRepository;
+    // 예외 호출
+    private final ValidationUseCase validationUseCase;
+    // 비밀번호 암호화
+    private final PasswordEncoder passwordEncoder;
+
+    // 아이디 찾기
+    public User findUserId(FindIdRequest findIdRequest) {
+        String userEmail = findIdRequest.getUserEmail();
+        String userPassword = findIdRequest.getPassword();
+
+        validationUseCase.checkUserEmail(userEmail);
+        validationUseCase.checkUserPassword(userPassword);
+
+        Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
+        User user = optionalUser.orElseThrow(() ->
+                new UserNotFoundException("이메일이 조회되지 않음"));
+
+        if (!user.getUserPassword().equals(passwordEncoder.encode(userPassword))) {
+            throw new UserNotFoundException("유저가 조회되지 않음");
+        }
+
+        return user;
+    }
+
+    // 이메일 찾기
+}
