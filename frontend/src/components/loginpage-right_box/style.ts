@@ -139,6 +139,7 @@ export const OAuthButton = styled.button`
 
     &:hover {
       transform: scale(1.1);
+      transform: rotate(360deg);
       box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     }
   }

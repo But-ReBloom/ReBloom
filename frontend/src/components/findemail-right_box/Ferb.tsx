@@ -13,27 +13,24 @@ export default function Ferb() {
         { id: "guest", password: "guest", email: "guest@sample.com" },
     ];
 
-    const [userid, setUserid] = useState("");
+    const [userID, setUserid] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSubmit = (event?: React.FormEvent) => {
         if (event) event.preventDefault();
         
         const user = users.find(
-            (u) => u.id === userid && u.password === password
+            (u) => u.id === userID && u.password === password
         );
 
         if (user) {
-            toast.success(`환영합니다! ${user.id}님!`);
-  
-            setTimeout(() => {
-                navigate("/login", { replace: true });
-            }, 4500);
-  
+            toast.success(`당신의 이메일은 ${user.email} 입니다.`);
+
         } else  {
-            toast.error("아이디 또는 비밀번호가 올바르지 않습니다.");
+            toast.error("이메일 또는 아이디가 올바르지 않습니다.");
         }
     };
+
 
     return (
         <>
@@ -48,7 +45,7 @@ export default function Ferb() {
                 <S.InputLabel>ID</S.InputLabel>
                 <S.Input
                 type="text"
-                value={userid}
+                value={userID}
                 onChange={(e) => setUserid(e.target.value)}
                 placeholder="Enter your ID"
                 autoFocus
@@ -68,6 +65,9 @@ export default function Ferb() {
             <S.Send onClick={handleSubmit} type="button">
             Send
             </S.Send>
+            <S.gotoLogin onClick={() => { navigate('/login'); }}>
+                Go to Login
+            </S.gotoLogin>
         </S.LoginContainer>
         <ToastContainer position="top-right" autoClose={3000} />
         </>
