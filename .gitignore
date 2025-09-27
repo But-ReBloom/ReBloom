@@ -43,3 +43,7 @@ application*.yml
 bootstrap*.yml
 application*.properties
 bootstrap*.properties
+
+### VS Code ###
+.vscode/
+.DS_Store
