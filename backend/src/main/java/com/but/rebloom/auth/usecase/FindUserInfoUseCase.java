@@ -21,7 +21,7 @@ public class FindUserInfoUseCase {
     private final PasswordEncoder passwordEncoder;
 
     // 아이디 찾기
-    public User findUserId(FindIdRequest findIdRequest) {
+    public User findUserIdByEmailAndPw(FindIdRequest findIdRequest) {
         String userEmail = findIdRequest.getUserEmail();
         String userPassword = findIdRequest.getPassword();
 
@@ -32,7 +32,7 @@ public class FindUserInfoUseCase {
         User user = optionalUser.orElseThrow(() ->
                 new UserNotFoundException("이메일이 조회되지 않음"));
 
-        if (!user.getUserPassword().equals(passwordEncoder.encode(userPassword))) {
+        if (!passwordEncoder.matches(userPassword, user.getUserPassword())) {
             throw new UserNotFoundException("유저가 조회되지 않음");
         }
 

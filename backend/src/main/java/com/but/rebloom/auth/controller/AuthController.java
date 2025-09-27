@@ -27,6 +27,8 @@ public class AuthController {
     private final UpdateUserInfoUseCase updateUserInfoUseCase;
     // Google OAuth에 이용
     private final GoogleOAuthUseCase googleOAuthUseCase;
+    // 유저 정보 찾기에 이용
+    private final FindUserInfoUseCase findUserInfoUseCase;
 
     @PostMapping("/email/send")
     public ResponseEntity<Object> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
@@ -74,5 +76,12 @@ public class AuthController {
         // 비밀번호 변경
         User user = updateUserInfoUseCase.updateUserPassword(updatePwRequest);
         return ResponseEntity.ok(UpdatePwResponse.from(user));
+    }
+
+    @PostMapping("/find/id")
+    public ResponseEntity<Object> findUserId(@RequestBody FindIdRequest findIdRequest) {
+        // 아이디 조회
+        User user = findUserInfoUseCase.findUserIdByEmailAndPw(findIdRequest);
+        return ResponseEntity.ok(FindIdResponse.from(user));
     }
 }
