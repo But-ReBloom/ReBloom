@@ -1,9 +1,11 @@
 package com.but.rebloom.auth.usecase;
 
+import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.LoginRequest;
 import com.but.rebloom.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.auth.repository.UserRepository;
+import com.but.rebloom.common.exception.IllegalArgumentException;
 import com.but.rebloom.common.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.mapping.List;
@@ -44,6 +46,10 @@ public class LoginUseCase {
         }
 
         User user = optionalUser.get();
+
+        if (!user.getProvider().equals(Provider.SELF)) {
+            throw new IllegalArgumentException("잘못된 로그인 환경");
+        }
 
         if (!passwordEncoder.matches(userPassword, user.getUserPassword())) {
             throw new UserNotFoundException("유저 조회 실패");
