@@ -1,5 +1,6 @@
 package com.but.rebloom.auth.dto.request;
 
+import com.but.rebloom.auth.domain.Provider;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,4 +12,6 @@ public class LoginRequest {
     private String userEmail;
     @NotNull
     private String userPassword;
+    @NotNull
+    private Provider provider;
 }

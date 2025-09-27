@@ -41,7 +41,7 @@ public class SignupUseCase {
                 .userId(userId)
                 .userPassword(passwordEncoder.encode(userPassword))
                 .userName(userName)
-                .provider(Provider.SELF)
+                .provider(signupRequest.getProvider())
                 .build();
 
         // 유저 등록
