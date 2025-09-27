@@ -16,7 +16,7 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String userEmail;
 
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(name = "user_id", unique = true, nullable = false)
     private String userId;
 
     @Column(name = "password", nullable = false)
@@ -38,6 +38,7 @@ public class User {
     @Builder.Default    // 기본값 설정
     private Integer userPoint = 0;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "provider")
     private Provider provider;
 }
