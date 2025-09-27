@@ -3,7 +3,7 @@ import Dodum from "../../assets/images/dodamdodam.svg";
 import Google from "../../assets/images/Google.svg";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { toast } from 'react-toastify';
+import {  ToastContainer ,toast } from 'react-toastify';
 
 
 export default function Right_box() {
@@ -33,10 +33,12 @@ export default function Right_box() {
         );
 
         if (user) {
-          navigate("/", { 
-              replace: true,
-              state: { toastMessage: `환영합니다! ${user.id}님` }
-          });
+          toast.success(`환영합니다! ${user.id}님!`);
+
+          setTimeout(() => {
+            navigate("/", { replace: true });
+          }, 2000);
+
         } else {
             toast.error("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
@@ -56,7 +58,7 @@ export default function Right_box() {
           <S.Input type="text"
                 value={userid}
                 onChange={(e) => setUserid(e.target.value)}
-                placeholder="Enter your ID"
+                placeholder="Enter your e-mail"
                 autoFocus />
         </div>
         <div>
@@ -88,6 +90,7 @@ export default function Right_box() {
       </S.OAuthFamily>
       <S.SignUpTag onClick={() => { navigate('/signup'); }}>Haven't you signed up yet?</S.SignUpTag>
     </S.LoginContainer>
+    <ToastContainer position="top-right" autoClose={2000} />
     </>
   );
 }
