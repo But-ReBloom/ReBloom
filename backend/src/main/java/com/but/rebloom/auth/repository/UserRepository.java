@@ -1,5 +1,6 @@
 package com.but.rebloom.auth.repository;
 
+import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +15,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     // 유저 조회 함수
     Optional<User> findByUserEmail(String userEmail);
+    Optional<User> findByUserEmailAndProvider(String userEmail, Provider provider);
 
     // 유저 존재 확인 함수
     boolean existsByUserId(String userId);

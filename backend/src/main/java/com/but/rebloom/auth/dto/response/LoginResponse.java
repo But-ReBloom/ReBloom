@@ -1,11 +1,11 @@
 package com.but.rebloom.auth.dto.response;
 
+import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
@@ -18,6 +18,8 @@ public class LoginResponse {
     @NotNull
     private String userEmail;
     @NotNull
+    private Provider provider;
+    @NotNull
     private String token;
 
     public static LoginResponse from(Map<User, Object> response) {
@@ -28,6 +30,7 @@ public class LoginResponse {
         return LoginResponse.builder()
                 .success(true)
                 .userEmail(user.getUserEmail())
+                .provider(user.getProvider())
                 .token(token)
                 .build();
     }

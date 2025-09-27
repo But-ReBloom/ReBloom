@@ -47,7 +47,7 @@ public class LoginUseCase {
 
         User user = optionalUser.get();
 
-        if (!user.getProvider().equals(Provider.SELF)) {
+        if (!loginRequest.getProvider().equals(Provider.SELF)) {
             throw new IllegalArgumentException("잘못된 로그인 환경");
         }
 
