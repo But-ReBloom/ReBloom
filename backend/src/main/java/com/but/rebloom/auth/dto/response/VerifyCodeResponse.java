@@ -16,8 +16,6 @@ public class VerifyCodeResponse {
     private Boolean success;
     @NotNull
     private String userEmail;
-    @NotNull
-    private String code;
 
     public static VerifyCodeResponse from(Map<User, String> response) {
         Map.Entry<User, String> entry = response.entrySet().iterator().next();
@@ -27,7 +25,6 @@ public class VerifyCodeResponse {
         return VerifyCodeResponse.builder()
                 .success(true)
                 .userEmail(user.getUserEmail())
-                .code(code)
                 .build();
     }
 }
