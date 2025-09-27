@@ -3,10 +3,7 @@ package com.but.rebloom.auth.controller;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.*;
 import com.but.rebloom.auth.dto.response.*;
-import com.but.rebloom.auth.usecase.EmailUseCase;
-import com.but.rebloom.auth.usecase.LoginUseCase;
-import com.but.rebloom.auth.usecase.SignupUseCase;
-import com.but.rebloom.auth.usecase.UpdateUserInfoUseCase;
+import com.but.rebloom.auth.usecase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +26,8 @@ public class AuthController {
     private final LoginUseCase loginUseCase;
     // 정보 수정 부분에 이용
     private final UpdateUserInfoUseCase updateUserInfoUseCase;
+    // Google OAuth에 이용
+    private final GoogleOAuthUseCase googleOAuthUseCase;
 
     @PostMapping("/email/send")
     public ResponseEntity<Object> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
@@ -59,9 +58,9 @@ public class AuthController {
     }
 
     @PostMapping("/login/google")
-    public ResponseEntity<Object> loginGoogle(@RequestBody LoginRequest loginRequest) throws IOException {
-        Map<User, Object> loginResponse = loginUseCase.login(loginRequest);
-        return ResponseEntity.ok(LoginResponse.from(loginResponse));
+    public ResponseEntity<GoogleUserInfoResponse> login(@RequestBody GoogleLoginRequest request) {
+        Map<User, Object> response = googleOAuthUseCase.execute(request.getAuthorizationCode());
+        return ResponseEntity.ok(GoogleUserInfoResponse.from(response));
     }
 
     @PostMapping("/update/id")
