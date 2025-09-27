@@ -13,12 +13,17 @@ export default function Suprb() {
   const [userID, setUserID] = useState("");
   const [userName, setUserName] = useState("");
 
-   const handleSubmit = () => {
-    toast.success(`환영합니다! ${userID}님!`);
+  const handleSubmit = () => {
+    if(userEmail.trim() && password.trim() && userID.trim() && userName.trim()){
+      toast.success(<>환영합니다! {userID}님! <br /> 기다려주세요. 이동중 입니다.</>);
 
-    setTimeout(() => {
-        navigate("/login", { replace: true });
-    }, 2000);
+      setTimeout(() => {
+          navigate("/login", { replace: true });
+      }, 2500);
+    } else {
+      toast.error(<>빈 칸이 있어선 안됩니다.</>);
+    }
+    
   };
   return (
     <>

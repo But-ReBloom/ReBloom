@@ -92,6 +92,30 @@ export const Send = styled.button`
     font-weight: 500;
     border-radius: 16px;
     margin-top: 80px;
+    margin-bottom: 20px;
+
+    &:hover {
+        color: #3e55bf;
+        background: white;
+        border: 2px solid #3e55bf;
+        font-size: 20px;
+        font-weight: bold;
+        transform: scale(1.05);
+    }
+`;
+
+export const gotoLogin = styled.button`
+    width: 20vh;
+    height: 50px;
+    background: linear-gradient(90deg, #41a6ff, #3e55bf);
+    color: #ffffff;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    border: 1px solid #dedede;
+    font-weight: 500;
+    border-radius: 999px;
 
     &:hover {
         color: #3e55bf;

@@ -3,7 +3,7 @@ import App from "./App";
 import LoginPage from "./Pages/loginpage/LP.tsx";
 import SignUpPage from "./Pages/signuppage/SUP.tsx";
 import FindEmail from "./Pages/findEmailpage/FEP.tsx";
-// import FindPassWord from "./Pages/findPasswordpage/FPWP.tsx";
+import FindPassWord from "./Pages/findPasswordpage/FPWP.tsx";
 
 
 const router = createBrowserRouter([
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
   },
   {
     path:"/forgot/password",
-    element: <noindex/>,
+    element: <FindPassWord/>,
   },
   {
     path: "*",
