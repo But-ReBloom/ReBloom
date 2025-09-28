@@ -6,6 +6,7 @@ import com.but.rebloom.auth.dto.request.UpdateIdRequest;
 import com.but.rebloom.auth.dto.request.UpdatePwRequest;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.UserNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class UpdateUserInfoUseCase {
     // 예외 분리
     private final ValidationUseCase validationUseCase;
 
+    @Transactional
     public User updateUserId(UpdateIdRequest updateIdRequest) {
         String userId = updateIdRequest.getUserId();
         String userEmail = updateIdRequest.getUserEmail();
@@ -43,6 +45,7 @@ public class UpdateUserInfoUseCase {
         return user;
     }
 
+    @Transactional
     public User updateUserPassword(UpdatePwRequest updatePwRequest) {
         String userPassword = updatePwRequest.getUserPassword();
         String userEmail = updatePwRequest.getUserEmail();

@@ -6,10 +6,7 @@ import com.but.rebloom.auth.dto.response.*;
 import com.but.rebloom.auth.usecase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -33,15 +30,15 @@ public class AuthController {
     @PostMapping("/email/send")
     public ResponseEntity<Object> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
         // 인증 코드 저장함
-        Map<User, String> response = emailUseCase.sendVerificationEmail(sendVerificationEmailRequest);
-        return ResponseEntity.ok(SendVerificationEmailResponse.from(response));
+        User user = emailUseCase.sendVerificationEmail(sendVerificationEmailRequest);
+        return ResponseEntity.ok(SendVerificationEmailResponse.from(user));
     }
 
     @PostMapping("/email/verify")
     public ResponseEntity<Object> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
         // 인증 코드 인증 로직 실행
-        Map<User, String> response = emailUseCase.verifyCode(verifyCodeRequest);
-        return ResponseEntity.ok(VerifyCodeResponse.from(response));
+        User user = emailUseCase.verifyCode(verifyCodeRequest);
+        return ResponseEntity.ok(VerifyCodeResponse.from(user));
     }
 
     @PostMapping("/signup")
@@ -52,14 +49,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> googleLogin(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
         // 로그인 로직 실행
         LoginResponse loginResponse = loginUseCase.login(loginRequest);
         return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/login/google")
-    public ResponseEntity<GoogleUserInfoResponse> login(@RequestBody GoogleLoginRequest request) {
+    public ResponseEntity<GoogleUserInfoResponse> googleLogin(@RequestBody GoogleLoginRequest request) {
         GoogleUserInfoResponse response = googleOAuthUseCase.execute(request.getAuthorizationCode());
         return ResponseEntity.ok(response);
     }
@@ -91,4 +88,6 @@ public class AuthController {
         User user = findUserInfoUseCase.findUserIdByIdAndPw(findEmailRequest);
         return ResponseEntity.ok(FindEmailResponse.from(user));
     }
+
+
 }

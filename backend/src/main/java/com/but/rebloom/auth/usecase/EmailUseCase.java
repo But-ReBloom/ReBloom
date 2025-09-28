@@ -37,7 +37,7 @@ public class EmailUseCase {
     }
 
     // 인증 코드 전송
-    public Map<User, String> sendVerificationEmail(SendVerificationEmailRequest emailRequest) {
+    public User sendVerificationEmail(SendVerificationEmailRequest emailRequest) {
         validationUseCase.checkUserEmail(emailRequest.getUserEmail());
 
         String code = generateCode();
@@ -59,13 +59,14 @@ public class EmailUseCase {
             throw new UserNotFoundException("유저가 조회되지 않음");
         }
 
-        User user = optionalUser.get();
+        User user = optionalUser.orElseThrow(() ->
+                new UserNotFoundException("이메일이 조회되지 않음"));
 
-        return Map.of(user, code);
+        return user;
     }
 
     // 인증 코드 검증
-    public Map<User, String> verifyCode(VerifyCodeRequest verifyCodeRequest) {
+    public User verifyCode(VerifyCodeRequest verifyCodeRequest) {
         // 보낸 인증 코드 저장
         CodeInfo userCode = codeMap.get(verifyCodeRequest.getUserEmail()).get(verifyCodeRequest.getPurpose());
 
@@ -97,7 +98,7 @@ public class EmailUseCase {
 
         User user = optionalUser.get();
 
-        return Map.of(user, verifyCodeRequest.getCode());
+        return user;
     }
 
     // 만료시간 저장
