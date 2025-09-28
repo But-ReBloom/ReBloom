@@ -75,13 +75,6 @@ public class AuthController {
         return ResponseEntity.ok(UpdatePwResponse.from(user));
     }
 
-    @PostMapping("/find/id")
-    public ResponseEntity<Object> findUserId(@RequestBody FindIdRequest findIdRequest) {
-        // 아이디 조회
-        User user = findUserInfoUseCase.findUserIdByEmailAndPw(findIdRequest);
-        return ResponseEntity.ok(FindIdResponse.from(user));
-    }
-
     @PostMapping("/find/email")
     public ResponseEntity<Object> findUserEmail(@RequestBody FindEmailRequest findEmailRequest) {
         // 이메일 조회
