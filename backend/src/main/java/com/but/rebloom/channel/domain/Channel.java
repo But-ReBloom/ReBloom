@@ -22,7 +22,7 @@ public class Channel {
     private Long channelId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user; // User entity와 맵핑을 위해 필드명을 userId가 아닌 user로
 
     @Column(name = "title", nullable = false)
@@ -36,7 +36,7 @@ public class Channel {
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime channelCreatedAt;
 
     @Column(name = "is_accepted",nullable = false)
     private Boolean isAccepted;
