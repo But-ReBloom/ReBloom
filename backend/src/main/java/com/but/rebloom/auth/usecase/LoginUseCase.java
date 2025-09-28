@@ -56,10 +56,8 @@ public class LoginUseCase {
             throw new UserNotFoundException("유저 조회 실패");
         }
 
-        // 토큰 생성 및 반환
-//        return Map.of(user, jwtTokenProvider.generateToken(String.valueOf(user.getUserEmail())));
-
         return LoginResponse.builder()
+                .success(true)
                 .userEmail(user.getUserEmail())
                 .provider(user.getProvider())
                 .token(jwtTokenProvider.generateToken(String.valueOf(user.getUserEmail())))
