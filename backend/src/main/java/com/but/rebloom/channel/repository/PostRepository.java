@@ -11,16 +11,15 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     // 특정 채널의 모든 게시글 조회(최신순)
-    List<Post> findByChannel_ChannelIdOrderByCreateAtDesc(Long channelId);
+    List<Post> findByChannel_ChannelIdOrderByPostCreatedAtDesc(Long channelId);
 
-    // 특정 유저가 작성한 모든 게시글 조회(최신순)
-    List<Post> findByUser_UserIdOrderByCreateAtDesc(Long userId);
+    List<Post> findByUser_UserIdOrderByPostCreateAtDesc(String userUserId);
 
     // 인기글 조회
     List<Post> findByPostType(Type type);
 
     // 특정 키워드를 제목이나 설명에 포함한 게시글 조회(최신순)
-    List<Post> findByTitleContainingOrContentContainingOrderByCreateAtDesc(String title, String content);
+    List<Post> findByTitleContainingOrContentContainingOrderByPostCreatedAtDescDesc(String title, String content);
 
     // 인증
     // 상태 별 게시글 조회
