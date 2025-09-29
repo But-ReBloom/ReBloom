@@ -3,11 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import * as S from "./style.ts";
 
 export const Body = () => {
-    const navigation = useNavigate();
+    const navigate = useNavigate();
 
-    const handleLink = () => {
-        navigation("/login");
-    };
+
+    //메인페이지_바디
 return (
     <>
     <S.BodyContainer>
@@ -19,7 +18,7 @@ return (
             <Link to="/login">
                 <S.GoFindTasteButton>Taste Activity</S.GoFindTasteButton>
             </Link>
-            <S.IntroButtons onClick={handleLink} id="go-findTaste_Hobbytest">
+            <S.IntroButtons onClick={() => { navigate('/'); }} id="go-findTaste_Hobbytest">
                 <S.DYT><b>Discover your taste</b></S.DYT>
                 <img src={arrow} alt="" />
             </S.IntroButtons>

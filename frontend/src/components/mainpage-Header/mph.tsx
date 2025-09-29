@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import * as S from './style.ts';
 
 function Header() {
+    //메인 페이지_헤더
     return (
         <>
             <S.HeaderContainer>

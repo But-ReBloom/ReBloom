@@ -16,28 +16,30 @@ export default function Ferb() {
     const [userID, setUserid] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = (event?: React.FormEvent) => {
-        if (event) event.preventDefault();
-        
-        const user = users.find(
-            (u) => u.id === userID && u.password === password
-        );
+    const handleSubmit = () => {
+        if(userID.trim() && password){
+            const user = users.find(
+                (u) => u.id === userID && u.password === password
+            );
 
-        if (user) {
-            toast.success(`당신의 이메일은 ${user.email} 입니다.`);
+            if (user) {
+                toast.success(`당신의 이메일은 ${user.email} 입니다.`);
 
-        } else  {
-            toast.error("이메일 또는 아이디가 올바르지 않습니다.");
+            } else  {
+                toast.error("이메일 또는 아이디가 올바르지 않습니다.");
+            }
+        }else{
+            toast.error(<>빈 칸인 있어선 안됩니다.</>);
         }
     };
 
-
+    // 이메일찾기_오른쪽박스
     return (
         <>
         <S.LoginContainer>
             <S.LoginTextBox>
             <S.Title>Find my E-mail</S.Title>
-            <S.Subtitle>Please take a moment to find ID</S.Subtitle>
+            <S.Subtitle>Please take a moment to find email</S.Subtitle>
             </S.LoginTextBox>
 
             <S.InputBox>

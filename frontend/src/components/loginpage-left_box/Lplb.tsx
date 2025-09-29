@@ -3,6 +3,7 @@ import * as S from "./style.ts";
 import { Link } from "react-router-dom";
 
 function Left_box() {
+  //로그인_왼쪽박스_Auth와 관련한 모든 박스의 왼쪽에 사용되는 박스
   return (
     <S.LeftBox>
       <Link to="/"><S.Logo src={logo} alt="Rebloom Logo" /></Link>

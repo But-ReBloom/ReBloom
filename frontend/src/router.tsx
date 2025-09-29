@@ -5,7 +5,7 @@ import SignUpPage from "./Pages/signuppage/SUP.tsx";
 import FindEmail from "./Pages/findEmailpage/FEP.tsx";
 import FindPassWord from "./Pages/findPasswordpage/FPWP.tsx";
 
-
+//경로명세 라우터
 const router = createBrowserRouter([
   {
     path: "/",
