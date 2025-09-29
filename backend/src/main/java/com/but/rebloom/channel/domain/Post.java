@@ -25,7 +25,7 @@ public class Post {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "channel_id", nullable = false)
     private Channel channel;
 
     @Column(name = "title", nullable = false)
