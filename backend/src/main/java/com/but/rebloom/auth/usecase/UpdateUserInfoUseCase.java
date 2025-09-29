@@ -40,13 +40,17 @@ public class UpdateUserInfoUseCase {
         validationUseCase.checkExistAccountByUserId(userId);
 
         // 디비 수정
-        userRepository.updateUserId(userEmail, userId);
+        userRepository.updateUserIdByUserEmail(userEmail, userId);
 
-        return user;
+        Optional<User> optionalUpdateUser = userRepository.findByUserEmail(userEmail);
+        User updateUser = optionalUser.orElseThrow(() ->
+                new UserNotFoundException("이메일이 조회되지 않음"));
+
+        return updateUser;
     }
 
     @Transactional
-    public User updateUserPassword(UpdatePwRequest updatePwRequest) {
+    public User updateUserPw(UpdatePwRequest updatePwRequest) {
         String userPassword = updatePwRequest.getUserPassword();
         String userEmail = updatePwRequest.getUserEmail();
 
@@ -61,8 +65,12 @@ public class UpdateUserInfoUseCase {
         validationUseCase.checkUserPassword(userPassword);
 
         // 디비 수정
-        userRepository.updateUserPassword(userEmail, passwordEncoder.encode(userPassword));
+        userRepository.updateUserPasswordByUserEmail(userEmail, passwordEncoder.encode(userPassword));
 
-        return user;
+        Optional<User> optionalUpdateUser = userRepository.findByUserEmail(userEmail);
+        User updateUser = optionalUser.orElseThrow(() ->
+                new UserNotFoundException("이메일이 조회되지 않음"));
+
+        return updateUser;
     }
 }
