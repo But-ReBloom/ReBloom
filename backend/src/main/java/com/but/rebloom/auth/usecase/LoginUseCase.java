@@ -1,14 +1,19 @@
 package com.but.rebloom.auth.usecase;
 
+import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.LoginRequest;
+import com.but.rebloom.auth.dto.response.LoginResponse;
 import com.but.rebloom.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.auth.repository.UserRepository;
+import com.but.rebloom.common.exception.IllegalArgumentException;
 import com.but.rebloom.common.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.mapping.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -24,7 +29,7 @@ public class LoginUseCase {
     private final JwtTokenProvider jwtTokenProvider;
 
     // 로그인, 토큰 반환
-    public String login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) {
         // 기본 예외 확인
         validationUseCase.checkNull(loginRequest);
 
@@ -43,11 +48,19 @@ public class LoginUseCase {
 
         User user = optionalUser.get();
 
+        if (!loginRequest.getProvider().equals(Provider.SELF)) {
+            throw new IllegalArgumentException("잘못된 로그인 환경");
+        }
+
         if (!passwordEncoder.matches(userPassword, user.getUserPassword())) {
             throw new UserNotFoundException("유저 조회 실패");
         }
 
-        // 토큰 생성 및 반환
-        return jwtTokenProvider.generateToken(String.valueOf(user.getUserEmail()));
+        return LoginResponse.builder()
+                .success(true)
+                .userEmail(user.getUserEmail())
+                .provider(user.getProvider())
+                .token(jwtTokenProvider.generateToken(String.valueOf(user.getUserEmail())))
+                .build();
     }
 }
