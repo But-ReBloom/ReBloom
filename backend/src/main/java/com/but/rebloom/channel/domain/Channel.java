@@ -39,6 +39,6 @@ public class Channel {
     private LocalDateTime channelCreatedAt;
 
     @Column(name = "is_accepted",nullable = false)
-    private Boolean isAccepted;
+    private Boolean isAccepted = false;
 
 }
