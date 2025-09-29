@@ -37,7 +37,7 @@ export default function Right_box() {
         toast.error(<>빈 칸이 있어선 안됩니다.</>);
       };
   };
-
+// 로그인_오른쪽박스
   return (
     <>
     <S.LoginContainer>

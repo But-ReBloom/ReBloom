@@ -39,6 +39,8 @@ export default function Ferb() {
         }
     };
 
+
+    // 회원가입_오른쪽박스
     return (
         <>
         <S.LoginContainer>

@@ -25,6 +25,8 @@ export default function Suprb() {
     }
     
   };
+
+  //회원가입_오른쪽박스
   return (
     <>
       <S.LoginContainer>

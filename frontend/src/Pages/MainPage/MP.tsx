@@ -4,6 +4,8 @@ import { Body } from "../../components/mainpage-Body/mpb.tsx";
 import * as S from "./style.ts";
 
 function MainPage() {
+    
+    //메인페이지
     return (
         <S.MainPage_Container>
             <Header />
