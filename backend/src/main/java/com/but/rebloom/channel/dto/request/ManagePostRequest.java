@@ -13,6 +13,5 @@ public class ManagePostRequest {
     private Long postId;
 
     private Type postType;
-    private Status postStatus;
 
 }
