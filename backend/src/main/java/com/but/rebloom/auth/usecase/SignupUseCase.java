@@ -1,5 +1,6 @@
 package com.but.rebloom.auth.usecase;
 
+import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.SignupRequest;
 import com.but.rebloom.auth.repository.UserRepository;
@@ -18,7 +19,7 @@ public class SignupUseCase {
     private final ValidationUseCase validationUseCase;
 
     // 회원가입
-    public void signup(SignupRequest signupRequest) {
+    public User signup(SignupRequest signupRequest) {
         // 기본 예외 처리
         validationUseCase.checkNull(signupRequest);
 
@@ -40,9 +41,10 @@ public class SignupUseCase {
                 .userId(userId)
                 .userPassword(passwordEncoder.encode(userPassword))
                 .userName(userName)
+                .provider(signupRequest.getProvider())
                 .build();
 
         // 유저 등록
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 }

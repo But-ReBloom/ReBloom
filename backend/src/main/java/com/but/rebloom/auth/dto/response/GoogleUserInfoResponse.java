@@ -1,21 +1,23 @@
-package com.but.rebloom.auth.dto.request;
+package com.but.rebloom.auth.dto.response;
 
 import com.but.rebloom.auth.domain.Provider;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class SignupRequest {
+@Builder
+public class GoogleUserInfoResponse {
     @NotNull
-    private String userEmail;
+    private String id;
     @NotNull
-    private String userId;
+    private String email;
     @NotNull
-    private String userPassword;
+    private String name;
     @NotNull
-    private String userName;
+    private String accessToken;
     @NotNull
     private Provider provider;
 }

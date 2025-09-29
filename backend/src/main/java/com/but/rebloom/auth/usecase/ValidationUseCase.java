@@ -14,6 +14,13 @@ public class ValidationUseCase {
     // 디비 이용
     private final UserRepository userRepository;
 
+    // 널 값 확인 - 한 요소
+    public <T> void checkNull(T element) {
+        if (element == null || element.toString().trim().isEmpty()) {
+            throw new IllegalArgumentException("빈 값이 존재");
+        }
+    }
+
     // 널 값 확인 - 로그인
     public void checkNull(LoginRequest loginRequest) {
         String userEmail = loginRequest.getUserEmail();
@@ -77,7 +84,7 @@ public class ValidationUseCase {
 
     // 이름 확인
     public void checkUserName(String userName) {
-        if (userName.length() < 4 || userName.length() > 20) {
+        if (userName.length() < 1 || userName.length() > 20) {
             throw new IllegalArgumentException("이름 오류");
         }
     }
@@ -86,6 +93,20 @@ public class ValidationUseCase {
     public void checkExistAccount(String userEmail, String userId) {
         if (userRepository.existsByUserEmail(userEmail) ||
                 userRepository.existsByUserId(userId)) {
+            throw new AlreadyUsingException("이미 존재함");
+        }
+    }
+
+    // 존재하는지 확인
+    public void checkExistAccountByUserEmail(String userEmail) {
+        if (userRepository.existsByUserEmail(userEmail)) {
+            throw new AlreadyUsingException("이미 존재함");
+        }
+    }
+
+    // 존재하는지 확인
+    public void checkExistAccountByUserId(String userId) {
+        if (userRepository.existsByUserId(userId)) {
             throw new AlreadyUsingException("이미 존재함");
         }
     }
