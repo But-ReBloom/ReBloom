@@ -69,7 +69,7 @@ public class AuthController {
     }
 
     @PostMapping("/update/pw")
-    public ResponseEntity<Object> updateUserId(@RequestBody UpdatePwRequest updatePwRequest) {
+    public ResponseEntity<Object> updateUserPw(@RequestBody UpdatePwRequest updatePwRequest) {
         // 비밀번호 변경
         User user = updateUserInfoUseCase.updateUserPw(updatePwRequest);
         return ResponseEntity.ok(UpdatePwResponse.from(user));
