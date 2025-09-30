@@ -1,16 +1,11 @@
-### Gradle ###
-.gradle/
+HELP.md
+.gradle
 build/
 !backend/gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-### IntelliJ IDEA ###
-.idea/
-*.iws
-*.iml
-*.ipr
-out/
-
-### STS / Eclipse ###
+### STS ###
 .apt_generated
 .classpath
 .factorypath
@@ -19,27 +14,26 @@ out/
 .springBeans
 .sts4-cache
 bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+backend/.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
 
 ### VS Code ###
 .vscode/
 
-### Logs / Temp ###
-*.log
-*.db
-*.sqlite
-.env
-
-### OS ###
 .DS_Store
-ehthumbs.db
-Thumbs.db
-
-### Resources (무조건 무시) ###
-**/src/main/resources/
-**/src/test/resources/
-
-### Spring Boot Config (민감 설정) ###
-application*.yml
-bootstrap*.yml
-application*.properties
-bootstrap*.properties
