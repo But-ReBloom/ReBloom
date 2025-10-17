@@ -13,12 +13,8 @@ import java.util.Optional;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
-    // ActivityId로 이름 조회
-    Optional<Activity> findActivityNameByActivityId(Long activityId);
-    // ActivityId로 시작일 조회
-    Optional<Activity> findActivityStartByActivityId(Long activityId);
-    // ActivityId로 최근 활동일 조회
-    Optional<Activity> findActivityRecentByActivityId(Long activityId);
+    // ActivityId로 객체 조회
+    Optional<Activity> findActivityByActivityId(Long activityId);
 
     // Activity 추가
     @Modifying
