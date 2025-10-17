@@ -2,6 +2,7 @@ package com.but.rebloom.hobby.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -22,8 +23,10 @@ public class Activity {
     private String activityName;
 
     @Column(name = "activity_start", nullable = false)
+    @CreationTimestamp
     private LocalDate activityStart;
 
     @Column(name = "activity_recent", nullable = false)
+    @CreationTimestamp
     private LocalDate activityRecent;
 }
