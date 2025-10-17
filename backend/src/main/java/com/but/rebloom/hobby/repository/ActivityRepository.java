@@ -13,8 +13,14 @@ import java.util.Optional;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
+    // ActivityId로 이름 조회
     Optional<Activity> findActivityNameByActivityId(Long activityId);
+    // ActivityId로 시작일 조회
+    Optional<Activity> findActivityStartByActivityId(Long activityId);
+    // ActivityId로 최근 활동일 조회
+    Optional<Activity> findActivityRecentByActivityId(Long activityId);
 
+    // Activity 추가
     @Modifying
     @Transactional
     @Query(
@@ -28,6 +34,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
             @Param("newActivityRecent") LocalDate newActivityRecent
     );
 
+    // 활동 이름 변경
     @Modifying
     @Transactional
     @Query("UPDATE Activity activity SET activity.activityName = :newActivityName WHERE activity.activityId = :currentActivityId")
@@ -36,6 +43,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
             @Param("newActivityName") String activityName
     );
 
+    // 최근 활동일 변경
     @Modifying
     @Transactional
     @Query("UPDATE Activity activity SET activity.activityRecent = :newActivityRecent WHERE activity.activityId = :currentActivityId")
