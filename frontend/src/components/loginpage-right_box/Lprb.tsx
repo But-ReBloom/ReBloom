@@ -8,39 +8,51 @@ import { ToastContainer, toast } from "react-toastify";
 export default function Right_box() {
   const navigate = useNavigate();
 
-  const users = [
-    { id: "testuser", password: "1234", email: "testuser@example.com" },
-    { id: "yongjun", password: "abcd", email: "yongjun@example.com" },
-    { id: "guest", password: "guest", email: "guest@sample.com" },
-  ];
-
   const [userEmail, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = () => {
-    if (userEmail.trim() && password.trim()) {
-      const user = users.find(
-        (u) => u.password === password && u.email === userEmail
-      );
+  // 로그인 함수
+  const handleSubmit = async () => {
+    if (!userEmail.trim() || !password.trim()) {
+      toast.error("빈 칸이 있어선 안됩니다.");
+      return;
+    }
 
-      if (user) {
-        toast.success(
-          <>
-            환영합니다! {user.id}님 <br /> 기다려 주세요. 이동중 입니다.
-          </>
-        );
+    try {
+      const response = await fetch("", {
+        method: "POST",
+        body: JSON.stringify({
+          userEmail: userEmail,
+          userPassword: password,
+          provider: "SELF",
+        }),
+      });
 
-        setTimeout(() => {
-          navigate("/", { replace: true });
-        }, 2500);
-      } else {
-        toast.error(<>알맞은 정보가 없습니다.</>);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    } else {
-      toast.error(<>빈 칸이 있어선 안됩니다.</>);
+
+      const data = await response.json();
+      // console.log("서버 응답:", data);
+
+      // 로그인 성공 시
+      toast.success(
+        <>
+          환영합니다! {data.userName}님 <br /> 이동 중입니다...
+        </>
+      );
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 2000);
+    } 
+    
+    catch (error) {
+      console.error("Fetch error:", error);
+      toast.error(<>로그인에 실패했습니다. 다시 시도해주세요.</>);
     }
   };
-  // 로그인_오른쪽박스
+
+  // UI
   return (
     <>
       <S.LoginContainer>
@@ -89,14 +101,11 @@ export default function Right_box() {
             <img src={Dodum} alt="Dodum" />
           </S.OAuthButton>
         </S.OAuthFamily>
-        <S.SignUpTag
-          onClick={() => {
-            navigate("/signup");
-          }}
-        >
+        <S.SignUpTag onClick={() => navigate("/signup")}>
           Haven't you signed up yet?
         </S.SignUpTag>
       </S.LoginContainer>
+
       <ToastContainer position="top-right" autoClose={2000} />
     </>
   );
