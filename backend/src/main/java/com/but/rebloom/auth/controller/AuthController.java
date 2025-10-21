@@ -3,12 +3,11 @@ package com.but.rebloom.auth.controller;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.*;
 import com.but.rebloom.auth.dto.response.*;
+import com.but.rebloom.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.auth.usecase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,61 +25,63 @@ public class AuthController {
     private final GoogleOAuthUseCase googleOAuthUseCase;
     // 유저 정보 찾기에 이용
     private final FindUserInfoUseCase findUserInfoUseCase;
+    // 토큰 발급에 이용
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/email/send")
-    public ResponseEntity<Object> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
+    public ResponseEntity<SendVerificationEmailResponse> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
         // 인증 코드 저장함
         User user = emailUseCase.sendVerificationEmail(sendVerificationEmailRequest);
         return ResponseEntity.ok(SendVerificationEmailResponse.from(user));
     }
 
     @PostMapping("/email/verify")
-    public ResponseEntity<Object> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
+    public ResponseEntity<VerifyCodeResponse> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
         // 인증 코드 인증 로직 실행
         User user = emailUseCase.verifyCode(verifyCodeRequest);
         return ResponseEntity.ok(VerifyCodeResponse.from(user));
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> signup(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest signupRequest) {
         // 회원가입 로직 실행
         User user = signupUseCase.signup(signupRequest);
         return ResponseEntity.ok(SignupResponse.from(user));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         // 로그인 로직 실행
-        LoginResponse loginResponse = loginUseCase.login(loginRequest);
-        return ResponseEntity.ok(loginResponse);
+        User user = loginUseCase.login(loginRequest);
+        String jwtToken = jwtTokenProvider.generateToken(user.getUserEmail());
+        return ResponseEntity.ok(LoginResponse.from(user, jwtToken));
     }
 
     @PostMapping("/login/google")
     public ResponseEntity<GoogleUserInfoResponse> googleLogin(@RequestBody GoogleLoginRequest request) {
-        GoogleUserInfoResponse response = googleOAuthUseCase.execute(request.getAuthorizationCode());
-        return ResponseEntity.ok(response);
+        User user = googleOAuthUseCase.execute(request.getAuthorizationCode());
+        String jwtToken = jwtTokenProvider.generateToken(user.getUserEmail());
+        return ResponseEntity.ok(GoogleUserInfoResponse.from(user, jwtToken));
     }
 
-    @PostMapping("/update/id")
-    public ResponseEntity<Object> updateUserId(@RequestBody UpdateIdRequest updateIdRequest) {
+    @PatchMapping("/update/id")
+    public ResponseEntity<UpdateIdResponse> updateUserId(@RequestBody UpdateIdRequest updateIdRequest) {
         // 아이디 변경 및 반환
         User user = updateUserInfoUseCase.updateUserId(updateIdRequest);
         return ResponseEntity.ok(UpdateIdResponse.from(user));
     }
 
-    @PostMapping("/update/pw")
-    public ResponseEntity<Object> updateUserPw(@RequestBody UpdatePwRequest updatePwRequest) {
+    @PatchMapping("/update/pw")
+    public ResponseEntity<UpdatePwResponse> updateUserPw(@RequestBody UpdatePwRequest updatePwRequest) {
         // 비밀번호 변경
         User user = updateUserInfoUseCase.updateUserPw(updatePwRequest);
         return ResponseEntity.ok(UpdatePwResponse.from(user));
     }
 
     @PostMapping("/find/email")
-    public ResponseEntity<Object> findUserEmail(@RequestBody FindEmailRequest findEmailRequest) {
+    public ResponseEntity<FindEmailResponse> findUserEmail(@RequestBody FindEmailRequest findEmailRequest) {
         // 이메일 조회
         User user = findUserInfoUseCase.findUserIdByIdAndPw(findEmailRequest);
         return ResponseEntity.ok(FindEmailResponse.from(user));
     }
-
-
 }

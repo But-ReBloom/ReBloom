@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d7bae20c-61bd-4648-b2a5-3ff619ac6d14" name="Changes" comment="" />
+    <list default="true" id="d7bae20c-61bd-4648-b2a5-3ff619ac6d14" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/hobby/controller/ActivityController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/hobby/controller/ActivityFindController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/hobby/domain/Activity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/hobby/dto/request/AddActivityRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/hobby/dto/response/AddActivityResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/hobby/dto/response/FindActivityResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/hobby/repository/ActivityRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/hobby/usecase/DefaultActivityControlUseCase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/hobby/usecase/HobbyValidationUseCase.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -83,8 +93,8 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.ReBloomApplication.executor": "Run",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/hwangjeongbin/Downloads/rebloom",
+    "git-widget-placeholder": "feature/hobby-test-server-v2",
+    "last_opened_file_path": "/Users/hwangjeongbin/Downloads/rebloom/backend/src/main/java/com/but/rebloom",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -107,6 +117,7 @@
       <recent name="com.but.rebloom.common.exception" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/backend/src/test" />
       <recent name="$PROJECT_DIR$/backend/src/main/java" />
