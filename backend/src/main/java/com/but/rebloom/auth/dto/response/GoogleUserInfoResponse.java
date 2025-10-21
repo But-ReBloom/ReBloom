@@ -1,6 +1,7 @@
 package com.but.rebloom.auth.dto.response;
 
 import com.but.rebloom.auth.domain.Provider;
+import com.but.rebloom.auth.domain.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,4 +21,14 @@ public class GoogleUserInfoResponse {
     private String accessToken;
     @NotNull
     private Provider provider;
+
+    public static GoogleUserInfoResponse from(User user, String jwt) {
+        return GoogleUserInfoResponse.builder()
+                .id(user.getUserId().toString())
+                .email(user.getUserEmail())
+                .name(user.getUserName())
+                .accessToken(jwt)
+                .provider(user.getProvider())
+                .build();
+    }
 }
