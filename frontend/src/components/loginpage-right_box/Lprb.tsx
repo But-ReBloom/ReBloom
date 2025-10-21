@@ -8,16 +8,19 @@ import { ToastContainer, toast } from "react-toastify";
 export default function Right_box() {
   const navigate = useNavigate();
 
+  //로그인 데이터 가져오기
   const [userEmail, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
 
   // 로그인 함수
   const handleSubmit = async () => {
+    // 로그인 영역 , 비밀번호 영역 중 하나라도 공백이면 에러
     if (!userEmail.trim() || !password.trim()) {
       toast.error("빈 칸이 있어선 안됩니다.");
       return;
     }
 
+    // 그게 아니라면 바로 리스폰스 시도
     try {
       const response = await fetch("", {
         method: "POST",
@@ -28,10 +31,12 @@ export default function Right_box() {
         }),
       });
 
+      // 주소가 알맞지 않다면 에러 처리
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      // 데이터 가공
       const data = await response.json();
       // console.log("서버 응답:", data);
 
@@ -44,15 +49,13 @@ export default function Right_box() {
       setTimeout(() => {
         navigate("/", { replace: true });
       }, 2000);
-    } 
-    
-    catch (error) {
+    } catch (error) {
+      // 잘못된 정보인 데이터가 확인된다면  처리
       console.error("Fetch error:", error);
       toast.error(<>로그인에 실패했습니다. 다시 시도해주세요.</>);
     }
   };
 
-  // UI
   return (
     <>
       <S.LoginContainer>
