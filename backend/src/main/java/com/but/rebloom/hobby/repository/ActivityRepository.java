@@ -19,11 +19,11 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     // (ActivityName + UserEmail)으로 객체 조회
     Optional<Activity> findActivityByActivityNameAndUserEmail(String activityName, String userEmail);
     // UserEmail로 객체 조회
-    List<Activity> findActivityByUserEmail(String userEmail);
+    Optional<List<Activity>> findActivityByUserEmail(String userEmail);
     // ActivityRecent를 기준으로 오름차순 정렬하여 조회
-    List<Activity> findActivityByUserEmailOrderByActivityRecentAsc(String userEmail);
+    Optional<List<Activity>> findActivityByUserEmailOrderByActivityRecentAsc(String userEmail);
     // ActivityRecent를 기준으로 내림차순 정렬하여 조회
-    List<Activity> findActivityByUserEmailOrderByActivityRecentDesc(String userEmail);
+    Optional<List<Activity>> findActivityByUserEmailOrderByActivityRecentDesc(String userEmail);
 
     // Activity 추가
     @Modifying
@@ -57,3 +57,4 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
             @Param("newActivityRecent") String activityRecent
     );
 }
+

@@ -25,11 +25,8 @@ public class DefaultActivityControlUseCase {
 
     // Activity 조회 - ActivityId
     public Activity findActivityByActivityId(Long activityId) {
-        Optional<Activity> optionalActivity = activityRepository.findActivityByActivityId(activityId);
-        if (optionalActivity.isEmpty()) {
-            throw new ActivityNotFoundException("활동 조회 실패");
-        }
-        return optionalActivity.get();
+        return activityRepository.findActivityByActivityId(activityId)
+                .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 
     // Activity 조회 - ActivityName
@@ -43,11 +40,8 @@ public class DefaultActivityControlUseCase {
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 
-        Optional<Activity> optionalActivity = activityRepository.findActivityByActivityNameAndUserEmail(activityName, userEmail);
-        if (optionalActivity.isEmpty()) {
-            throw new ActivityNotFoundException("활동 조회 실패");
-        }
-        return optionalActivity.get();
+        return activityRepository.findActivityByActivityNameAndUserEmail(activityName, userEmail)
+                .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 
     // 전체 Activity 조회
@@ -57,12 +51,8 @@ public class DefaultActivityControlUseCase {
 
         System.out.println(userEmail);
 
-        List<Activity> activities = activityRepository.findActivityByUserEmail(userEmail);
-        if (activities.isEmpty()) {
-            throw new ActivityNotFoundException("활동 조회 실패");
-        }
-
-        return activities;
+        return activityRepository.findActivityByUserEmail(userEmail)
+                .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 
     // Acitivity 조회 - ActivityRecent(ASC)
@@ -70,12 +60,8 @@ public class DefaultActivityControlUseCase {
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 
-        List<Activity> activities = activityRepository.findActivityByUserEmailOrderByActivityRecentAsc(userEmail);
-        if (activities.isEmpty()) {
-            throw new ActivityNotFoundException("활동 조회 실패");
-        }
-
-        return activities;
+        return activityRepository.findActivityByUserEmailOrderByActivityRecentAsc(userEmail)
+                .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 
     // Acitivity 조회 - ActivityRecent(DESC)
@@ -83,12 +69,8 @@ public class DefaultActivityControlUseCase {
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 
-        List<Activity> activities = activityRepository.findActivityByUserEmailOrderByActivityRecentDesc(userEmail);
-        if (activities.isEmpty()) {
-            throw new ActivityNotFoundException("활동 조회 실패");
-        }
-
-        return activities;
+        return activityRepository.findActivityByUserEmailOrderByActivityRecentDesc(userEmail)
+                .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 
     // Activity 추가
