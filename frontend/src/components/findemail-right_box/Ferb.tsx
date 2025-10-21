@@ -32,8 +32,8 @@ export default function Ferb() {
             toast.error(<>빈 칸인 있어선 안됩니다.</>);
         }
     };
-
-    // 이메일찾기_오른쪽박스
+    
+    // 이메일찾기_오른쪽박스 
     return (
         <>
         <S.LoginContainer>
