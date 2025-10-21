@@ -32,39 +32,17 @@ public class GoogleOAuthUseCase {
     private String clientSecret;
 
     // 인증 코드 추출
-    public GoogleUserInfoResponse execute(String authorizationCode) {
+    public User execute(String authorizationCode) {
         String accessToken = getAccessToken(authorizationCode);
         GoogleUserInfoResponse googleUser = getUserInfo(accessToken);
 
-        User user = userRepository.findByUserEmailAndProvider(googleUser.getEmail(), Provider.GOOGLE)
+        return userRepository.findByUserEmailAndProvider(googleUser.getEmail(), Provider.GOOGLE)
                 .orElseGet(() -> userRepository.save(User.builder()
                         .userEmail(googleUser.getEmail())
                         .userName(googleUser.getName())
                         .userPassword("")
                         .provider(Provider.GOOGLE)
                         .build()));
-
-        String jwt = jwtTokenProvider.generateToken(user.getUserEmail());
-
-        GoogleUserInfoResponse completeResponse = GoogleUserInfoResponse.builder()
-                .id(googleUser.getId())
-                .email(googleUser.getEmail())
-                .name(googleUser.getName())
-                .accessToken(jwt)
-                .provider(user.getProvider())
-                .build();
-
-        // 1차 저장
-        Map<User, Object> response = new HashMap<>();
-        response.put(user, completeResponse);
-
-        return GoogleUserInfoResponse.builder()
-                .id(googleUser.getId())
-                .email(googleUser.getEmail())
-                .name(googleUser.getName())
-                .accessToken(googleUser.getAccessToken())
-                .provider(user.getProvider())
-                .build();
     }
 
     // Jwt랑 비슷하게 이해

@@ -25,11 +25,9 @@ public class LoginUseCase {
     private final ValidationUseCase validationUseCase;
     // 비밀번호 암호화
     private final PasswordEncoder passwordEncoder;
-    // Jwt 토큰 생성
-    private final JwtTokenProvider jwtTokenProvider;
 
-    // 로그인, 토큰 반환
-    public LoginResponse login(LoginRequest loginRequest) {
+    // 로그인
+    public User login(LoginRequest loginRequest) {
         // 기본 예외 확인
         validationUseCase.checkNull(loginRequest);
 
@@ -56,11 +54,6 @@ public class LoginUseCase {
             throw new UserNotFoundException("유저 조회 실패");
         }
 
-        return LoginResponse.builder()
-                .success(true)
-                .userEmail(user.getUserEmail())
-                .provider(user.getProvider())
-                .token(jwtTokenProvider.generateToken(String.valueOf(user.getUserEmail())))
-                .build();
+        return user;
     }
 }
