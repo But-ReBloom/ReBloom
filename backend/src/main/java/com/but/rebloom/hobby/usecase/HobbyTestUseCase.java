@@ -1,5 +1,6 @@
 package com.but.rebloom.hobby.usecase;
 
+import com.but.rebloom.common.exception.AuthenticationException;
 import com.but.rebloom.hobby.domain.HobbyWeight;
 import com.but.rebloom.hobby.domain.InitialTest;
 import com.but.rebloom.hobby.dto.request.UserAnswerRequest;
@@ -9,10 +10,7 @@ import com.mysql.cj.exceptions.WrongArgumentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +48,7 @@ public class HobbyTestUseCase {
         return userScore;
     }
 
+    // 결과에 따른 취미 탐색
     public List<Map<HobbyWeight, Double>> calculateRecommendations(double[] userVector) {
         List<HobbyWeight> hobbies = hobbyWeightRepository.findAll();
 
@@ -65,6 +64,7 @@ public class HobbyTestUseCase {
                 .collect(Collectors.toList());
     }
 
+    // 평균 거리 탐색
     private double averageAbsoluteDistance(double[] userVector, HobbyWeight hobby) {
         double sum = 0;
         sum += Math.abs(hobby.getWeight1() - userVector[0]);
@@ -75,7 +75,12 @@ public class HobbyTestUseCase {
         return sum / 5.0;
     }
 
+    // 질문 반환
     public List<InitialTest> getQuestions() {
-        return initialTestRepository.findAll();
+        Random random = new Random();
+        int num = random.nextInt(10) + 1;
+
+        return initialTestRepository.findBySetNo(num, (num + 1) % 10)
+                .orElseThrow(() -> new AuthenticationException("질문 세트 번호 이상"));
     }
 }
