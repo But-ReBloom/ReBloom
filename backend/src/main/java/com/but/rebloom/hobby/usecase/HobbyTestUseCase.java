@@ -5,6 +5,7 @@ import com.but.rebloom.hobby.domain.InitialTest;
 import com.but.rebloom.hobby.dto.request.UserAnswerRequest;
 import com.but.rebloom.hobby.repository.HobbyWeightRepository;
 import com.but.rebloom.hobby.repository.InitialTestRepository;
+import com.mysql.cj.exceptions.WrongArgumentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,33 +18,36 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class HobbyTestUseCase {
+    // 디비 이용
     private final InitialTestRepository initialTestRepository;
     private final HobbyWeightRepository hobbyWeightRepository;
 
+    // 유저 취향 테스트시 관련 함수 호출 (컨트롤러에서 SRP 위배 방지)
     public List<Map<HobbyWeight, Double>> findUserHobbies(List<UserAnswerRequest> answers) {
-        double[] userVector = calculateUserVector(answers);
-        return calculateRecommendations(userVector);
+        double[] userScore = calculateUserScore(answers);
+        return calculateRecommendations(userScore);
     }
 
-    public double[] calculateUserVector(List<UserAnswerRequest> answers) {
-        double[] userVector = new double[5];
+    // 취향 테스트 - 유저 결과 추출
+    public double[] calculateUserScore(List<UserAnswerRequest> answers) {
+        double[] userScore = new double[5];
 
         for (UserAnswerRequest answer : answers) {
-            InitialTest test = initialTestRepository.findBySetNoAndCategory(
-                    answer.getSetNo(),
-                    answer.getCategory()
-            );
+            // JPA 함수로 추출하여 최적화
+            InitialTest test = initialTestRepository.findBySetNoAndCategory(answer.getSetNo(), answer.getCategory())
+                    .orElseThrow(() -> new WrongArgumentException("잘못된 입력값"));
 
+            // 점수 계산
             if (test != null) {
-                userVector[0] += test.getWeight1() * answer.getAnswerValue();
-                userVector[1] += test.getWeight2() * answer.getAnswerValue();
-                userVector[2] += test.getWeight3() * answer.getAnswerValue();
-                userVector[3] += test.getWeight4() * answer.getAnswerValue();
-                userVector[4] += test.getWeight5() * answer.getAnswerValue();
+                userScore[0] += test.getWeight1() * answer.getAnswerValue();
+                userScore[1] += test.getWeight2() * answer.getAnswerValue();
+                userScore[2] += test.getWeight3() * answer.getAnswerValue();
+                userScore[3] += test.getWeight4() * answer.getAnswerValue();
+                userScore[4] += test.getWeight5() * answer.getAnswerValue();
             }
         }
 
-        return userVector;
+        return userScore;
     }
 
     public List<Map<HobbyWeight, Double>> calculateRecommendations(double[] userVector) {
