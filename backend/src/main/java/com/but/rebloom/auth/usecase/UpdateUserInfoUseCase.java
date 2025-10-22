@@ -1,7 +1,6 @@
 package com.but.rebloom.auth.usecase;
 
 import com.but.rebloom.auth.domain.User;
-import com.but.rebloom.auth.dto.request.SendVerificationEmailRequest;
 import com.but.rebloom.auth.dto.request.UpdateIdRequest;
 import com.but.rebloom.auth.dto.request.UpdatePwRequest;
 import com.but.rebloom.auth.repository.UserRepository;
@@ -10,8 +9,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

@@ -3,18 +3,12 @@ package com.but.rebloom.auth.usecase;
 import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.LoginRequest;
-import com.but.rebloom.auth.dto.response.LoginResponse;
-import com.but.rebloom.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.IllegalArgumentException;
 import com.but.rebloom.common.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.mapping.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

@@ -3,7 +3,6 @@ package com.but.rebloom.auth.usecase;
 import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.response.GoogleUserInfoResponse;
-import com.but.rebloom.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.WrongVerifiedCodeException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,16 +13,11 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
 @RequiredArgsConstructor
 public class GoogleOAuthUseCase {
     // 디비 접근
     private final UserRepository userRepository;
-    // 토큰 생성
-    private final JwtTokenProvider jwtTokenProvider;
 
     // yml 속성 추출
     @Value("${spring.security.oauth2.client.registration.google.client-id:}")

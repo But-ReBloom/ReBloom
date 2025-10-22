@@ -7,8 +7,6 @@ import com.but.rebloom.common.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class FindCurrentUserUseCase {
