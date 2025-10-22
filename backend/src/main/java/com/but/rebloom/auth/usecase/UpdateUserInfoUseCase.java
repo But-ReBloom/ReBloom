@@ -31,9 +31,8 @@ public class UpdateUserInfoUseCase {
         validationUseCase.checkNull(userEmail);
         validationUseCase.checkUserEmail(userEmail);
 
-        Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
-        User user = optionalUser.orElseThrow(() ->
-                new UserNotFoundException("이메일이 조회되지 않음"));
+        userRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("이메일이 조회되지 않음"));
 
         validationUseCase.checkNull(userId);
         validationUseCase.checkUserId(userId);
@@ -42,11 +41,8 @@ public class UpdateUserInfoUseCase {
         // 디비 수정
         userRepository.updateUserIdByUserEmail(userEmail, userId);
 
-        Optional<User> optionalUpdateUser = userRepository.findByUserEmail(userEmail);
-        User updateUser = optionalUser.orElseThrow(() ->
-                new UserNotFoundException("이메일이 조회되지 않음"));
-
-        return updateUser;
+        return userRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("이메일이 조회되지 않음"));
     }
 
     @Transactional
@@ -57,9 +53,8 @@ public class UpdateUserInfoUseCase {
         validationUseCase.checkNull(userEmail);
         validationUseCase.checkUserEmail(userEmail);
 
-        Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
-        User user = optionalUser.orElseThrow(() ->
-                new UserNotFoundException("이메일이 조회되지 않음"));
+        userRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("이메일이 조회되지 않음"));
 
         validationUseCase.checkNull(userPassword);
         validationUseCase.checkUserPassword(userPassword);
@@ -67,10 +62,7 @@ public class UpdateUserInfoUseCase {
         // 디비 수정
         userRepository.updateUserPasswordByUserEmail(userEmail, passwordEncoder.encode(userPassword));
 
-        Optional<User> optionalUpdateUser = userRepository.findByUserEmail(userEmail);
-        User updateUser = optionalUser.orElseThrow(() ->
-                new UserNotFoundException("이메일이 조회되지 않음"));
-
-        return updateUser;
+        return userRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("이메일이 조회되지 않음"));
     }
 }
