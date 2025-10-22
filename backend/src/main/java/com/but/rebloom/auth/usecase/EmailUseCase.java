@@ -17,7 +17,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -54,15 +53,8 @@ public class EmailUseCase {
 
         mailSender.send(message);
 
-        Optional<User> optionalUser  = userRepository.findByUserEmail(emailRequest.getUserEmail());
-        if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException("유저가 조회되지 않음");
-        }
-
-        User user = optionalUser.orElseThrow(() ->
-                new UserNotFoundException("이메일이 조회되지 않음"));
-
-        return user;
+        return userRepository.findByUserEmail(emailRequest.getUserEmail())
+                .orElseThrow(() -> new UserNotFoundException("유저가 조회되지 않음"));
     }
 
     // 인증 코드 검증
@@ -91,14 +83,8 @@ public class EmailUseCase {
             throw new WrongVerifiedCodeException("잘못된 인증 코드");
         }
 
-        Optional<User> optionalUser = userRepository.findByUserEmail(verifyCodeRequest.getUserEmail());
-        if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException("유저가 조회 되지 않음");
-        }
-
-        User user = optionalUser.get();
-
-        return user;
+        return userRepository.findByUserEmail(verifyCodeRequest.getUserEmail())
+                .orElseThrow(() -> new UserNotFoundException("유저가 조회 되지 않음"));
     }
 
     // 만료시간 저장

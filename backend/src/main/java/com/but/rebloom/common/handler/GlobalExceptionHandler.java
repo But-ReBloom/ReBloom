@@ -1,14 +1,12 @@
 package com.but.rebloom.common.handler;
 
-import com.but.rebloom.common.exception.AlreadyUsingException;
-import com.but.rebloom.common.exception.TokenExpiredException;
-import com.but.rebloom.common.exception.UserNotFoundException;
-import com.but.rebloom.common.exception.WrongVerifiedCodeException;
+import com.but.rebloom.common.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.lang.IllegalArgumentException;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -43,6 +41,17 @@ public class GlobalExceptionHandler {
                 .body(Map.of(
                         "success", false,
                         "error_name", "UserNotFoundException",
+                        "message", e.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(ActivityNotFoundException.class)
+    public ResponseEntity<Object> handleNotFound(ActivityNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)   // 404
+                .body(Map.of(
+                        "success", false,
+                        "error_name", "ActivityNotFoundException",
                         "message", e.getMessage()
                 ));
     }

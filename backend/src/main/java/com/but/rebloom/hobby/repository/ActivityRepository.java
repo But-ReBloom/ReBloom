@@ -19,24 +19,18 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     // (ActivityName + UserEmail)으로 객체 조회
     Optional<Activity> findActivityByActivityNameAndUserEmail(String activityName, String userEmail);
     // UserEmail로 객체 조회
-    List<Activity> findActivityByUserEmail(String userEmail);
+    Optional<List<Activity>> findActivityByUserEmail(String userEmail);
     // ActivityRecent를 기준으로 오름차순 정렬하여 조회
-    List<Activity> findActivityByUserEmailOrderByActivityRecentAsc(String userEmail);
+    @Query("SELECT activity FROM Activity activity WHERE activity.userEmail = :userEmail " +
+            "ORDER BY activity.activityRecent ASC")
+    Optional<List<Activity>> findActivityOrderByActivityRecentAsc(
+            @Param("userEmail") String userEmail
+    );
     // ActivityRecent를 기준으로 내림차순 정렬하여 조회
-    List<Activity> findActivityByUserEmailOrderByActivityRecentDesc(String userEmail);
-
-    // Activity 추가
-    @Modifying
-    @Transactional
-    @Query(
-            value = "INSERT INTO Activity (activityName, activityStart, activityRecent) " +
-                    "VALUES (:newActivityNamed, :newActivityStart, :newActivityRecent)",
-            nativeQuery = true
-    )
-    void insertActivity(
-            @Param("newActivityName") String newActivityName,
-            @Param("newActivityStart") LocalDate newActivityStart,
-            @Param("newActivityRecent") LocalDate newActivityRecent
+    @Query("SELECT activity FROM Activity activity WHERE activity.userEmail = :userEmail " +
+            "ORDER BY activity.activityRecent DESC")
+    Optional<List<Activity>> findActivityOrderByActivityRecentDesc(
+            @Param("userEmail") String userEmail
     );
 
     // 활동 이름 변경
@@ -57,3 +51,4 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
             @Param("newActivityRecent") String activityRecent
     );
 }
+

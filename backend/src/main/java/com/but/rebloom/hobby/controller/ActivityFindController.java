@@ -61,7 +61,7 @@ public class ActivityFindController {
     }
 
     // Activity 조회 - ActivityRecent(DESC)
-    @GetMapping("/normal/recent/asc")
+    @GetMapping("/normal/recent/desc")
     public ResponseEntity<List<FindActivityResponse>> findActivityOrderByRecentActivityDesc() {
         List<Activity> activities = defaultActivityControlUseCase.findActivityOrderByActivityRecentDesc();
 
