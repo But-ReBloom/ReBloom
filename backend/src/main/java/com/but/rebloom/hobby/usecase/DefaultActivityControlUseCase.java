@@ -60,7 +60,7 @@ public class DefaultActivityControlUseCase {
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 
-        return activityRepository.findActivityByUserEmailOrderByActivityRecentAsc(userEmail)
+        return activityRepository.findActivityOrderByActivityRecentAsc(userEmail)
                 .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 
@@ -69,7 +69,7 @@ public class DefaultActivityControlUseCase {
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 
-        return activityRepository.findActivityByUserEmailOrderByActivityRecentDesc(userEmail)
+        return activityRepository.findActivityOrderByActivityRecentDesc(userEmail)
                 .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 

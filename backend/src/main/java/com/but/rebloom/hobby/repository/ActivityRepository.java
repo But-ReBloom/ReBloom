@@ -21,9 +21,17 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     // UserEmail로 객체 조회
     Optional<List<Activity>> findActivityByUserEmail(String userEmail);
     // ActivityRecent를 기준으로 오름차순 정렬하여 조회
-    Optional<List<Activity>> findActivityByUserEmailOrderByActivityRecentAsc(String userEmail);
+    @Query("SELECT activity FROM Activity activity WHERE activity.userEmail = :userEmail " +
+            "ORDER BY activity.activityRecent ASC")
+    Optional<List<Activity>> findActivityOrderByActivityRecentAsc(
+            @Param("userEmail") String userEmail
+    );
     // ActivityRecent를 기준으로 내림차순 정렬하여 조회
-    Optional<List<Activity>> findActivityByUserEmailOrderByActivityRecentDesc(String userEmail);
+    @Query("SELECT activity FROM Activity activity WHERE activity.userEmail = :userEmail " +
+            "ORDER BY activity.activityRecent DESC")
+    Optional<List<Activity>> findActivityOrderByActivityRecentDesc(
+            @Param("userEmail") String userEmail
+    );
 
     // Activity 추가
     @Modifying
