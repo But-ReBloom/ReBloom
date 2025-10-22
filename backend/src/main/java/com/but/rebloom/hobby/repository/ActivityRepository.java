@@ -33,20 +33,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
             @Param("userEmail") String userEmail
     );
 
-    // Activity 추가
-    @Modifying
-    @Transactional
-    @Query(
-            value = "INSERT INTO Activity (activityName, activityStart, activityRecent) " +
-                    "VALUES (:newActivityNamed, :newActivityStart, :newActivityRecent)",
-            nativeQuery = true
-    )
-    void insertActivity(
-            @Param("newActivityName") String newActivityName,
-            @Param("newActivityStart") LocalDate newActivityStart,
-            @Param("newActivityRecent") LocalDate newActivityRecent
-    );
-
     // 활동 이름 변경
     @Modifying
     @Transactional
