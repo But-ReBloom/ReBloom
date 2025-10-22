@@ -37,14 +37,8 @@ public class LoginUseCase {
         validationUseCase.checkUserEmail(userEmail);
         validationUseCase.checkUserPassword(userPassword);
 
-        Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
-
-        // 유저 조회
-        if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException("유저가 조회되지 않음");
-        }
-
-        User user = optionalUser.get();
+        User user = userRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("유저가 조회되지 않음"));
 
         if (!loginRequest.getProvider().equals(Provider.SELF)) {
             throw new IllegalArgumentException("잘못된 로그인 환경");

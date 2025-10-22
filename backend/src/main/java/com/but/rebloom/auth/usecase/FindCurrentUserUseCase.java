@@ -20,10 +20,7 @@ public class FindCurrentUserUseCase {
     public User getCurrentUser() {
         String email = jwtUtil.getCurrentUserEmail();
 
-        Optional<User> optionalUser = userRepository.findByUserEmail(email);
-        User user = optionalUser.orElseThrow(() ->
-            new UserNotFoundException("유저 조회 실패"));
-
-        return user;
+        return userRepository.findByUserEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("유저 조회 실패"));
     }
 }

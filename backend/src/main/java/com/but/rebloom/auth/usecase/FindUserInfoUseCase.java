@@ -28,14 +28,9 @@ public class FindUserInfoUseCase {
         validationUseCase.checkUserId(userId);
         validationUseCase.checkUserPassword(userPassword);
 
-        Optional<User> optionalUser = userRepository.findByUserId(userId);
-        User user = optionalUser.orElseThrow(() ->
-                new UserNotFoundException("이메일이 조회되지 않음"));
-
-        if (!passwordEncoder.matches(userPassword, user.getUserPassword())) {
-            throw new UserNotFoundException("유저가 조회되지 않음");
-        }
-
-        return user;
+        return userRepository.findByUserId(userId)
+                // 필터로 비밀번호 매치 로직 추가
+                .filter(user -> passwordEncoder.matches(userPassword, user.getUserPassword()))
+                .orElseThrow(() -> new UserNotFoundException("이메일 또는 비밀번호가 올바르지 않음"));
     }
 }
