@@ -37,17 +37,12 @@ public class LoginUseCase {
         validationUseCase.checkUserEmail(userEmail);
         validationUseCase.checkUserPassword(userPassword);
 
-        User user = userRepository.findByUserEmail(userEmail)
-                .orElseThrow(() -> new UserNotFoundException("유저가 조회되지 않음"));
-
         if (!loginRequest.getProvider().equals(Provider.SELF)) {
             throw new IllegalArgumentException("잘못된 로그인 환경");
         }
 
-        if (!passwordEncoder.matches(userPassword, user.getUserPassword())) {
-            throw new UserNotFoundException("유저 조회 실패");
-        }
-
-        return user;
+        return userRepository.findByUserEmail(userEmail)
+                .filter(user -> passwordEncoder.matches(userPassword, user.getUserPassword()))
+                .orElseThrow(() -> new UserNotFoundException("유저 조회 실패"));
     }
 }

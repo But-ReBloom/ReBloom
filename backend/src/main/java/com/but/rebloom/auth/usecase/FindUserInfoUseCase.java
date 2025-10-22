@@ -31,6 +31,6 @@ public class FindUserInfoUseCase {
         return userRepository.findByUserId(userId)
                 // 필터로 비밀번호 매치 로직 추가
                 .filter(user -> passwordEncoder.matches(userPassword, user.getUserPassword()))
-                .orElseThrow(() -> new UserNotFoundException("이메일 또는 비밀번호가 올바르지 않음"));
+                .orElseThrow(() -> new UserNotFoundException("아이디 또는 비밀번호가 올바르지 않음"));
     }
 }
