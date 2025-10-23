@@ -4,6 +4,7 @@ import LoginPage from "./Pages/loginpage/LP.tsx";
 import SignUpPage from "./Pages/signuppage/SUP.tsx";
 import FindEmail from "./Pages/findEmailpage/FEP.tsx";
 import FindPassWord from "./Pages/findPasswordpage/FPWP.tsx";
+import NotFound from "./Pages/404page/NF.tsx";
 
 //경로명세 라우터
 const router = createBrowserRouter([
@@ -29,11 +30,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: (
-      <>
-        <span>찾을 수 없습니다</span>
-      </>
-    ),
+    element: <NotFound/>,
   },
 ]);
 
