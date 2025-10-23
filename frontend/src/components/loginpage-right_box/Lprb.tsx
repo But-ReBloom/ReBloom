@@ -23,6 +23,9 @@ export default function Right_box() {
     // POST 과정 (이메일과 패스워드 정보를 보내어 사용자 정보 확인)
     fetch("", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json", // json 형식으로 데이터 전송
+      },
       body: JSON.stringify({
         userEmail: userEmail,
         userPassword: password,
@@ -30,23 +33,38 @@ export default function Right_box() {
       }),
     })
       .then((response) => {
-        if (!response.ok) { // response가 정상적이지 않으면 에러 처리
-          throw new Error(`HTTP error! 현 상태: ${response.status}`);
-        }else{
+        if (!response.ok) {
+          // response가 정상적이지 않으면 에러 처리
+          throw new Error(
+            `서버 응답이 올바르지 않습니다. | 현 상태: ${response.status}`
+          );
+        } else {
           return response.json(); // 아니라면 json으로 데이터 변환 후 다음 then으로 전달
         }
       })
 
-      .then((data) => { // POST한 데이터가 일치하면 환영 메시지와 함께 메인 페이지로 이동
-        toast.success(<>환영합니다! {data.userName}님 <br /> 이동 중입니다...</>);
-        setTimeout(() => {
-          navigate("/", { replace: true });
-        }, 2000);
+      .then((data) => {
+        if (data.success) {
+          // POST한 데이터가 일치하면 환영 메시지와 함께 메인 페이지로 이동
+          toast.success(
+            <>
+              환영합니다! {data.userName}님 <br /> 이동 중입니다...
+            </>
+          );
+          setTimeout(() => {
+            navigate("/", { replace: true });
+          }, 2000);
+        } else {
+          // 일치하지 않다면 오류 출력
+          toast.error("이메일 또는 비밀번호가 일치하지 않습니다.");
+        }
       })
 
-      .catch((error) => { // 데이터 불일치 시 에러 메세지 출력
+      .catch((error) => {
+        // 서버 통신 중 에러 메세지 출력
         console.error("Fetch error:", error);
-        toast.error(<>로그인에 실패했습니다. 다시 시도해주세요.</>);
+        console.error("로그인 중 오류 발생:", error);
+        toast.error("서버와의 통신 중 오류가 발생했습니다.");
       });
   };
 
@@ -78,14 +96,14 @@ export default function Right_box() {
               placeholder="Enter your password"
             />
           </div>
-        
+
           <S.ButtonBox>
             <S.Forgots>
               <S.Forgot_a to="/forgot/email">Forgot email?</S.Forgot_a>
               <S.Forgot_a to="/forgot/password">Forgot password?</S.Forgot_a>
             </S.Forgots>
             // 함수 호출
-            <S.LoginButton onClick={handleSubmit} type="button"> 
+            <S.LoginButton onClick={handleSubmit} type="button">
               Log In
             </S.LoginButton>
           </S.ButtonBox>
