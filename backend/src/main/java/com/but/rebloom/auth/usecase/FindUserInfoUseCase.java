@@ -3,7 +3,7 @@ package com.but.rebloom.auth.usecase;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.FindEmailRequest;
 import com.but.rebloom.auth.repository.UserRepository;
-import com.but.rebloom.common.exception.UserNotFoundException;
+import com.but.rebloom.auth.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

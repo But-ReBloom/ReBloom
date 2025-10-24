@@ -5,7 +5,7 @@ import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.LoginRequest;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.IllegalArgumentException;
-import com.but.rebloom.common.exception.UserNotFoundException;
+import com.but.rebloom.auth.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

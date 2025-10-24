@@ -4,7 +4,7 @@ import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.UpdateIdRequest;
 import com.but.rebloom.auth.dto.request.UpdatePwRequest;
 import com.but.rebloom.auth.repository.UserRepository;
-import com.but.rebloom.common.exception.UserNotFoundException;
+import com.but.rebloom.auth.exception.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -3,7 +3,7 @@ package com.but.rebloom.hobby.usecase;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.AlreadyUsingException;
 import com.but.rebloom.common.exception.IllegalArgumentException;
-import com.but.rebloom.common.exception.WrongTimeStampException;
+import com.but.rebloom.hobby.exception.WrongTimeStampException;
 import com.but.rebloom.hobby.dto.request.AddActivityRequest;
 import com.but.rebloom.hobby.repository.ActivityRepository;
 import lombok.RequiredArgsConstructor;
