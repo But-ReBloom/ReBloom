@@ -1,8 +1,9 @@
 package com.but.rebloom.hobby.usecase;
 
+import com.but.rebloom.auth.exception.AlreadyUsingUserException;
 import com.but.rebloom.auth.repository.UserRepository;
-import com.but.rebloom.common.exception.AlreadyUsingException;
 import com.but.rebloom.common.exception.IllegalArgumentException;
+import com.but.rebloom.hobby.exception.AlreadyUsingActivityException;
 import com.but.rebloom.hobby.exception.WrongTimeStampException;
 import com.but.rebloom.hobby.dto.request.AddActivityRequest;
 import com.but.rebloom.hobby.repository.ActivityRepository;
@@ -77,14 +78,14 @@ public class HobbyValidationUseCase {
     // 존재하는 유저인지 확인
     public void checkNotExistAccountByUserEmail(String userEmail) {
         if (!userRepository.existsByUserEmail(userEmail)) {
-            throw new AlreadyUsingException("존재하지 않는 이메일");
+            throw new AlreadyUsingUserException("존재하지 않는 이메일");
         }
     }
 
     // 해당 유저가 하고 있지 않은 활동인지 확인
     public void checkExistActivityByEmailAndActivityName(String email, String activityName) {
         if (activityRepository.findActivityByActivityNameAndUserEmail(email, activityName).isPresent()) {
-            throw new AlreadyUsingException("이미 활동중인 활동");
+            throw new AlreadyUsingActivityException("이미 활동중인 활동");
         }
     }
 }

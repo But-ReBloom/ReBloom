@@ -2,8 +2,8 @@ package com.but.rebloom.auth.usecase;
 
 import com.but.rebloom.auth.dto.request.LoginRequest;
 import com.but.rebloom.auth.dto.request.SignupRequest;
+import com.but.rebloom.auth.exception.AlreadyUsingUserException;
 import com.but.rebloom.auth.repository.UserRepository;
-import com.but.rebloom.common.exception.AlreadyUsingException;
 import com.but.rebloom.common.exception.IllegalArgumentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -93,21 +93,21 @@ public class ValidationUseCase {
     public void checkExistAccount(String userEmail, String userId) {
         if (userRepository.existsByUserEmail(userEmail) ||
                 userRepository.existsByUserId(userId)) {
-            throw new AlreadyUsingException("이미 존재함");
+            throw new AlreadyUsingUserException("이미 존재함");
         }
     }
 
     // 존재하는지 확인
     public void checkExistAccountByUserEmail(String userEmail) {
         if (userRepository.existsByUserEmail(userEmail)) {
-            throw new AlreadyUsingException("이미 존재함");
+            throw new AlreadyUsingUserException("이미 존재함");
         }
     }
 
     // 존재하는지 확인
     public void checkExistAccountByUserId(String userId) {
         if (userRepository.existsByUserId(userId)) {
-            throw new AlreadyUsingException("이미 존재함");
+            throw new AlreadyUsingUserException("이미 존재함");
         }
     }
 }

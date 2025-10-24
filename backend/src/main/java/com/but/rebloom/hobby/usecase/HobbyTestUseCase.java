@@ -1,9 +1,9 @@
 package com.but.rebloom.hobby.usecase;
 
-import com.but.rebloom.common.exception.AuthenticationException;
 import com.but.rebloom.hobby.domain.HobbyWeight;
 import com.but.rebloom.hobby.domain.InitialTest;
 import com.but.rebloom.hobby.dto.request.UserAnswerRequest;
+import com.but.rebloom.hobby.exception.QuestionSetException;
 import com.but.rebloom.hobby.repository.HobbyWeightRepository;
 import com.but.rebloom.hobby.repository.InitialTestRepository;
 import com.mysql.cj.exceptions.WrongArgumentException;
@@ -81,6 +81,6 @@ public class HobbyTestUseCase {
         int num = random.nextInt(10) + 1;
 
         return initialTestRepository.findBySetNo(num, (num + 1) % 10)
-                .orElseThrow(() -> new AuthenticationException("질문 세트 번호 이상"));
+                .orElseThrow(() -> new QuestionSetException("질문 세트 번호 이상"));
     }
 }

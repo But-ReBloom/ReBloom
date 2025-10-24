@@ -28,6 +28,7 @@ public class EmailUseCase {
     private final Map<String, Map<VerificationPurpose, CodeInfo>> codeMap = new HashMap<>();
     // 예외 호출
     private final ValidationUseCase validationUseCase;
+    // 디비 이용
     private final UserRepository userRepository;
 
     // 인증 코드 생성
