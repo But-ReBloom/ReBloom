@@ -2,7 +2,6 @@ package com.but.rebloom.auth.usecase;
 
 import com.but.rebloom.auth.dto.request.LoginRequest;
 import com.but.rebloom.auth.dto.request.SignupRequest;
-import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.IllegalArgumentException;
 import com.but.rebloom.common.usecase.ValidationUseCase;
 import lombok.RequiredArgsConstructor;
