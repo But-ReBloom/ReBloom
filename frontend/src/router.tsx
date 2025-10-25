@@ -5,6 +5,9 @@ import SignUpPage from "./Pages/signuppage/SUP.tsx";
 import FindEmail from "./Pages/findEmailpage/FEP.tsx";
 import FindPassWord from "./Pages/findPasswordpage/FPWP.tsx";
 import NotFound from "./Pages/404page/NF.tsx";
+import ExpReviewPage from "./Pages/expReviewpage/Exr.tsx";
+import MyExps from "./Pages/myExpspage/MEP.tsx";
+
 
 //경로명세 라우터
 const router = createBrowserRouter([
@@ -31,6 +34,14 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <NotFound/>,
+  },
+  {
+    path: "/expreview",
+    element: <ExpReviewPage/>,
+  },
+  {
+    path: "/myexps",
+    element: <MyExps/>,
   },
 ]);
 
