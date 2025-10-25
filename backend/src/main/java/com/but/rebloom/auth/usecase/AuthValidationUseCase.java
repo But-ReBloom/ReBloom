@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ValidationUseCase {
+public class AuthValidationUseCase {
     // 디비 이용
     private final UserRepository userRepository;
 

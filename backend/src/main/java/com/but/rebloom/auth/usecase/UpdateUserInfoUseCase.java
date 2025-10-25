@@ -18,22 +18,22 @@ public class UpdateUserInfoUseCase {
     // 비밀번호 암호화
     private final PasswordEncoder passwordEncoder;
     // 예외 분리
-    private final ValidationUseCase validationUseCase;
+    private final AuthValidationUseCase authValidationUseCase;
 
     @Transactional
     public User updateUserId(UpdateIdRequest updateIdRequest) {
         String userId = updateIdRequest.getUserId();
         String userEmail = updateIdRequest.getUserEmail();
 
-        validationUseCase.checkNull(userEmail);
-        validationUseCase.checkUserEmail(userEmail);
+        authValidationUseCase.checkNull(userEmail);
+        authValidationUseCase.checkUserEmail(userEmail);
 
         userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new UserNotFoundException("이메일이 조회되지 않음"));
 
-        validationUseCase.checkNull(userId);
-        validationUseCase.checkUserId(userId);
-        validationUseCase.checkExistAccountByUserId(userId);
+        authValidationUseCase.checkNull(userId);
+        authValidationUseCase.checkUserId(userId);
+        authValidationUseCase.checkExistAccountByUserId(userId);
 
         // 디비 수정
         userRepository.updateUserIdByUserEmail(userEmail, userId);
@@ -47,14 +47,14 @@ public class UpdateUserInfoUseCase {
         String userPassword = updatePwRequest.getUserPassword();
         String userEmail = updatePwRequest.getUserEmail();
 
-        validationUseCase.checkNull(userEmail);
-        validationUseCase.checkUserEmail(userEmail);
+        authValidationUseCase.checkNull(userEmail);
+        authValidationUseCase.checkUserEmail(userEmail);
 
         userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new UserNotFoundException("이메일이 조회되지 않음"));
 
-        validationUseCase.checkNull(userPassword);
-        validationUseCase.checkUserPassword(userPassword);
+        authValidationUseCase.checkNull(userPassword);
+        authValidationUseCase.checkUserPassword(userPassword);
 
         // 디비 수정
         userRepository.updateUserPasswordByUserEmail(userEmail, passwordEncoder.encode(userPassword));
