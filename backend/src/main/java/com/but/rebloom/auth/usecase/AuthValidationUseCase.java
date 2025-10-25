@@ -46,12 +46,34 @@ public class AuthValidationUseCase {
 
     // 아이디 확인
     public void checkUserId(String userId) {
-        validationUseCase.checkUserId(userId);
+        if (userId.length() < 4 || userId.length() > 20) {
+            throw new IllegalArgumentException("길이가 잘못됨");
+        }
+        if (!userId.matches("^[a-zA-Z0-9]+$")) {
+            throw new IllegalArgumentException("영어, 숫자 이외의 글자");
+        }
+        if (userId.matches(".*(.)\\1{2,}.*")) {
+            throw new IllegalArgumentException("3글자 이상 연속");
+        }
+        if (!userId.matches("^(?=.*[A-Za-z])(?=.*\\d).+$")) {
+            throw new IllegalArgumentException("영어, 숫자 포함 안 됨");
+        }
     }
 
     // 비밀번호 확인
     public void checkUserPassword(String userPassword) {
-        validationUseCase.checkUserPassword(userPassword);
+        if (userPassword.length() < 6 || userPassword.length() > 20) {
+            throw new IllegalArgumentException("길이가 잘못됨");
+        }
+        if (!userPassword.matches("^[A-Za-z0-9@$!%*?&]+$")) {
+            throw new IllegalArgumentException("영어, 숫자, 특수문자 이외의 글자");
+        }
+        if (userPassword.matches(".*(.)\\1{2,}.*")) {
+            throw new IllegalArgumentException("3글자 이상 연속");
+        }
+        if (!userPassword.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&]).+$")) {
+            throw new IllegalArgumentException("영어, 숫자, 특수문자를 포함 안 됨");
+        }
     }
 
     // 이메일 확인
@@ -61,7 +83,9 @@ public class AuthValidationUseCase {
 
     // 이름 확인
     public void checkUserName(String userName) {
-        validationUseCase.checkUserName(userName);
+        if (userName.length() < 1 || userName.length() > 20) {
+            throw new IllegalArgumentException("이름 오류");
+        }
     }
 
     // 존재하는지 확인

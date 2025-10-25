@@ -25,9 +25,7 @@ public class HobbyValidationUseCase {
 
     // 널 값 확인 - 한 요소
     public <T> void checkNull(T element) {
-        if (element == null || element.toString().trim().isEmpty()) {
-            throw new IllegalArgumentException("빈 값이 존재");
-        }
+        validationUseCase.checkNull(element);
     }
 
     // 널 값 확인 - Activity 추가
@@ -73,16 +71,12 @@ public class HobbyValidationUseCase {
 
     // 이메일 확인
     public void checkUserEmail(String userEmail) {
-        if (!userEmail.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            throw new IllegalArgumentException("이메일 오류");
-        }
+        validationUseCase.checkUserEmail(userEmail);
     }
 
     // 존재하는 유저인지 확인
     public void checkNotExistAccountByUserEmail(String userEmail) {
-        if (!userRepository.existsByUserEmail(userEmail)) {
-            throw new AlreadyUsingUserException("존재하지 않는 이메일");
-        }
+        validationUseCase.checkNotExistAccountByUserEmail(userEmail);
     }
 
     // 해당 유저가 하고 있지 않은 활동인지 확인
