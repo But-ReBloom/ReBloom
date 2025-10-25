@@ -5,12 +5,15 @@ import com.but.rebloom.auth.dto.request.SignupRequest;
 import com.but.rebloom.auth.exception.AlreadyUsingUserException;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.IllegalArgumentException;
+import com.but.rebloom.common.usecase.ValidationUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthValidationUseCase {
+    // DI
+    private final ValidationUseCase validationUseCase;
     // 디비 이용
     private final UserRepository userRepository;
 

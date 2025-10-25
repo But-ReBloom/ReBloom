@@ -3,6 +3,7 @@ package com.but.rebloom.hobby.usecase;
 import com.but.rebloom.auth.exception.AlreadyUsingUserException;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.IllegalArgumentException;
+import com.but.rebloom.common.usecase.ValidationUseCase;
 import com.but.rebloom.hobby.exception.AlreadyUsingActivityException;
 import com.but.rebloom.hobby.exception.WrongTimeStampException;
 import com.but.rebloom.hobby.dto.request.AddActivityRequest;
@@ -15,6 +16,8 @@ import java.time.LocalDate;
 @Service
 @RequiredArgsConstructor
 public class HobbyValidationUseCase {
+    // DI
+    private final ValidationUseCase validationUseCase;
     // 디비 이용
     private final ActivityRepository activityRepository;
     // 계정 확인
