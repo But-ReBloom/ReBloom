@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 public class ValidationUseCase {
     // 디비 이용
     private final UserRepository userRepository;
-    private final ActivityRepository activityRepository;
 
     // 널 값 확인 - 한 요소
     public <T> void checkNull(T element) {

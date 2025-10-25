@@ -20,8 +20,6 @@ public class HobbyValidationUseCase {
     private final ValidationUseCase validationUseCase;
     // 디비 이용
     private final ActivityRepository activityRepository;
-    // 계정 확인
-    private final UserRepository userRepository;
 
     // 널 값 확인 - 한 요소
     public <T> void checkNull(T element) {

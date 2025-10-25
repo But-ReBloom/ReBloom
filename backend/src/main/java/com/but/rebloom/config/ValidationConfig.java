@@ -11,17 +11,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ValidationConfig {
     @Bean
-    public ValidationUseCase validationUseCase(UserRepository userRepository, ActivityRepository activityRepository) {
-        return new ValidationUseCase(userRepository, activityRepository);
+    public ValidationUseCase validationUseCase(UserRepository userRepository) {
+        return new ValidationUseCase(userRepository);
     }
 
     @Bean
-    public AuthValidationUseCase authValidationUseCase(ValidationUseCase validationUseCase, UserRepository userRepository) {
-        return new AuthValidationUseCase(validationUseCase, userRepository);
+    public AuthValidationUseCase authValidationUseCase(ValidationUseCase validationUseCase) {
+        return new AuthValidationUseCase(validationUseCase);
     }
 
     @Bean
-    public HobbyValidationUseCase hobbyValidationUseCase(ValidationUseCase validationUseCase, ActivityRepository activityRepository, UserRepository userRepository) {
-        return new HobbyValidationUseCase(validationUseCase, activityRepository, userRepository);
+    public HobbyValidationUseCase hobbyValidationUseCase(ValidationUseCase validationUseCase, ActivityRepository activityRepository) {
+        return new HobbyValidationUseCase(validationUseCase, activityRepository);
     }
 }
