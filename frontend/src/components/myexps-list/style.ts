@@ -14,5 +14,5 @@ export const Head = styled.div`
 
 export const Tags = styled.p`
   font-size: 14px;
-  color:rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
 `;
