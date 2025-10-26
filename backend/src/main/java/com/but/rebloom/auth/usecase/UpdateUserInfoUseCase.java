@@ -1,8 +1,6 @@
 package com.but.rebloom.auth.usecase;
 
 import com.but.rebloom.auth.domain.User;
-import com.but.rebloom.auth.dto.request.UpdateIdRequest;
-import com.but.rebloom.auth.dto.request.UpdatePwRequest;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.auth.exception.UserNotFoundException;
 import jakarta.transaction.Transactional;
@@ -23,35 +21,33 @@ public class UpdateUserInfoUseCase {
     private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     @Transactional
-    public User updateUserId(UpdateIdRequest updateIdRequest) {
-        String userId = updateIdRequest.getUserId();
+    public User updateUserId(String updateUserId) {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
         authValidationUseCase.checkNull(userEmail);
 
-        authValidationUseCase.checkNull(userId);
-        authValidationUseCase.checkUserId(userId);
-        authValidationUseCase.checkExistAccountByUserId(userId);
+        authValidationUseCase.checkNull(updateUserId);
+        authValidationUseCase.checkUserId(updateUserId);
+        authValidationUseCase.checkExistAccountByUserId(updateUserId);
 
         // 디비 수정
-        userRepository.updateUserIdByUserEmail(userEmail, userId);
+        userRepository.updateUserIdByUserEmail(userEmail, updateUserId);
 
         return userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new UserNotFoundException("이메일이 조회되지 않음"));
     }
 
     @Transactional
-    public User updateUserPw(UpdatePwRequest updatePwRequest) {
-        String userPassword = updatePwRequest.getUserPassword();
+    public User updateUserPw(String updateUserPw) {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
         authValidationUseCase.checkNull(userEmail);
 
-        authValidationUseCase.checkNull(userPassword);
-        authValidationUseCase.checkUserPassword(userPassword);
+        authValidationUseCase.checkNull(updateUserPw);
+        authValidationUseCase.checkUserPassword(updateUserPw);
 
         // 디비 수정
-        userRepository.updateUserPasswordByUserEmail(userEmail, passwordEncoder.encode(userPassword));
+        userRepository.updateUserPasswordByUserEmail(userEmail, passwordEncoder.encode(updateUserPw));
 
         return userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new UserNotFoundException("이메일이 조회되지 않음"));
