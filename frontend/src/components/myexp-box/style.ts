@@ -19,7 +19,7 @@ export const Wrraper = styled.div`
 `;
 
 export const Container = styled.div`
-  width: 100%;
+  width: 94%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -28,7 +28,7 @@ export const Container = styled.div`
 `;
 
 export const Locate = styled.div`
-  width: 400px;
+  width: 39%;
   display: flex;
   align-items: center;
   justify-content: space-between;

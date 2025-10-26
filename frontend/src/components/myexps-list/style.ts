@@ -16,3 +16,11 @@ export const Tags = styled.p`
   font-size: 14px;
   color: rgb(255, 255, 255);
 `;
+
+export const Locate = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 300px;
+  margin-right: 36px;
+`;

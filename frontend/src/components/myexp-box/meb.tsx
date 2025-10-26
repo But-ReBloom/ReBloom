@@ -17,15 +17,15 @@ export default function OneExpInfo() {
     <>
       <S.Wrraper>
         <S.Container>
-          <S.ExpInfo>
-            <img
-              src={Page}
-              alt="페이지 아이콘"
-              style={{ width: "20px", height: "20px" }}
-            />
-            활동명 예시
-          </S.ExpInfo>
           <S.Locate>
+            <S.ExpInfo>
+              <img
+                src={Page}
+                alt="페이지 아이콘"
+                style={{ width: "20px", height: "20px" }}
+              />
+              활동명 예시
+            </S.ExpInfo>
             <S.ExpInfo>
               <img
                 src={Clock}
@@ -34,6 +34,8 @@ export default function OneExpInfo() {
               />
               {formattedDate}
             </S.ExpInfo>
+          </S.Locate>
+          <S.Locate>
             <S.ExpInfo>
               <img
                 src={Tag}
@@ -42,15 +44,15 @@ export default function OneExpInfo() {
               />
               관련 태그
             </S.ExpInfo>
+            <S.ExpInfo>
+              <img
+                src={Submitimg}
+                alt="제출 여부"
+                style={{ width: "24px", height: "24px" }}
+              />
+              제출
+            </S.ExpInfo>
           </S.Locate>
-          <S.ExpInfo>
-            <img
-              src={Submitimg}
-              alt="제출 여부"
-              style={{ width: "24px", height: "24px" }}
-            />
-            제출
-          </S.ExpInfo>
         </S.Container>
       </S.Wrraper>
     </>
