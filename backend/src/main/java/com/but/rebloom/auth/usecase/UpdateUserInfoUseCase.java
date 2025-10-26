@@ -19,17 +19,15 @@ public class UpdateUserInfoUseCase {
     private final PasswordEncoder passwordEncoder;
     // 예외 분리
     private final AuthValidationUseCase authValidationUseCase;
+    // 현재 유저 조회
+    private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     @Transactional
     public User updateUserId(UpdateIdRequest updateIdRequest) {
         String userId = updateIdRequest.getUserId();
-        String userEmail = updateIdRequest.getUserEmail();
+        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
         authValidationUseCase.checkNull(userEmail);
-        authValidationUseCase.checkUserEmail(userEmail);
-
-        userRepository.findByUserEmail(userEmail)
-                .orElseThrow(() -> new UserNotFoundException("이메일이 조회되지 않음"));
 
         authValidationUseCase.checkNull(userId);
         authValidationUseCase.checkUserId(userId);
@@ -45,13 +43,9 @@ public class UpdateUserInfoUseCase {
     @Transactional
     public User updateUserPw(UpdatePwRequest updatePwRequest) {
         String userPassword = updatePwRequest.getUserPassword();
-        String userEmail = updatePwRequest.getUserEmail();
+        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
         authValidationUseCase.checkNull(userEmail);
-        authValidationUseCase.checkUserEmail(userEmail);
-
-        userRepository.findByUserEmail(userEmail)
-                .orElseThrow(() -> new UserNotFoundException("이메일이 조회되지 않음"));
 
         authValidationUseCase.checkNull(userPassword);
         authValidationUseCase.checkUserPassword(userPassword);

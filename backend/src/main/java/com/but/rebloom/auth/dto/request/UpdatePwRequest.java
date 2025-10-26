@@ -8,7 +8,5 @@ import lombok.Setter;
 @Setter
 public class UpdatePwRequest {
     @NotNull
-    private String userEmail;
-    @NotNull
     private String userPassword;
 }
