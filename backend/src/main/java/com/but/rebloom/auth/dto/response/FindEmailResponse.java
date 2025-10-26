@@ -11,10 +11,13 @@ import lombok.Setter;
 @Builder
 public class FindEmailResponse {
     @NotNull
+    private Boolean success;
+    @NotNull
     private String userEmail;
 
     public static FindEmailResponse from(User user) {
         return FindEmailResponse.builder()
+                .success(true)
                 .userEmail(user.getUserEmail())
                 .build();
     }
