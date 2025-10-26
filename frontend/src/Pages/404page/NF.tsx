@@ -1,4 +1,4 @@
-import Header from "../../components/notfound_header/nfh.tsx";
+import Header from "../../components/normal_header/nh.tsx";
 import Body from "../../components/notfound_body/nfb.tsx";
 import * as S from "./style.ts"
 

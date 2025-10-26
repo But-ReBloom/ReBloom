@@ -1,5 +1,5 @@
 import * as S from "./style.ts"
-import Header from "../../components/notfound_header/nfh.tsx";
+import Header from "../../components/normal_header/nh.tsx";
 import ExpreviewContentBox from "../../components/expreview-content_box/epr-cb.tsx";
 
 // 활동 리뷰 페이지
