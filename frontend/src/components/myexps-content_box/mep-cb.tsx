@@ -6,11 +6,11 @@ export default function MepCb() {
         <>
             <S.Wrapper>
                 <S.Container>
-                    <S.TitleBox>
+                    <S.TitleBox> {/*타이틀*/}
                         <S.Question>어떤 활동에 대한 리뷰를 남기고 싶으신가요?</S.Question>
                         <S.Line />
                     </S.TitleBox>
-                    <List />
+                    <List /> {/*항목들*/}
                 </S.Container>
             </S.Wrapper>
         </>

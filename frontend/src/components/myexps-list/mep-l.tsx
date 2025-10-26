@@ -12,7 +12,8 @@ export default function MepL() {
         <S.Tags>관련 태그</S.Tags>
         <S.Tags>리뷰 여부</S.Tags>
       </S.Head>
-      <OneExpInfo />
+      {/*컴포넌트 - 활동정보*/}
+      <OneExpInfo /> 
       <OneExpInfo />
       <OneExpInfo />
       <OneExpInfo />

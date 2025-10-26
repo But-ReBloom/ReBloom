@@ -5,6 +5,7 @@ import Tag from "../../assets/images/Tag.svg";
 import Submitimg from "../../assets/images/submitinfo.svg";
 
 export default function OneExpInfo() {
+  {/*년 월 일 가져오기 - 연습용*/}
   let now = new Date();
   let year = now.getFullYear();
   let month = now.getMonth() + 1;

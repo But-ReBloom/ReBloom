@@ -7,8 +7,8 @@ export default function MyExps (){
         <>
         <S.Wrapper>
             <S.Container>
-                <Header/>
-                <Content/>
+                <Header/> {/*홈화면 이동 헤더*/}
+                <Content/> {/*리스트 박스*/}
             </S.Container>
         </S.Wrapper> 
         </>
