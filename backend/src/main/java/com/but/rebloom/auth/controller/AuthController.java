@@ -27,6 +27,8 @@ public class AuthController {
     private final FindUserInfoUseCase findUserInfoUseCase;
     // 토큰 발급에 이용
     private final JwtTokenProvider jwtTokenProvider;
+    // 현재 유저 정보 확인
+    private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     @PostMapping("/email/send")
     public ResponseEntity<SendVerificationEmailResponse> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
@@ -83,5 +85,11 @@ public class AuthController {
         // 이메일 조회
         User user = findUserInfoUseCase.findUserIdByIdAndPw(findEmailRequest);
         return ResponseEntity.ok(FindEmailResponse.from(user));
+    }
+
+    @PostMapping("/current-user")
+    public ResponseEntity<FindUserInfoResponse> findCurrentUser() {
+        User user = findCurrentUserUseCase.getCurrentUser();
+        return ResponseEntity.ok(FindUserInfoResponse.from(user));
     }
 }
