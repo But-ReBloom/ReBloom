@@ -50,4 +50,7 @@ public class Post {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime postCreatedAt;
 
+    @Column(name = "veiwers", nullable = false)
+    @Builder.Default
+    private int veiwers = 0;
 }
