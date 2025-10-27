@@ -1,12 +1,12 @@
-import MainPage from './Pages/mainpage/MP'
-import './App.css'
+import MainPage from "./Pages/mainpage/MP";
+import "./App.css";
 
 function App() {
-  return (   
+  return (
     <>
-    <MainPage/>
+      <MainPage />
     </>
   );
 }
 
-export default App
+export default App;
