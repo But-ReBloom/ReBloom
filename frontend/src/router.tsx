@@ -7,8 +7,12 @@ import FindPassWord from "./Pages/findPasswordpage/FPWP.tsx";
 import FT_HobbyTest from "./Pages/findtastepage/ftp.tsx";
 import FT_HobbyTest_Description from "./Pages/findtaste-description-page/ft-dp.tsx";
 import FT_TestPage from "./Pages/findtaste-testpage/fttp.tsx";
+import NotFound from "./Pages/404page/NF.tsx";
+import ExpReviewPage from "./Pages/expReviewpage/Exr.tsx";
+import MyExps from "./Pages/myExpspage/MEP.tsx";
+import EPT from "./Pages/exploreTaste/EPT.tsx";
 
-
+//경로명세 라우터
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,11 +48,19 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: (
-      <>
-        <span>찾을 수 없습니다</span>
-      </>
-    ),
+    element: <NotFound/>,
+  },
+  {
+    path: "/expreview",
+    element: <ExpReviewPage/>,
+  },
+  {
+    path: "/myexps",
+    element: <MyExps/>,
+  },
+  {
+    path: "/explore/taste",
+    element: <EPT/>,
   },
 ]);
 
