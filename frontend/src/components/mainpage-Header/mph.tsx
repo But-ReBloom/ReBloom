@@ -1,8 +1,16 @@
 import logo from '../../assets/images/Rebloom-logo.svg';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom'
 import * as S from './style.ts';
 
 function Header() {
+
+    const navigate = useNavigate();
+    const goto_ftdp = () => {
+        navigate('/taste');
+    };
+
+    navigate('/taste')
+
     return (
         <>
             <S.HeaderContainer>
@@ -10,7 +18,7 @@ function Header() {
                 <S.HeaderRight>
                         <div className='header-menu'>
                             <ul>
-                                <li><a href="">취향 발견</a></li>
+                                <li><a href="" onClick={goto_ftdp}>취향 발견</a></li>
                                 <li><a href="">취향 탐색</a></li>
                                 <li><a href="">커뮤니티</a></li>
                                 <li><a href="">마이페이지</a></li>

@@ -32,6 +32,7 @@ export const RowContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 
     gap: 20px;
 `
@@ -53,7 +54,8 @@ export const TextBox = styled.div`
 
 export const TopTextBox = styled.div`
     padding-top: 10px;
-    padding-bottom: 20px`;
+    padding-bottom: 20px;
+`;
 
 export const BottomTextBox = styled.div`
     gap: -5px;
@@ -66,20 +68,68 @@ export const StartConnect_Button = styled.button`
     border: none;
     border-radius: 20px; 
 
-    background: #000;
+    background: linear-gradient(103deg, #287dfc 0%, #2b57d9 100%);
     color: #fff;
     font-size: 18px;
     font-family: "Nanum Gothic";
     font-weight: bold;
     cursor: pointer;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     &:hover {
-    transform: scale(1.1);
-  background: linear-gradient(90deg, #41a6ff, #3e55bf);
+    transform: translateY(-2px);
     }
     &:active {
     transform: translateY(0);
     box-shadow: none;
-    }
-`;
+}`;
+
+export const Select_Box = styled.div`
+    width: 900px;
+    height: 650px;
+
+    border-radius: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    background-color: #ffffff87;
+
+    padding-bottom: 100px;
+
+    background: rgba(255, 255, 255, 0.30);
+    box-shadow: 0 4px 100px 0 rgba(0, 0, 0, 0.25);
+`
+
+export const Page_num = styled.div`
+    width: 800px;
+    padding-top: 100px;
+    text-align: right;
+`
+
+export const Button_Box = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
+export const Before_button = styled.button`
+    background-color: #ffffff00;
+    border: #ffffff00;
+
+    font-size: 20px;
+
+    cursor: pointer;
+`
+
+export const After_button = styled.button`
+    background-color: #ffffff00;
+    border: #ffffff00;
+
+    font-size: 20px;
+
+    cursor: pointer;
+`
+

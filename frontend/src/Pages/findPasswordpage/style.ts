@@ -14,3 +14,13 @@ export const Box = styled.div`
     align-items: center;
     justify-content: center;
 `;
+
+export const MainContainer = styled.div`
+    width: 100%;
+    height: 100%; /* 화면 전체 채우기 */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+`;
