@@ -1,9 +1,9 @@
 package com.but.rebloom.hobby.usecase;
 
-import com.but.rebloom.auth.repository.UserRepository;
-import com.but.rebloom.common.exception.AlreadyUsingException;
 import com.but.rebloom.common.exception.IllegalArgumentException;
-import com.but.rebloom.common.exception.WrongTimeStampException;
+import com.but.rebloom.common.usecase.ValidationUseCase;
+import com.but.rebloom.hobby.exception.AlreadyUsingActivityException;
+import com.but.rebloom.hobby.exception.WrongTimeStampException;
 import com.but.rebloom.hobby.dto.request.AddActivityRequest;
 import com.but.rebloom.hobby.repository.ActivityRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,16 +14,14 @@ import java.time.LocalDate;
 @Service
 @RequiredArgsConstructor
 public class HobbyValidationUseCase {
+    // DI
+    private final ValidationUseCase validationUseCase;
     // 디비 이용
     private final ActivityRepository activityRepository;
-    // 계정 확인
-    private final UserRepository userRepository;
 
     // 널 값 확인 - 한 요소
     public <T> void checkNull(T element) {
-        if (element == null || element.toString().trim().isEmpty()) {
-            throw new IllegalArgumentException("빈 값이 존재");
-        }
+        validationUseCase.checkNull(element);
     }
 
     // 널 값 확인 - Activity 추가
@@ -69,22 +67,18 @@ public class HobbyValidationUseCase {
 
     // 이메일 확인
     public void checkUserEmail(String userEmail) {
-        if (!userEmail.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            throw new IllegalArgumentException("이메일 오류");
-        }
+        validationUseCase.checkUserEmail(userEmail);
     }
 
     // 존재하는 유저인지 확인
     public void checkNotExistAccountByUserEmail(String userEmail) {
-        if (!userRepository.existsByUserEmail(userEmail)) {
-            throw new AlreadyUsingException("존재하지 않는 이메일");
-        }
+        validationUseCase.checkNotExistAccountByUserEmail(userEmail);
     }
 
     // 해당 유저가 하고 있지 않은 활동인지 확인
     public void checkExistActivityByEmailAndActivityName(String email, String activityName) {
         if (activityRepository.findActivityByActivityNameAndUserEmail(email, activityName).isPresent()) {
-            throw new AlreadyUsingException("이미 활동중인 활동");
+            throw new AlreadyUsingActivityException("이미 활동중인 활동");
         }
     }
 }

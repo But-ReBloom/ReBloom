@@ -27,6 +27,8 @@ public class AuthController {
     private final FindUserInfoUseCase findUserInfoUseCase;
     // 토큰 발급에 이용
     private final JwtTokenProvider jwtTokenProvider;
+    // 현재 유저 정보 확인
+    private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     @PostMapping("/email/send")
     public ResponseEntity<SendVerificationEmailResponse> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
@@ -58,23 +60,23 @@ public class AuthController {
     }
 
     @PostMapping("/login/google")
-    public ResponseEntity<GoogleUserInfoResponse> googleLogin(@RequestBody GoogleLoginRequest request) {
-        User user = googleOAuthUseCase.execute(request.getAuthorizationCode());
+    public ResponseEntity<GoogleUserInfoResponse> googleLogin(@RequestBody String authorizationCode) {
+        User user = googleOAuthUseCase.execute(authorizationCode);
         String jwtToken = jwtTokenProvider.generateToken(user.getUserEmail());
         return ResponseEntity.ok(GoogleUserInfoResponse.from(user, jwtToken));
     }
 
     @PatchMapping("/update/id")
-    public ResponseEntity<UpdateIdResponse> updateUserId(@RequestBody UpdateIdRequest updateIdRequest) {
+    public ResponseEntity<UpdateIdResponse> updateUserId(@RequestBody String updateId) {
         // 아이디 변경 및 반환
-        User user = updateUserInfoUseCase.updateUserId(updateIdRequest);
+        User user = updateUserInfoUseCase.updateUserId(updateId);
         return ResponseEntity.ok(UpdateIdResponse.from(user));
     }
 
     @PatchMapping("/update/pw")
-    public ResponseEntity<UpdatePwResponse> updateUserPw(@RequestBody UpdatePwRequest updatePwRequest) {
+    public ResponseEntity<UpdatePwResponse> updateUserPw(@RequestBody String updatePw) {
         // 비밀번호 변경
-        User user = updateUserInfoUseCase.updateUserPw(updatePwRequest);
+        User user = updateUserInfoUseCase.updateUserPw(updatePw);
         return ResponseEntity.ok(UpdatePwResponse.from(user));
     }
 
@@ -83,5 +85,11 @@ public class AuthController {
         // 이메일 조회
         User user = findUserInfoUseCase.findUserIdByIdAndPw(findEmailRequest);
         return ResponseEntity.ok(FindEmailResponse.from(user));
+    }
+
+    @PostMapping("/current-user")
+    public ResponseEntity<FindUserInfoResponse> findCurrentUser() {
+        User user = findCurrentUserUseCase.getCurrentUser();
+        return ResponseEntity.ok(FindUserInfoResponse.from(user));
     }
 }

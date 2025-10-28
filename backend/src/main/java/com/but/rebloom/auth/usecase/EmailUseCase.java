@@ -5,8 +5,8 @@ import com.but.rebloom.auth.domain.VerificationPurpose;
 import com.but.rebloom.auth.dto.request.SendVerificationEmailRequest;
 import com.but.rebloom.auth.dto.request.VerifyCodeRequest;
 import com.but.rebloom.auth.repository.UserRepository;
-import com.but.rebloom.common.exception.UserNotFoundException;
-import com.but.rebloom.common.exception.WrongVerifiedCodeException;
+import com.but.rebloom.auth.exception.UserNotFoundException;
+import com.but.rebloom.auth.exception.WrongVerifiedCodeException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -27,7 +27,8 @@ public class EmailUseCase {
     // 이메일-인증코드 저장용
     private final Map<String, Map<VerificationPurpose, CodeInfo>> codeMap = new HashMap<>();
     // 예외 호출
-    private final ValidationUseCase validationUseCase;
+    private final AuthValidationUseCase authValidationUseCase;
+    // 디비 이용
     private final UserRepository userRepository;
 
     // 인증 코드 생성
@@ -37,7 +38,7 @@ public class EmailUseCase {
 
     // 인증 코드 전송
     public User sendVerificationEmail(SendVerificationEmailRequest emailRequest) {
-        validationUseCase.checkUserEmail(emailRequest.getUserEmail());
+        authValidationUseCase.checkUserEmail(emailRequest.getUserEmail());
 
         String code = generateCode();
         // 이메일 - (목적 - 코드) 저장

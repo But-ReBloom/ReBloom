@@ -2,7 +2,7 @@ package com.but.rebloom.hobby.usecase;
 
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.usecase.FindCurrentUserUseCase;
-import com.but.rebloom.common.exception.ActivityNotFoundException;
+import com.but.rebloom.hobby.exception.ActivityNotFoundException;
 import com.but.rebloom.hobby.domain.Activity;
 import com.but.rebloom.hobby.dto.request.AddActivityRequest;
 import com.but.rebloom.hobby.repository.ActivityRepository;

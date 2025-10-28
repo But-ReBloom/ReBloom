@@ -3,7 +3,7 @@ package com.but.rebloom.auth.usecase;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.FindEmailRequest;
 import com.but.rebloom.auth.repository.UserRepository;
-import com.but.rebloom.common.exception.UserNotFoundException;
+import com.but.rebloom.auth.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class FindUserInfoUseCase {
     // 디비 접근
     private final UserRepository userRepository;
     // 예외 호출
-    private final ValidationUseCase validationUseCase;
+    private final AuthValidationUseCase authValidationUseCase;
     // 비밀번호 암호화
     private final PasswordEncoder passwordEncoder;
 
@@ -23,8 +23,8 @@ public class FindUserInfoUseCase {
         String userId = findEmailRequest.getUserId();
         String userPassword = findEmailRequest.getPassword();
 
-        validationUseCase.checkUserId(userId);
-        validationUseCase.checkUserPassword(userPassword);
+        authValidationUseCase.checkUserId(userId);
+        authValidationUseCase.checkUserPassword(userPassword);
 
         return userRepository.findByUserId(userId)
                 // 필터로 비밀번호 매치 로직 추가

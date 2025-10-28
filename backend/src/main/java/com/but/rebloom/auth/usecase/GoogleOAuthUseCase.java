@@ -4,7 +4,7 @@ import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.response.GoogleUserInfoResponse;
 import com.but.rebloom.auth.repository.UserRepository;
-import com.but.rebloom.common.exception.WrongVerifiedCodeException;
+import com.but.rebloom.auth.exception.WrongVerifiedCodeException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

@@ -44,5 +44,5 @@ spring:
             user-info-uri: https://www.googleapis.com/oauth2/v2/userinfo
 
 jwt:
-  secret: ${JWT_SERCRET}
+  secret: ${JWT_SECRET}
   expiration: 3600000
