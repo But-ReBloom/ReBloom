@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d7bae20c-61bd-4648-b2a5-3ff619ac6d14" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/controller/CommentController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/request/CreateCommentRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/request/UpdateCommentRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/response/CreateCommentResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/response/FindCommentResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/usecase/CommentUseCase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/controller/HeartController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/request/CreateHeartRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/request/DeleteHeartRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/response/CreateHeartResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/response/FindHeartResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/usecase/HeartUseCase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -201,7 +201,7 @@
       <workItem from="1761548747088" duration="19000" />
       <workItem from="1761548772751" duration="3714000" />
       <workItem from="1761565622332" duration="1284000" />
-      <workItem from="1761568232842" duration="15839000" />
+      <workItem from="1761568232842" duration="19024000" />
     </task>
     <servers />
   </component>
