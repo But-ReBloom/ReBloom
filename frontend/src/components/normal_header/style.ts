@@ -1,29 +1,45 @@
 import styled from "styled-components";
 
 export const GlobalFont = styled.div`
-@font-face {
-  font-family: 'PyeojinGothic';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2504-1@1.0/PyeojinGothic-Bold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
+  @font-face {
+    font-family: "PyeojinGothic";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2504-1@1.0/PyeojinGothic-Bold.woff2")
+      format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
 `;
 
 export const HeaderContainer = styled.div`
-    padding: 16px 36px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 80px;
-    position: fixed;
-    opacity: 1;
+  padding: 16px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 80px;
+  position: fixed;
+  opacity: 1;
 `;
 
 export const Logo_svg = styled.img`
-width: 160px;
-margin: 0;
+  width: 160px;
+  margin: 0;
+`;
+
+export const Exit_img = styled.img`
+  width: 44px;
+`;
+
+export const ExitBtn = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
 `;
 
 /* ========== 오른쪽 영역: 메뉴 + 버튼 ========== */
@@ -69,12 +85,12 @@ export const HeaderRight = styled.div`
     bottom: -6px; /* 글자 밑 여백 */
     width: 0;
     height: 2px;
-    background-color: #3E55BF;
+    background-color: #3e55bf;
     transition: width 0.3s ease;
   }
 
   .header-menu ul li a:hover {
-    color: #3E55BF;
+    color: #3e55bf;
     transform: scale(1.2); /* 너무 크게 하지 않도록 소폭만 */
   }
 
@@ -90,12 +106,13 @@ export const HeaderRight = styled.div`
   }
 
   .login-button-go-lp {
-    background: linear-gradient(90deg, #41a6ff, #3E55BF);
+    background: linear-gradient(90deg, #41a6ff, #3e55bf);
     color: #ffffff;
     padding: 8px 16px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.3s ease, transform 0.12s ease, color 0.12s ease;
+    transition: background-color 0.3s ease, transform 0.12s ease,
+      color 0.12s ease;
     border: 1px solid #dedede;
   }
 
