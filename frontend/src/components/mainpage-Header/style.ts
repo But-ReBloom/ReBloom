@@ -30,7 +30,7 @@ margin: 0;
 export const HeaderRight = styled.div`
   display: flex;
   align-items: center;
-  gap: 464px;
+  gap: 508px;
 
   .header-menu {
     display: block;

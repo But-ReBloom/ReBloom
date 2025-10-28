@@ -1,12 +1,13 @@
+import { Link } from "react-router-dom";
+
 function Menu_Bar(){
     return(
     <>
         <div className='header-menu'>
             <ul>
-                <li><a href="">취향 발견</a></li>
-                <li><a href="">취향 탐색</a></li>
-                <li><a href="">커뮤니티</a></li>
-                <li><a href="">마이페이지</a></li>
+                <li><Link to="/explore/taste">취향 탐색</Link></li>
+                <li><Link to="">커뮤니티</Link></li>
+                <li><Link to="">마이페이지</Link></li>
             </ul>
         </div>
     </>

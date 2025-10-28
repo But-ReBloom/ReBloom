@@ -7,7 +7,7 @@ import FindPassWord from "./Pages/findPasswordpage/FPWP.tsx";
 import NotFound from "./Pages/404page/NF.tsx";
 import ExpReviewPage from "./Pages/expReviewpage/Exr.tsx";
 import MyExps from "./Pages/myExpspage/MEP.tsx";
-
+import EPT from "./Pages/exploreTaste/EPT.tsx";
 
 //경로명세 라우터
 const router = createBrowserRouter([
@@ -42,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "/myexps",
     element: <MyExps/>,
+  },
+  {
+    path: "/explore/taste",
+    element: <EPT/>,
   },
 ]);
 
