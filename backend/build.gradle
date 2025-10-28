@@ -6,11 +6,11 @@ plugins {
 
 group = 'com.but'
 version = '0.0.1-SNAPSHOT'
-description = 'ReBloom project that helps finding hobby'
+description = 'ReBloom project that helps finding hoddy'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
