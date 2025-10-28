@@ -5,17 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d7bae20c-61bd-4648-b2a5-3ff619ac6d14" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/controller/PostController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/request/CreatePostRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/request/FindPostRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/request/UpdatePostRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/response/CreatePostResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/response/FindPostResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/usecase/PostUseCase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/controller/CommentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/request/CreateCommentRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/request/UpdateCommentRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/response/CreateCommentResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/dto/response/FindCommentResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/usecase/CommentUseCase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/domain/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/domain/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/repository/ChannelRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/repository/ChannelRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/but/rebloom/channel/repository/PostRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,7 +201,7 @@
       <workItem from="1761548747088" duration="19000" />
       <workItem from="1761548772751" duration="3714000" />
       <workItem from="1761565622332" duration="1284000" />
-      <workItem from="1761568232842" duration="14276000" />
+      <workItem from="1761568232842" duration="15839000" />
     </task>
     <servers />
   </component>
