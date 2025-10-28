@@ -44,7 +44,7 @@ public class Post {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = true)
-    private Type postStatus;
+    private Status postStatus;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

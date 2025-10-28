@@ -8,9 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ChannelRepository extends JpaRepository<Channel, Long> {
+    // ID로 채널 조회
+    Optional<Channel> findByChannelId(Long channelId);
 
     // 특정 키워드를 제목이나 설명에 포함한 채널 조회
     List<Channel> findByChannelTitleContainingOrChannelDescriptionContaining(String channelTitle, String channelDescription);
