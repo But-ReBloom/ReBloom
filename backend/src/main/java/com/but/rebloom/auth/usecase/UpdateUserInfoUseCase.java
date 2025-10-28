@@ -1,16 +1,12 @@
 package com.but.rebloom.auth.usecase;
 
 import com.but.rebloom.auth.domain.User;
-import com.but.rebloom.auth.dto.request.SendVerificationEmailRequest;
-import com.but.rebloom.auth.dto.request.UpdateIdRequest;
-import com.but.rebloom.auth.dto.request.UpdatePwRequest;
 import com.but.rebloom.auth.repository.UserRepository;
-import com.but.rebloom.common.exception.UserNotFoundException;
+import com.but.rebloom.auth.exception.UserNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,46 +16,40 @@ public class UpdateUserInfoUseCase {
     // 비밀번호 암호화
     private final PasswordEncoder passwordEncoder;
     // 예외 분리
-    private final ValidationUseCase validationUseCase;
+    private final AuthValidationUseCase authValidationUseCase;
+    // 현재 유저 조회
+    private final FindCurrentUserUseCase findCurrentUserUseCase;
 
-    public User updateUserId(UpdateIdRequest updateIdRequest) {
-        String userId = updateIdRequest.getUserId();
-        String userEmail = updateIdRequest.getUserEmail();
+    @Transactional
+    public User updateUserId(String updateUserId) {
+        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
-        validationUseCase.checkNull(userEmail);
-        validationUseCase.checkUserEmail(userEmail);
+        authValidationUseCase.checkNull(userEmail);
 
-        Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
-        User user = optionalUser.orElseThrow(() ->
-                new UserNotFoundException("이메일이 조회되지 않음"));
-
-        validationUseCase.checkNull(userId);
-        validationUseCase.checkUserId(userId);
-        validationUseCase.checkExistAccountByUserId(userId);
+        authValidationUseCase.checkNull(updateUserId);
+        authValidationUseCase.checkUserId(updateUserId);
+        authValidationUseCase.checkExistAccountByUserId(updateUserId);
 
         // 디비 수정
-        userRepository.updateUserId(userEmail, userId);
+        userRepository.updateUserIdByUserEmail(userEmail, updateUserId);
 
-        return user;
+        return userRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("이메일이 조회되지 않음"));
     }
 
-    public User updateUserPassword(UpdatePwRequest updatePwRequest) {
-        String userPassword = updatePwRequest.getUserPassword();
-        String userEmail = updatePwRequest.getUserEmail();
+    @Transactional
+    public User updateUserPw(String updateUserPw) {
+        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
-        validationUseCase.checkNull(userEmail);
-        validationUseCase.checkUserEmail(userEmail);
+        authValidationUseCase.checkNull(userEmail);
 
-        Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
-        User user = optionalUser.orElseThrow(() ->
-                new UserNotFoundException("이메일이 조회되지 않음"));
-
-        validationUseCase.checkNull(userPassword);
-        validationUseCase.checkUserPassword(userPassword);
+        authValidationUseCase.checkNull(updateUserPw);
+        authValidationUseCase.checkUserPassword(updateUserPw);
 
         // 디비 수정
-        userRepository.updateUserPassword(userEmail, passwordEncoder.encode(userPassword));
+        userRepository.updateUserPasswordByUserEmail(userEmail, passwordEncoder.encode(updateUserPw));
 
-        return user;
+        return userRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("이메일이 조회되지 않음"));
     }
 }

@@ -1,6 +1,6 @@
 package com.but.rebloom.auth.jwt;
 
-import com.but.rebloom.common.exception.TokenExpiredException;
+import com.but.rebloom.auth.exception.TokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

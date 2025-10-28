@@ -3,9 +3,8 @@ package com.but.rebloom.auth.usecase;
 import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.response.GoogleUserInfoResponse;
-import com.but.rebloom.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.auth.repository.UserRepository;
-import com.but.rebloom.common.exception.WrongVerifiedCodeException;
+import com.but.rebloom.auth.exception.WrongVerifiedCodeException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,16 +13,11 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
 @RequiredArgsConstructor
 public class GoogleOAuthUseCase {
     // 디비 접근
     private final UserRepository userRepository;
-    // 토큰 생성
-    private final JwtTokenProvider jwtTokenProvider;
 
     // yml 속성 추출
     @Value("${spring.security.oauth2.client.registration.google.client-id:}")
@@ -32,39 +26,17 @@ public class GoogleOAuthUseCase {
     private String clientSecret;
 
     // 인증 코드 추출
-    public GoogleUserInfoResponse execute(String authorizationCode) {
+    public User execute(String authorizationCode) {
         String accessToken = getAccessToken(authorizationCode);
         GoogleUserInfoResponse googleUser = getUserInfo(accessToken);
 
-        User user = userRepository.findByUserEmailAndProvider(googleUser.getEmail(), Provider.GOOGLE)
+        return userRepository.findByUserEmailAndProvider(googleUser.getEmail(), Provider.GOOGLE)
                 .orElseGet(() -> userRepository.save(User.builder()
                         .userEmail(googleUser.getEmail())
                         .userName(googleUser.getName())
                         .userPassword("")
                         .provider(Provider.GOOGLE)
                         .build()));
-
-        String jwt = jwtTokenProvider.generateToken(user.getUserEmail());
-
-        GoogleUserInfoResponse completeResponse = GoogleUserInfoResponse.builder()
-                .id(googleUser.getId())
-                .email(googleUser.getEmail())
-                .name(googleUser.getName())
-                .accessToken(jwt)
-                .provider(user.getProvider())
-                .build();
-
-        // 1차 저장
-        Map<User, Object> response = new HashMap<>();
-        response.put(user, completeResponse);
-
-        return GoogleUserInfoResponse.builder()
-                .id(googleUser.getId())
-                .email(googleUser.getEmail())
-                .name(googleUser.getName())
-                .accessToken(googleUser.getAccessToken())
-                .provider(user.getProvider())
-                .build();
     }
 
     // Jwt랑 비슷하게 이해

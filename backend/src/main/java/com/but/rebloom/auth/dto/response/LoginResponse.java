@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Map;
-
 @Getter
 @Setter
 @Builder
@@ -21,4 +19,13 @@ public class LoginResponse {
     private Provider provider;
     @NotNull
     private String token;
+
+    public static LoginResponse from(User user, String jwtToken) {
+        return LoginResponse.builder()
+                .success(true)
+                .userEmail(user.getUserEmail())
+                .provider(user.getProvider())
+                .token(jwtToken)
+                .build();
+    }
 }

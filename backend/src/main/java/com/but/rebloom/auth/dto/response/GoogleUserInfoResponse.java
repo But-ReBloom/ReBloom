@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Map;
-
 @Getter
 @Setter
 @Builder
@@ -23,4 +21,14 @@ public class GoogleUserInfoResponse {
     private String accessToken;
     @NotNull
     private Provider provider;
+
+    public static GoogleUserInfoResponse from(User user, String jwt) {
+        return GoogleUserInfoResponse.builder()
+                .id(user.getUserId().toString())
+                .email(user.getUserEmail())
+                .name(user.getUserName())
+                .accessToken(jwt)
+                .provider(user.getProvider())
+                .build();
+    }
 }
