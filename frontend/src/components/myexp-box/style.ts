@@ -7,14 +7,13 @@ export const Wrraper = styled.div`
   margin-top: 12px;
   width: 91.5%;
   height: 44px;
-  border: 1.5px solid #000;
+  border: 1px solid #000;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
 
   &:hover {
-    transform: scale(1.05);
-    border: 1.5px solid #3e55bf;
+    background-color:rgb(211, 241, 255);
+    border: 1px solid #3e55bf;
   }
 `;
 
