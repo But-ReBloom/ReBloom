@@ -1,17 +1,17 @@
 package com.but.rebloom.channel.usecase;
 
 import com.but.rebloom.auth.domain.User;
+import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.channel.domain.Channel;
 import com.but.rebloom.channel.dto.request.CreateChannelRequest;
-import com.but.rebloom.channel.dto.request.FindChannelRequest;
+import com.but.rebloom.channel.exception.AlreadyProcessedChannelException;
+import com.but.rebloom.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.channel.repository.ChannelRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +30,7 @@ public class ChannelUseCase {
     public Channel requestCreation(CreateChannelRequest request) {
         // 유저 조회
         User user = userRepository.findByUserId(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
+                .orElseThrow(() -> new UserNotFoundException("User Not Found"));
 
         // 티어 포인트 확인
         if (user.getUserTierPoint() < requiredTierPoint) {
@@ -41,7 +41,7 @@ public class ChannelUseCase {
         if (user.getUserPoint() < requiredPoints) {
             throw new IllegalArgumentException("Point not enough");
         }
-        user.setUserTierPoint(user.getUserTierPoint() - requiredPoints);
+        user.setUserPoint(user.getUserPoint() - requiredPoints);
         userRepository.save(user);
 
         // 채널 생성(승인 대기)
@@ -56,26 +56,24 @@ public class ChannelUseCase {
     }
 
     // 채널 검색
-    @Transactional
-    public List<Channel> findChannel(FindChannelRequest request) {
+    public List<Channel> findChannel(String keyword) {
         List<Channel> channels = channelRepository
                 .findByChannelTitleContainingOrChannelDescriptionContaining(
-                        request.getKeyword(),
-                        request.getKeyword()
+                        keyword,
+                        keyword
                 );
+
         return channels.stream()
                 .filter(Channel::getIsAccepted)
                 .collect(Collectors.toList());
     }
 
     // 승인된 채널 목록
-    @Transactional
     public List<Channel> getApprovedChannels() {
         return channelRepository.findByIsAcceptedTrue();
     }
 
     // 승인대기 채널 목록
-    @Transactional
     public List<Channel> getPendingChannels() {
         return channelRepository.findByIsAcceptedFalse();
     }
@@ -84,10 +82,10 @@ public class ChannelUseCase {
     @Transactional
     public Channel approveChannel(Long channelId) {
         Channel channel = channelRepository.findById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel Not Found"));
+                .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
 
         if (channel.getIsAccepted()) {
-            throw new IllegalArgumentException("This channel is already accepted");
+            throw new AlreadyProcessedChannelException("This channel is already accepted");
         }
 
         channel.setIsAccepted(true);
@@ -98,16 +96,16 @@ public class ChannelUseCase {
     @Transactional
     public void rejectChannel(Long channelId) {
         Channel channel = channelRepository.findById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel Not Found"));
+                .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
 
         if (channel.getIsAccepted()) {
-            throw new IllegalArgumentException("This channel is already rejected");
+            throw new AlreadyProcessedChannelException("This channel is already rejected");
         }
 
         // 포인트 환불
         User user = channel.getUser();
         user.setUserTierPoint(user.getUserTierPoint() + requiredTierPoint);
-        user.setUserTierPoint(user.getUserPoint() + requiredPoints);
+        user.setUserPoint(user.getUserPoint() + requiredPoints);
         userRepository.save(user);
 
         // 삭제
@@ -115,9 +113,8 @@ public class ChannelUseCase {
     }
 
     // 특정 채널 조회
-    @Transactional
     public Channel getChannel(Long channelId) {
         return channelRepository.findById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel Not Found"));
+                .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
     }
 }

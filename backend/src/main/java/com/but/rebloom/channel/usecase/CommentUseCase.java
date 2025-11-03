@@ -1,11 +1,15 @@
 package com.but.rebloom.channel.usecase;
 
 import com.but.rebloom.auth.domain.User;
+import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.channel.domain.Comment;
 import com.but.rebloom.channel.domain.Post;
 import com.but.rebloom.channel.dto.request.CreateCommentRequest;
 import com.but.rebloom.channel.dto.request.UpdateCommentRequest;
+import com.but.rebloom.channel.exception.CommentNotFoundException;
+import com.but.rebloom.channel.exception.ForbiddenAccessException;
+import com.but.rebloom.channel.exception.PostNotFoundException;
 import com.but.rebloom.channel.repository.CommentRepository;
 import com.but.rebloom.channel.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +30,11 @@ public class CommentUseCase {
     public Comment createComment(CreateCommentRequest request) {
         // 유저 조회
         User user = userRepository.findByUserId(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         // 게시글 조회
         Post post = postRepository.findById(request.getPostId())
-                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+                .orElseThrow(() -> new PostNotFoundException("Post not found"));
 
         // 댓글 생성
         Comment comment = Comment.builder()
@@ -43,26 +47,22 @@ public class CommentUseCase {
     }
 
     // 특정 댓글 조회
-    @Transactional
     public Comment getComment(Long commentId) {
         return commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CommentNotFoundException("댓글을 찾을 수 없습니다."));
     }
 
     // 특정 게시글의 댓글 목록 조회 (최신순)
-    @Transactional
     public List<Comment> getCommentsByPost(Long postId) {
         return commentRepository.findByPost_PostIdOrderByCommentCreatedAtDesc(postId);
     }
 
     // 특정 유저가 작성한 댓글 목록 조회 (최신순)
-    @Transactional
     public List<Comment> getCommentsByUser(String userId) {
         return commentRepository.findByUser_UserIdOrderByCommentCreatedAtDesc(userId);
     }
 
     // 특정 게시글의 댓글 수 조회
-    @Transactional
     public long getCommentCount(Long postId) {
         return commentRepository.countByPost_PostId(postId);
     }
@@ -71,11 +71,11 @@ public class CommentUseCase {
     @Transactional
     public Comment updateComment(Long commentId, String userId, UpdateCommentRequest request) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
         // 작성자 확인
         if (!comment.getUser().getUserId().equals(userId)) {
-            throw new IllegalStateException("본인이 작성한 댓글만 수정 가능");
+            throw new ForbiddenAccessException("본인이 작성한 댓글만 수정 가능");
         }
 
         // 댓글 수정
@@ -88,11 +88,11 @@ public class CommentUseCase {
     @Transactional
     public void deleteComment(Long commentId, String userId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
         // 작성자 확인
         if (!comment.getUser().getUserId().equals(userId)) {
-            throw new IllegalStateException("본인이 작성한 댓글만 삭제가능");
+            throw new ForbiddenAccessException("본인이 작성한 댓글만 삭제가능");
         }
 
         commentRepository.delete(comment);
@@ -102,7 +102,7 @@ public class CommentUseCase {
     @Transactional
     public void deleteCommentByAdmin(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
         commentRepository.delete(comment);
     }

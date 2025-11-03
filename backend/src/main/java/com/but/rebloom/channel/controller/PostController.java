@@ -3,7 +3,6 @@ package com.but.rebloom.channel.controller;
 import com.but.rebloom.channel.domain.Post;
 import com.but.rebloom.channel.domain.Status;
 import com.but.rebloom.channel.dto.request.CreatePostRequest;
-import com.but.rebloom.channel.dto.request.FindPostRequest;
 import com.but.rebloom.channel.dto.request.UpdatePostRequest;
 import com.but.rebloom.channel.dto.response.CreatePostResponse;
 import com.but.rebloom.channel.dto.response.FindPostResponse;
@@ -61,8 +60,8 @@ public class PostController {
 
     // 게시글 검색
     @GetMapping("/search")
-    public ResponseEntity<FindPostResponse> searchPosts(@Valid @ModelAttribute FindPostRequest request) {
-        List<Post> posts = postUseCase.searchPosts(request);
+    public ResponseEntity<FindPostResponse> searchPosts(@RequestParam String keyword) {
+        List<Post> posts = postUseCase.searchPosts(keyword);
         return ResponseEntity.ok(FindPostResponse.from(posts));
     }
 

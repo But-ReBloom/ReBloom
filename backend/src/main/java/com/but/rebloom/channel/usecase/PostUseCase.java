@@ -1,15 +1,18 @@
 package com.but.rebloom.channel.usecase;
 
 import com.but.rebloom.auth.domain.User;
+import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.channel.domain.Channel;
 import com.but.rebloom.channel.domain.Post;
 import com.but.rebloom.channel.domain.Status;
 import com.but.rebloom.channel.domain.Type;
 import com.but.rebloom.channel.dto.request.CreatePostRequest;
-import com.but.rebloom.channel.dto.request.FindPostRequest;
 import com.but.rebloom.channel.dto.request.UpdatePostRequest;
-import com.but.rebloom.channel.dto.response.CreatePostResponse;
+import com.but.rebloom.channel.exception.AlreadyProcessedChannelException;
+import com.but.rebloom.channel.exception.ChannelNotFoundException;
+import com.but.rebloom.channel.exception.ForbiddenAccessException;
+import com.but.rebloom.channel.exception.PostNotFoundException;
 import com.but.rebloom.channel.repository.ChannelRepository;
 import com.but.rebloom.channel.repository.PostRepository;
 import jakarta.transaction.Transactional;
@@ -30,10 +33,10 @@ public class PostUseCase {
     public Post createPost(CreatePostRequest request) {
         // 유저 조회
         User user = userRepository.findByUserId(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
+                .orElseThrow(() -> new UserNotFoundException("User Not Found"));
 
         Channel channel = channelRepository.findByChannelId(request.getChannelId())
-                .orElseThrow(() -> new IllegalArgumentException("Channel Not Found"));
+                .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
 
         // 게시글 생성
         Post post = Post.builder()
@@ -52,7 +55,7 @@ public class PostUseCase {
     @Transactional
     public Post getPost(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post Not Found"));
+                .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         // 조회수 증가
         post.setVeiwers(post.getVeiwers() + 1);
@@ -62,31 +65,26 @@ public class PostUseCase {
     }
 
     // 특정 채널의 게시물 목록 조회(최신순)
-    @Transactional
     public List<Post> getPostsByChannel(Long channelId) {
         return postRepository.findByChannel_ChannelIdOrderByPostCreatedAtDesc(channelId);
     }
 
     // 특정 유저의 게시물 목록 조회(최신순)
-    @Transactional
     public List<Post> getPostsByUser(String userId) {
         return postRepository.findByUser_UserIdOrderByPostCreatedAtDesc(userId);
     }
 
     // 인기글 조회
-    @Transactional
     public List<Post> getPopularPosts() {
         return postRepository.findByPostType(Type.POPULAR);
     }
 
     // 게시글 검색
-    @Transactional
-    public List<Post> searchPosts(FindPostRequest request){
-        return postRepository.findByPostTitleContainingOrPostContentContainingOrderByPostCreatedAtDesc(request.getKeyword(), request.getKeyword());
+    public List<Post> searchPosts(String keyword) {
+        return postRepository.findByPostTitleContainingOrPostContentContainingOrderByPostCreatedAtDesc(keyword, keyword);
     }
 
     // 인증 게시글 상태별 조회
-    @Transactional
     public List<Post> getPostsByStatus(Status status) {
         return postRepository.findByPostStatus(status);
     }
@@ -95,10 +93,10 @@ public class PostUseCase {
     @Transactional
     public Post approvePost(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post Not Found"));
+                .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         if(post.getPostStatus() == Status.APPROVED) {
-            throw new IllegalArgumentException("Post is already approved");
+            throw new AlreadyProcessedChannelException("Post is already approved");
         }
         post.setPostStatus(Status.APPROVED);
         return postRepository.save(post);
@@ -108,10 +106,10 @@ public class PostUseCase {
     @Transactional
     public Post rejectPost(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post Not Found"));
+                .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         if(post.getPostStatus() == Status.APPROVED) {
-            throw new IllegalArgumentException("Post is already approved");
+            throw new AlreadyProcessedChannelException("Post is already approved");
         }
         post.setPostStatus(Status.REJECTED);
         return postRepository.save(post);
@@ -121,11 +119,11 @@ public class PostUseCase {
     @Transactional
     public Post updatePost(Long postId, String userId, UpdatePostRequest request) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post Not Found"));
+                .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         // 작성자 확인
         if (!post.getUser().getUserId().equals(userId)) {
-            throw new IllegalArgumentException("본인이 작성한 게시글만 수정 가능");
+            throw new ForbiddenAccessException("본인이 작성한 게시글만 수정 가능");
         }
 
         // 게시글 수정
@@ -139,11 +137,11 @@ public class PostUseCase {
     @Transactional
     public void deletePost(Long postId, String userId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post Not Found"));
+                .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         // 작성자 확인
         if (!post.getUser().getUserId().equals(userId)) {
-            throw new IllegalArgumentException("본인이 작성한 게시글만 삭제 가능");
+            throw new ForbiddenAccessException("본인이 작성한 게시글만 삭제 가능");
         }
 
         postRepository.delete(post);
@@ -153,7 +151,7 @@ public class PostUseCase {
     @Transactional
     public void deletePostByAdmin(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post Not Found"));
+                .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         postRepository.delete(post);
     }

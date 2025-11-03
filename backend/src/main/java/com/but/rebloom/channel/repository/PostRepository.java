@@ -25,7 +25,4 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // 인증
     // 상태 별 게시글 조회
     List<Post> findByPostStatus(Status status);
-
-    // 본인이 작성한 게시글인지 확인(일반 유저 게시글 삭제)
-    boolean existsByUser_UserId(String userId);
 }

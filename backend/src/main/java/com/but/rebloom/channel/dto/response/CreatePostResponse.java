@@ -3,6 +3,7 @@ package com.but.rebloom.channel.dto.response;
 import com.but.rebloom.channel.domain.Post;
 import com.but.rebloom.channel.domain.Status;
 import com.but.rebloom.channel.domain.Type;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,15 +16,34 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreatePostResponse {
+    @NotNull
     private Long postId;
+
+    @NotNull
     private String userId;
+
+    @NotNull
     private Long channelId;
+
+    @NotNull
     private String postTitle;
+
+    @NotNull
     private String postContent;
+
+    @NotNull
     private String postImage;
+
+    @NotNull
     private Type postType;
+
+    @NotNull
     private Status postStatus;
+
+    @NotNull
     private LocalDateTime postCreatedAt;
+
+    @NotNull
     private int viewers;
 
     public static CreatePostResponse from(Post post) {

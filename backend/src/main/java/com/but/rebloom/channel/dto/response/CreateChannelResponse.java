@@ -1,6 +1,7 @@
 package com.but.rebloom.channel.dto.response;
 
 import com.but.rebloom.channel.domain.Channel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,12 +14,25 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateChannelResponse {
+    @NotNull
     private Long channelId;
+
+    @NotNull
     private String userId;
+
+    @NotNull
     private String channelTitle;
+
+    @NotNull
     private String channelIntro;
+
+    @NotNull
     private String channelDescription;
+
+    @NotNull
     private Boolean isAccepted;
+
+    @NotNull
     private LocalDateTime channelCreatedAt;
 
     public static CreateChannelResponse from(Channel channel) {

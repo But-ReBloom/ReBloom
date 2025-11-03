@@ -2,10 +2,8 @@ package com.but.rebloom.channel.controller;
 
 import com.but.rebloom.channel.domain.Channel;
 import com.but.rebloom.channel.dto.request.CreateChannelRequest;
-import com.but.rebloom.channel.dto.request.FindChannelRequest;
 import com.but.rebloom.channel.dto.response.CreateChannelResponse;
 import com.but.rebloom.channel.dto.response.FindChannelResponse;
-import com.but.rebloom.channel.repository.ChannelRepository;
 import com.but.rebloom.channel.usecase.ChannelUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +17,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/channels")
 public class ChannelController {
-    private final ChannelRepository channelRepository;
     private final ChannelUseCase channelUseCase;
 
     // 채널 생성 요청
-    @PostMapping
+    @PostMapping("/request")
     public ResponseEntity<CreateChannelResponse> createChannel(@Valid @RequestBody CreateChannelRequest request) {
         Channel channel = channelUseCase.requestCreation(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(CreateChannelResponse.from(channel));
@@ -31,8 +28,8 @@ public class ChannelController {
 
     // 채널 검색
     @GetMapping("/search")
-    public ResponseEntity<FindChannelResponse> searchChannel(@Valid @ModelAttribute FindChannelRequest request) {
-        List<Channel> channels = channelUseCase.findChannel(request);
+    public ResponseEntity<FindChannelResponse> searchChannel(String keyword) {
+        List<Channel> channels = channelUseCase.findChannel(keyword);
         return ResponseEntity.ok(FindChannelResponse.from(channels));
     }
 
@@ -44,7 +41,7 @@ public class ChannelController {
     }
 
     // 승인된 채널 목록 조회
-    @GetMapping
+    @GetMapping("/admin/approve")
     public ResponseEntity<FindChannelResponse> getApprovedChannels() {
         List<Channel> channels = channelUseCase.getApprovedChannels();
         return ResponseEntity.ok(FindChannelResponse.from(channels));

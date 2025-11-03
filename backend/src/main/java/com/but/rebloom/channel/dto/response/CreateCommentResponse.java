@@ -1,6 +1,7 @@
 package com.but.rebloom.channel.dto.response;
 
 import com.but.rebloom.channel.domain.Comment;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,11 +14,22 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateCommentResponse {
+    @NotNull
     private Long commentId;
+
+    @NotNull
     private String userId;
+
+    @NotNull
     private String userName;
+
+    @NotNull
     private Long postId;
+
+    @NotNull
     private String commentContent;
+
+    @NotNull
     private LocalDateTime commentCreatedAt;
 
     public static CreateCommentResponse from(Comment comment) {

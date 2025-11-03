@@ -1,6 +1,7 @@
 package com.but.rebloom.channel.dto.response;
 
 import com.but.rebloom.channel.domain.Post;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +15,10 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FindPostResponse {
+    @NotNull
     private List<CreatePostResponse> posts;
+
+    @NotNull
     private int totalCount;
 
     public static FindPostResponse from(List<Post> posts) {
