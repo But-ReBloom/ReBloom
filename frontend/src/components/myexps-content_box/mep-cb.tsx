@@ -3,7 +3,7 @@ import List from "../myexps-list/mep-l.tsx";
 import { useState } from "react";
 
 export default function MepCb() {
-  const exps = [0, 1, 2, 3, 4, 5, 6,7, 8, 9,10,11,12,13,14];
+  const exps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
 
@@ -16,11 +16,10 @@ export default function MepCb() {
       <S.Wrapper>
         <S.Container>
           <S.TitleBox>
-            {/*타이틀*/}
             <S.Question>어떤 활동에 대한 리뷰를 남기고 싶으신가요?</S.Question>
             <S.Line />
           </S.TitleBox>
-          <List myexps={currentExps} /> {/*항목들*/}
+          <List myexps={currentExps} />
           <PageNum
             myexps={exps}
             itemsPerPage={itemsPerPage}
@@ -41,7 +40,9 @@ function PageNum(props) {
     <>
       <S.PageNumBox>
         {pageArray.map((num) => (
-          <S.PageCountBox key={num} onClick={() => props.setCurrentPage(num)}>{num}</S.PageCountBox>
+          <S.PageCountBox key={num} onClick={() => props.setCurrentPage(num)}>
+            {num}
+          </S.PageCountBox>
         ))}
       </S.PageNumBox>
     </>
