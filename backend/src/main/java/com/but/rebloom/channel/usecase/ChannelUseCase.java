@@ -7,6 +7,8 @@ import com.but.rebloom.channel.domain.Channel;
 import com.but.rebloom.channel.dto.request.CreateChannelRequest;
 import com.but.rebloom.channel.exception.AlreadyProcessedChannelException;
 import com.but.rebloom.channel.exception.ChannelNotFoundException;
+import com.but.rebloom.channel.exception.InsufficientPointException;
+import com.but.rebloom.channel.exception.InsufficientTeirPointException;
 import com.but.rebloom.channel.repository.ChannelRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,12 +36,12 @@ public class ChannelUseCase {
 
         // 티어 포인트 확인
         if (user.getUserTierPoint() < requiredTierPoint) {
-            throw new IllegalArgumentException("Tier point not enough");
+            throw new InsufficientTeirPointException("Tier point not enough");
         }
         user.setUserTierPoint(user.getUserTierPoint() - requiredTierPoint);
-
+        //포인트 확인
         if (user.getUserPoint() < requiredPoints) {
-            throw new IllegalArgumentException("Point not enough");
+            throw new InsufficientPointException("Point not enough");
         }
         user.setUserPoint(user.getUserPoint() - requiredPoints);
         userRepository.save(user);
@@ -102,9 +104,10 @@ public class ChannelUseCase {
             throw new AlreadyProcessedChannelException("This channel is already rejected");
         }
 
-        // 포인트 환불
         User user = channel.getUser();
+        // 티어포인트 환불
         user.setUserTierPoint(user.getUserTierPoint() + requiredTierPoint);
+        // 포인트 환불
         user.setUserPoint(user.getUserPoint() + requiredPoints);
         userRepository.save(user);
 

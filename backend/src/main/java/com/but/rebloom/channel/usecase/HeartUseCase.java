@@ -7,7 +7,7 @@ import com.but.rebloom.channel.domain.Heart;
 import com.but.rebloom.channel.domain.Post;
 import com.but.rebloom.channel.dto.request.CreateHeartRequest;
 import com.but.rebloom.channel.dto.request.DeleteHeartRequest;
-import com.but.rebloom.channel.exception.AlreadyExistException;
+import com.but.rebloom.channel.exception.AlreadyUsingHeartException;
 import com.but.rebloom.channel.exception.PostNotFoundException;
 import com.but.rebloom.channel.repository.HeartRepository;
 import com.but.rebloom.channel.repository.PostRepository;
@@ -37,7 +37,7 @@ public class HeartUseCase {
 
         // 이미 하트를 눌렀는지 확인
         if (heartRepository.existsByUser_UserIdAndPost_PostId(request.getUserId(), request.getPostId())) {
-            throw new AlreadyExistException("already heart exists");
+            throw new AlreadyUsingHeartException("already heart exists");
         }
 
         // 하트 생성
@@ -60,12 +60,12 @@ public class HeartUseCase {
     }
 
     // 특정 게시글의 하트 수 조회
-    public long getHeartCount(Long postId) {
+    public Long getHeartCount(Long postId) {
         return heartRepository.countByPost_PostId(postId);
     }
 
     // 특정 유저가 특정 게시글에 하트를 눌렀는지 확인
-    public boolean isHeartExists(String userId, Long postId) {
+    public Boolean isHeartExists(String userId, Long postId) {
         return heartRepository.existsByUser_UserIdAndPost_PostId(userId, postId);
     }
 
@@ -74,7 +74,7 @@ public class HeartUseCase {
     public void deleteHeart(DeleteHeartRequest request) {
         // 하트가 존재하는지 확인
         if (!heartRepository.existsByUser_UserIdAndPost_PostId(request.getUserId(), request.getPostId())) {
-            throw new AlreadyExistException("heart not exists");
+            throw new AlreadyUsingHeartException("heart not exists");
         }
 
         heartRepository.deleteByUser_UserIdAndPost_PostId(request.getUserId(), request.getPostId());
