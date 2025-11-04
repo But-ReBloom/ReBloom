@@ -13,7 +13,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   width: 1200px;
-  height: 600px;
+  height: 640px;
   background-color: rgb(255, 255, 255, 0.58);
   border-radius: 20px;
 `;
@@ -36,4 +36,30 @@ export const Line = styled.div`
   width: 100%;
   height: 2px;
   background: linear-gradient(90deg, #41a6ff, #3e55bf);
+`;
+
+export const PageNumBox = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  margin-top: auto;
+  margin-bottom: 20px;
+`;
+
+export const PageCountBox = styled.button`
+  width: 32px;
+  height: 32px;
+  border-radius: 20%;
+  border: none;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin: 0 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: scale(1.08);
+    color: #ffffff;
+    font-weight: bold;
+    background: linear-gradient(90deg, #41a6ff, #3e55bf);
+  }
 `;
