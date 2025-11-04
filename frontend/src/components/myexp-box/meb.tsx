@@ -3,9 +3,11 @@ import Page from "../../assets/images/page.svg";
 import Clock from "../../assets/images/mi_clock.svg";
 import Tag from "../../assets/images/Tag.svg";
 import Submitimg from "../../assets/images/submitinfo.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function OneExpInfo() {
-  {/*년 월 일 가져오기 - 연습용*/}
+  const navigate = useNavigate();
+
   let now = new Date();
   let year = now.getFullYear();
   let month = now.getMonth() + 1;
@@ -16,9 +18,13 @@ export default function OneExpInfo() {
   }일`;
   return (
     <>
-      <S.Wrraper>
+      <S.Wrraper
+        onClick={() => {
+          navigate("/next");
+        }}
+      >
         <S.Container>
-          <S.Locate>
+          <S.Locate style={{ textDecoration: "none" }}>
             <S.ExpInfo>
               <img
                 src={Page}
