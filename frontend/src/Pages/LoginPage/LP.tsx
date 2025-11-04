@@ -3,7 +3,6 @@ import Right_box from "../../components/loginpage-right_box/Lprb";
 import * as S from "./style.ts";
 
 function LoginPage() {
-
     //로그인 페이지
     return (
         <>
