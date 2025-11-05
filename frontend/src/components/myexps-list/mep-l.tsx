@@ -3,14 +3,8 @@ import Page from "../../assets/images/page.svg";
 import Clock from "../../assets/images/mi_clock.svg";
 import Tag from "../../assets/images/Tag.svg";
 import Submitimg from "../../assets/images/submitinfo.svg";
-import { useNavigate } from "react-router-dom";
 
 export default function MepL(props) {
-
-  interface props {
-    exps: number[];
-  }
-
   return (
     <>
       <S.Head>
@@ -18,21 +12,21 @@ export default function MepL(props) {
           <S.Tags>활동명</S.Tags>
           <S.Tags>활동 날짜</S.Tags>
         </S.Locate>
-        <S.Tags>관련 태그</S.Tags>
-        <S.Tags>리뷰 여부</S.Tags>
+        <S.Locate>
+          <S.Tags>관련 태그</S.Tags>
+          <S.Tags>리뷰 여부</S.Tags>
+        </S.Locate>
       </S.Head>
       <S.Info_Body>
         {props.myexps.map((id) => (
-          <OneExpInfo key={id} id={id} />
+          <OneExpInfo key={id} id={id} setStep={props.setStep} />
         ))}
       </S.Info_Body>
     </>
   );
 }
 
-function OneExpInfo({ id }) {
-  const navigate = useNavigate();
-
+function OneExpInfo({ id, setStep }) {
   let now = new Date();
   let year = now.getFullYear();
   let month = now.getMonth() + 1;
@@ -43,11 +37,7 @@ function OneExpInfo({ id }) {
   }일`;
   return (
     <>
-      <S.Wrraper
-        onClick={() => {
-          navigate("/next");
-        }}
-      >
+      <S.Wrraper onClick={() => setStep("detail")}>
         <S.Container>
           <S.Locates style={{ textDecoration: "none" }}>
             <S.ExpInfo>
