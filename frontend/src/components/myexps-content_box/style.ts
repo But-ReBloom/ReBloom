@@ -16,6 +16,7 @@ export const Container = styled.div`
   height: 640px;
   background-color: rgb(255, 255, 255, 0.58);
   border-radius: 20px;
+  box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.12);
 `;
 
 export const TitleBox = styled.div`
@@ -52,7 +53,7 @@ export const PageCountBox = styled.button`
   border-radius: 20%;
   border: none;
   background-color: #ffffff;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
   margin: 0 4px;
   cursor: pointer;
   transition: all 0.3s ease;
