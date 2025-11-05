@@ -32,9 +32,10 @@ export const Wrraper = styled.div`
   margin-top: 12px;
   width: 91.5%;
   height: 44px;
-  border: 1px solid #000;
+  // border: 1px solid #000;
   border-radius: 12px;
   cursor: pointer;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.26);
 
   &:hover {
     background-color: rgb(211, 241, 255);

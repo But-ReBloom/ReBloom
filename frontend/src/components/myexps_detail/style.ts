@@ -76,3 +76,21 @@ export const TextingBox = styled.textarea`
 export const DetailPlace = styled.div`
   width: 80%;
 `;
+
+export const Arrows = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 40px;
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border: 2px solid rgb(210, 210, 210);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover{
+    transform: scale(1.2);
+  }
+`;
