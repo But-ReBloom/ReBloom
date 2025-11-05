@@ -31,3 +31,48 @@ export const Arrow = styled.button`
     transform: rotate(180deg) scale(1.2);
   }
 `;
+
+export const QuestionBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 48px;
+`;
+
+export const Boxing = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 24px;
+`;
+
+export const Title = styled.p`
+  font-size: 20px;
+  text-align: left;
+  font-weight: 500;
+`;
+
+export const TextPlace = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  gap: 20px;
+  margin: 20px;
+`;
+
+export const TextingBox = styled.textarea`
+  margin-top: 0;
+  padding: 8px 12px;
+  width: 100%;
+  height: 200px;
+  border-radius: 20px;
+  border: 2px solid rgb(195, 195, 195);
+  resize: none;
+`;
+
+export const DetailPlace = styled.div`
+  width: 80%;
+`;
