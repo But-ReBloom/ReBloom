@@ -60,6 +60,6 @@ export const PageCountBox = styled.button`
     transform: scale(1.08);
     color: #ffffff;
     font-weight: bold;
-    background: linear-gradient(90deg, #41a6ff, #3e55bf);
+    background: #333;
   }
 `;
