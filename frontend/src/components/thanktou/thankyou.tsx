@@ -15,7 +15,7 @@ export default function Thankyou() {
             소중한 리뷰 감사합니다. 다음에 또 이용해주세요.
         </S.SubTitle>
         <S.HomeButton onClick={()=>{navigate("/")}}>
-            다음
+            나가기
         </S.HomeButton>
       </S.Container>
     </S.Wrapper>

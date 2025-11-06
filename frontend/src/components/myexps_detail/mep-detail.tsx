@@ -2,9 +2,22 @@ import * as S from "./style.ts";
 import BlackArrowImg from "../../assets/images/blackarrow.svg";
 import QuestionBox from "../questionbox/qb.tsx";
 import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function MyexpsDetail() {
   const navigate = useNavigate();
+
+  const [ReviewData, setWrittenData] = useState("");
+
+  const handleSubmit = () => {
+    if (ReviewData.length < 100) {
+      toast.error("리뷰는 100자 이상 작성하셔야 합니다.");
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <>
       <S.Wrapper>
@@ -24,7 +37,11 @@ export default function MyexpsDetail() {
                 <S.Title style={{ marginLeft: "12px", marginBottom: "12px" }}>
                   이번 활동에 대한 리뷰를 남겨주십시오.
                 </S.Title>
-                <S.TextingBox placeholder="최소 100자 이상으로 작성해주십시오."></S.TextingBox>
+                <S.TextingBox
+                  placeholder="최소 100자 이상으로 작성해주십시오."
+                  value={ReviewData}
+                  onChange={(e) => setWrittenData(e.target.value)}
+                ></S.TextingBox>
               </S.DetailPlace>
               <S.DetailPlace>
                 <S.Title style={{ marginLeft: "12px", marginBottom: "12px" }}>
@@ -35,10 +52,11 @@ export default function MyexpsDetail() {
             </S.TextPlace>
           </S.QuestionBox>
         </S.Container>
-        <S.Arrows onClick={()=> {navigate("/thankyou")}}>
+        <S.Arrows onClick={handleSubmit}>
           <img src={BlackArrowImg} alt="이전으로 가는 화살표" />
         </S.Arrows>
       </S.Wrapper>
+      <ToastContainer position="top-right" autoClose={2000} />
     </>
   );
 }
