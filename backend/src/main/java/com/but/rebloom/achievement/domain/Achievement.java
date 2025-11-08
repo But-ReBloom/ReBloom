@@ -21,7 +21,7 @@ public class Achievement {
     @Column(name = "achieve_id", unique = true, nullable = false)
     private Long achievementId;
 
-    @Column(name = "title", unique = true, nullable = false)
+    @Column(name = "title", nullable = false)
     private String achievementTitle;
 
     @Column(name = "description", nullable = false)
