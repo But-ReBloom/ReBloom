@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/hearts")
+@RequestMapping("/heart")
 public class HeartController {
     private final HeartUseCase heartUseCase;
 

@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/channels")
+@RequestMapping("/channel")
 public class ChannelController {
     private final ChannelUseCase channelUseCase;
 

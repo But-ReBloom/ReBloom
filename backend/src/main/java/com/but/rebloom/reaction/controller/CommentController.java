@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/comments")
+@RequestMapping("/comment")
 public class CommentController {
     private final CommentUseCase commentUseCase;
 

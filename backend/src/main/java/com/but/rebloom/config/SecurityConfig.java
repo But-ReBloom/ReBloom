@@ -38,9 +38,10 @@ public class SecurityConfig {
                         .requestMatchers("/",
                                 "/auth/**",
                                 "/achievement/**",
-                                "/channels/**",
-                                "/posts/**",
-                                "/comments/**"
+                                "/channel/**",
+                                "/post/**",
+                                "/comment/**",
+                                "/heart/**"
                         ).permitAll()
                         // 스웨거
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs").permitAll()
