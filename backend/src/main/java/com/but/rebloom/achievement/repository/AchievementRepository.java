@@ -12,8 +12,7 @@ public interface AchievementRepository extends JpaRepository<Achievement, Long> 
     // 업적 조회 함수
     Optional<Achievement> findAchievementByAchievementId(Long achievementId);
     Optional<Achievement> findAchievementByAchievementTitle(String achievementTitle);
-    Optional<List<Achievement>> findAchievementsByAchievementId(Long achievementId);
-    Optional<List<Achievement>> findAchievementsByAchievementTitle(String achievementTitle);
+    Optional<List<Achievement>> findAllAchievements();
 
     // 존재 유무 확인 함수
     Boolean existsByAchievementId(Long achievementId);
