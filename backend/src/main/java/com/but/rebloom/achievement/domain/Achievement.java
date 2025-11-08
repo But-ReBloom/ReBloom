@@ -28,8 +28,8 @@ public class Achievement {
     private String achievementDescription;
 
     @Column(name = "reward_point", nullable = false)
-    private String achievementRewardPoint;
+    private Integer achievementRewardPoint;
 
     @Column(name = "tier_point", nullable = false)
-    private String achievementTierPoint;
+    private Integer achievementTierPoint;
 }
