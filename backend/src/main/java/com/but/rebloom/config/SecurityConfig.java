@@ -35,7 +35,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/favicon.ico").permitAll()
                         // 기본 경로
-                        .requestMatchers("/", "/auth/**").permitAll()
+                        .requestMatchers("/",
+                                "/auth/**",
+                                "/achievement/**",
+                                "/channels/**",
+                                "/posts/**",
+                                "/comments/**"
+                        ).permitAll()
                         // 스웨거
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs").permitAll()
                         .anyRequest().authenticated()

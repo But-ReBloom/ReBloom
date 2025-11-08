@@ -5,10 +5,7 @@ import com.but.rebloom.achievement.dto.response.GetAchievement;
 import com.but.rebloom.achievement.usecase.DefaultAchievementUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,15 +28,15 @@ public class AchievementController {
     }
 
     // 업적 조회 - 업적 아이디
-    @GetMapping("/{achievement}")
-    public ResponseEntity<GetAchievement> finaAchievement(@RequestParam Long achievementId) {
+    @GetMapping("/id/{achievementId}")
+    public ResponseEntity<GetAchievement> finaAchievementById(@PathVariable Long achievementId) {
         Achievement response = defaultAchievementUseCase.findAchievementById(achievementId);
         return ResponseEntity.ok(GetAchievement.from(response));
     }
 
     // 업적 조회 - 업적 제목
-    @GetMapping("/{achievementTitle}")
-    public ResponseEntity<GetAchievement> finaAchievement(@RequestParam String achievementTitle) {
+    @GetMapping("/title/{achievementTitle}")
+    public ResponseEntity<GetAchievement> finaAchievementByTitle(@PathVariable String achievementTitle) {
         Achievement response = defaultAchievementUseCase.findAchievementByTitle(achievementTitle);
         return ResponseEntity.ok(GetAchievement.from(response));
     }
