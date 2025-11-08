@@ -3,7 +3,6 @@ package com.but.rebloom.common.usecase;
 import com.but.rebloom.auth.exception.AlreadyUsingUserException;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.IllegalArgumentException;
-import com.but.rebloom.hobby.repository.ActivityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
