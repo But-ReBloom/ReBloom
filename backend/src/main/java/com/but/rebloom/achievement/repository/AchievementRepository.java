@@ -1,0 +1,16 @@
+package com.but.rebloom.achievement.repository;
+
+import com.but.rebloom.achievement.domain.Achievement;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface AchievementRepository extends JpaRepository<Achievement, Long> {
+    // 업적 조회 함수
+    Optional<Achievement> findAchievementByAchievementId(Long achievementId);
+    Optional<Achievement> findAchievementByAchievementTitle(String achievementTitle);
+
+    // 성공 여부 변경
+}

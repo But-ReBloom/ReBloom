@@ -21,19 +21,11 @@ public class Achievement {
     @Column(name = "achieve_id", unique = true, nullable = false)
     private Long achievementId;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", unique = true, nullable = false)
     private String achievementTitle;
 
     @Column(name = "description", nullable = false)
     private String achievementDescription;
-
-    @Column(name = "progress", nullable = false)
-    @Builder.Default
-    private Double achievementProgress = 0.0;
-
-    @Column(name = "is_success", nullable = false)
-    @Builder.Default
-    private Boolean achievementIsSuccess = false;
 
     @Column(name = "reward_point", nullable = false)
     private String achievementRewardPoint;
