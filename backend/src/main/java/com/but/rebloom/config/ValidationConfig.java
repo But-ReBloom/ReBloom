@@ -35,7 +35,7 @@ public class ValidationConfig {
     }
 
     @Bean
-    public UserAchievementValidationUseCase userAchievementValidationUseCase(ValidationUseCase validationUseCase, AchievementValidationUseCase achievementValidationUseCase, UserAchievementRepository achievementRepository) {
-        return new UserAchievementValidationUseCase(validationUseCase, achievementValidationUseCase, achievementRepository);
+    public UserAchievementValidationUseCase userAchievementValidationUseCase(ValidationUseCase validationUseCase, AchievementValidationUseCase achievementValidationUseCase) {
+        return new UserAchievementValidationUseCase(validationUseCase, achievementValidationUseCase);
     }
 }
