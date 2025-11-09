@@ -20,14 +20,14 @@ public class AchievementValidationUseCase {
     }
 
     // 존재하는지 확인 - 업적 아이디
-    public void checkExistAchievement(Long achievementId) {
+    public void checkExistAchievementByAchievementId(Long achievementId) {
         if (!achievementRepository.existsByAchievementId(achievementId)) {
             throw new AchievementNotFoundException("존재하지 않는 업적");
         }
     }
 
     // 존재하는지 확인 - 업적 제목
-    public void checkExistAchievement(String achievementTitle) {
+    public void checkExistAchievementByAchievementTitle(String achievementTitle) {
         if (!achievementRepository.existsByAchievementTitle(achievementTitle)) {
             throw new AchievementNotFoundException("존재하지 않는 업적");
         }

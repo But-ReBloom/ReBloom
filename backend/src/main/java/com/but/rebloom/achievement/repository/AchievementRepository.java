@@ -3,6 +3,7 @@ package com.but.rebloom.achievement.repository;
 import com.but.rebloom.achievement.domain.Achievement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,4 +20,10 @@ public interface AchievementRepository extends JpaRepository<Achievement, Long> 
     // 존재 유무 확인 함수
     Boolean existsByAchievementId(Long achievementId);
     Boolean existsByAchievementTitle(String achievementTitle);
+    @Query("SELECT CASE WHEN COUNT(a) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM Achievement a WHERE a.achievementId = :achievementId AND a.achievementTitle = :achievementTitle")
+    Boolean existsByAchievementIdAndAchievementTitle(
+            @Param("achievementId") Long achievementId,
+            @Param("achievementTitle") String achievementTitle
+    );
 }
