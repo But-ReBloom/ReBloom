@@ -25,7 +25,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 유저 존재 확인 함수
     Boolean existsByUserId(String userId);
     Boolean existsByUserEmail(String userEmail);
-    @Query("select u from User u where u.userEmail = :userEmail and u.userId = :userId")
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM User u WHERE u.userEmail = :userEmail AND u.userId = :userId")
     Boolean existsByUserEmailAndUserId(
             @Param("userEmail") String userEmail,
             @Param("userId") String userId

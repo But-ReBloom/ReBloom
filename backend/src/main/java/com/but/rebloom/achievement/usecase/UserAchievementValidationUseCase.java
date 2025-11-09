@@ -1,7 +1,6 @@
 package com.but.rebloom.achievement.usecase;
 
 import com.but.rebloom.achievement.repository.UserAchievementRepository;
-import com.but.rebloom.auth.exception.AlreadyUsingUserException;
 import com.but.rebloom.common.usecase.ValidationUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class UserAchievementValidationUseCase {
     // DI
     private final ValidationUseCase validationUseCase;
+    private final AchievementValidationUseCase achievementValidationUseCase;
     // 디비 접근
     private final UserAchievementRepository userAchievementRepository;
 
@@ -23,4 +23,17 @@ public class UserAchievementValidationUseCase {
     public void checkNotExistAccountByUserEmail(String userEmail) {
         validationUseCase.checkNotExistAccountByUserEmail(userEmail);
     }
+
+    // 존재하는 유저인지 확인
+    public void checkNotExistAccountByUserId(String userId) {
+        validationUseCase.checkNotExistAccountByUserId(userId);
+    }
+
+    // 존재하는 유저인지 확인
+    public void checkNotExistAccountByUserEmailAndUserId(String userEmail, String userId) {
+        validationUseCase.checkNotExistAccountByUserEmailAndUserId(userEmail, userId);
+    }
+
+    // 존재하는 업적인지 확인
+    public void checkNotExist
 }
