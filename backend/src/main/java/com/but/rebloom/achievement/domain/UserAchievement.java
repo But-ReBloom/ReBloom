@@ -20,13 +20,13 @@ public class UserAchievement {
 
     @Id
     @Column(name = "achieve_id", nullable = false)
-    private Long achieveId;
+    private Long achievementId;
 
     @Column(name = "user_id", nullable = false)
     private String userId;
 
     @Column(name = "achieve_title", nullable = false)
-    private String achieveTitle;
+    private String achievementTitle;
 
     @Column(name = "progress", nullable = false)
     private Float progress;
