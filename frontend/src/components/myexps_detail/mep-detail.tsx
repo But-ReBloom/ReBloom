@@ -2,7 +2,7 @@ import * as S from "./style.ts";
 import BlackArrowImg from "../../assets/images/blackarrow.svg";
 import QuestionBox from "../questionbox/qb.tsx";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function MyexpsDetail() {
@@ -14,7 +14,7 @@ export default function MyexpsDetail() {
     if (ReviewData.length < 100) {
       toast.error("리뷰는 100자 이상 작성하셔야 합니다.");
     } else {
-      navigate("/");
+      navigate("/", { state: {message : `감사합니다! <br /> 다음에 또 이용해주세요!` } });
     }
   };
 
