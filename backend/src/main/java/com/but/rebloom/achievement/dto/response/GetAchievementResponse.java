@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class GetAchievement {
+public class GetAchievementResponse {
     @NotNull
     private Boolean success;
     @NotBlank(message = "업적 제목은 필수 반환값 입니다.")
@@ -22,8 +22,8 @@ public class GetAchievement {
     @NotNull(message = "업적 티어 포인트는 필수 반환값 입니다.")
     private Integer achievementTierPoint;
 
-    public static GetAchievement from(Achievement achievement) {
-        return GetAchievement.builder()
+    public static GetAchievementResponse from(Achievement achievement) {
+        return GetAchievementResponse.builder()
                 .success(true)
                 .achievementTitle(achievement.getAchievementTitle())
                 .achievementDescription(achievement.getAchievementDescription())
