@@ -54,4 +54,18 @@ public class ValidationUseCase {
             throw new AlreadyUsingUserException("존재하지 않는 이메일");
         }
     }
+
+    // 존재하는 유저인지 확인
+    public void checkNotExistAccountByUserId(String userId) {
+        if (!userRepository.existsByUserId(userId)) {
+            throw new AlreadyUsingUserException("존재하지 않는 아이디");
+        }
+    }
+
+    // 존재하는 유저인지 확인
+    public void checkNotExistAccountByUserEmailAndUserId(String userEmail, String userId) {
+        if (!userRepository.existsByUserEmailAndUserId(userEmail, userId)) {
+            throw new AlreadyUsingUserException("존재하지 계정");
+        }
+    }
 }
