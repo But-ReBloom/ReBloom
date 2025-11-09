@@ -13,6 +13,7 @@ import lombok.*;
 @IdClass(UserAchievementId.class) // 복합키 클래스 연결
 @Table(name = "users_to_achieves")
 public class UserAchievement {
+    // 테이블 속성 연결
     @Id
     @Column(name = "email", nullable = false)
     private String userEmail;

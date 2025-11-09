@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class UserAchievementId implements Serializable {
+    // 다중키 속성 정의
     private String userEmail;
     private Long achieveId;
 }
