@@ -1,9 +1,6 @@
 package com.but.rebloom.achievement.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class Achievement {
     // 테이블 속성 연결
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "achieve_id", unique = true, nullable = false)
     private Long achievementId;
 
