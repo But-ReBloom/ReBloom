@@ -1,12 +1,10 @@
 package com.but.rebloom.achievement.usecase;
 
 import com.but.rebloom.achievement.domain.UserAchievement;
-import com.but.rebloom.achievement.dto.request.EmailAndIdRequest;
-import com.but.rebloom.achievement.dto.request.EmailAndTitleRequest;
-import com.but.rebloom.achievement.dto.request.IdAndIdRequest;
-import com.but.rebloom.achievement.dto.request.IdAndTitleRequest;
 import com.but.rebloom.achievement.exception.UserAchievementNotFoundException;
 import com.but.rebloom.achievement.repository.UserAchievementRepository;
+import com.but.rebloom.auth.domain.User;
+import com.but.rebloom.auth.usecase.FindCurrentUserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,52 +15,42 @@ import java.util.List;
 public class DefaultUserAchievementUseCase {
     // 디비 접근
     private final UserAchievementRepository userAchievementRepository;
+    // 로그인 되어있는지 확인
+    private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     // 전체 유저 업적 조회 - 유저 아이디
-    public List<UserAchievement> finaAllUserAchievementsByUserId(String userId) {
+    public List<UserAchievement> finaAllUserAchievementsByUserId() {
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+        String userId = currentUser.getUserId();
+
         return userAchievementRepository.findAllUserAchievementsByUserId(userId)
                 .orElseThrow(() -> new UserAchievementNotFoundException("존재하지 않는 유저 업적"));
     }
 
     // 전체 유저 업적 조회 - 유저 이메일
-    public List<UserAchievement> finaAllUserAchievementsByUserEmail(String userEmail) {
+    public List<UserAchievement> finaAllUserAchievementsByUserEmail() {
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+        String userEmail = currentUser.getUserEmail();
+
         return userAchievementRepository.findAllUserAchievementsByUserEmail(userEmail)
                 .orElseThrow(() -> new UserAchievementNotFoundException("존재하지 않는 유저 업적"));
     }
 
     // 유저 업적 조회 - (유저 이메일 + 업적 아이디)
-    public UserAchievement finaUserAchievementByUserEmailAndAchievementId(EmailAndIdRequest request) {
-        String userEmail = request.getUserEmail();
-        Long achievementId = request.getAchievementId();
+    public UserAchievement finaUserAchievementByUserEmailAndAchievementId(Long achievementId) {
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+        String userEmail = currentUser.getUserEmail();
 
         return userAchievementRepository.findUserAchievementByUserEmailAndAchievementId(userEmail, achievementId)
                 .orElseThrow(() -> new UserAchievementNotFoundException("존재하지 않는 유저 업적"));
     }
 
     // 유저 업적 조회 - (유저 이메일 + 업적 제목)
-    public UserAchievement finaUserAchievementByUserEmailAndAchievementTitle(EmailAndTitleRequest request) {
-        String userEmail = request.getUserEmail();
-        String achievementTitle = request.getAchievementTitle();
+    public UserAchievement finaUserAchievementByUserEmailAndAchievementTitle(String achievementTitle) {
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+        String userEmail = currentUser.getUserEmail();
 
         return userAchievementRepository.findUserAchievementByUserEmailAndAchievementTitle(userEmail, achievementTitle)
-                .orElseThrow(() -> new UserAchievementNotFoundException("존재하지 않는 유저 업적"));
-    }
-
-    // 유저 업적 조회 - (유저 아이디 + 업적 아이디)
-    public UserAchievement finaUserAchievementByUserIdAndAchievementId(IdAndIdRequest request) {
-        String userId = request.getUserId();
-        Long achievementId = request.getAchievementId();
-
-        return userAchievementRepository.findUserAchievementByUserIdAndAchievementId(userId, achievementId)
-                .orElseThrow(() -> new UserAchievementNotFoundException("존재하지 않는 유저 업적"));
-    }
-
-    // 유저 업적 조회 - (유저 아이디 + 업적 제목)
-    public UserAchievement finaUserAchievementByUserIdAndAchievementTitle(IdAndTitleRequest request) {
-        String userId = request.getUserId();
-        String achievementTitle = request.getAchievementTitle();
-
-        return userAchievementRepository.findUserAchievementByUserIdAndAchievementTitle(userId, achievementTitle)
                 .orElseThrow(() -> new UserAchievementNotFoundException("존재하지 않는 유저 업적"));
     }
 }
