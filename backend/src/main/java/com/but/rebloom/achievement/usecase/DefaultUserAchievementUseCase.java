@@ -25,4 +25,28 @@ public class DefaultUserAchievementUseCase {
         return userAchievementRepository.findAllUserAchievementsByUserEmail(userEmail)
                 .orElseThrow(() -> new UserAchievementNotFoundException("존재하지 않는 유저 업적"));
     }
+
+    // 유저 업적 조회 - (유저 이메일 + 업적 아이디)
+    public UserAchievement finaUserAchievementByUserEmailAndAchievementId(String userEmail, Long achievementId) {
+        return userAchievementRepository.findUserAchievementByUserEmailAndAchievementId(userEmail, achievementId)
+                .orElseThrow(() -> new UserAchievementNotFoundException("존재하지 않는 유저 업적"));
+    }
+
+    // 유저 업적 조회 - (유저 이메일 + 업적 제목)
+    public UserAchievement finaUserAchievementByUserEmailAndAchievementTitle(String userEmail, String achievementTitle) {
+        return userAchievementRepository.findUserAchievementByUserEmailAndAchievementTitle(userEmail, achievementTitle)
+                .orElseThrow(() -> new UserAchievementNotFoundException("존재하지 않는 유저 업적"));
+    }
+
+    // 유저 업적 조회 - (유저 아이디 + 업적 아이디)
+    public UserAchievement finaUserAchievementByUserIdAndAchievementId(String userId, Long achievementId) {
+        return userAchievementRepository.findUserAchievementByUserIdAndAchievementId(userId, achievementId)
+                .orElseThrow(() -> new UserAchievementNotFoundException("존재하지 않는 유저 업적"));
+    }
+
+    // 유저 업적 조회 - (유저 아이디 + 업적 제목)
+    public UserAchievement finaUserAchievementByUserIdAndAchievementTitle(String userEmail, String achievementTitle) {
+        return userAchievementRepository.findUserAchievementByUserIdAndAchievementTitle(userEmail, achievementTitle)
+                .orElseThrow(() -> new UserAchievementNotFoundException("존재하지 않는 유저 업적"));
+    }
 }
