@@ -1,5 +1,7 @@
 package com.but.rebloom.auth.usecase;
 
+import com.but.rebloom.achievement.domain.UserAchievement;
+import com.but.rebloom.achievement.repository.UserAchievementRepository;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.SignupRequest;
 import com.but.rebloom.auth.repository.UserRepository;
@@ -16,6 +18,8 @@ public class SignupUseCase {
     private final PasswordEncoder passwordEncoder;
     // 예외 이용
     private final AuthValidationUseCase authValidationUseCase;
+    // 업적 성공 표시
+    private final UserAchievementRepository userAchievementRepository;
 
     // 회원가입
     public User signup(SignupRequest signupRequest) {
@@ -42,6 +46,8 @@ public class SignupUseCase {
                 .userName(userName)
                 .provider(signupRequest.getProvider())
                 .build();
+
+//        userAchievementRepository.save(new UserAchievement(userId, userEmail, userName));
 
         // 유저 등록
         return userRepository.save(user);
