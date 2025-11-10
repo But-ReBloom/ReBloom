@@ -1,6 +1,5 @@
 package com.but.rebloom.achievement.usecase;
 
-import com.but.rebloom.achievement.repository.UserAchievementRepository;
 import com.but.rebloom.common.usecase.ValidationUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

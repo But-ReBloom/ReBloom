@@ -48,6 +48,4 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
     // 유저 업적 전체 조회 - userEmail
     @Query("select a from UserAchievement a where a.userEmail = :userEmail")
     Optional<List<UserAchievement>> findAllUserAchievementsByUserEmail(@Param("userEmail") String userEmail);
-
-    String user(User user);
 }
