@@ -3,7 +3,9 @@ package com.but.rebloom.achievement.repository;
 import com.but.rebloom.achievement.domain.UserAchievement;
 import com.but.rebloom.achievement.domain.UserAchievementId;
 import com.but.rebloom.auth.domain.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -49,5 +51,28 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
     @Query("select a from UserAchievement a where a.userEmail = :userEmail")
     Optional<List<UserAchievement>> findAllUserAchievementsByUserEmail(@Param("userEmail") String userEmail);
 
-    String user(User user);
+    @Transactional
+    @Modifying
+    @Query("update UserAchievement u SET u.progress = 100.0, u.isSuccess = true where u.userEmail = :userEmail and u.achievementTitle = :achievementTitle")
+    void updateUserAchievementToSuccess(
+            @Param("userEmail") String userEmail,
+            @Param("achievementTitle") String achievementTitle
+    );
+
+    @Transactional
+    @Modifying
+    @Query("update UserAchievement u SET u.progress = u.progress + :addProgress where u.userEmail = :userEmail and u.achievementTitle = :achievementTitle")
+    void setAddProgressIntoUserAchievement(
+            @Param("userEmail") String userEmail,
+            @Param("achievementTitle") String achievementTitle,
+            @Param("addProgress") Float addProgress
+    );
+
+    @Transactional
+    @Modifying
+    @Query("update UserAchievement u set u.isSuccess = true where u.progress = 100.0 and u.userEmail = :userEmail and u.achievementTitle = :achievementTitle")
+    void checkUserAchievementIsSuccess(
+            @Param("userEmail") String userEmail,
+            @Param("achievementTitle") String achievementTitle
+    );
 }
