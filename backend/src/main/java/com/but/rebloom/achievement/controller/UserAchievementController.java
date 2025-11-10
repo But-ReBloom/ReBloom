@@ -1,10 +1,6 @@
 package com.but.rebloom.achievement.controller;
 
 import com.but.rebloom.achievement.domain.UserAchievement;
-import com.but.rebloom.achievement.dto.request.EmailAndIdRequest;
-import com.but.rebloom.achievement.dto.request.EmailAndTitleRequest;
-import com.but.rebloom.achievement.dto.request.IdAndIdRequest;
-import com.but.rebloom.achievement.dto.request.IdAndTitleRequest;
 import com.but.rebloom.achievement.dto.response.GetUserAchievementResponse;
 import com.but.rebloom.achievement.usecase.DefaultUserAchievementUseCase;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +20,9 @@ public class UserAchievementController {
     private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     // 전체 유저 업적 조회 - 유저 아이디
-    @GetMapping("/id/{userId}")
-    public ResponseEntity<List<GetUserAchievementResponse>> getUserAchievementsByUserId(@PathVariable String userId) {
-        List<UserAchievement> response = defaultUserAchievementUseCase.finaAllUserAchievementsByUserId(userId);
+    @GetMapping("/id")
+    public ResponseEntity<List<GetUserAchievementResponse>> getUserAchievementsByUserId() {
+        List<UserAchievement> response = defaultUserAchievementUseCase.finaAllUserAchievementsByUserId();
         return ResponseEntity.ok(
                 response.stream()
                         .map(GetUserAchievementResponse::from)
@@ -35,9 +31,9 @@ public class UserAchievementController {
     }
 
     // 전체 유저 업적 조회 - 유저 이메일
-    @GetMapping("/email/{userEmail}")
-    public ResponseEntity<List<GetUserAchievementResponse>> getUserAchievementsByUserEmail(@PathVariable String userEmail) {
-        List<UserAchievement> response = defaultUserAchievementUseCase.finaAllUserAchievementsByUserEmail(userEmail);
+    @GetMapping("/email")
+    public ResponseEntity<List<GetUserAchievementResponse>> getUserAchievementsByUserEmail() {
+        List<UserAchievement> response = defaultUserAchievementUseCase.finaAllUserAchievementsByUserEmail();
         return ResponseEntity.ok(
                 response.stream()
                         .map(GetUserAchievementResponse::from)
@@ -46,30 +42,16 @@ public class UserAchievementController {
     }
 
     // 유저 업적 조회 - (유저 이메일 + 업적 아이디)
-    @GetMapping("/email-id")
-    public ResponseEntity<GetUserAchievementResponse> getUserAchievementsByUserEmailAndAchievementId(EmailAndIdRequest request) {
-        UserAchievement response = defaultUserAchievementUseCase.finaUserAchievementByUserEmailAndAchievementId(request);
+    @GetMapping("/id/{achievementId}")
+    public ResponseEntity<GetUserAchievementResponse> getUserAchievementsByUserEmailAndAchievementId(@PathVariable Long achievementId) {
+        UserAchievement response = defaultUserAchievementUseCase.finaUserAchievementByUserEmailAndAchievementId(achievementId);
         return ResponseEntity.ok(GetUserAchievementResponse.from(response));
     }
 
     // 유저 업적 조회 - (유저 이메일 + 업적 제목)
-    @GetMapping("/email-title")
-    public ResponseEntity<GetUserAchievementResponse> getUserAchievementsByUserEmailAndAchievementTitle(EmailAndTitleRequest request) {
-        UserAchievement response = defaultUserAchievementUseCase.finaUserAchievementByUserEmailAndAchievementTitle(request);
-        return ResponseEntity.ok(GetUserAchievementResponse.from(response));
-    }
-
-    // 유저 업적 조회 - (유저 이메일 + 업적 아이디)
-    @GetMapping("/id-id")
-    public ResponseEntity<GetUserAchievementResponse> getUserAchievementsByUserIdAndAchievementId(IdAndIdRequest request) {
-        UserAchievement response = defaultUserAchievementUseCase.finaUserAchievementByUserIdAndAchievementId(request);
-        return ResponseEntity.ok(GetUserAchievementResponse.from(response));
-    }
-
-    // 유저 업적 조회 - (유저 아이디 + 업적 제목)
-    @GetMapping("/id-title")
-    public ResponseEntity<GetUserAchievementResponse> getUserAchievementsByUserIdAndAchievementTitle(IdAndTitleRequest request) {
-        UserAchievement response = defaultUserAchievementUseCase.finaUserAchievementByUserIdAndAchievementTitle(request);
+    @GetMapping("/title/{achievementTitle}")
+    public ResponseEntity<GetUserAchievementResponse> getUserAchievementsByUserEmailAndAchievementTitle(@PathVariable String achievementTitle) {
+        UserAchievement response = defaultUserAchievementUseCase.finaUserAchievementByUserEmailAndAchievementTitle(achievementTitle);
         return ResponseEntity.ok(GetUserAchievementResponse.from(response));
     }
 }
