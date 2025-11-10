@@ -40,6 +40,8 @@ public class SecurityConfig {
                                 "/achievement/**",
                                 "/channel/**",
                                 "/post/**",
+                                "/achievement/**",
+                                "/user-achievement/**",
                                 "/comment/**",
                                 "/heart/**"
                         ).permitAll()
