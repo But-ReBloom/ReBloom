@@ -4,6 +4,7 @@ import com.but.rebloom.achievement.domain.UserAchievement;
 import com.but.rebloom.achievement.dto.request.EmailAndIdRequest;
 import com.but.rebloom.achievement.dto.request.EmailAndTitleRequest;
 import com.but.rebloom.achievement.dto.request.IdAndIdRequest;
+import com.but.rebloom.achievement.dto.request.IdAndTitleRequest;
 import com.but.rebloom.achievement.exception.UserAchievementNotFoundException;
 import com.but.rebloom.achievement.repository.UserAchievementRepository;
 import lombok.RequiredArgsConstructor;
@@ -57,11 +58,11 @@ public class DefaultUserAchievementUseCase {
     }
 
     // 유저 업적 조회 - (유저 아이디 + 업적 제목)
-    public UserAchievement finaUserAchievementByUserIdAndAchievementTitle(EmailAndTitleRequest request) {
-        String userEmail = request.getUserEmail();
+    public UserAchievement finaUserAchievementByUserIdAndAchievementTitle(IdAndTitleRequest request) {
+        String userId = request.getUserId();
         String achievementTitle = request.getAchievementTitle();
 
-        return userAchievementRepository.findUserAchievementByUserIdAndAchievementTitle(userEmail, achievementTitle)
+        return userAchievementRepository.findUserAchievementByUserIdAndAchievementTitle(userId, achievementTitle)
                 .orElseThrow(() -> new UserAchievementNotFoundException("존재하지 않는 유저 업적"));
     }
 }
