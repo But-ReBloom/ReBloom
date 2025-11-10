@@ -2,7 +2,6 @@ package com.but.rebloom.achievement.repository;
 
 import com.but.rebloom.achievement.domain.UserAchievement;
 import com.but.rebloom.achievement.domain.UserAchievementId;
-import com.but.rebloom.auth.domain.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -74,5 +73,23 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
     void checkUserAchievementIsSuccess(
             @Param("userEmail") String userEmail,
             @Param("achievementTitle") String achievementTitle
+    );
+
+    @Transactional
+    @Modifying
+    @Query("update User u set u.userPoint = u.userPoint + :addPoint")
+    void getPointFromUserAchievement(
+            @Param("userEmail") String userEmail,
+            @Param("achievementTitle") String achievementTitle,
+            @Param("addPoint") Integer addPoint
+    );
+
+    @Transactional
+    @Modifying
+    @Query("update User u set u.userTierPoint = u.userTierPoint + :addPoint")
+    void getTierPointFromUserAchievement(
+            @Param("userEmail") String userEmail,
+            @Param("achievementTitle") String achievementTitle,
+            @Param("addTierPoint") Integer addTierPoint
     );
 }

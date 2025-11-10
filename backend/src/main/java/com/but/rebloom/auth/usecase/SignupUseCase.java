@@ -1,9 +1,12 @@
 package com.but.rebloom.auth.usecase;
 
+import com.but.rebloom.achievement.domain.Achievement;
 import com.but.rebloom.achievement.repository.UserAchievementRepository;
+import com.but.rebloom.achievement.usecase.DefaultAchievementUseCase;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.SignupRequest;
 import com.but.rebloom.auth.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,8 +22,11 @@ public class SignupUseCase {
     private final AuthValidationUseCase authValidationUseCase;
     // 업적 조정
     private final UserAchievementRepository userAchievementRepository;
+    // 업적 관련 함수 이용
+    private final DefaultAchievementUseCase defaultAchievementUseCase;
 
     // 회원가입
+    @Transactional
     public User signup(SignupRequest signupRequest) {
         // 기본 예외 처리
         authValidationUseCase.checkNull(signupRequest);
@@ -47,7 +53,11 @@ public class SignupUseCase {
                 .build();
 
         // 업적 성공 처리
-        userAchievementRepository.updateUserAchievementToSuccess(userEmail, "시작이 반이다.");
+        String achievementTitle = "시작이 반이다.";
+        userAchievementRepository.updateUserAchievementToSuccess(userEmail, achievementTitle);
+        Achievement achievement = defaultAchievementUseCase.findAchievementByTitle(achievementTitle);
+        userAchievementRepository.getPointFromUserAchievement(userEmail, achievementTitle, achievement.getAchievementRewardPoint());
+        userAchievementRepository.getPointFromUserAchievement(userEmail, achievementTitle, achievement.getAchievementTierPoint());
 
         // 유저 등록
         return userRepository.save(user);
