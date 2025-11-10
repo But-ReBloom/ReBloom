@@ -5,10 +5,12 @@ import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.post.domain.Post;
 import com.but.rebloom.reaction.domain.Heart;
+import com.but.rebloom.reaction.dto.request.CommentNotificationRequest;
 import com.but.rebloom.reaction.dto.request.CreateHeartRequest;
 import com.but.rebloom.reaction.dto.request.DeleteHeartRequest;
 import com.but.rebloom.channel.exception.AlreadyUsingHeartException;
 import com.but.rebloom.channel.exception.PostNotFoundException;
+import com.but.rebloom.reaction.dto.request.HeartNotificationRequest;
 import com.but.rebloom.reaction.repository.HeartRepository;
 import com.but.rebloom.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class HeartUseCase {
     private final HeartRepository heartRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final NotificationUseCase notificationUseCase;
 
     // 하트 생성 (좋아요 누르기)
     @Transactional
@@ -46,7 +49,21 @@ public class HeartUseCase {
                 .post(post)
                 .build();
 
-        return heartRepository.save(heart);
+        Heart savedHeart = heartRepository.save(heart);
+        // 본인이 작성한 글에 남긴 좋아요가 아닐 때만 알림 전송
+        if(!post.getUser().getUserId().equals(user.getUserId())) {
+            HeartNotificationRequest heartNotificationRequest = HeartNotificationRequest.builder()
+                    .ownerUserId(post.getUser().getUserId())
+                    .ownerEmail(post.getUser().getUserEmail())
+                    .likerUserId(user.getUserId())
+                    .heartId(savedHeart.getHeartId())
+                    .postId(post.getPostId())
+                    .build();
+
+            notificationUseCase.sendHeartNotification(heartNotificationRequest);
+        }
+
+        return savedHeart;
     }
 
     // 특정 게시글의 하트 목록 조회

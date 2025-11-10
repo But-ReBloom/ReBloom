@@ -1,11 +1,13 @@
 package com.but.rebloom.reaction.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class CommentNotificationRequest {
     @NotNull
     private String ownerUserId;
@@ -20,7 +22,7 @@ public class CommentNotificationRequest {
     private String commentContent;
 
     @NotNull
-    private Long CommentId;
+    private Long commentId;
 
     @NotNull
     private Long postId;
