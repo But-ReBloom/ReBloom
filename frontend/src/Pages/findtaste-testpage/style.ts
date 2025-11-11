@@ -114,6 +114,7 @@ export const Button_Box = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 40px;
 `;
 
 export const After_button = styled.button`
@@ -144,7 +145,7 @@ export const Arrows = styled.button`
 `;
 
 export const NextButton = styled.button`
-  width: 400px;
+  width: 200px;
   height: 44px;
   border: none;
   border-radius: 10px;
@@ -163,16 +164,10 @@ export const NextButton = styled.button`
 `;
 
 export const Before_button = styled.button`
-  background: #f2f2f2;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  margin-right: 12px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.2s;
+  background-color: #ffffff00;
+  border: #ffffff00;
 
-  &:hover {
-    background: #e0e0e0;
-  }
+  font-size: 20px;
+
+  cursor: pointer;
 `;
