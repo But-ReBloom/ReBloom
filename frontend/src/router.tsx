@@ -11,6 +11,7 @@ import NotFound from "./Pages/404page/NF.tsx";
 import ExpReviewPage from "./Pages/expReviewpage/Exr.tsx";
 import MyExps from "./Pages/myExpspage/MEP.tsx";
 import EPT from "./Pages/exploreTaste/EPT.tsx";
+import Thankyou from "./components/thanktou/thankyou.tsx";
 
 //경로명세 라우터
 const router = createBrowserRouter([
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
   {
     path: "/explore/taste",
     element: <EPT/>,
+  },
+  {
+    path: "/thankyou",
+    element: <Thankyou/>,
   },
 ]);
 
