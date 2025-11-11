@@ -27,12 +27,12 @@ export default function MepL(props) {
 }
 
 function OneExpInfo({ num, setStep }) {
-  let now = new Date();
-  let year = now.getFullYear();
-  let month = now.getMonth() + 1;
-  let date = now.getDate();
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const date = now.getDate();
 
-  let formattedDate = `${year}년 ${month < 10 ? "0" + month : month}월 ${
+  const formattedDate = `${year}년 ${month < 10 ? "0" + month : month}월 ${
     date < 10 ? "0" + date : date
   }일`;
   return (
