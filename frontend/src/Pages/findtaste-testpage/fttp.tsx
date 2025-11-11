@@ -59,7 +59,7 @@ export default function FT_TestPage() {
       (_, idx) => answers[startIndex + idx] === null
     );
     if (unselected !== undefined) {
-      alert("모든 질문을 선택해야 제출할 수 있습니다.");
+      toast.warning("모든 질문을 선택해야 제출할 수 있습니다.");
       return;
     }
     console.log("최종 응답:", answers);
