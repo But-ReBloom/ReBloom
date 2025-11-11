@@ -11,5 +11,5 @@ import lombok.*;
 public class UserAchievementId implements Serializable {
     // 다중키 속성 정의
     private String userEmail;
-    private Long achieveId;
+    private Long achievementId;
 }

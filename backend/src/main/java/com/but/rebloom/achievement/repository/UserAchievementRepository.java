@@ -22,7 +22,7 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
     );
 
     // 유저 업적 조회 - userEmail + achievementTitle
-    @Query("select a from UserAchievement a where a.userEmail = :userEmail and a.achievementTitle = :achievementTitle")
+    @Query("select a from UserAchievement a where a.userEmail = :userEmail and trim(a.achievementTitle) = :achievementTitle")
     Optional<UserAchievement> findUserAchievementByUserEmailAndAchievementTitle(
             @Param("userEmail") String userEmail,
             @Param("achievementTitle") String achievementTitle
@@ -36,7 +36,7 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
     );
 
     // 유저 업적 조회 - userId + achievementTitle
-    @Query("select a from UserAchievement a where a.userId = :userId and a.achievementTitle = :achievementTitle")
+    @Query("select a from UserAchievement a where a.userId = :userId and trim(a.achievementTitle) = :achievementTitle")
     Optional<UserAchievement> findUserAchievementByUserIdAndAchievementTitle(
             @Param("userId") String userId,
             @Param("achievementTitle") String achievementTitle
@@ -52,7 +52,7 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
 
     @Transactional
     @Modifying
-    @Query("update UserAchievement u SET u.progress = 100.0, u.isSuccess = true where u.userEmail = :userEmail and u.achievementTitle = :achievementTitle")
+    @Query("update UserAchievement u SET u.progress = 100.0, u.isSuccess = true where u.userEmail = :userEmail and trim(u.achievementTitle) = :achievementTitle")
     void updateUserAchievementToSuccess(
             @Param("userEmail") String userEmail,
             @Param("achievementTitle") String achievementTitle
@@ -60,7 +60,7 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
 
     @Transactional
     @Modifying
-    @Query("update UserAchievement u SET u.progress = u.progress + :addProgress where u.userEmail = :userEmail and u.achievementTitle = :achievementTitle")
+    @Query("update UserAchievement u SET u.progress = u.progress + :addProgress where u.userEmail = :userEmail and trim(u.achievementTitle) = :achievementTitle")
     void setAddProgressIntoUserAchievement(
             @Param("userEmail") String userEmail,
             @Param("achievementTitle") String achievementTitle,
@@ -69,7 +69,7 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
 
     @Transactional
     @Modifying
-    @Query("update UserAchievement u set u.isSuccess = true where u.progress = 100.0 and u.userEmail = :userEmail and u.achievementTitle = :achievementTitle")
+    @Query("update UserAchievement u set u.isSuccess = true where u.progress = 100.0 and u.userEmail = :userEmail and trim(u.achievementTitle) = :achievementTitle")
     void checkUserAchievementIsSuccess(
             @Param("userEmail") String userEmail,
             @Param("achievementTitle") String achievementTitle
@@ -80,7 +80,6 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
     @Query("update User u set u.userPoint = u.userPoint + :addPoint")
     void getPointFromUserAchievement(
             @Param("userEmail") String userEmail,
-            @Param("achievementTitle") String achievementTitle,
             @Param("addPoint") Integer addPoint
     );
 
@@ -89,7 +88,6 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
     @Query("update User u set u.userTierPoint = u.userTierPoint + :addPoint")
     void getTierPointFromUserAchievement(
             @Param("userEmail") String userEmail,
-            @Param("achievementTitle") String achievementTitle,
             @Param("addTierPoint") Integer addTierPoint
     );
 }

@@ -40,5 +40,6 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "provider")
-    private Provider provider;
+    @Builder.Default
+    private Provider provider = Provider.SELF;
 }

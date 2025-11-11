@@ -21,7 +21,7 @@ public interface AchievementRepository extends JpaRepository<Achievement, Long> 
     Boolean existsByAchievementId(Long achievementId);
     Boolean existsByAchievementTitle(String achievementTitle);
     @Query("SELECT CASE WHEN COUNT(a) > 0 THEN TRUE ELSE FALSE END " +
-            "FROM Achievement a WHERE a.achievementId = :achievementId AND a.achievementTitle = :achievementTitle")
+            "FROM Achievement a WHERE a.achievementId = :achievementId AND trim(a.achievementTitle) = :achievementTitle")
     Boolean existsByAchievementIdAndAchievementTitle(
             @Param("achievementId") Long achievementId,
             @Param("achievementTitle") String achievementTitle
