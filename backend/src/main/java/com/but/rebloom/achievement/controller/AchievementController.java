@@ -29,14 +29,14 @@ public class AchievementController {
 
     // 업적 조회 - 업적 아이디
     @GetMapping("/id/{achievementId}")
-    public ResponseEntity<GetAchievementResponse> finaAchievementById(@PathVariable Long achievementId) {
+    public ResponseEntity<GetAchievementResponse> findAchievementById(@PathVariable Long achievementId) {
         Achievement response = defaultAchievementUseCase.findAchievementById(achievementId);
         return ResponseEntity.ok(GetAchievementResponse.from(response));
     }
 
     // 업적 조회 - 업적 제목
     @GetMapping("/title/{achievementTitle}")
-    public ResponseEntity<GetAchievementResponse> finaAchievementByTitle(@PathVariable String achievementTitle) {
+    public ResponseEntity<GetAchievementResponse> findAchievementByTitle(@PathVariable String achievementTitle) {
         Achievement response = defaultAchievementUseCase.findAchievementByTitle(achievementTitle);
         return ResponseEntity.ok(GetAchievementResponse.from(response));
     }
