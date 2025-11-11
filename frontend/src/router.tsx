@@ -28,44 +28,44 @@ const router = createBrowserRouter([
     element: <SignUpPage />,
   },
   {
-    path:"/forgot/email",
-    element: <FindEmail />
+    path: "/forgot/email",
+    element: <FindEmail />,
   },
   {
-    path:"/forgot/password",
-    element: <FindPassWord/>,
+    path: "/forgot/password",
+    element: <FindPassWord />,
   },
   {
-    path:"/taste",
-    element:<FT_HobbyTest/>
+    path: "/taste",
+    element: <FT_HobbyTest />,
   },
   {
-    path:"/taste/hobby",
-    element:<FT_HobbyTest_Description/>
+    path: "/taste/hobby",
+    element: <FT_HobbyTest_Description />,
   },
   {
-    path:"taste/hobby/test",
-    element:<FT_TestPage/>
+    path: "taste/hobby/test",
+    element: <FT_TestPage />,
   },
   {
     path: "*",
-    element: <NotFound/>,
+    element: <NotFound />,
   },
   {
     path: "/expreview",
-    element: <ExpReviewPage/>,
+    element: <ExpReviewPage />,
   },
   {
     path: "/myexps",
-    element: <MyExps/>,
+    element: <MyExps />,
   },
   {
     path: "/explore/taste",
-    element: <EPT/>,
+    element: <EPT />,
   },
   {
     path: "/thankyou",
-    element: <Thankyou/>,
+    element: <Thankyou />,
   },
 ]);
 
