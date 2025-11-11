@@ -58,14 +58,39 @@ export default function FT_TestPage() {
     const unselected = currentQuestions.find(
       (_, idx) => answers[startIndex + idx] === null
     );
+
     if (unselected !== undefined) {
       toast.warning("모든 질문을 선택해야 제출할 수 있습니다.");
       return;
     }
-    console.log("최종 응답:", answers);
-    navigate("/test/result", {
-      state: { message: `감사합니다! <br /> 다음에 또 이용해주세요!` },
-    });
+
+    fetch("", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: "test@example.com",
+        password: "1234",
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("데이터 전송 실패");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("응답 데이터:", data);
+        console.log("최종 응답:", answers);
+
+        navigate("/test/result", {
+          state: { message: `감사합니다! <br /> 다음에 또 이용해주세요!` },
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
