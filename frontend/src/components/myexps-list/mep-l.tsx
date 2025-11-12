@@ -26,7 +26,7 @@ export default function MepL(props) {
   );
 }
 
-function OneExpInfo({ num, setStep }) {
+function OneExpInfo(props) {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
@@ -37,7 +37,7 @@ function OneExpInfo({ num, setStep }) {
   }일`;
   return (
     <>
-      <S.Wrraper onClick={() => setStep("detail")}>
+      <S.Wrraper onClick={() => props.setStep("detail")}>
         <S.Container>
           <S.Locates style={{ textDecoration: "none" }}>
             <S.ExpInfo>
@@ -46,7 +46,7 @@ function OneExpInfo({ num, setStep }) {
                 alt="페이지 아이콘"
                 style={{ width: "20px", height: "20px" }}
               />
-              활동명 예시 {num}
+              활동명 예시 {props.id}
             </S.ExpInfo>
             <S.ExpInfo>
               <img

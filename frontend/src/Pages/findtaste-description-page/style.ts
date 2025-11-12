@@ -33,11 +33,11 @@ export const RowContainer = styled.div`
     flex-direction: column;
     align-items: center;
 
-    gap: 20px;
+    gap: 56px;
 `
 
 export const Text = styled.p`
-    color: rgba(0, 0, 0, 0.80);
+    color: rgba(0, 0, 0, 0.48);
     text-align: center;
     font-family: Pretendard;
     font-size: 22px;
