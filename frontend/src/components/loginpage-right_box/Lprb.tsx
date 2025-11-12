@@ -26,7 +26,7 @@ export default function Right_box() {
     }
 
     try {
-      const response = await fetch("", {
+      const response = await fetch("/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

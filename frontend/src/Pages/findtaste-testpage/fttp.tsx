@@ -10,35 +10,26 @@ export default function FT_TestPage() {
   const [page, setPage] = useState(1);
 
   // 질문 받아오기
-  // const QuestionData = fetch("", {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     id: 0,
-  //     setNo: 0,
-  //     category: "string",
-  //     question: "string",
-  //     weight1: 0,
-  //     weight2: 0,
-  //     weight3: 0,
-  //     weight4: 0,
-  //     weight5: 0,
-  //   }),
-  // })
-  //   .then((response) => {
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-  //     return response.json();
-  //   })
-  //   .then((data) => {
-  //     console.log(data);
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
+  const QuestionData = fetch("/hobby-test/questions", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 
   const questions = [
     "당신의 이름은 인가요?",
