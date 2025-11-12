@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Builder
 @Table(name = "users")
 public class User {
-
     @Id
     @Column(name = "u_email", nullable = false, unique = true, length = 100)
     private String userEmail;
