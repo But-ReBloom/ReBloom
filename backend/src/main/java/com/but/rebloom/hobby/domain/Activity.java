@@ -38,7 +38,7 @@ public class Activity {
     private LocalDate activityRecent = LocalDate.now();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email")
+    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email", updatable = false, insertable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 }

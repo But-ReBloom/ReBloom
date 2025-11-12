@@ -15,13 +15,12 @@ import org.hibernate.annotations.OnDeleteAction;
 @IdClass(UserAchievementId.class)
 @Table(name = "users_to_achieves")
 public class UserAchievement {
-
     @Id
     @Column(name = "fk_u_email", nullable = false)
     private String userEmail;
 
     @Id
-    @Column(name = "fk_ach_achieve_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "fk_ach_id", nullable = false, insertable = false, updatable = false)
     private Long achievementId;
 
     @Column(name = "fk_u_id", nullable = false)
@@ -41,7 +40,7 @@ public class UserAchievement {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_ach_achieve_id", referencedColumnName = "ach_achieve_id")
+    @JoinColumn(name = "fk_ach_id", referencedColumnName = "ach_id", insertable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Achievement achievement;
 }

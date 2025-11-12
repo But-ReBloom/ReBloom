@@ -43,7 +43,7 @@ public class Channel {
     private Boolean isAccepted = false;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email")
+    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email", updatable = false, insertable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 }

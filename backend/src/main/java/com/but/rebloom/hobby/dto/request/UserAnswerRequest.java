@@ -8,9 +8,13 @@ import lombok.Setter;
 @Setter
 public class UserAnswerRequest {
     @NotNull
-    private int setNo;
+    private Double socialScore;
     @NotNull
-    private String category;
+    private Double learningScore;
     @NotNull
-    private double answerValue;
+    private Double planningScore;
+    @NotNull
+    private Double focusScore;
+    @NotNull
+    private Double creativityScore;
 }

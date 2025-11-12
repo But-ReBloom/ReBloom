@@ -59,12 +59,12 @@ public class Post {
     private Integer postViewers = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_ch_id", nullable = false)
+    @JoinColumn(name = "fk_ch_id", nullable = false, updatable = false, insertable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Channel channel;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email", nullable = false)
+    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email", nullable = false, updatable = false, insertable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 }

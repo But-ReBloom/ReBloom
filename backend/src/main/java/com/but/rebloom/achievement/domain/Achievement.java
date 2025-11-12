@@ -13,7 +13,7 @@ import lombok.*;
 public class Achievement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ach_achieve_id", nullable = false, unique = true)
+    @Column(name = "ach_id", nullable = false, unique = true)
     private Long achievementId;
 
     @Column(name = "ach_title", nullable = false, unique = true, length = 100)

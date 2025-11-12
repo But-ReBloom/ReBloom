@@ -15,7 +15,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "hobby")
 public class HobbyWeight {
     @Id
-    @Column(name = "fk_u_id", nullable = false, unique = true, length = 255)
+    @Column(name = "h_id", nullable = false, unique = true, length = 255)
     private String userId;
 
     @Column(name = "h_name", nullable = false, length = 255)
@@ -35,9 +35,4 @@ public class HobbyWeight {
 
     @Column(name = "h_w_creativity", nullable = false)
     private Double hobbyWeightCreativity;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_u_id", referencedColumnName = "u_id", insertable = false, updatable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private User user;
 }

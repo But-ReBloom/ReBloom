@@ -29,7 +29,7 @@ public class HobbyTestController {
 
      // 활동 추천 로직
     @PostMapping("/recommend")
-    public ResponseEntity<List<HobbyScoreResponse>> recommendHobby(@RequestBody List<UserAnswerRequest> answers) {
+    public ResponseEntity<List<HobbyScoreResponse>> recommendHobby(@RequestBody UserAnswerRequest answers) {
         List<Map<HobbyWeight, Double>> hobbies = hobbyTestUseCase.findUserHobbies(answers);
         return ResponseEntity.ok(
                 hobbies.stream()
