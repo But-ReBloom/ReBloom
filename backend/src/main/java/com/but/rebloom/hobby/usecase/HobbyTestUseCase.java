@@ -32,7 +32,7 @@ public class HobbyTestUseCase {
 
         for (UserAnswerRequest answer : answers) {
             // JPA 함수로 추출하여 최적화
-            InitialTest test = initialTestRepository.findBySetNoAndCategory(answer.getSetNo(), answer.getCategory())
+            InitialTest test = initialTestRepository.findByInitialTestSetNumberAndInitialTestCategory(answer.getSetNo(), answer.getCategory())
                     .orElseThrow(() -> new WrongArgumentException("잘못된 입력값"));
 
             // 점수 계산
