@@ -10,5 +10,5 @@ public class FindEmailRequest {
     @NotNull
     private String userId;
     @NotNull
-    private String password;
+    private String userPassword;
 }

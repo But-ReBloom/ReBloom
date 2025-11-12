@@ -13,5 +13,5 @@ public class LoginRequest {
     @NotNull
     private String userPassword;
     @NotNull
-    private Provider provider;
+    private Provider userProvider;
 }

@@ -2,6 +2,9 @@ package com.but.rebloom.auth.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDate;
 
 @Entity
@@ -51,7 +54,9 @@ public class User {
     private String userTier = "BRONZE";
 
     @Column(name = "u_recent_date", nullable = false)
-    private LocalDate userRecentDate;
+    @UpdateTimestamp
+    @Builder.Default
+    private LocalDate userRecentDate = LocalDate.now();
 
     @Column(name = "u_streak", nullable = false)
     @Builder.Default

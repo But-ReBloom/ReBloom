@@ -32,7 +32,7 @@ public class InitialTest {
     private Double initialTestLearningWeight;
 
     @Column(name = "it_w_planning", nullable = false)
-    private Double initialTestLPlanningWeight;
+    private Double initialTestPlanningWeight;
 
     @Column(name = "it_w_focus", nullable = false)
     private Double initialTestFocusWeight;

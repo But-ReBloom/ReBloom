@@ -37,11 +37,11 @@ public class HobbyTestUseCase {
 
             // 점수 계산
             if (test != null) {
-                userScore[0] += test.getWeight1() * answer.getAnswerValue();
-                userScore[1] += test.getWeight2() * answer.getAnswerValue();
-                userScore[2] += test.getWeight3() * answer.getAnswerValue();
-                userScore[3] += test.getWeight4() * answer.getAnswerValue();
-                userScore[4] += test.getWeight5() * answer.getAnswerValue();
+                userScore[0] += test.getInitialTestSocialWeight() * answer.getAnswerValue();
+                userScore[1] += test.getInitialTestLearningWeight() * answer.getAnswerValue();
+                userScore[2] += test.getInitialTestPlanningWeight() * answer.getAnswerValue();
+                userScore[3] += test.getInitialTestFocusWeight() * answer.getAnswerValue();
+                userScore[4] += test.getInitialTestFocusWeight() * answer.getAnswerValue();
             }
         }
 
@@ -67,11 +67,11 @@ public class HobbyTestUseCase {
     // 평균 거리 탐색
     private double averageAbsoluteDistance(double[] userVector, HobbyWeight hobby) {
         double sum = 0;
-        sum += Math.abs(hobby.getWeight1() - userVector[0]);
-        sum += Math.abs(hobby.getWeight2() - userVector[1]);
-        sum += Math.abs(hobby.getWeight3() - userVector[2]);
-        sum += Math.abs(hobby.getWeight4() - userVector[3]);
-        sum += Math.abs(hobby.getWeight5() - userVector[4]);
+        sum += Math.abs(hobby.getHobbyWeightSocial() - userVector[0]);
+        sum += Math.abs(hobby.getHobbyWeightLearning() - userVector[1]);
+        sum += Math.abs(hobby.getHobbyWeightPlanning() - userVector[2]);
+        sum += Math.abs(hobby.getHobbyWeightFocus() - userVector[3]);
+        sum += Math.abs(hobby.getHobbyWeightCreativity() - userVector[4]);
         return sum / 5.0;
     }
 

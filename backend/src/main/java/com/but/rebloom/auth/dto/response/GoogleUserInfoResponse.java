@@ -28,7 +28,7 @@ public class GoogleUserInfoResponse {
                 .email(user.getUserEmail())
                 .name(user.getUserName())
                 .accessToken(jwt)
-                .provider(user.getProvider())
+                .provider(user.getUserProvider())
                 .build();
     }
 }

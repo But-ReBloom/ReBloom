@@ -12,25 +12,28 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "hobby_weights")
+@Table(name = "hobby")
 public class HobbyWeight {
     @Id
     @Column(name = "fk_u_id", nullable = false, unique = true, length = 255)
     private String userId;
 
-    @Column(name = "hw_social", nullable = false)
+    @Column(name = "h_name", nullable = false, length = 255)
+    private String hobbyName;
+
+    @Column(name = "h_w_social", nullable = false)
     private Double hobbyWeightSocial;
 
-    @Column(name = "hw_learning", nullable = false)
+    @Column(name = "h_w_learning", nullable = false)
     private Double hobbyWeightLearning;
 
-    @Column(name = "hw_planning", nullable = false)
+    @Column(name = "h_w_planning", nullable = false)
     private Double hobbyWeightPlanning;
 
-    @Column(name = "hw_focus", nullable = false)
+    @Column(name = "h_w_focus", nullable = false)
     private Double hobbyWeightFocus;
 
-    @Column(name = "hw_creativity", nullable = false)
+    @Column(name = "h_w_creativity", nullable = false)
     private Double hobbyWeightCreativity;
 
     @OneToOne(fetch = FetchType.LAZY)

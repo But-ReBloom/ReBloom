@@ -17,5 +17,5 @@ public class SignupRequest {
     @NotNull
     private String userName;
     @NotNull
-    private Provider provider;
+    private Provider userProvider;
 }
