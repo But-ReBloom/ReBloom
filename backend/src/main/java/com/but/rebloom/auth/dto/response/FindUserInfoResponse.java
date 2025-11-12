@@ -38,7 +38,7 @@ public class FindUserInfoResponse {
                 .userRole(user.getUserRole())
                 .userTierPoint(user.getUserTierPoint())
                 .userPoint(user.getUserPoint())
-                .userProvider(user.getProvider())
+                .userProvider(user.getUserProvider())
                 .build();
     }
 }

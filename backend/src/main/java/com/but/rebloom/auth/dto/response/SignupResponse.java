@@ -21,14 +21,14 @@ public class SignupResponse {
     @NotNull
     private String userEmail;
     @NotNull
-    private Provider provider;
+    private Provider userProvider;
 
     public static SignupResponse from(User user) {
         return SignupResponse.builder()
                 .success(true)
                 .userId(user.getUserId())
                 .userEmail(user.getUserEmail())
-                .provider(user.getProvider())
+                .userProvider(user.getUserProvider())
                 .build();
     }
 }

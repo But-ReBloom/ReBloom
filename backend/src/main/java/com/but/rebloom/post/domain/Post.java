@@ -5,6 +5,8 @@ import com.but.rebloom.channel.domain.Channel;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -18,40 +20,51 @@ import java.time.LocalDateTime;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id", nullable = false)
+    @Column(name = "p_id", nullable = false)
     private Long postId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "fk_u_email", nullable = false, insertable = false, updatable = false)
+    private String userEmail;
 
-    @ManyToOne
-    @JoinColumn(name = "channel_id", nullable = false)
-    private Channel channel;
+    @Column(name = "fk_u_id", nullable = false, insertable = false, updatable = false)
+    private String userId;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "fk_ch_id", nullable = false, insertable = false, updatable = false)
+    private Long channelId;
+
+    @Column(name = "p_title", nullable = false)
     private String postTitle;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "p_content", nullable = false, columnDefinition = "MEDIUMTEXT")
     private String postContent;
 
-    @Column(name = "image", nullable = true)
+    @Column(name = "p_image")
     private String postImage;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
-    @Builder.Default    // 기본값 설정
+    @Column(name = "p_type", nullable = false)
+    @Builder.Default
     private Type postType = Type.NORMAL;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = true)
+    @Column(name = "p_status")
     private Status postStatus;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "p_created_at", nullable = false, updatable = false)
     private LocalDateTime postCreatedAt;
 
-    @Column(name = "veiwers", nullable = false)
+    @Column(name = "p_viewers", nullable = false)
     @Builder.Default
-    private int veiwers = 0;
+    private Integer postViewers = 0;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_ch_id", nullable = false, updatable = false, insertable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Channel channel;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email", nullable = false, updatable = false, insertable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 }

@@ -13,11 +13,11 @@ import java.util.Optional;
 public interface InitialTestRepository extends JpaRepository<InitialTest, Long> {
     // 질문지 조회 - (SetNo)
     @Query("SELECT initialTest FROM InitialTest initialTest " +
-            "WHERE initialTest.setNo = :setNo1 OR initialTest.setNo = :setNo2")
+            "WHERE initialTest.initialTestSetNumber = :setNo1 OR initialTest.initialTestSetNumber = :setNo2")
     Optional<List<InitialTest>> findBySetNo(
             @Param("setNo1") int setNo1,
             @Param("setNo2") int setNo2
     );
     // 질문지 조회 - (SetNo + Category)
-    Optional<InitialTest> findBySetNoAndCategory(int setNo, String category);
+    Optional<InitialTest> findByInitialTestSetNumberAndInitialTestCategory(int setNo, String category);
 }

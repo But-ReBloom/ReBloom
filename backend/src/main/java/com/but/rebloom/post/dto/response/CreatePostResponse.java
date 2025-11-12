@@ -57,7 +57,7 @@ public class CreatePostResponse {
                 .postType(post.getPostType())
                 .postStatus(post.getPostStatus())
                 .postCreatedAt(post.getPostCreatedAt())
-                .viewers(post.getVeiwers())
+                .viewers(post.getPostViewers())
                 .build();
     }
 }

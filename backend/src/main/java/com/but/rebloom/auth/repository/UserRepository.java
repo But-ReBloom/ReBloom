@@ -15,22 +15,38 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     // 유저 조회 함수
     Optional<User> findByUserEmail(String userEmail);
-    Optional<User> findByUserEmailAndProvider(String userEmail, Provider provider);
+    @Query("select u from User u where u.userEmail = :userEmail and u.userProvider = :userProvider")
+    Optional<User> findByUserEmailAndProvider(
+            @Param("userEmail") String userEmail,
+            @Param("userProvider") Provider userProvider
+    );
     Optional<User> findByUserId(String userId);
 
     // 유저 존재 확인 함수
-    boolean existsByUserId(String userId);
-    boolean existsByUserEmail(String userEmail);
+    Boolean existsByUserId(String userId);
+    Boolean existsByUserEmail(String userEmail);
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM User u WHERE u.userEmail = :userEmail AND u.userId = :userId")
+    Boolean existsByUserEmailAndUserId(
+            @Param("userEmail") String userEmail,
+            @Param("userId") String userId
+    );
 
     // 유저 아이디 수정
     @Transactional
     @Modifying
     @Query("UPDATE User user SET user.userId = :newId WHERE user.userEmail = :userEmail")
-    void updateUserIdByUserEmail(@Param("userEmail") String email, @Param("newId") String userId);
+    void updateUserIdByUserEmail(
+            @Param("userEmail") String email,
+            @Param("newId") String userId
+    );
 
     // 유저 비밀번호 수정
     @Transactional
     @Modifying
     @Query("UPDATE User user SET user.userPassword = :newPassword WHERE user.userEmail = :userEmail")
-    void updateUserPasswordByUserEmail(@Param("userEmail") String email, @Param("newPassword") String newPassword);
+    void updateUserPasswordByUserEmail(
+            @Param("userEmail") String email,
+            @Param("newPassword") String newPassword
+    );
 }
