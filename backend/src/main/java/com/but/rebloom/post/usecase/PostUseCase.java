@@ -58,7 +58,7 @@ public class PostUseCase {
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         // 조회수 증가
-        post.setVeiwers(post.getVeiwers() + 1);
+        post.setPostViewers(post.getPostViewers() + 1);
         postRepository.save(post);
 
         return post;
