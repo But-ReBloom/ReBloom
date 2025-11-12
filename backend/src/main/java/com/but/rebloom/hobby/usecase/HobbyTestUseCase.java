@@ -21,40 +21,50 @@ public class HobbyTestUseCase {
     private final HobbyWeightRepository hobbyWeightRepository;
 
     // 유저 취향 테스트시 관련 함수 호출 (컨트롤러에서 SRP 위배 방지)
-    public List<Map<HobbyWeight, Double>> findUserHobbies(List<UserAnswerRequest> answers) {
-        double[] userScore = calculateUserScore(answers);
-        return calculateRecommendations(userScore);
+    public List<Map<HobbyWeight, Double>> findUserHobbies(UserAnswerRequest answers) {
+        return calculateRecommendations(answers);
     }
 
-    // 취향 테스트 - 유저 결과 추출
-    public double[] calculateUserScore(List<UserAnswerRequest> answers) {
-        double[] userScore = new double[5];
-
-        for (UserAnswerRequest answer : answers) {
-            // JPA 함수로 추출하여 최적화
-            InitialTest test = initialTestRepository.findByInitialTestSetNumberAndInitialTestCategory(answer.getSetNo(), answer.getCategory())
-                    .orElseThrow(() -> new WrongArgumentException("잘못된 입력값"));
-
-            // 점수 계산
-            if (test != null) {
-                userScore[0] += test.getInitialTestSocialWeight() * answer.getAnswerValue();
-                userScore[1] += test.getInitialTestLearningWeight() * answer.getAnswerValue();
-                userScore[2] += test.getInitialTestPlanningWeight() * answer.getAnswerValue();
-                userScore[3] += test.getInitialTestFocusWeight() * answer.getAnswerValue();
-                userScore[4] += test.getInitialTestFocusWeight() * answer.getAnswerValue();
-            }
-        }
-
-        return userScore;
-    }
+//    // 취향 테스트 - 유저 결과 추출
+//    public Double[] calculateUserScore(List<UserAnswerRequest> answers) {
+//        Double[] userScore = new Double[5];
+//
+//        for (UserAnswerRequest answer : answers) {
+//            // JPA 함수로 추출하여 최적화
+//            InitialTest test = initialTestRepository.findByInitialTestSetNumberAndInitialTestCategory(
+//                            answer.getInitialTestSetNumber(),
+//                            answer.getInitialTestCategory()
+//                    )
+//                    .orElseThrow(() -> new WrongArgumentException("잘못된 입력값"));
+//
+//            // 점수 계산
+//            if (test != null) {
+//                userScore[0] += test.getInitialTestSocialWeight() * answer.getAnswerValue();
+//                userScore[1] += test.getInitialTestLearningWeight() * answer.getAnswerValue();
+//                userScore[2] += test.getInitialTestPlanningWeight() * answer.getAnswerValue();
+//                userScore[3] += test.getInitialTestFocusWeight() * answer.getAnswerValue();
+//                userScore[4] += test.getInitialTestFocusWeight() * answer.getAnswerValue();
+//            }
+//        }
+//
+//        return userScore;
+//    }
 
     // 결과에 따른 취미 탐색
-    public List<Map<HobbyWeight, Double>> calculateRecommendations(double[] userVector) {
+    public List<Map<HobbyWeight, Double>> calculateRecommendations(UserAnswerRequest userVector) {
         List<HobbyWeight> hobbies = hobbyWeightRepository.findAll();
+
+        double[] userScore = new double[5];
+
+        userScore[0] = userVector.getSocialScore();
+        userScore[1] = userVector.getLearningScore();
+        userScore[2] = userVector.getPlanningScore();
+        userScore[3] = userVector.getFocusScore();
+        userScore[4] = userVector.getCreativityScore();
 
         return hobbies.stream()
                 .map(h -> {
-                    double distance = averageAbsoluteDistance(userVector, h);
+                    Double distance = averageAbsoluteDistance(userScore, h);
                     Map<HobbyWeight, Double> map = new HashMap<>();
                     map.put(h, distance);
                     return map;
@@ -66,7 +76,7 @@ public class HobbyTestUseCase {
 
     // 평균 거리 탐색
     private double averageAbsoluteDistance(double[] userVector, HobbyWeight hobby) {
-        double sum = 0;
+        double sum = 0.0;
         sum += Math.abs(hobby.getHobbyWeightSocial() - userVector[0]);
         sum += Math.abs(hobby.getHobbyWeightLearning() - userVector[1]);
         sum += Math.abs(hobby.getHobbyWeightPlanning() - userVector[2]);

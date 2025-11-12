@@ -23,7 +23,8 @@ public class User {
     private String userId;
 
     @Column(name = "u_current_act")
-    private Integer currentAct; // u_current_act int
+    @Builder.Default
+    private Long userCurrentActivity = null;
 
     @Column(name = "u_password", nullable = false, length = 255)
     private String userPassword;
