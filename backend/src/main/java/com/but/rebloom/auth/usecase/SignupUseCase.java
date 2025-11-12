@@ -83,7 +83,7 @@ public class SignupUseCase {
         userAchievementRepository.updateUserAchievementToSuccess(userEmail, achievementTitle);
         Achievement achievement = defaultAchievementUseCase.findAchievementByTitle(achievementTitle);
         userAchievementRepository.getPointFromUserAchievement(userEmail, achievement.getAchievementRewardPoint());
-        userAchievementRepository.getPointFromUserAchievement(userEmail, achievement.getAchievementTierPoint());
+        userAchievementRepository.getPointFromUserAchievement(userEmail, achievement.getAchievementRewardPoint());
 
         return saveUser;
     }
