@@ -25,11 +25,6 @@ public class Activity {
     @Column(name = "fk_u_email", nullable = false, unique = true, length = 100)
     private String userEmail;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private User user;
-
     @Column(name = "act_name", nullable = false, length = 50)
     private String actName;
 
@@ -38,4 +33,9 @@ public class Activity {
 
     @Column(name = "act_recent", nullable = false)
     private LocalDate actRecent;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 }
