@@ -15,10 +15,10 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     // 유저 조회 함수
     Optional<User> findByUserEmail(String userEmail);
-    @Query("select u from User u where u.userEmail = :userEmail and u.provider = :provider")
+    @Query("select u from User u where u.userEmail = :userEmail and u.userProvider = :userProvider")
     Optional<User> findByUserEmailAndProvider(
             @Param("userEmail") String userEmail,
-            @Param("provider") Provider provider
+            @Param("userProvider") Provider userProvider
     );
     Optional<User> findByUserId(String userId);
 
