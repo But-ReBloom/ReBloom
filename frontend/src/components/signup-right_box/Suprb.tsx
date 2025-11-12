@@ -14,16 +14,22 @@ export default function Suprb() {
   const [userName, setUserName] = useState("");
 
   const handleSubmit = () => {
-    if(userEmail.trim() && password.trim() && userID.trim() && userName.trim()){
-      toast.success(<>환영합니다! {userID}님! <br /> 기다려주세요. 이동중 입니다.</>);
+    if (
+      userEmail.trim() &&
+      password.trim() &&
+      userID.trim() &&
+      userName.trim()
+    ) {
+      toast.success(
+        <>
+          환영합니다! {userID}님! <br /> 기다려주세요. 이동중 입니다.
+        </>
+      );
 
-      setTimeout(() => {
-          navigate("/login", { replace: true });
-      }, 2500);
+      navigate("/login", { state: { id: userID } });
     } else {
       toast.error(<>빈 칸이 있어선 안됩니다.</>);
     }
-    
   };
 
   //회원가입_오른쪽박스
@@ -91,7 +97,7 @@ export default function Suprb() {
           </S.OAuthButton>
         </S.OAuthFamily>
       </S.LoginContainer>
-    <ToastContainer position="top-right" autoClose={2000} />
+      <ToastContainer position="top-right" autoClose={2000} />
     </>
   );
 }
