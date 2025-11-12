@@ -5,6 +5,9 @@ import com.but.rebloom.channel.domain.Channel;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -57,9 +60,11 @@ public class Post {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_ch_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Channel channel;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 }
