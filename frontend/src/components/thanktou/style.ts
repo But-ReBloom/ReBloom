@@ -21,7 +21,8 @@ export const Title = styled.p`
 export const SubTitle = styled.p`
   margin-top: 0;
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 500;
+  color:rgba(0, 0, 0, 0.5);
 `;
 
 export const HomeButton = styled.button`
@@ -30,7 +31,7 @@ export const HomeButton = styled.button`
   padding: 16px 24px;
   border: none;
   border-radius: 20px;
-  margin-top: 120px;
+  margin-top: 36px;
   background: #000;
   color: #fff;
   font-size: 18px;
