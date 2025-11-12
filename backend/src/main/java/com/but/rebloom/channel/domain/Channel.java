@@ -22,7 +22,7 @@ public class Channel {
     private Long channelId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "u_email", nullable = false)
     private User user; // User entity와 맵핑을 위해 필드명을 userId가 아닌 user로
 
     @Column(name = "title", nullable = false)

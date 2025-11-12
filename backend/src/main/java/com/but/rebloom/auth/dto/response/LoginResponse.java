@@ -16,7 +16,7 @@ public class LoginResponse {
     @NotNull
     private String userEmail;
     @NotNull
-    private Provider provider;
+    private Provider userProvider;
     @NotNull
     private String token;
 
@@ -24,7 +24,7 @@ public class LoginResponse {
         return LoginResponse.builder()
                 .success(true)
                 .userEmail(user.getUserEmail())
-                .provider(user.getProvider())
+                .userProvider(user.getUserProvider())
                 .token(jwtToken)
                 .build();
     }

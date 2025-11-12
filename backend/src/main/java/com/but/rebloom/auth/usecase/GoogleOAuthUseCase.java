@@ -35,7 +35,7 @@ public class GoogleOAuthUseCase {
                         .userEmail(googleUser.getEmail())
                         .userName(googleUser.getName())
                         .userPassword("")
-                        .provider(Provider.GOOGLE)
+                        .userProvider(Provider.GOOGLE)
                         .build()));
     }
 

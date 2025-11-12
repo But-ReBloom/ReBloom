@@ -21,7 +21,7 @@ public class FindUserInfoUseCase {
     // 이메일 찾기
     public User findUserIdByIdAndPw(FindEmailRequest findEmailRequest) {
         String userId = findEmailRequest.getUserId();
-        String userPassword = findEmailRequest.getPassword();
+        String userPassword = findEmailRequest.getUserPassword();
 
         authValidationUseCase.checkUserId(userId);
         authValidationUseCase.checkUserPassword(userPassword);
