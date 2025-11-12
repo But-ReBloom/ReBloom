@@ -4,7 +4,8 @@ import com.but.rebloom.auth.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.stereotype.Controller;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -18,27 +19,31 @@ import java.time.LocalDateTime;
 public class Channel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "channel_id", nullable = false)
+    @Column(name = "ch_id")
     private Long channelId;
 
-    @ManyToOne
-    @JoinColumn(name = "u_email", nullable = false)
-    private User user; // User entity와 맵핑을 위해 필드명을 userId가 아닌 user로
+    @Column(name = "fk_u_email", nullable = false, unique = true, length = 100,
+        updatable = false, insertable = false)
+    private String userEmail;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "ch_title", nullable = false)
     private String channelTitle;
 
-    @Column(name = "intro", nullable = false)
+    @Column(name = "ch_intro", nullable = false)
     private String channelIntro;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "ch_description", nullable = false)
     private String channelDescription;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "ch_created_at", nullable = false, updatable = false)
     private LocalDateTime channelCreatedAt;
 
-    @Column(name = "is_accepted",nullable = false)
+    @Column(name = "ch_is_accepted", nullable = false)
     private Boolean isAccepted = false;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 }
