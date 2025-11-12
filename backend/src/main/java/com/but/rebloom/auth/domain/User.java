@@ -2,6 +2,7 @@ package com.but.rebloom.auth.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -11,35 +12,49 @@ import lombok.*;
 @Builder
 @Table(name = "users")
 public class User {
-    // 테이블 속성 연결
+
     @Id
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "u_email", nullable = false, unique = true, length = 100)
     private String userEmail;
 
-    @Column(name = "user_id", unique = true, nullable = false)
+    @Column(name = "u_id", nullable = false, unique = true, length = 255)
     private String userId;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "u_current_act")
+    private Integer currentAct; // u_current_act int
+
+    @Column(name = "u_password", nullable = false, length = 255)
     private String userPassword;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "u_name", nullable = false, length = 20)
     private String userName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    @Builder.Default    // 기본값 설정
+    @Column(name = "u_role", nullable = false, length = 255)
+    @Builder.Default
     private Role userRole = Role.USER;
 
-    @Column(name = "tier_point")
-    @Builder.Default    // 기본값 설정
+    @Column(name = "u_tier_point", nullable = false)
+    @Builder.Default
     private Integer userTierPoint = 0;
 
-    @Column(name = "point")
-    @Builder.Default    // 기본값 설정
+    @Column(name = "u_point", nullable = false)
+    @Builder.Default
     private Integer userPoint = 0;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "provider")
+    @Column(name = "u_provider", length = 255)
     @Builder.Default
-    private Provider provider = Provider.SELF;
+    private Provider userProvider = Provider.SELF;
+
+    @Column(name = "u_tier", nullable = false, length = 20)
+    @Builder.Default
+    private String userTier = "BRONZE";
+
+    @Column(name = "u_recent_date", nullable = false)
+    private LocalDate userRecentDate;
+
+    @Column(name = "u_streak", nullable = false)
+    @Builder.Default
+    private Integer userStreak = 1;
 }
