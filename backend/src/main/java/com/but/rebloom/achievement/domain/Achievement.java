@@ -1,33 +1,30 @@
 package com.but.rebloom.achievement.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Table(name = "achieves")
 public class Achievement {
-    // 테이블 속성 연결
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "achieve_id", unique = true, nullable = false)
+    @Column(name = "ach_achieve_id", nullable = false, unique = true)
     private Long achievementId;
 
-    @Column(name = "title", unique = true, nullable = false)
+    @Column(name = "ach_title", nullable = false, unique = true, length = 100)
     private String achievementTitle;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "ach_description", nullable = false, columnDefinition = "TEXT")
     private String achievementDescription;
 
-    @Column(name = "reward_point", nullable = false)
+    @Column(name = "ach_reward_point", nullable = false)
     private Integer achievementRewardPoint;
 
-    @Column(name = "tier_point", nullable = false)
-    private Integer achievementTierPoint;
+    @Column(name = "ach_reward_tier_point", nullable = false)
+    private Integer achievementRewardTierPoint;
 }

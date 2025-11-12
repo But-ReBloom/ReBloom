@@ -28,7 +28,7 @@ public class GetAchievementResponse {
                 .achievementTitle(achievement.getAchievementTitle())
                 .achievementDescription(achievement.getAchievementDescription())
                 .achievementRewardPoint(achievement.getAchievementRewardPoint())
-                .achievementTierPoint(achievement.getAchievementTierPoint())
+                .achievementTierPoint(achievement.getAchievementRewardTierPoint())
                 .build();
     }
 }
