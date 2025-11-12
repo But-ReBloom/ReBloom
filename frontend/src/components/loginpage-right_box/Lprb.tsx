@@ -5,6 +5,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
+import { login } from "../../api";
+import { Provider } from "../../types/api";
+
 export default function Right_box() {
   const navigate = useNavigate(); // 페이지 이동에 필요한 요소
 
@@ -13,14 +16,20 @@ export default function Right_box() {
   const [password, setPassword] = useState("");
 
   // 로그인 함수
+<<<<<<< Updated upstream
   // 로그인 함수
   const handleSubmit = async () => {
+=======
+  const handleSubmit = async () => {
+    // 로그인 영역 , 비밀번호 영역 중 하나라도 공백이면 에러
+>>>>>>> Stashed changes
     if (!userEmail.trim() || !password.trim()) {
       toast.error("빈 칸이 있어선 안됩니다.");
       return;
     }
 
     try {
+<<<<<<< Updated upstream
       const response = await fetch("", {
         method: "POST",
         headers: {
@@ -50,6 +59,33 @@ export default function Right_box() {
     } catch (error) {
       console.error("데이터 오류:", error);
       toast.error("이메일 또는 비밀번호가 일치하지 않습니다.");
+=======
+      const response = await login({
+        userEmail: userEmail,
+        userPassword: password,
+        provider: Provider.SELF,
+      });
+
+      if (response.data.success) {
+        // POST한 데이터가 일치하면 환영 메시지와 함께 메인 페이지로 이동
+        localStorage.setItem("token", response.data.token);
+        toast.success(
+          <div>
+            환영합니다! <br /> 이동 중입니다...
+          </div>
+        );
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 2000);
+      } else {
+        // 일치하지 않다면 오류 출력
+        toast.error("이메일 또는 비밀번호가 일치하지 않습니다.");
+      }
+    } catch (error) {
+      // 서버 통신 중 에러 메세지 출력
+      console.error("데이터 오류:", error);
+      toast.error("서버와의 통신 중 오류가 발생했습니다.");
+>>>>>>> Stashed changes
     }
   };
 

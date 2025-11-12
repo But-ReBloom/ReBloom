@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class SignupUseCase {
@@ -41,6 +43,7 @@ public class SignupUseCase {
                 .userPassword(passwordEncoder.encode(userPassword))
                 .userName(userName)
                 .provider(signupRequest.getProvider())
+                .userRecentDate(LocalDate.now())
                 .build();
 
         // 유저 등록

@@ -4,6 +4,8 @@ import Dodum from "../../assets/images/dodamdodam.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { signup } from "../../api";
+import { Provider } from "../../types/api";
 
 export default function Suprb() {
   const navigate = useNavigate();
@@ -13,17 +15,33 @@ export default function Suprb() {
   const [userID, setUserID] = useState("");
   const [userName, setUserName] = useState("");
 
-  const handleSubmit = () => {
-    if(userEmail.trim() && password.trim() && userID.trim() && userName.trim()){
-      toast.success(<>환영합니다! {userID}님! <br /> 기다려주세요. 이동중 입니다.</>);
-
-      setTimeout(() => {
-          navigate("/login", { replace: true });
-      }, 2500);
-    } else {
-      toast.error(<>빈 칸이 있어선 안됩니다.</>);
+  const handleSubmit = async () => {
+    if (!userEmail.trim() || !password.trim() || !userID.trim() || !userName.trim()) {
+      toast.error("빈 칸이 있어선 안됩니다.");
+      return;
     }
-    
+
+    try {
+      const response = await signup({
+        userEmail,
+        userId: userID,
+        userPassword: password,
+        userName,
+        provider: Provider.SELF,
+      });
+
+      if (response.data.success) {
+        toast.success(<div>환영합니다! {userName}님! <br /> 로그인 페이지로 이동합니다.</div>);
+        setTimeout(() => {
+          navigate("/login", { replace: true });
+        }, 2500);
+      } else {
+        toast.error("회원가입에 실패했습니다. 다시 시도해주세요.");
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      toast.error("서버와 통신 중 오류가 발생했습니다.");
+    }
   };
 
   //회원가입_오른쪽박스

@@ -3,6 +3,8 @@ package com.but.rebloom.auth.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -41,4 +43,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "provider")
     private Provider provider;
+
+    @Column(name = "recent_date")
+    private LocalDate userRecentDate;
 }
