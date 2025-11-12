@@ -10,7 +10,7 @@ export default function FT_TestPage() {
   const [page, setPage] = useState(1);
 
   // 질문 받아오기
-  // const QuestionDate = fetch("", {
+  // const QuestionData = fetch("", {
   //   method: "GET",
   //   headers: {
   //     "Content-Type": "application/json",
