@@ -116,11 +116,12 @@ export default function FT_TestPage() {
       console.log("응답 데이터:", data);
       console.log("최종 응답:", answers);
 
-      navigate("/test/result", {
+      navigate("/thankyou", {
         state: { message: `감사합니다! <br /> 다음에 또 이용해주세요!` },
       });
     } catch (error) {
       console.error(error);
+      toast.error("서버 통신 오류!");
     }
   };
 
