@@ -3,8 +3,9 @@ package com.but.rebloom.hobby.domain;
 import com.but.rebloom.auth.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 
@@ -18,25 +19,23 @@ import java.time.LocalDate;
 public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "activity_id", nullable = false)
-    private Long activityId;
+    @Column(name = "act_id", nullable = false)
+    private Long actId;
 
-    @Column(name = "activity_name", nullable = false)
-    private String activityName;
+    @Column(name = "fk_u_email", nullable = false, unique = true, length = 100)
+    private String userEmail;
 
-    @Column(name = "activity_start", nullable = false)
-    @CreationTimestamp
-    private LocalDate activityStart;
-
-    @Column(name = "activity_recent", nullable = false)
-    @UpdateTimestamp
-    private LocalDate activityRecent;
-
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "email", referencedColumnName = "email",
-                insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @Column(name = "email", nullable = false)
-    private String userEmail;
+    @Column(name = "act_name", nullable = false, length = 50)
+    private String actName;
+
+    @Column(name = "act_start", nullable = false)
+    private LocalDate actStart;
+
+    @Column(name = "act_recent", nullable = false)
+    private LocalDate actRecent;
 }
