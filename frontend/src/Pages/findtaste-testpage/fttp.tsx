@@ -9,6 +9,37 @@ export default function FT_TestPage() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
 
+  // 질문 받아오기
+  // const QuestionDate = fetch("", {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({
+  //     id: 0,
+  //     setNo: 0,
+  //     category: "string",
+  //     question: "string",
+  //     weight1: 0,
+  //     weight2: 0,
+  //     weight3: 0,
+  //     weight4: 0,
+  //     weight5: 0,
+  //   }),
+  // })
+  //   .then((response) => {
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     return response.json();
+  //   })
+  //   .then((data) => {
+  //     console.log(data);
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
+
   const questions = [
     "당신의 이름은 인가요?",
     "당신은 귀엽나요?",
@@ -54,7 +85,7 @@ export default function FT_TestPage() {
   console.log(answers);
 
   // ✅ 제출 버튼 클릭 시 체크
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const unselected = currentQuestions.find(
       (_, idx) => answers[startIndex + idx] === null
     );
@@ -64,33 +95,33 @@ export default function FT_TestPage() {
       return;
     }
 
-    fetch("", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: "test@example.com",
-        password: "1234",
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("데이터 전송 실패");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("응답 데이터:", data);
-        console.log("최종 응답:", answers);
-
-        navigate("/test/result", {
-          state: { message: `감사합니다! <br /> 다음에 또 이용해주세요!` },
-        });
-      })
-      .catch((error) => {
-        console.error(error);
+    try {
+      const response = await fetch("", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "test@example.com",
+          password: "1234",
+        }),
       });
+
+      if (!response.ok) {
+        throw new Error("데이터 전송 실패");
+      }
+
+      const data = await response.json();
+
+      console.log("응답 데이터:", data);
+      console.log("최종 응답:", answers);
+
+      navigate("/test/result", {
+        state: { message: `감사합니다! <br /> 다음에 또 이용해주세요!` },
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
