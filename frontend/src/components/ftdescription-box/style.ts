@@ -25,6 +25,7 @@ export const Text = styled.p`
     font-family: Pretendard;
     font-size: 20px;
     font-style: normal;
+    font-weight: 500;
 `;
 
 export const Select_Button_Box = styled.div`

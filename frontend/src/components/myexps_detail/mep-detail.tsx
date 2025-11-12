@@ -14,8 +14,8 @@ export default function MyexpsDetail() {
     if (ReviewData.length < 100) {
       toast.error("리뷰는 100자 이상 작성하셔야 합니다.");
     } else {
-      navigate("/", {
-        state: { message: `감사합니다! <br /> 다음에 또 이용해주세요!` },
+      navigate("/thankyou", {
+        state: { message: `활동리뷰를 마무리한 사람이세요~~~`, type: "ExpsReview" },
       });
     }
   };

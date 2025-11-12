@@ -117,7 +117,7 @@ export default function FT_TestPage() {
       console.log("최종 응답:", answers);
 
       navigate("/thankyou", {
-        state: { message: `감사합니다! <br /> 다음에 또 이용해주세요!` },
+        state: { message: `취향테스트를 완료한 사람이세요~~~~`, type: "HobbyTest"},
       });
     } catch (error) {
       console.error(error);
