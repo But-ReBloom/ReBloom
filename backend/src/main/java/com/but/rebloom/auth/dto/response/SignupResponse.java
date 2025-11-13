@@ -15,8 +15,6 @@ import java.util.Map;
 @Builder
 public class SignupResponse {
     @NotNull
-    private Boolean success;
-    @NotNull
     private String userId;
     @NotNull
     private String userEmail;
@@ -25,7 +23,6 @@ public class SignupResponse {
 
     public static SignupResponse from(User user) {
         return SignupResponse.builder()
-                .success(true)
                 .userId(user.getUserId())
                 .userEmail(user.getUserEmail())
                 .userProvider(user.getUserProvider())
