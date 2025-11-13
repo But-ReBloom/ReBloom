@@ -5,6 +5,7 @@ import com.but.rebloom.auth.dto.request.*;
 import com.but.rebloom.auth.dto.response.*;
 import com.but.rebloom.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.auth.usecase.*;
+import com.but.rebloom.common.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,65 +32,65 @@ public class AuthController {
     private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     @PostMapping("/email/send")
-    public ResponseEntity<SendVerificationEmailResponse> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
+    public ResponseEntity<ApiResponse<SendVerificationEmailResponse>> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
         // 인증 코드 저장함
         User user = emailUseCase.sendVerificationEmail(sendVerificationEmailRequest);
-        return ResponseEntity.ok(SendVerificationEmailResponse.from(user));
+        return ResponseEntity.ok(ApiResponse.success(SendVerificationEmailResponse.from(user)));
     }
 
     @PostMapping("/email/verify")
-    public ResponseEntity<VerifyCodeResponse> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
+    public ResponseEntity<ApiResponse<VerifyCodeResponse>> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
         // 인증 코드 인증 로직 실행
         User user = emailUseCase.verifyCode(verifyCodeRequest);
-        return ResponseEntity.ok(VerifyCodeResponse.from(user));
+        return ResponseEntity.ok(ApiResponse.success(VerifyCodeResponse.from(user)));
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<ApiResponse<SignupResponse>> signup(@RequestBody SignupRequest signupRequest) {
         // 회원가입 로직 실행
         User user = signupUseCase.signup(signupRequest);
-        return ResponseEntity.ok(SignupResponse.from(user));
+        return ResponseEntity.ok(ApiResponse.success(SignupResponse.from(user)));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest loginRequest) {
         // 로그인 로직 실행
         User user = loginUseCase.login(loginRequest);
         String jwtToken = jwtTokenProvider.generateToken(user.getUserEmail());
-        return ResponseEntity.ok(LoginResponse.from(user, jwtToken));
+        return ResponseEntity.ok(ApiResponse.success(LoginResponse.from(user, jwtToken)));
     }
 
     @PostMapping("/login/google")
-    public ResponseEntity<GoogleUserInfoResponse> googleLogin(@RequestBody String authorizationCode) {
+    public ResponseEntity<ApiResponse<GoogleUserInfoResponse>> googleLogin(@RequestBody String authorizationCode) {
         User user = googleOAuthUseCase.execute(authorizationCode);
         String jwtToken = jwtTokenProvider.generateToken(user.getUserEmail());
-        return ResponseEntity.ok(GoogleUserInfoResponse.from(user, jwtToken));
+        return ResponseEntity.ok(ApiResponse.success(GoogleUserInfoResponse.from(user, jwtToken)));
     }
 
     @PatchMapping("/update/id")
-    public ResponseEntity<UpdateIdResponse> updateUserId(@RequestBody String updateId) {
+    public ResponseEntity<ApiResponse<UpdateIdResponse>> updateUserId(@RequestBody String updateId) {
         // 아이디 변경 및 반환
         User user = updateUserInfoUseCase.updateUserId(updateId);
-        return ResponseEntity.ok(UpdateIdResponse.from(user));
+        return ResponseEntity.ok(ApiResponse.success(UpdateIdResponse.from(user)));
     }
 
     @PatchMapping("/update/pw")
-    public ResponseEntity<UpdatePwResponse> updateUserPw(@RequestBody String updatePw) {
+    public ResponseEntity<ApiResponse<UpdatePwResponse>> updateUserPw(@RequestBody String updatePw) {
         // 비밀번호 변경
         User user = updateUserInfoUseCase.updateUserPw(updatePw);
-        return ResponseEntity.ok(UpdatePwResponse.from(user));
+        return ResponseEntity.ok(ApiResponse.success(UpdatePwResponse.from(user)));
     }
 
     @PostMapping("/find/email")
-    public ResponseEntity<FindEmailResponse> findUserEmail(@RequestBody FindEmailRequest findEmailRequest) {
+    public ResponseEntity<ApiResponse<FindEmailResponse>> findUserEmail(@RequestBody FindEmailRequest findEmailRequest) {
         // 이메일 조회
         User user = findUserInfoUseCase.findUserIdByIdAndPw(findEmailRequest);
-        return ResponseEntity.ok(FindEmailResponse.from(user));
+        return ResponseEntity.ok(ApiResponse.success(FindEmailResponse.from(user)));
     }
 
     @PostMapping("/current-user")
-    public ResponseEntity<FindUserInfoResponse> findCurrentUser() {
+    public ResponseEntity<ApiResponse<FindUserInfoResponse>> findCurrentUser() {
         User user = findCurrentUserUseCase.getCurrentUser();
-        return ResponseEntity.ok(FindUserInfoResponse.from(user));
+        return ResponseEntity.ok(ApiResponse.success(FindUserInfoResponse.from(user)));
     }
 }
