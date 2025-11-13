@@ -1,5 +1,6 @@
 package com.but.rebloom.hobby.controller;
 
+import com.but.rebloom.common.dto.ApiResponse;
 import com.but.rebloom.hobby.domain.Activity;
 import com.but.rebloom.hobby.dto.request.AddActivityRequest;
 import com.but.rebloom.hobby.dto.response.AddActivityResponse;
@@ -20,8 +21,8 @@ public class ActivityController {
 
     // Activity 추가
     @PostMapping("/add")
-    public ResponseEntity<AddActivityResponse> addActivity(@RequestBody AddActivityRequest request) {
+    public ResponseEntity<ApiResponse<AddActivityResponse>> addActivity(@RequestBody AddActivityRequest request) {
         Activity activity = defaultActivityControlUseCase.addActivity(request);
-        return ResponseEntity.ok(AddActivityResponse.from(activity));
+        return ResponseEntity.ok(ApiResponse.success(AddActivityResponse.from(activity)));
     }
 }
