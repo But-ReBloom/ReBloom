@@ -12,13 +12,10 @@ import lombok.*;
 public class CreateHeartResponse {
     @NotNull
     private Long heartId;
-
     @NotNull
     private String userId;
-
     @NotNull
     private String userName;
-
     @NotNull
     private Long postId;
 

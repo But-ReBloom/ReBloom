@@ -17,9 +17,8 @@ import java.util.stream.Collectors;
 public class FindPostResponse {
     @NotNull
     private List<CreatePostResponse> posts;
-
     @NotNull
-    private int totalCount;
+    private Integer totalCount;
 
     public static FindPostResponse from(List<Post> posts) {
         List<CreatePostResponse> postResponses = posts.stream()

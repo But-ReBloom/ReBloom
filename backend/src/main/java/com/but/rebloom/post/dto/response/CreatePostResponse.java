@@ -18,31 +18,22 @@ import java.time.LocalDateTime;
 public class CreatePostResponse {
     @NotNull
     private Long postId;
-
     @NotNull
     private String userId;
-
     @NotNull
     private Long channelId;
-
     @NotNull
     private String postTitle;
-
     @NotNull
     private String postContent;
-
     @NotNull
     private String postImage;
-
     @NotNull
     private Type postType;
-
     @NotNull
     private Status postStatus;
-
     @NotNull
     private LocalDateTime postCreatedAt;
-
     @NotNull
     private int viewers;
 
