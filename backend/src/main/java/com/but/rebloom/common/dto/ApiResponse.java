@@ -4,6 +4,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Collections;
+import java.util.List;
+
 @Getter
 @Builder
 public class ApiResponse<T> {
@@ -25,6 +28,15 @@ public class ApiResponse<T> {
                 .build();
     }
 
+    public static <T> ApiResponse<List<T>> successAsList() {
+        return ApiResponse.<List<T>>builder()
+                .success(true)
+                .data(Collections.singletonList(null))
+                .message(null)
+                .error(null)
+                .build();
+    }
+
     public static <T> ApiResponse<T> success(T data) {
         return ApiResponse.<T>builder()
                 .success(true)
@@ -34,10 +46,19 @@ public class ApiResponse<T> {
                 .build();
     }
 
-    public static <T> ApiResponse<T> success(T data, String message) {
-        return ApiResponse.<T>builder()
+    public static <T> ApiResponse<List<T>> successAsList(T data) {
+        return ApiResponse.<List<T>>builder()
                 .success(true)
-                .data(data)
+                .data(Collections.singletonList(data))
+                .message(null)
+                .error(null)
+                .build();
+    }
+
+    public static <T> ApiResponse<List<T>> success(T data, String message) {
+        return ApiResponse.<List<T>>builder()
+                .success(true)
+                .data(Collections.singletonList(data))
                 .message(message)
                 .error(null)
                 .build();
