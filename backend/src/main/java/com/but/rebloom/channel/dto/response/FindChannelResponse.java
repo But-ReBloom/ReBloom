@@ -17,9 +17,8 @@ import java.util.stream.Collectors;
 public class FindChannelResponse {
     @NotNull
     private List<CreateChannelResponse> channels;
-
     @NotNull
-    private int totalCount;
+    private Integer totalCount;
 
     public static FindChannelResponse from(List<Channel> channels) {
         List<CreateChannelResponse> channelResponses = channels.stream()

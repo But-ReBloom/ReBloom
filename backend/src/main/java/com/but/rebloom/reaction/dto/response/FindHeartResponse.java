@@ -15,9 +15,8 @@ import java.util.stream.Collectors;
 public class FindHeartResponse {
     @NotNull
     private List<CreateHeartResponse> hearts;
-
     @NotNull
-    private int totalCount;
+    private Integer totalCount;
 
     public static FindHeartResponse from(List<Heart> hearts) {
         List<CreateHeartResponse> heartResponses = hearts.stream()

@@ -13,8 +13,6 @@ import java.time.LocalDate;
 @Builder
 public class AddActivityResponse {
     @NotNull
-    private Boolean success;
-    @NotNull
     private String activityName;
     @NotNull
     private LocalDate activityStart;
@@ -25,7 +23,6 @@ public class AddActivityResponse {
 
     public static AddActivityResponse from(Activity activity) {
         return AddActivityResponse.builder()
-                .success(true)
                 .activityName(activity.getActivityName())
                 .activityStart(activity.getActivityStart())
                 .activityRecent(activity.getActivityRecent())
