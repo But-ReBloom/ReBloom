@@ -14,6 +14,15 @@ public class ApiResponse<T> {
 
     private ErrorResponse error;
 
+    public static <T> ApiResponse<T> success() {
+        return ApiResponse.<T>builder()
+                .success(true)
+                .data(null)
+                .message(null)
+                .error(null)
+                .build();
+    }
+
     public static <T> ApiResponse<T> success(T data) {
         return ApiResponse.<T>builder()
                 .success(true)
