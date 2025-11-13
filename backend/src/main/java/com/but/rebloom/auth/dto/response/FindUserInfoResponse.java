@@ -13,8 +13,6 @@ import lombok.Setter;
 @Builder
 public class FindUserInfoResponse {
     @NotNull
-    private Boolean success;
-    @NotNull
     private String userEmail;
     @NotNull
     private String userId;
@@ -31,7 +29,6 @@ public class FindUserInfoResponse {
 
     public static FindUserInfoResponse from(User user) {
         return FindUserInfoResponse.builder()
-                .success(true)
                 .userEmail(user.getUserEmail())
                 .userId(user.getUserId())
                 .userName(user.getUserName())

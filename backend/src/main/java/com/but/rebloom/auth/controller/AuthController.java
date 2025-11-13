@@ -32,17 +32,17 @@ public class AuthController {
     private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     @PostMapping("/email/send")
-    public ResponseEntity<ApiResponse<SendVerificationEmailResponse>> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
+    public ResponseEntity<ApiResponse<String>> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
         // 인증 코드 저장함
         User user = emailUseCase.sendVerificationEmail(sendVerificationEmailRequest);
-        return ResponseEntity.ok(ApiResponse.success(SendVerificationEmailResponse.from(user)));
+        return ResponseEntity.ok(ApiResponse.success(user.getUserEmail()));
     }
 
     @PostMapping("/email/verify")
-    public ResponseEntity<ApiResponse<VerifyCodeResponse>> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
+    public ResponseEntity<ApiResponse<String>> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
         // 인증 코드 인증 로직 실행
         User user = emailUseCase.verifyCode(verifyCodeRequest);
-        return ResponseEntity.ok(ApiResponse.success(VerifyCodeResponse.from(user)));
+        return ResponseEntity.ok(ApiResponse.success(user.getUserEmail()));
     }
 
     @PostMapping("/signup")
@@ -75,17 +75,17 @@ public class AuthController {
     }
 
     @PatchMapping("/update/pw")
-    public ResponseEntity<ApiResponse<UpdatePwResponse>> updateUserPw(@RequestBody String updatePw) {
+    public ResponseEntity<ApiResponse<String>> updateUserPw(@RequestBody String updatePw) {
         // 비밀번호 변경
         User user = updateUserInfoUseCase.updateUserPw(updatePw);
-        return ResponseEntity.ok(ApiResponse.success(UpdatePwResponse.from(user)));
+        return ResponseEntity.ok(ApiResponse.success(user.getUserEmail()));
     }
 
     @PostMapping("/find/email")
-    public ResponseEntity<ApiResponse<FindEmailResponse>> findUserEmail(@RequestBody FindEmailRequest findEmailRequest) {
+    public ResponseEntity<ApiResponse<String>> findUserEmail(@RequestBody FindEmailRequest findEmailRequest) {
         // 이메일 조회
         User user = findUserInfoUseCase.findUserIdByIdAndPw(findEmailRequest);
-        return ResponseEntity.ok(ApiResponse.success(FindEmailResponse.from(user)));
+        return ResponseEntity.ok(ApiResponse.success(user.getUserEmail()));
     }
 
     @PostMapping("/current-user")

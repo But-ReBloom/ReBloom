@@ -11,8 +11,6 @@ import lombok.Setter;
 @Setter
 @Builder
 public class GetAchievementResponse {
-    @NotNull
-    private Boolean success;
     @NotBlank(message = "업적 제목은 필수 반환값 입니다.")
     private String achievementTitle;
     @NotBlank(message = "업적 설명은 필수 반환값 입니다.")
@@ -24,7 +22,6 @@ public class GetAchievementResponse {
 
     public static GetAchievementResponse from(Achievement achievement) {
         return GetAchievementResponse.builder()
-                .success(true)
                 .achievementTitle(achievement.getAchievementTitle())
                 .achievementDescription(achievement.getAchievementDescription())
                 .achievementRewardPoint(achievement.getAchievementRewardPoint())

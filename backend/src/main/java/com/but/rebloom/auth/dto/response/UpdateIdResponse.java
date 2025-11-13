@@ -11,15 +11,12 @@ import lombok.Setter;
 @Builder
 public class UpdateIdResponse {
     @NotNull
-    private Boolean success;
-    @NotNull
     private String userEmail;
     @NotNull
     private String userNewId;
 
     public static UpdateIdResponse from(User user) {
         return UpdateIdResponse.builder()
-                .success(true)
                 .userEmail(user.getUserEmail())
                 .userNewId(user.getUserId())
                 .build();

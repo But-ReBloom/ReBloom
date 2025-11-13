@@ -12,8 +12,6 @@ import lombok.Setter;
 @Builder
 public class LoginResponse {
     @NotNull
-    private Boolean success;
-    @NotNull
     private String userEmail;
     @NotNull
     private Provider userProvider;
@@ -22,7 +20,6 @@ public class LoginResponse {
 
     public static LoginResponse from(User user, String jwtToken) {
         return LoginResponse.builder()
-                .success(true)
                 .userEmail(user.getUserEmail())
                 .userProvider(user.getUserProvider())
                 .token(jwtToken)
