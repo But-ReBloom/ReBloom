@@ -30,7 +30,7 @@ public class UserAchievement {
     private String achievementTitle;
 
     @Column(name = "uach_progress", nullable = false)
-    private Float progress;
+    private Float userAchievementProgress;
 
     @Column(name = "uach_is_success", nullable = false)
     private Boolean isSuccess;

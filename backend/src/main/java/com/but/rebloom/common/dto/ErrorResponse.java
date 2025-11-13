@@ -3,10 +3,12 @@ package com.but.rebloom.common.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
+@Getter
 @Builder
 public class ErrorResponse {
     @NotBlank(message = "코드는 필수 반환값입니다.")

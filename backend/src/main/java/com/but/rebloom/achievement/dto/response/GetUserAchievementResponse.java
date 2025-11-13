@@ -33,7 +33,7 @@ public class GetUserAchievementResponse {
                 .userAchievementDescription(achievement.getAchievementDescription())
                 .userAchievementRewardPoint(achievement.getAchievementRewardPoint())
                 .userAchievementTierPoint(achievement.getAchievementRewardTierPoint())
-                .userAchievementProgress(userAchievement.getProgress())
+                .userAchievementProgress(userAchievement.getUserAchievementProgress())
                 .userAchievementIsSuccess(userAchievement.getIsSuccess())
                 .build();
     }
