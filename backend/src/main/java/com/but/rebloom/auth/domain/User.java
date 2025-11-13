@@ -22,7 +22,7 @@ public class User {
     @Column(name = "u_id", nullable = false, unique = true, length = 255)
     private String userId;
 
-    @Column(name = "u_current_act")
+    @Column(name = "u_current_act", nullable = true)
     @Builder.Default
     private Long userCurrentActivity = null;
 
