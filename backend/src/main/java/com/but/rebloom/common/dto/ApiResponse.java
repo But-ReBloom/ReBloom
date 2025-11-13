@@ -3,8 +3,6 @@ package com.but.rebloom.common.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
-import java.util.Map;
-
 @Builder
 public class ApiResponse<T> {
     private T data;
