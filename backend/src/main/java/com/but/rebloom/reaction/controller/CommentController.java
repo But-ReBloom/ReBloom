@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,9 +53,9 @@ public class CommentController {
 
     // 특정 게시글의 댓글 수 조회
     @GetMapping("/post/{postId}/count")
-    public ResponseEntity<ApiResponse<List<Long>>> getCommentCount(@PathVariable Long postId) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getCommentCount(@PathVariable Long postId) {
         long count = commentUseCase.getCommentCount(postId);
-        return ResponseEntity.ok(ApiResponse.successAsList(count));
+        return ResponseEntity.ok(ApiResponse.successAsMap("postCount", count));
     }
 
     // 댓글 수정
