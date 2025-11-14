@@ -6,7 +6,6 @@ import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.post.domain.Post;
 import com.but.rebloom.reaction.domain.Heart;
 import com.but.rebloom.reaction.dto.request.CheckHeartExistsRequest;
-import com.but.rebloom.reaction.dto.request.CheckIsHeartExistsRequest;
 import com.but.rebloom.reaction.dto.request.CreateHeartRequest;
 import com.but.rebloom.reaction.dto.request.DeleteHeartRequest;
 import com.but.rebloom.channel.exception.AlreadyUsingHeartException;

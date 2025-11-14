@@ -1,6 +1,5 @@
 package com.but.rebloom.reaction.dto.response;
 
-import com.but.rebloom.reaction.dto.request.CheckIsHeartExistsRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

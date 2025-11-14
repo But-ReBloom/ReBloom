@@ -1,17 +1,16 @@
 package com.but.rebloom.hobby.usecase;
 
+import com.but.rebloom.hobby.domain.HobbyScore;
 import com.but.rebloom.hobby.domain.HobbyWeight;
 import com.but.rebloom.hobby.domain.InitialTest;
 import com.but.rebloom.hobby.dto.request.UserAnswerRequest;
 import com.but.rebloom.hobby.exception.QuestionSetException;
 import com.but.rebloom.hobby.repository.HobbyWeightRepository;
 import com.but.rebloom.hobby.repository.InitialTestRepository;
-import com.mysql.cj.exceptions.WrongArgumentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,69 +19,32 @@ public class HobbyTestUseCase {
     private final InitialTestRepository initialTestRepository;
     private final HobbyWeightRepository hobbyWeightRepository;
 
-    // 유저 취향 테스트시 관련 함수 호출 (컨트롤러에서 SRP 위배 방지)
-    public List<Map<HobbyWeight, Double>> findUserHobbies(UserAnswerRequest answers) {
-        return calculateRecommendations(answers);
-    }
-
-//    // 취향 테스트 - 유저 결과 추출
-//    public Double[] calculateUserScore(List<UserAnswerRequest> answers) {
-//        Double[] userScore = new Double[5];
-//
-//        for (UserAnswerRequest answer : answers) {
-//            // JPA 함수로 추출하여 최적화
-//            InitialTest test = initialTestRepository.findByInitialTestSetNumberAndInitialTestCategory(
-//                            answer.getInitialTestSetNumber(),
-//                            answer.getInitialTestCategory()
-//                    )
-//                    .orElseThrow(() -> new WrongArgumentException("잘못된 입력값"));
-//
-//            // 점수 계산
-//            if (test != null) {
-//                userScore[0] += test.getInitialTestSocialWeight() * answer.getAnswerValue();
-//                userScore[1] += test.getInitialTestLearningWeight() * answer.getAnswerValue();
-//                userScore[2] += test.getInitialTestPlanningWeight() * answer.getAnswerValue();
-//                userScore[3] += test.getInitialTestFocusWeight() * answer.getAnswerValue();
-//                userScore[4] += test.getInitialTestFocusWeight() * answer.getAnswerValue();
-//            }
-//        }
-//
-//        return userScore;
-//    }
-
     // 결과에 따른 취미 탐색
-    public List<Map<HobbyWeight, Double>> calculateRecommendations(UserAnswerRequest userVector) {
-        List<HobbyWeight> hobbies = hobbyWeightRepository.findAll();
+    public List<HobbyScore> findUserHobbies(UserAnswerRequest answers) {
+        List<HobbyWeight> hobbies = hobbyWeightRepository.findAllHobbyWeight();
 
-        double[] userScore = new double[5];
-
-        userScore[0] = userVector.getSocialScore();
-        userScore[1] = userVector.getLearningScore();
-        userScore[2] = userVector.getPlanningScore();
-        userScore[3] = userVector.getFocusScore();
-        userScore[4] = userVector.getCreativityScore();
+        double[] userScore = {
+                answers.getSocialScore(),
+                answers.getLearningScore(),
+                answers.getPlanningScore(),
+                answers.getFocusScore(),
+                answers.getCreativityScore()
+        };
 
         return hobbies.stream()
-                .map(h -> {
-                    Double distance = averageAbsoluteDistance(userScore, h);
-                    Map<HobbyWeight, Double> map = new HashMap<>();
-                    map.put(h, distance);
-                    return map;
-                })
-                .sorted(Comparator.comparingDouble(m -> m.values().iterator().next()))
+                .map(h -> new HobbyScore(h, averageAbsoluteDistance(userScore, h)))
+                .sorted(Comparator.comparingDouble(HobbyScore::getDistance))
                 .limit(3)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // 평균 거리 탐색
     private double averageAbsoluteDistance(double[] userVector, HobbyWeight hobby) {
-        double sum = 0.0;
-        sum += Math.abs(hobby.getHobbyWeightSocial() - userVector[0]);
-        sum += Math.abs(hobby.getHobbyWeightLearning() - userVector[1]);
-        sum += Math.abs(hobby.getHobbyWeightPlanning() - userVector[2]);
-        sum += Math.abs(hobby.getHobbyWeightFocus() - userVector[3]);
-        sum += Math.abs(hobby.getHobbyWeightCreativity() - userVector[4]);
-        return sum / 5.0;
+        return (Math.abs(hobby.getHobbyWeightSocial() - userVector[0]) +
+                Math.abs(hobby.getHobbyWeightLearning() - userVector[1]) +
+                Math.abs(hobby.getHobbyWeightPlanning() - userVector[2]) +
+                Math.abs(hobby.getHobbyWeightFocus() - userVector[3]) +
+                Math.abs(hobby.getHobbyWeightCreativity() - userVector[4])) / 5.0;
     }
 
     // 질문 반환
