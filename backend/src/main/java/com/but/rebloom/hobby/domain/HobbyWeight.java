@@ -12,11 +12,11 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "hobby")
+@Table(name = "hobbies")
 public class HobbyWeight {
     @Id
     @Column(name = "h_id", nullable = false, unique = true, length = 255)
-    private String userId;
+    private Long hobbyId;
 
     @Column(name = "h_name", nullable = false, length = 255)
     private String hobbyName;
