@@ -16,7 +16,12 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
     Optional<Channel> findByChannelId(Long channelId);
 
     // 특정 키워드를 제목이나 설명에 포함한 채널 조회
-    List<Channel> findByChannelTitleContainingOrChannelDescriptionContaining(String channelTitle, String channelDescription);
+    @Query("""
+        select c from Channel c
+        where c.channelTitle like concat('%', :keyword, '%')
+            or c.channelDescription like concat('%', :keyword, '%')
+    """)
+    List<Channel> findByChannelInfoByKeyword(@Param("keyword") String keyword);
 
     // 승인된 채널 목록 조회
     List<Channel> findByIsAcceptedTrue();

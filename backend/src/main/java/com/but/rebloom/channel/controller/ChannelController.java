@@ -2,6 +2,7 @@ package com.but.rebloom.channel.controller;
 
 import com.but.rebloom.channel.domain.Channel;
 import com.but.rebloom.channel.dto.request.CreateChannelRequest;
+import com.but.rebloom.channel.dto.request.SearchChannelRequest;
 import com.but.rebloom.channel.dto.response.CreateChannelResponse;
 import com.but.rebloom.channel.dto.response.FindChannelResponse;
 import com.but.rebloom.channel.usecase.ChannelUseCase;
@@ -30,8 +31,8 @@ public class ChannelController {
 
     // 채널 검색
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<FindChannelResponse>> searchChannel(String keyword) {
-        List<Channel> channels = channelUseCase.findChannel(keyword);
+    public ResponseEntity<ApiResponse<FindChannelResponse>> searchChannel(@ModelAttribute SearchChannelRequest request) {
+        List<Channel> channels = channelUseCase.findChannel(request);
         return ResponseEntity.ok(ApiResponse.success(FindChannelResponse.from(channels)));
     }
 
