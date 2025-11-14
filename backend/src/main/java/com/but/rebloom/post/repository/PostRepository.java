@@ -4,6 +4,8 @@ import com.but.rebloom.post.domain.Post;
 import com.but.rebloom.post.domain.Status;
 import com.but.rebloom.post.domain.Type;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +22,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByPostType(Type type);
 
     // 특정 키워드를 제목이나 설명에 포함한 게시글 조회(최신순)
-    List<Post> findByPostTitleContainingOrPostContentContainingOrderByPostCreatedAtDesc(String title, String content);
+    @Query("""
+        select p from Post p
+        where p.postTitle like concat('%', :keyword, '%')
+            or p.postContent like concat('%', :keyword, '%')
+        order by p.postTitle asc
+    """)
+    List<Post> findByPostInfoByKeyword(@Param("keyword") String keyword);
 
     // 인증
     // 상태 별 게시글 조회
