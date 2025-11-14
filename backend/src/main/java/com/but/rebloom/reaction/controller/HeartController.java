@@ -47,22 +47,22 @@ public class HeartController {
 
     // 특정 게시글의 하트 수 조회
     @GetMapping("/post/{postId}/count")
-    public ResponseEntity<ApiResponse<Map<String, Long>>> getHeartCount(@PathVariable Long postId) {
+    public ResponseEntity<ApiResponse<List<Map<String, Long>>>> getHeartCount(@PathVariable Long postId) {
         long count = heartUseCase.getHeartCount(postId);
         Map<String, Long> response = new HashMap<>();
         response.put("count", count);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return ResponseEntity.ok(ApiResponse.successAsList(response));
     }
 
     // 특정 유저가 특정 게시글에 하트를 눌렀는지 확인
     @GetMapping("/check")
-    public ResponseEntity<ApiResponse<Map<String, Boolean>>> isHeartExists(
+    public ResponseEntity<ApiResponse<List<Map<String, Boolean>>>> isHeartExists(
             @RequestParam String userId,
             @RequestParam Long postId) {
         boolean exists = heartUseCase.isHeartExists(userId, postId);
         Map<String, Boolean> response = new HashMap<>();
         response.put("isLiked", exists);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return ResponseEntity.ok(ApiResponse.successAsList(response));
     }
 
     // 하트 취소 (좋아요 취소)

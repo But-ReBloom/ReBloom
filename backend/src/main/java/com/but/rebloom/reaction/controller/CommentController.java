@@ -52,9 +52,9 @@ public class CommentController {
 
     // 특정 게시글의 댓글 수 조회
     @GetMapping("/post/{postId}/count")
-    public ResponseEntity<ApiResponse<Long>> getCommentCount(@PathVariable Long postId) {
+    public ResponseEntity<ApiResponse<List<Long>>> getCommentCount(@PathVariable Long postId) {
         long count = commentUseCase.getCommentCount(postId);
-        return ResponseEntity.ok(ApiResponse.success(count));
+        return ResponseEntity.ok(ApiResponse.successAsList(count));
     }
 
     // 댓글 수정
