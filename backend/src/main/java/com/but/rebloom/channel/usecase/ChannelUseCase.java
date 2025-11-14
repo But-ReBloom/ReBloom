@@ -5,6 +5,7 @@ import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.channel.domain.Channel;
 import com.but.rebloom.channel.dto.request.CreateChannelRequest;
+import com.but.rebloom.channel.dto.request.SearchChannelRequest;
 import com.but.rebloom.channel.exception.AlreadyProcessedChannelException;
 import com.but.rebloom.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.channel.exception.InsufficientPointException;
@@ -58,12 +59,9 @@ public class ChannelUseCase {
     }
 
     // 채널 검색
-    public List<Channel> findChannel(String keyword) {
+    public List<Channel> findChannel(SearchChannelRequest request) {
         List<Channel> channels = channelRepository
-                .findByChannelTitleContainingOrChannelDescriptionContaining(
-                        keyword,
-                        keyword
-                );
+                .findByChannelInfoByKeyword(request.getKeyword());
 
         return channels.stream()
                 .filter(Channel::getIsAccepted)
