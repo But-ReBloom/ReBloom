@@ -20,6 +20,7 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
         select c from Channel c
         where c.channelTitle like concat('%', :keyword, '%')
             or c.channelDescription like concat('%', :keyword, '%')
+        order by c.channelTitle asc
     """)
     List<Channel> findByChannelInfoByKeyword(@Param("keyword") String keyword);
 
