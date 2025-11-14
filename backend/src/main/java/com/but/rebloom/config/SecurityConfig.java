@@ -38,9 +38,11 @@ public class SecurityConfig {
                         .requestMatchers("/",
                                 "/auth/**",
                                 "/achievement/**",
+                                "/user-achievement/**",
                                 "/channel/**",
                                 "/post/**",
-                                "/achievement/**",
+                                "/hobby-test/**",
+                                "/activity/**",
                                 "/comment/**",
                                 "/heart/**"
                         ).permitAll()

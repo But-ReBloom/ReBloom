@@ -11,15 +11,12 @@ import lombok.Setter;
 @Builder
 public class HobbyScoreResponse {
     @NotNull
-    private Boolean success;
-    @NotNull
     private String hobbyName;
     @NotNull
-    private double distance;
+    private Double distance;
 
     public static HobbyScoreResponse from(HobbyWeight hobbyWeight, Double distance) {
         return HobbyScoreResponse.builder()
-                .success(true)
                 .hobbyName(hobbyWeight.getHobbyName())
                 .distance(distance)
                 .build();

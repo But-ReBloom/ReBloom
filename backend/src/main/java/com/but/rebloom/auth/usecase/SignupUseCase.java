@@ -56,6 +56,7 @@ public class SignupUseCase {
                 .userPassword(passwordEncoder.encode(userPassword))
                 .userName(userName)
                 .userProvider(signupRequest.getUserProvider())
+                .userCurrentActivity(null)
                 .build();
 
         // 유저 등록
@@ -71,7 +72,7 @@ public class SignupUseCase {
                         .userId(userId)
                         .achievementId(a.getAchievementId())
                         .achievementTitle(a.getAchievementTitle())
-                        .progress(0f)
+                        .userAchievementProgress(0f)
                         .isSuccess(false)
                         .build())
                 .toList();

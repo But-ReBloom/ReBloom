@@ -53,7 +53,7 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
     @Transactional
     @Modifying
     @Query("""
-            update UserAchievement u SET u.progress = 100.0, u.isSuccess = true
+            update UserAchievement u SET u.userAchievementProgress = 100.0, u.isSuccess = true
             where u.userEmail = :userEmail and trim(u.achievementTitle) = :achievementTitle
     """)
     void updateUserAchievementToSuccess(
@@ -64,7 +64,7 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
     @Transactional
     @Modifying
     @Query("""
-            update UserAchievement u SET u.progress = u.progress + :addProgress
+            update UserAchievement u SET u.userAchievementProgress = u.userAchievementProgress + :addProgress
             where u.userEmail = :userEmail and trim(u.achievementTitle) = :achievementTitle
     """)
     void setAddProgressIntoUserAchievement(
@@ -77,7 +77,7 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
     @Modifying
     @Query("""
             update UserAchievement u set u.isSuccess = true
-            where u.progress >= 100.0 and u.userEmail = :userEmail and trim(u.achievementTitle) = :achievementTitle
+            where u.userAchievementProgress >= 100.0 and u.userEmail = :userEmail and trim(u.achievementTitle) = :achievementTitle
     """)
     void checkUserAchievementIsSuccess(
             @Param("userEmail") String userEmail,

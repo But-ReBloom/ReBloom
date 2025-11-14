@@ -16,22 +16,16 @@ import java.time.LocalDateTime;
 public class CreateChannelResponse {
     @NotNull
     private Long channelId;
-
     @NotNull
     private String userId;
-
     @NotNull
     private String channelTitle;
-
     @NotNull
     private String channelIntro;
-
     @NotNull
     private String channelDescription;
-
     @NotNull
     private Boolean isAccepted;
-
     @NotNull
     private LocalDateTime channelCreatedAt;
 

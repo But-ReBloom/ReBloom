@@ -17,9 +17,8 @@ import java.util.stream.Collectors;
 public class FindCommentResponse {
     @NotNull
     private List<CreateCommentResponse> comments;
-
     @NotNull
-    private int totalCount;
+    private Integer totalCount;
 
     public static FindCommentResponse from(List<Comment> comments) {
         List<CreateCommentResponse> commentResponses = comments.stream()

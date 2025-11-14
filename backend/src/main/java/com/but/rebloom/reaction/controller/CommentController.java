@@ -1,5 +1,6 @@
 package com.but.rebloom.reaction.controller;
 
+import com.but.rebloom.common.dto.ApiResponse;
 import com.but.rebloom.reaction.domain.Comment;
 import com.but.rebloom.reaction.dto.request.CreateCommentRequest;
 import com.but.rebloom.reaction.dto.request.UpdateCommentRequest;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,62 +24,63 @@ public class CommentController {
 
     // 댓글 생성
     @PostMapping
-    public ResponseEntity<CreateCommentResponse> createComment(@Valid @RequestBody CreateCommentRequest request) {
+    public ResponseEntity<ApiResponse<CreateCommentResponse>> createComment(@Valid @RequestBody CreateCommentRequest request) {
         Comment comment = commentUseCase.createComment(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(CreateCommentResponse.from(comment));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(CreateCommentResponse.from(comment)));
     }
 
     // 특정 댓글 조회
     @GetMapping("/{commentId}")
-    public ResponseEntity<CreateCommentResponse> getComment(@PathVariable Long commentId) {
+    public ResponseEntity<ApiResponse<CreateCommentResponse>> getComment(@PathVariable Long commentId) {
         Comment comment = commentUseCase.getComment(commentId);
-        return ResponseEntity.ok(CreateCommentResponse.from(comment));
+        return ResponseEntity.ok(ApiResponse.success(CreateCommentResponse.from(comment)));
     }
 
     // 특정 게시글의 댓글 목록 조회
     @GetMapping("/post/{postId}")
-    public ResponseEntity<FindCommentResponse> getCommentsByPost(@PathVariable Long postId) {
+    public ResponseEntity<ApiResponse<FindCommentResponse>> getCommentsByPost(@PathVariable Long postId) {
         List<Comment> comments = commentUseCase.getCommentsByPost(postId);
-        return ResponseEntity.ok(FindCommentResponse.from(comments));
+        return ResponseEntity.ok(ApiResponse.success(FindCommentResponse.from(comments)));
     }
 
     // 특정 유저가 작성한 댓글 목록 조회
     @GetMapping("/user/{userId}")
-    public ResponseEntity<FindCommentResponse> getCommentsByUser(@PathVariable String userId) {
+    public ResponseEntity<ApiResponse<FindCommentResponse>> getCommentsByUser(@PathVariable String userId) {
         List<Comment> comments = commentUseCase.getCommentsByUser(userId);
-        return ResponseEntity.ok(FindCommentResponse.from(comments));
+        return ResponseEntity.ok(ApiResponse.success(FindCommentResponse.from(comments)));
     }
 
     // 특정 게시글의 댓글 수 조회
     @GetMapping("/post/{postId}/count")
-    public ResponseEntity<Long> getCommentCount(@PathVariable Long postId) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getCommentCount(@PathVariable Long postId) {
         long count = commentUseCase.getCommentCount(postId);
-        return ResponseEntity.ok(count);
+        return ResponseEntity.ok(ApiResponse.successAsMap("postCount", count));
     }
 
     // 댓글 수정
     @PutMapping("/{commentId}")
-    public ResponseEntity<CreateCommentResponse> updateComment(
+    public ResponseEntity<ApiResponse<CreateCommentResponse>> updateComment(
             @PathVariable Long commentId,
             @RequestParam String userId,
             @Valid @RequestBody UpdateCommentRequest request) {
         Comment comment = commentUseCase.updateComment(commentId, userId, request);
-        return ResponseEntity.ok(CreateCommentResponse.from(comment));
+        return ResponseEntity.ok(ApiResponse.success(CreateCommentResponse.from(comment)));
     }
 
     // 댓글 삭제 (일반 유저)
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> deleteComment(
+    public ResponseEntity<ApiResponse<Void>> deleteComment(
             @PathVariable Long commentId,
             @RequestParam String userId) {
         commentUseCase.deleteComment(commentId, userId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success());
     }
 
     // 댓글 삭제 (관리자)
     @DeleteMapping("/admin/{commentId}")
-    public ResponseEntity<Void> deleteCommentByAdmin(@PathVariable Long commentId) {
+    public ResponseEntity<ApiResponse<Void>> deleteCommentByAdmin(@PathVariable Long commentId) {
         commentUseCase.deleteCommentByAdmin(commentId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success());
     }
 }
