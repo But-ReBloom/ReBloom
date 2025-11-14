@@ -3,6 +3,7 @@ package com.but.rebloom.reaction.usecase;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.auth.repository.UserRepository;
+import com.but.rebloom.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.post.domain.Post;
 import com.but.rebloom.reaction.domain.Comment;
 import com.but.rebloom.reaction.dto.request.CreateCommentRequest;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class CommentUseCase {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     // 댓글 생성
     @Transactional
@@ -63,15 +66,17 @@ public class CommentUseCase {
     }
 
     // 특정 게시글의 댓글 수 조회
-    public long getCommentCount(Long postId) {
-        return commentRepository.countByPost_PostId(postId);
+    public Map<String, Long> getCommentCount(Long postId) {
+        return commentRepository.countByPostId(postId);
     }
 
     // 댓글 수정
     @Transactional
-    public Comment updateComment(Long commentId, String userId, UpdateCommentRequest request) {
+    public Comment updateComment(Long commentId, UpdateCommentRequest request) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
+
+        String userId = findCurrentUserUseCase.getCurrentUser().getUserId();
 
         // 작성자 확인
         if (!comment.getUser().getUserId().equals(userId)) {
