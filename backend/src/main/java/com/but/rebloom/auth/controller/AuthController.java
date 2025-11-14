@@ -63,23 +63,23 @@ public class AuthController {
     }
 
     @PostMapping("/login/google")
-    public ResponseEntity<ApiResponse<GoogleUserInfoResponse>> googleLogin(@RequestBody String authorizationCode) {
-        User user = googleOAuthUseCase.execute(authorizationCode);
+    public ResponseEntity<ApiResponse<GoogleUserInfoResponse>> googleLogin(@RequestBody GoogleLoginAuthorizeCodeRequest request) {
+        User user = googleOAuthUseCase.execute(request);
         String jwtToken = jwtTokenProvider.generateToken(user.getUserEmail());
         return ResponseEntity.ok(ApiResponse.success(GoogleUserInfoResponse.from(user, jwtToken)));
     }
 
     @PatchMapping("/update/id")
-    public ResponseEntity<ApiResponse<UpdateIdResponse>> updateUserId(@RequestBody String updateId) {
+    public ResponseEntity<ApiResponse<UpdateIdResponse>> updateUserId(@RequestBody UpdateUserIdRequest request) {
         // 아이디 변경 및 반환
-        User user = updateUserInfoUseCase.updateUserId(updateId);
+        User user = updateUserInfoUseCase.updateUserId(request);
         return ResponseEntity.ok(ApiResponse.success(UpdateIdResponse.from(user)));
     }
 
     @PatchMapping("/update/pw")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> updateUserPw(@RequestBody String updatePw) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> updateUserPw(@RequestBody UpdateUserPasswordRequest request) {
         // 비밀번호 변경
-        User user = updateUserInfoUseCase.updateUserPw(updatePw);
+        User user = updateUserInfoUseCase.updateUserPw(request);
         return ResponseEntity.ok(ApiResponse.successAsMap("userEmail", user.getUserEmail()));
     }
 

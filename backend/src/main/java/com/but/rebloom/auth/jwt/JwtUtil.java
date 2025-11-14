@@ -1,11 +1,13 @@
 package com.but.rebloom.auth.jwt;
 
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.security.Key;
 
+@RequiredArgsConstructor
 public class JwtUtil {
 
     protected final Key key;

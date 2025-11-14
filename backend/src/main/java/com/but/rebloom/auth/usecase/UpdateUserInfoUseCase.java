@@ -1,6 +1,8 @@
 package com.but.rebloom.auth.usecase;
 
 import com.but.rebloom.auth.domain.User;
+import com.but.rebloom.auth.dto.request.UpdateUserIdRequest;
+import com.but.rebloom.auth.dto.request.UpdateUserPasswordRequest;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.auth.exception.UserNotFoundException;
 import jakarta.transaction.Transactional;
@@ -21,7 +23,9 @@ public class UpdateUserInfoUseCase {
     private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     @Transactional
-    public User updateUserId(String updateUserId) {
+    public User updateUserId(UpdateUserIdRequest request) {
+        String updateUserId = request.getUpdateUserId();
+
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
         authValidationUseCase.checkNull(userEmail);
@@ -38,8 +42,9 @@ public class UpdateUserInfoUseCase {
     }
 
     @Transactional
-    public User updateUserPw(String updateUserPw) {
+    public User updateUserPw(UpdateUserPasswordRequest request) {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
+        String updateUserPw = request.getUpdateUserPassword();
 
         authValidationUseCase.checkNull(userEmail);
 
