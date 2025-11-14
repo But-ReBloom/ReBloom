@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Builder
@@ -28,10 +28,13 @@ public class ApiResponse<T> {
                 .build();
     }
 
-    public static <T> ApiResponse<List<T>> successAsList() {
-        return ApiResponse.<List<T>>builder()
+    public static <T> ApiResponse<Map<String, Object>> successAsMap(String key, T value) {
+        Map<String, Object> obj = new HashMap<>();
+        obj.put(key, value);
+
+        return ApiResponse.<Map<String, Object>>builder()
                 .success(true)
-                .data(Collections.singletonList(null))
+                .data(obj)
                 .message(null)
                 .error(null)
                 .build();
@@ -46,19 +49,22 @@ public class ApiResponse<T> {
                 .build();
     }
 
-    public static <T> ApiResponse<List<T>> successAsList(T data) {
-        return ApiResponse.<List<T>>builder()
+    public static <T> ApiResponse<Map<String, Object>> successAsMap(String key, T value, String message) {
+        Map<String, Object> obj = new HashMap<>();
+        obj.put(key, value);
+
+        return ApiResponse.<Map<String, Object>>builder()
                 .success(true)
-                .data(Collections.singletonList(data))
-                .message(null)
+                .data(obj)
+                .message(message)
                 .error(null)
                 .build();
     }
 
-    public static <T> ApiResponse<List<T>> success(T data, String message) {
-        return ApiResponse.<List<T>>builder()
+    public static <T> ApiResponse<T> success(T data, String message) {
+        return ApiResponse.<T>builder()
                 .success(true)
-                .data(Collections.singletonList(data))
+                .data(data)
                 .message(message)
                 .error(null)
                 .build();
