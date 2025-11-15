@@ -138,9 +138,9 @@ public class DefaultUserAchievementUseCase {
         if (userAchievement.getIsSuccess().equals(true))
             return;
 
-        userAchievement.setUserAchievementProgress(userAchievement.getUserAchievementProgress() + progress);
+        userAchievement.setUserAchievementProgress(userAchievement.getUserAchievementProgress() + (float) Math.ceil(progress));
 
-        if (userAchievement.getUserAchievementProgress().equals(100.0f))
+        if (Math.ceil(userAchievement.getUserAchievementProgress()) >= 100.0f)
             updateUserAchievementToSuccess(userEmail, achievementTitle);
     }
 }
