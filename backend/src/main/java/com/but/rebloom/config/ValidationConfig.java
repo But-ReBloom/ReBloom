@@ -1,9 +1,7 @@
 package com.but.rebloom.config;
 
 import com.but.rebloom.achievement.repository.AchievementRepository;
-import com.but.rebloom.achievement.repository.UserAchievementRepository;
 import com.but.rebloom.achievement.usecase.AchievementValidationUseCase;
-import com.but.rebloom.achievement.usecase.UserAchievementValidationUseCase;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.auth.usecase.AuthValidationUseCase;
 import com.but.rebloom.common.usecase.ValidationUseCase;
@@ -30,12 +28,7 @@ public class ValidationConfig {
     }
 
     @Bean
-    public AchievementValidationUseCase achievementValidationUseCase(ValidationUseCase validationUseCase, AchievementRepository achievementRepository) {
-        return new AchievementValidationUseCase(validationUseCase, achievementRepository);
-    }
-
-    @Bean
-    public UserAchievementValidationUseCase userAchievementValidationUseCase(ValidationUseCase validationUseCase, AchievementValidationUseCase achievementValidationUseCase) {
-        return new UserAchievementValidationUseCase(validationUseCase, achievementValidationUseCase);
+    public AchievementValidationUseCase achievementValidationUseCase(AchievementRepository achievementRepository) {
+        return new AchievementValidationUseCase(achievementRepository);
     }
 }
