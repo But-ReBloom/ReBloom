@@ -61,7 +61,7 @@ public class ChannelUseCase {
     // 채널 검색
     public List<Channel> findChannel(SearchChannelRequest request) {
         List<Channel> channels = channelRepository
-                .findByChannelInfoByKeyword(request.getKeyword());
+                .searchByKeyword(request.getKeyword());
 
         return channels.stream()
                 .filter(Channel::getIsAccepted)
