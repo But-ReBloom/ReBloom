@@ -1,10 +1,6 @@
 package com.but.rebloom.auth.usecase;
 
-import com.but.rebloom.achievement.domain.Achievement;
-import com.but.rebloom.achievement.domain.UserAchievement;
-import com.but.rebloom.achievement.repository.AchievementRepository;
-import com.but.rebloom.achievement.repository.UserAchievementRepository;
-import com.but.rebloom.achievement.usecase.DefaultAchievementUseCase;
+import com.but.rebloom.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.SignupRequest;
 import com.but.rebloom.auth.repository.UserRepository;
@@ -12,8 +8,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +18,8 @@ public class SignupUseCase {
     private final PasswordEncoder passwordEncoder;
     // 예외 이용
     private final AuthValidationUseCase authValidationUseCase;
-    // 업적 조회
-    private final AchievementRepository achievementRepository;
-    // 유저 업적 조회
-    private final UserAchievementRepository userAchievementRepository;
-    // 업적 관련 함수 이용
-    private final DefaultAchievementUseCase defaultAchievementUseCase;
+    // 유저 업적 설정
+    private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     // 회원가입
     @Transactional
@@ -64,27 +54,11 @@ public class SignupUseCase {
         userRepository.flush();
 
         // 초기 유저 업적 생성
-        List<Achievement> allAchievements = achievementRepository.findAll();
-
-        List<UserAchievement> initialAchievements = allAchievements.stream()
-                .map(a -> UserAchievement.builder()
-                        .userEmail(userEmail)
-                        .userId(userId)
-                        .achievementId(a.getAchievementId())
-                        .achievementTitle(a.getAchievementTitle())
-                        .userAchievementProgress(0f)
-                        .isSuccess(false)
-                        .build())
-                .toList();
-
-        userAchievementRepository.saveAll(initialAchievements);
+        defaultUserAchievementUseCase.createDefaultUserAchievement(userEmail, userId);
 
         // 업적 성공 처리
         String achievementTitle = "시작이 반이다.";
-        userAchievementRepository.updateUserAchievementToSuccess(userEmail, achievementTitle);
-        Achievement achievement = defaultAchievementUseCase.findAchievementByTitle(achievementTitle);
-        userAchievementRepository.getPointFromUserAchievement(userEmail, achievement.getAchievementRewardPoint());
-        userAchievementRepository.getPointFromUserAchievement(userEmail, achievement.getAchievementRewardPoint());
+        defaultUserAchievementUseCase.updateUserAchievementToSuccess(userEmail, achievementTitle);
 
         return saveUser;
     }

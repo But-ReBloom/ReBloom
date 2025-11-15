@@ -52,11 +52,4 @@ public class UserAchievementController {
         UserAchievement response = defaultUserAchievementUseCase.finaUserAchievementByUserEmailAndAchievementId(achievementId);
         return ResponseEntity.ok(ApiResponse.success(GetUserAchievementResponse.from(response)));
     }
-
-    // 유저 업적 조회 - (유저 이메일 + 업적 제목)
-    @GetMapping("/title/{achievementTitle}")
-    public ResponseEntity<ApiResponse<GetUserAchievementResponse>> getUserAchievementsByUserEmailAndAchievementTitle(@PathVariable String achievementTitle) {
-        UserAchievement response = defaultUserAchievementUseCase.finaUserAchievementByUserEmailAndAchievementTitle(achievementTitle);
-        return ResponseEntity.ok(ApiResponse.success(GetUserAchievementResponse.from(response)));
-    }
 }
