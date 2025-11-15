@@ -22,7 +22,7 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
             or c.channelDescription like concat('%', :keyword, '%')
         order by c.channelTitle asc
     """)
-    List<Channel> findByChannelInfoByKeyword(@Param("keyword") String keyword);
+    List<Channel> searchByKeyword(@Param("keyword") String keyword);
 
     // 승인된 채널 목록 조회
     List<Channel> findByIsAcceptedTrue();
@@ -31,7 +31,7 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
     List<Channel> findByIsAcceptedFalse();
 
     // 관리자 승인/거절 처리 (일주일 이내)
-    @Query("SELECT c FROM Channel c WHERE c.isAccepted = false AND c.channelCreatedAt < :deadline")
+    @Query("select c from Channel c where c.isAccepted = false and c.channelCreatedAt < :deadline")
     List<Channel> findPendingChannelsOlderThan(@Param("deadline") LocalDateTime deadline);
 
 
