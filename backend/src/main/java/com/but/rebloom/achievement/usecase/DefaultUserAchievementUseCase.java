@@ -43,7 +43,7 @@ public class DefaultUserAchievementUseCase {
     }
 
     // 유저 업적 조회 - (유저 이메일 + 업적 아이디)
-    public UserAchievement finaUserAchievementByUserEmailAndAchievementId(Long achievementId) {
+    public UserAchievement findUserAchievementByUserEmailAndAchievementId(Long achievementId) {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
         String userEmail = currentUser.getUserEmail();
 

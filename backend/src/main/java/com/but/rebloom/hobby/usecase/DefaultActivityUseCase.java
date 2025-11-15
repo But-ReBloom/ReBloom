@@ -33,7 +33,7 @@ public class DefaultActivityUseCase {
     public Activity findActivityByActivityName(String activityName) {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
-        return activityRepository.findByActivityNameAndUserEmail(activityName, userEmail)
+        return activityRepository.findByUserEmailAndActivityName(activityName, userEmail)
                 .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 
