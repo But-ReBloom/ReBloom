@@ -12,10 +12,10 @@ import java.util.Map;
 @Repository
 public interface HeartRepository extends JpaRepository<Heart, Long> {
     // 특정 게시글의 모든 하트 조회
-    List<Heart> findByPost_PostId(Long postId);
+    List<Heart> findByPostId(Long postId);
 
     // 특정 유저가 누른 모든 하트 조회
-    List<Heart> findByUser_UserId(String userId);
+    List<Heart> findByUserId(String userId);
 
     @Query("""
         select case when count(h) > 0 then true else false end
@@ -35,8 +35,8 @@ public interface HeartRepository extends JpaRepository<Heart, Long> {
     Map<String, Long> countByPostId(@Param("postId") Long postId);
 
     // 하트 취소
-    void deleteByUser_UserIdAndPost_PostId(String userUserId, Long postId);
+    void deleteByUserIdAndPostId(String userUserId, Long postId);
 
     // 게시글 삭제 시 하트 일괄 삭제
-    void deleteByPost_PostId(Long postId);
+    void deleteByPostId(Long postId);
 }

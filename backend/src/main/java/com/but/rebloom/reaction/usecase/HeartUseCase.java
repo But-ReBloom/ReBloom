@@ -53,12 +53,12 @@ public class HeartUseCase {
 
     // 특정 게시글의 하트 목록 조회
     public List<Heart> getHeartsByPost(Long postId) {
-        return heartRepository.findByPost_PostId(postId);
+        return heartRepository.findByPostId(postId);
     }
 
     // 특정 유저가 누른 하트 목록 조회
     public List<Heart> getHeartsByUser(String userId) {
-        return heartRepository.findByUser_UserId(userId);
+        return heartRepository.findByUserId(userId);
     }
 
     // 특정 게시글의 하트 수 조회
@@ -68,8 +68,10 @@ public class HeartUseCase {
 
     // 특정 유저가 특정 게시글에 하트를 눌렀는지 확인
     public Map<String, Boolean> checkHeartExists(CheckHeartExistsRequest request) {
-        Boolean isSuccess = heartRepository.existsByUserIdAndPostId(request.getUserId(), request.getPostId());
-        String postTitle = postRepository.findPostByPostId(request.getPostId()).getPostTitle();
+        boolean isSuccess = heartRepository.existsByUserIdAndPostId(request.getUserId(), request.getPostId());
+        String postTitle = postRepository.findByPostId(request.getPostId())
+                .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음"))
+                .getPostTitle();
         return Map.of(postTitle, isSuccess);
     }
 
@@ -78,15 +80,9 @@ public class HeartUseCase {
     public void deleteHeart(DeleteHeartRequest request) {
         // 하트가 존재하는지 확인
         if (!heartRepository.existsByUserIdAndPostId(request.getUserId(), request.getPostId())) {
-            throw new AlreadyUsingHeartException("heart not exists");
+            throw new AlreadyUsingHeartException("하트가 조회되지 않음");
         }
 
-        heartRepository.deleteByUser_UserIdAndPost_PostId(request.getUserId(), request.getPostId());
-    }
-
-    // 게시글 삭제 시 하트 일괄 삭제
-    @Transactional
-    public void deleteHeartsByPost(Long postId) {
-        heartRepository.deleteByPost_PostId(postId);
+        heartRepository.deleteByUserIdAndPostId(request.getUserId(), request.getPostId());
     }
 }
