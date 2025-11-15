@@ -2,17 +2,13 @@ package com.but.rebloom.channel.dto.response;
 
 import com.but.rebloom.channel.domain.Channel;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class CreateChannelResponse {
     @NotNull
     private Long channelId;

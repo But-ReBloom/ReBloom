@@ -4,12 +4,10 @@ import com.but.rebloom.hobby.domain.Activity;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
-@Setter
 @Builder
 public class AddActivityResponse {
     @NotNull

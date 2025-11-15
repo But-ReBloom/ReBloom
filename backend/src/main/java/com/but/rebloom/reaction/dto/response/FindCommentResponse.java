@@ -2,18 +2,14 @@ package com.but.rebloom.reaction.dto.response;
 
 import com.but.rebloom.reaction.domain.Comment;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class FindCommentResponse {
     @NotNull
     private List<CreateCommentResponse> comments;

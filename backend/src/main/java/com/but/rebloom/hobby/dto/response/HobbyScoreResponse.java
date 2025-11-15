@@ -1,14 +1,11 @@
 package com.but.rebloom.hobby.dto.response;
 
 import com.but.rebloom.hobby.domain.HobbyScore;
-import com.but.rebloom.hobby.domain.HobbyWeight;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 @Builder
 public class HobbyScoreResponse {
     @NotNull
