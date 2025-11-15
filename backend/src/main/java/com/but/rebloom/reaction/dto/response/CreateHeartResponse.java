@@ -2,13 +2,11 @@ package com.but.rebloom.reaction.dto.response;
 
 import com.but.rebloom.reaction.domain.Heart;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
-@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class CreateHeartResponse {
     @NotNull
     private Long heartId;

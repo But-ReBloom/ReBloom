@@ -1,6 +1,7 @@
 package com.but.rebloom.hobby.controller;
 
 import com.but.rebloom.common.dto.ApiResponse;
+import com.but.rebloom.hobby.domain.HobbyScore;
 import com.but.rebloom.hobby.domain.HobbyWeight;
 import com.but.rebloom.hobby.domain.InitialTest;
 import com.but.rebloom.hobby.dto.request.UserAnswerRequest;
@@ -29,18 +30,14 @@ public class HobbyTestController {
     }
 
      // 활동 추천 로직
-    @PostMapping("/recommend")
-    public ResponseEntity<ApiResponse<List<HobbyScoreResponse>>> recommendHobby(@RequestBody UserAnswerRequest answers) {
-        List<Map<HobbyWeight, Double>> hobbies = hobbyTestUseCase.findUserHobbies(answers);
-        return ResponseEntity.ok(
-                ApiResponse.success(
-                    hobbies.stream()
-                            .map(m -> HobbyScoreResponse.from(
-                                    m.keySet().iterator().next(),
-                                    m.values().iterator().next()
-                            ))
-                            .toList()
-                )
-        );
-    }
+     @PostMapping("/recommend")
+     public ResponseEntity<ApiResponse<List<HobbyScoreResponse>>> recommendHobby(@RequestBody UserAnswerRequest answers) {
+         List<HobbyScore> hobbies = hobbyTestUseCase.findUserHobbies(answers);
+
+         return ResponseEntity.ok(ApiResponse.success(
+                 hobbies.stream()
+                         .map(HobbyScoreResponse::from)
+                         .toList()
+         ));
+     }
 }

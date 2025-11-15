@@ -2,16 +2,14 @@ package com.but.rebloom.reaction.dto.response;
 
 import com.but.rebloom.reaction.domain.Heart;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class FindHeartResponse {
     @NotNull
     private List<CreateHeartResponse> hearts;

@@ -2,10 +2,10 @@ package com.but.rebloom.reaction.controller;
 
 import com.but.rebloom.common.dto.ApiResponse;
 import com.but.rebloom.reaction.domain.Heart;
+import com.but.rebloom.reaction.dto.request.CheckHeartExistsRequest;
 import com.but.rebloom.reaction.dto.request.CreateHeartRequest;
 import com.but.rebloom.reaction.dto.request.DeleteHeartRequest;
-import com.but.rebloom.reaction.dto.response.CreateHeartResponse;
-import com.but.rebloom.reaction.dto.response.FindHeartResponse;
+import com.but.rebloom.reaction.dto.response.*;
 import com.but.rebloom.reaction.usecase.HeartUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,22 +46,16 @@ public class HeartController {
 
     // 특정 게시글의 하트 수 조회
     @GetMapping("/post/{postId}/count")
-    public ResponseEntity<ApiResponse<Map<String, Long>>> getHeartCount(@PathVariable Long postId) {
-        long count = heartUseCase.getHeartCount(postId);
-        Map<String, Long> response = new HashMap<>();
-        response.put("count", count);
-        return ResponseEntity.ok(ApiResponse.success(response));
+    public ResponseEntity<ApiResponse<GetHeartCountResponse>> getHeartCount(@PathVariable Long postId) {
+        Map<String, Long> response = heartUseCase.getHeartCount(postId);
+        return ResponseEntity.ok(ApiResponse.success(GetHeartCountResponse.from(response)));
     }
 
     // 특정 유저가 특정 게시글에 하트를 눌렀는지 확인
     @GetMapping("/check")
-    public ResponseEntity<ApiResponse<Map<String, Boolean>>> isHeartExists(
-            @RequestParam String userId,
-            @RequestParam Long postId) {
-        boolean exists = heartUseCase.isHeartExists(userId, postId);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("isLiked", exists);
-        return ResponseEntity.ok(ApiResponse.success(response));
+    public ResponseEntity<ApiResponse<CheckHeartExistsResponse>> checkHeartExists(@ModelAttribute CheckHeartExistsRequest request) {
+        Map<String, Boolean> response = heartUseCase.checkHeartExists(request);
+        return ResponseEntity.ok(ApiResponse.success(CheckHeartExistsResponse.from(response)));
     }
 
     // 하트 취소 (좋아요 취소)

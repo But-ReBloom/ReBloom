@@ -4,6 +4,7 @@ import com.but.rebloom.common.dto.ApiResponse;
 import com.but.rebloom.post.domain.Post;
 import com.but.rebloom.post.domain.Status;
 import com.but.rebloom.post.dto.request.CreatePostRequest;
+import com.but.rebloom.post.dto.request.SearchPostsRequest;
 import com.but.rebloom.post.dto.request.UpdatePostRequest;
 import com.but.rebloom.post.dto.response.CreatePostResponse;
 import com.but.rebloom.post.dto.response.FindPostResponse;
@@ -61,22 +62,22 @@ public class PostController {
 
     // 게시글 검색
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<FindPostResponse>> searchPosts(@RequestParam String keyword) {
-        List<Post> posts = postUseCase.searchPosts(keyword);
+    public ResponseEntity<ApiResponse<FindPostResponse>> searchPosts(@ModelAttribute SearchPostsRequest request) {
+        List<Post> posts = postUseCase.searchPosts(request);
         return ResponseEntity.ok(ApiResponse.success(FindPostResponse.from(posts)));
     }
 
     // 게시글 수정
     @PutMapping("/{postId}")
-    public ResponseEntity<ApiResponse<CreatePostResponse>> updatePost(@PathVariable Long postId, @RequestParam String userId, @Valid @RequestBody UpdatePostRequest request) {
-        Post post = postUseCase.updatePost(postId, userId, request);
+    public ResponseEntity<ApiResponse<CreatePostResponse>> updatePost(@PathVariable Long postId, @Valid @RequestBody UpdatePostRequest request) {
+        Post post = postUseCase.updatePost(postId, request);
         return ResponseEntity.ok(ApiResponse.success(CreatePostResponse.from(post)));
     }
 
     // 게시글 삭제(유저 본인)
     @DeleteMapping("/{postId}")
-    public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postId, @RequestParam String userId) {
-        postUseCase.deletePost(postId, userId);
+    public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postId) {
+        postUseCase.deletePost(postId);
         return ResponseEntity.ok(ApiResponse.success());
     }
 

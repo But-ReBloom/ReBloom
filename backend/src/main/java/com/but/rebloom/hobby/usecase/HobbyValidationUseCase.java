@@ -19,11 +19,6 @@ public class HobbyValidationUseCase {
     // 디비 이용
     private final ActivityRepository activityRepository;
 
-    // 널 값 확인 - 한 요소
-    public <T> void checkNull(T element) {
-        validationUseCase.checkNull(element);
-    }
-
     // 널 값 확인 - Activity 추가
     public void checkNull(AddActivityRequest addActivityRequest) {
         String activityName = addActivityRequest.getActivityName();
@@ -77,7 +72,7 @@ public class HobbyValidationUseCase {
 
     // 해당 유저가 하고 있지 않은 활동인지 확인
     public void checkExistActivityByEmailAndActivityName(String email, String activityName) {
-        if (activityRepository.findActivityByActivityNameAndUserEmail(email, activityName).isPresent()) {
+        if (activityRepository.findByUserEmailAndActivityName(email, activityName).isPresent()) {
             throw new AlreadyUsingActivityException("이미 활동중인 활동");
         }
     }

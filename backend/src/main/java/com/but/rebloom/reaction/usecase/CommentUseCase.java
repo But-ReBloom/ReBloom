@@ -3,6 +3,7 @@ package com.but.rebloom.reaction.usecase;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.auth.repository.UserRepository;
+import com.but.rebloom.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.post.domain.Post;
 import com.but.rebloom.reaction.domain.Comment;
 import com.but.rebloom.reaction.dto.request.CreateCommentRequest;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class CommentUseCase {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     // 댓글 생성
     @Transactional
@@ -54,24 +57,30 @@ public class CommentUseCase {
 
     // 특정 게시글의 댓글 목록 조회 (최신순)
     public List<Comment> getCommentsByPost(Long postId) {
-        return commentRepository.findByPost_PostIdOrderByCommentCreatedAtDesc(postId);
+        return commentRepository.findByPostIdOrderByCommentCreatedAtDesc(postId);
     }
 
     // 특정 유저가 작성한 댓글 목록 조회 (최신순)
     public List<Comment> getCommentsByUser(String userId) {
-        return commentRepository.findByUser_UserIdOrderByCommentCreatedAtDesc(userId);
+        return commentRepository.findByUserIdOrderByCommentCreatedAtDesc(userId);
     }
 
     // 특정 게시글의 댓글 수 조회
-    public long getCommentCount(Long postId) {
-        return commentRepository.countByPost_PostId(postId);
+    public Map<String, Long> getCommentCount(Long postId) {
+        Long commentCount = commentRepository.countByPostId(postId);
+
+        return Map.of(postRepository.findByPostId(postId)
+                .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음"))
+                .getPostTitle(), commentCount);
     }
 
     // 댓글 수정
     @Transactional
-    public Comment updateComment(Long commentId, String userId, UpdateCommentRequest request) {
+    public Comment updateComment(Long commentId, UpdateCommentRequest request) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
+
+        String userId = findCurrentUserUseCase.getCurrentUser().getUserId();
 
         // 작성자 확인
         if (!comment.getUser().getUserId().equals(userId)) {
@@ -102,14 +111,7 @@ public class CommentUseCase {
     @Transactional
     public void deleteCommentByAdmin(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
-
+                .orElseThrow(() -> new CommentNotFoundException("댓글이 조회되지 않음"));
         commentRepository.delete(comment);
-    }
-
-    // 게시글 삭제 시 해당 게시글의 모든 댓글 일괄 삭제
-    @Transactional
-    public void deleteCommentsByPost(Long postId) {
-        commentRepository.deleteByPost_PostId(postId);
     }
 }

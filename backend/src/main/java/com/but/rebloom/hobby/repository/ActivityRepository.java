@@ -13,24 +13,20 @@ import java.util.Optional;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
-    // ActivityId로 객체 조회
-    Optional<Activity> findActivityByActivityId(Long activityId);
-    // (ActivityName + UserEmail)으로 객체 조회
-    Optional<Activity> findActivityByActivityNameAndUserEmail(String activityName, String userEmail);
-    // UserEmail로 객체 조회
-    Optional<List<Activity>> findActivityByUserEmail(String userEmail);
-    // ActivityRecent를 기준으로 오름차순 정렬하여 조회
-    @Query("SELECT activity FROM Activity activity WHERE activity.userEmail = :userEmail " +
-            "ORDER BY activity.activityRecent ASC")
-    Optional<List<Activity>> findActivityOrderByActivityRecentAsc(
-            @Param("userEmail") String userEmail
-    );
-    // ActivityRecent를 기준으로 내림차순 정렬하여 조회
-    @Query("SELECT activity FROM Activity activity WHERE activity.userEmail = :userEmail " +
-            "ORDER BY activity.activityRecent DESC")
-    Optional<List<Activity>> findActivityOrderByActivityRecentDesc(
-            @Param("userEmail") String userEmail
-    );
+    // activityId로 객체 조회
+    Optional<Activity> findByActivityId(Long activityId);
+
+    // (activityEmail + userName)으로 객체 조회
+    Optional<Activity> findByUserEmailAndActivityName(String userEmail, String activityName);
+
+    // userEmail로 객체 조회
+    List<Activity> findByUserEmail(String userEmail);
+
+    // activityRecent를 기준으로 오름차순 정렬하여 조회
+    List<Activity> findByUserEmailOrderByActivityRecentAsc(String userEmail);
+
+    // activityRecent를 기준으로 내림차순 정렬하여 조회
+    List<Activity> findByUserEmailOrderByActivityRecentDesc(String userEmail);
 
     // 활동 이름 변경
     @Modifying

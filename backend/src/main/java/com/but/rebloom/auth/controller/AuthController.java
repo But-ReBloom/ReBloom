@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
@@ -34,17 +32,17 @@ public class AuthController {
     private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     @PostMapping("/email/send")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
+    public ResponseEntity<ApiResponse<GetUserEmailResponse>> sendVerificationEmail(@RequestBody SendVerificationEmailRequest sendVerificationEmailRequest) {
         // 인증 코드 저장함
         User user = emailUseCase.sendVerificationEmail(sendVerificationEmailRequest);
-        return ResponseEntity.ok(ApiResponse.successAsMap("userEmail", user.getUserEmail()));
+        return ResponseEntity.ok(ApiResponse.success(GetUserEmailResponse.from(user)));
     }
 
     @PostMapping("/email/verify")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
+    public ResponseEntity<ApiResponse<GetUserEmailResponse>> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
         // 인증 코드 인증 로직 실행
         User user = emailUseCase.verifyCode(verifyCodeRequest);
-        return ResponseEntity.ok(ApiResponse.successAsMap("userEmail", user.getUserEmail()));
+        return ResponseEntity.ok(ApiResponse.success(GetUserEmailResponse.from(user)));
     }
 
     @PostMapping("/signup")
@@ -63,31 +61,31 @@ public class AuthController {
     }
 
     @PostMapping("/login/google")
-    public ResponseEntity<ApiResponse<GoogleUserInfoResponse>> googleLogin(@RequestBody String authorizationCode) {
-        User user = googleOAuthUseCase.execute(authorizationCode);
+    public ResponseEntity<ApiResponse<GoogleUserInfoResponse>> googleLogin(@RequestBody GoogleLoginAuthorizeCodeRequest request) {
+        User user = googleOAuthUseCase.execute(request);
         String jwtToken = jwtTokenProvider.generateToken(user.getUserEmail());
         return ResponseEntity.ok(ApiResponse.success(GoogleUserInfoResponse.from(user, jwtToken)));
     }
 
     @PatchMapping("/update/id")
-    public ResponseEntity<ApiResponse<UpdateIdResponse>> updateUserId(@RequestBody String updateId) {
+    public ResponseEntity<ApiResponse<UpdateIdResponse>> updateUserId(@RequestBody UpdateUserIdRequest request) {
         // 아이디 변경 및 반환
-        User user = updateUserInfoUseCase.updateUserId(updateId);
+        User user = updateUserInfoUseCase.updateUserId(request);
         return ResponseEntity.ok(ApiResponse.success(UpdateIdResponse.from(user)));
     }
 
     @PatchMapping("/update/pw")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> updateUserPw(@RequestBody String updatePw) {
+    public ResponseEntity<ApiResponse<GetUserEmailResponse>> updateUserPw(@RequestBody UpdateUserPasswordRequest request) {
         // 비밀번호 변경
-        User user = updateUserInfoUseCase.updateUserPw(updatePw);
-        return ResponseEntity.ok(ApiResponse.successAsMap("userEmail", user.getUserEmail()));
+        User user = updateUserInfoUseCase.updateUserPassword(request);
+        return ResponseEntity.ok(ApiResponse.success(GetUserEmailResponse.from(user)));
     }
 
     @PostMapping("/find/email")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> findUserEmail(@RequestBody FindEmailRequest findEmailRequest) {
+    public ResponseEntity<ApiResponse<GetUserEmailResponse>> findUserEmail(@RequestBody FindEmailRequest findEmailRequest) {
         // 이메일 조회
         User user = findUserInfoUseCase.findUserIdByIdAndPw(findEmailRequest);
-        return ResponseEntity.ok(ApiResponse.successAsMap("userEmail", user.getUserEmail()));
+        return ResponseEntity.ok(ApiResponse.success(GetUserEmailResponse.from(user)));
     }
 
     @PostMapping("/current-user")
