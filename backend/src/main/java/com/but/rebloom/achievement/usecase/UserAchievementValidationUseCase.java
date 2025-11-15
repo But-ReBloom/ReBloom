@@ -40,9 +40,4 @@ public class UserAchievementValidationUseCase {
     public void checkExistAchievementByAchievementTitle(String achievementTitle) {
         achievementValidationUseCase.checkExistAchievementByAchievementTitle(achievementTitle);
     }
-
-    // 존재하는 업적인지 확인
-    public void checkExistAchievementByAchievementIdAndAchievementTitle(Long achievementId, String achievementTitle) {
-        achievementValidationUseCase.checkExistAchievementByAchievementIdAndAchievementTitle(achievementId, achievementTitle);
-    }
 }
