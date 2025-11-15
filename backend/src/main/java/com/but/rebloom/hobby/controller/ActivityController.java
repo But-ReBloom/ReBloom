@@ -4,7 +4,7 @@ import com.but.rebloom.common.dto.ApiResponse;
 import com.but.rebloom.hobby.domain.Activity;
 import com.but.rebloom.hobby.dto.request.AddActivityRequest;
 import com.but.rebloom.hobby.dto.response.AddActivityResponse;
-import com.but.rebloom.hobby.usecase.DefaultActivityControlUseCase;
+import com.but.rebloom.hobby.usecase.DefaultActivityUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/activity")
 public class ActivityController {
     // 기본 Activity 조정 함수 호출
-    private final DefaultActivityControlUseCase defaultActivityControlUseCase;
+    private final DefaultActivityUseCase defaultActivityUseCase;
 
     // Activity 추가
     @PostMapping("/add")
     public ResponseEntity<ApiResponse<AddActivityResponse>> addActivity(@RequestBody AddActivityRequest request) {
-        Activity activity = defaultActivityControlUseCase.addActivity(request);
+        Activity activity = defaultActivityUseCase.addActivity(request);
         return ResponseEntity.ok(ApiResponse.success(AddActivityResponse.from(activity)));
     }
 }

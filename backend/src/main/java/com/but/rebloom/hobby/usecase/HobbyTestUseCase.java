@@ -4,7 +4,6 @@ import com.but.rebloom.hobby.domain.HobbyScore;
 import com.but.rebloom.hobby.domain.HobbyWeight;
 import com.but.rebloom.hobby.domain.InitialTest;
 import com.but.rebloom.hobby.dto.request.UserAnswerRequest;
-import com.but.rebloom.hobby.exception.QuestionSetException;
 import com.but.rebloom.hobby.repository.HobbyWeightRepository;
 import com.but.rebloom.hobby.repository.InitialTestRepository;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +51,6 @@ public class HobbyTestUseCase {
         Random random = new Random();
         int num = random.nextInt(10) + 1;
 
-        return initialTestRepository.findBySetNo(num, (num + 1) % 10)
-                .orElseThrow(() -> new QuestionSetException("질문 세트 번호 이상"));
+        return initialTestRepository.findBySetNo(num, (num + 1) % 10);
     }
 }
