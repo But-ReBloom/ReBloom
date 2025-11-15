@@ -7,8 +7,10 @@ import com.but.rebloom.achievement.exception.UserAchievementNotFoundException;
 import com.but.rebloom.achievement.repository.AchievementRepository;
 import com.but.rebloom.achievement.repository.UserAchievementRepository;
 import com.but.rebloom.auth.domain.User;
+import com.but.rebloom.auth.exception.TierNotFoundException;
 import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.auth.repository.UserRepository;
+import com.but.rebloom.auth.usecase.DefaultTierUseCase;
 import com.but.rebloom.auth.usecase.FindCurrentUserUseCase;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,8 @@ public class DefaultUserAchievementUseCase {
     private final UserAchievementRepository userAchievementRepository;
     // 로그인 되어있는지 확인
     private final FindCurrentUserUseCase findCurrentUserUseCase;
+    // 함수 홏출
+    private final DefaultTierUseCase defaultTierUseCase;
 
     // 전체 유저 업적 조회 - 유저 아이디
     public List<UserAchievement> finaAllUserAchievementsByUserId() {
@@ -89,6 +93,10 @@ public class DefaultUserAchievementUseCase {
                 .orElseThrow(() -> new UserNotFoundException("유저가 조회되지 않음"));
         user.setUserPoint(user.getUserPoint() + rewardPoint);
         user.setUserTierPoint(user.getUserTierPoint() + rewardTierPoint);
+
+        user.setUserTier(defaultTierUseCase.getTierEnumByPoint(user.getUserTierPoint())
+                .orElseThrow(() -> new TierNotFoundException("티어가 조회되지 않음"))
+        );
     }
 
     // 유저 업적 성공 처리 - (PK - Non-Pk)
@@ -97,6 +105,10 @@ public class DefaultUserAchievementUseCase {
         UserAchievement userAchievement = userAchievementRepository
                 .findByUserEmailAndAchievementTitle(userEmail, achievementTitle)
                 .orElseThrow(() -> new UserAchievementNotFoundException("유저 업적이 조회되지 않음"));
+
+        // 이미 성공했으면 패스
+        if (userAchievement.getIsSuccess().equals(true))
+            return;
 
         userAchievement.setIsSuccess(true);
         userAchievement.setUserAchievementProgress(100.0f);
@@ -110,5 +122,25 @@ public class DefaultUserAchievementUseCase {
                 .orElseThrow(() -> new UserNotFoundException("유저가 조회되지 않음"));
         user.setUserPoint(user.getUserPoint() + rewardPoint);
         user.setUserTierPoint(user.getUserTierPoint() + rewardTierPoint);
+
+        user.setUserTier(defaultTierUseCase.getTierEnumByPoint(user.getUserTierPoint())
+                .orElseThrow(() -> new TierNotFoundException("티어가 조회되지 않음"))
+        );
+    }
+
+    @Transactional
+    public void updateUserAchievementProgress(String userEmail, String achievementTitle, float progress) {
+        UserAchievement userAchievement = userAchievementRepository
+                .findByUserEmailAndAchievementTitle(userEmail, achievementTitle)
+                .orElseThrow(() -> new UserAchievementNotFoundException("유저 업적이 조회되지 않음"));
+
+        // 이미 성공했으면 패스
+        if (userAchievement.getIsSuccess().equals(true))
+            return;
+
+        userAchievement.setUserAchievementProgress(userAchievement.getUserAchievementProgress() + progress);
+
+        if (userAchievement.getUserAchievementProgress().equals(100.0f))
+            updateUserAchievementToSuccess(userEmail, achievementTitle);
     }
 }

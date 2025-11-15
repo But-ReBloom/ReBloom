@@ -52,6 +52,7 @@ public class User {
 
     @Column(name = "u_tier", nullable = false, length = 20)
     @Builder.Default
+    @Enumerated(EnumType.STRING)
     private TierName userTier = TierName.IRON;
 
     @Column(name = "u_recent_date", nullable = false)

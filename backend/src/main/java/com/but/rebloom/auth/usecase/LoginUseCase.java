@@ -1,14 +1,18 @@
 package com.but.rebloom.auth.usecase;
 
+import com.but.rebloom.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.LoginRequest;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.common.exception.IllegalArgumentException;
 import com.but.rebloom.auth.exception.UserNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +23,11 @@ public class LoginUseCase {
     private final AuthValidationUseCase authValidationUseCase;
     // 비밀번호 암호화
     private final PasswordEncoder passwordEncoder;
+    // 업적 함수 호출
+    private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     // 로그인
+    @Transactional
     public User login(LoginRequest loginRequest) {
         // 기본 예외 확인
         authValidationUseCase.checkNull(loginRequest);
@@ -35,8 +42,21 @@ public class LoginUseCase {
             throw new IllegalArgumentException("잘못된 로그인 환경");
         }
 
-        return userRepository.findByUserEmail(userEmail)
-                .filter(user -> passwordEncoder.matches(userPassword, user.getUserPassword()))
+        User user = userRepository.findByUserEmail(userEmail)
+                .filter(u -> passwordEncoder.matches(userPassword, u.getUserPassword()))
                 .orElseThrow(() -> new UserNotFoundException("유저 조회 실패"));
+
+        // 최근 출석일 업데이트
+        LocalDate recentLoginDate = user.getUserRecentDate();
+        if (recentLoginDate.isBefore(LocalDate.now().minusDays(1))) {
+            user.setUserStreak(user.getUserStreak() + 1);
+        }
+
+        user.setUserRecentDate(LocalDate.now());
+
+        String streakAchievementTitle = "5연속 접속!";
+        defaultUserAchievementUseCase.updateUserAchievementProgress(userEmail, streakAchievementTitle, 100.0f / 5.0f);
+
+        return user;
     }
 }

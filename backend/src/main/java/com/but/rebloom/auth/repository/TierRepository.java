@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface TierRepository {
     // tierPoint에 따른 티어 확인
@@ -12,5 +14,5 @@ public interface TierRepository {
         from Tier t
         where t.tierMinPoint <= :tierPoint and t.tierMaxPoint >= :tierPoint
     """)
-    String searchTierByTierPoint(@Param("tierPoint") Integer tierPoint);
+    Optional<String> searchTierByTierPoint(@Param("tierPoint") Integer tierPoint);
 }

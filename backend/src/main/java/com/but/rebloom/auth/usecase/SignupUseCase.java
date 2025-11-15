@@ -62,8 +62,11 @@ public class SignupUseCase {
         defaultUserAchievementUseCase.createDefaultUserAchievement(userEmail, userId);
 
         // 업적 성공 처리
-        String achievementTitle = "시작이 반이다.";
-        defaultUserAchievementUseCase.updateUserAchievementToSuccess(userEmail, achievementTitle);
+        String signupAchievementTitle = "시작이 반이다.";
+        defaultUserAchievementUseCase.updateUserAchievementToSuccess(userEmail, signupAchievementTitle);
+
+        String streakAchievementTitle = "5연속 접속!";
+        defaultUserAchievementUseCase.updateUserAchievementProgress(userEmail, streakAchievementTitle, 100.0f / 5.0f);
 
         return saveUser;
     }
