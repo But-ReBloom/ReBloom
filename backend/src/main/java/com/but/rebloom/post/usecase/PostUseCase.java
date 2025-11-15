@@ -1,5 +1,6 @@
 package com.but.rebloom.post.usecase;
 
+import com.but.rebloom.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.auth.repository.UserRepository;
@@ -30,6 +31,7 @@ public class PostUseCase {
     private final UserRepository userRepository;
     private final ChannelRepository channelRepository;
     private final FindCurrentUserUseCase findCurrentUserUseCase;
+    private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     // 게시글 생성
     @Transactional
@@ -50,6 +52,9 @@ public class PostUseCase {
                 .postImage(request.getPostImage())
                 .postType(request.getPostType() != null ? request.getPostType() : Type.NORMAL)
                 .build();
+
+        String post1AchievementTitle = "커뮤니티 시작!";
+        defaultUserAchievementUseCase.updateUserAchievementToSuccess(user.getUserEmail(), post1AchievementTitle);
 
         return postRepository.save(post);
     }
