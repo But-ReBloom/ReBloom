@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
@@ -79,7 +77,7 @@ public class AuthController {
     @PatchMapping("/update/pw")
     public ResponseEntity<ApiResponse<GetUserEmailResponse>> updateUserPw(@RequestBody UpdateUserPasswordRequest request) {
         // 비밀번호 변경
-        User user = updateUserInfoUseCase.updateUserPw(request);
+        User user = updateUserInfoUseCase.updateUserPassword(request);
         return ResponseEntity.ok(ApiResponse.success(GetUserEmailResponse.from(user)));
     }
 

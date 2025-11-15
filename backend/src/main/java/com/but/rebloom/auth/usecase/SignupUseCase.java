@@ -3,6 +3,7 @@ package com.but.rebloom.auth.usecase;
 import com.but.rebloom.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.dto.request.SignupRequest;
+import com.but.rebloom.auth.exception.AlreadyUsingUserException;
 import com.but.rebloom.auth.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +38,11 @@ public class SignupUseCase {
         authValidationUseCase.checkUserPassword(userPassword);
         authValidationUseCase.checkUserName(userName);
 
-        authValidationUseCase.checkExistAccountByUserEmail(userEmail);
-        authValidationUseCase.checkExistAccountByUserId(userId);
+        if (userRepository.existsByUserEmail(userEmail))
+            throw new AlreadyUsingUserException("이미 사용중인 이메일");
+
+        if (userRepository.existsByUserId(userId))
+            throw new AlreadyUsingUserException("이미 사용중인 아이디");
 
         // 유저 생성
         User user = User.builder()

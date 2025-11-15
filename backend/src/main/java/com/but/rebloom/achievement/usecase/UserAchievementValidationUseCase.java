@@ -21,16 +21,6 @@ public class UserAchievementValidationUseCase {
         validationUseCase.checkNotExistAccountByUserEmail(userEmail);
     }
 
-    // 존재하는 유저인지 확인
-    public void checkNotExistAccountByUserId(String userId) {
-        validationUseCase.checkNotExistAccountByUserId(userId);
-    }
-
-    // 존재하는 유저인지 확인
-    public void checkNotExistAccountByUserEmailAndUserId(String userEmail, String userId) {
-        validationUseCase.checkNotExistAccountByUserEmailAndUserId(userEmail, userId);
-    }
-
     // 존재하는 업적인지 확인
     public void checkExistAchievementByAchievementId(Long achievementId) {
         achievementValidationUseCase.checkExistAchievementByAchievementId(achievementId);
