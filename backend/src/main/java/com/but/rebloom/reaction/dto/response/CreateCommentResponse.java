@@ -2,17 +2,13 @@ package com.but.rebloom.reaction.dto.response;
 
 import com.but.rebloom.reaction.domain.Comment;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class CreateCommentResponse {
     @NotNull
     private Long commentId;
