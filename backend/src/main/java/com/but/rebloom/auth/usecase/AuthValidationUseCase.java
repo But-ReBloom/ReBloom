@@ -85,11 +85,6 @@ public class AuthValidationUseCase {
     }
 
     // 존재하는지 확인
-    public void checkExistAccount(String userEmail, String userId) {
-        validationUseCase.checkExistAccount(userEmail, userId);
-    }
-
-    // 존재하는지 확인
     public void checkExistAccountByUserEmail(String userEmail) {
         validationUseCase.checkExistAccountByUserEmail(userEmail);
     }

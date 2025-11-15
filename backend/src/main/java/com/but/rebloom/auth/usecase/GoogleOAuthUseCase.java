@@ -31,7 +31,7 @@ public class GoogleOAuthUseCase {
         String accessToken = getAccessToken(request.getAuthorizationCode());
         GoogleUserInfoResponse googleUser = getUserInfo(accessToken);
 
-        return userRepository.findByUserEmailAndProvider(googleUser.getEmail(), Provider.GOOGLE)
+        return userRepository.findByUserEmail(googleUser.getEmail())
                 .orElseGet(() -> userRepository.save(User.builder()
                         .userEmail(googleUser.getEmail())
                         .userName(googleUser.getName())
