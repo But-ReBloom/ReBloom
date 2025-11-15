@@ -32,11 +32,4 @@ public class AchievementValidationUseCase {
             throw new AchievementNotFoundException("존재하지 않는 업적");
         }
     }
-
-    // 존재하는지 확인 - (업적 아이디 + 업적 제목)
-    public void checkExistAchievementByAchievementIdAndAchievementTitle(Long achievementId, String achievementTitle) {
-        if (!achievementRepository.existsByAchievementIdAndAchievementTitle(achievementId, achievementTitle)) {
-            throw new AchievementNotFoundException("존재하지 않는 업적");
-        }
-    }
 }

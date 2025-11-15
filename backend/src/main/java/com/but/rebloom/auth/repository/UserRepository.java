@@ -20,11 +20,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
             @Param("userEmail") String userEmail,
             @Param("userProvider") Provider userProvider
     );
+
     Optional<User> findByUserId(String userId);
 
     // 유저 존재 확인 함수
     Boolean existsByUserId(String userId);
+
     Boolean existsByUserEmail(String userEmail);
+
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
             "FROM User u WHERE u.userEmail = :userEmail AND u.userId = :userId")
     Boolean existsByUserEmailAndUserId(
