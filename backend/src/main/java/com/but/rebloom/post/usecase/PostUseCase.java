@@ -69,12 +69,12 @@ public class PostUseCase {
 
     // 특정 채널의 게시물 목록 조회(최신순)
     public List<Post> getPostsByChannel(Long channelId) {
-        return postRepository.findByChannel_ChannelIdOrderByPostCreatedAtDesc(channelId);
+        return postRepository.findByChannelIdOrderByPostCreatedAtDesc(channelId);
     }
 
     // 특정 유저의 게시물 목록 조회(최신순)
     public List<Post> getPostsByUser(String userId) {
-        return postRepository.findByUser_UserIdOrderByPostCreatedAtDesc(userId);
+        return postRepository.findByUserIdOrderByPostCreatedAtDesc(userId);
     }
 
     // 인기글 조회
@@ -84,7 +84,7 @@ public class PostUseCase {
 
     // 게시글 검색
     public List<Post> searchPosts(SearchPostsRequest request) {
-        return postRepository.findByPostInfoByKeyword(request.getKeyword());
+        return postRepository.searchByKeyword(request.getKeyword());
     }
 
     // 인증 게시글 상태별 조회
