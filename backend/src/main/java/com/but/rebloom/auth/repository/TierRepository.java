@@ -1,0 +1,16 @@
+package com.but.rebloom.auth.repository;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface TierRepository {
+    // tierPoint에 따른 티어 확인
+    @Query("""
+        select t.tierName
+        from Tier t
+        where t.tierMinPoint <= :tierPoint and t.tierMaxPoint >= :tierPoint
+    """)
+    String searchTierByTierPoint(@Param("tierPoint") Integer tierPoint);
+}
