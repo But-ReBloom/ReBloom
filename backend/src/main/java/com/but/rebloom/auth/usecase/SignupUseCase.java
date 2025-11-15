@@ -37,7 +37,8 @@ public class SignupUseCase {
         authValidationUseCase.checkUserPassword(userPassword);
         authValidationUseCase.checkUserName(userName);
 
-        authValidationUseCase.checkExistAccount(userEmail, userId);
+        authValidationUseCase.checkExistAccountByUserEmail(userEmail);
+        authValidationUseCase.checkExistAccountByUserId(userId);
 
         // 유저 생성
         User user = User.builder()
