@@ -10,14 +10,14 @@ import java.util.List;
 @Repository
 public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long> {
     // 취미 가중치 조회 - 전체
-    @Query(value = """
+    @Query("""
         select distinct hw
         from HobbyWeight hw
         where hw.hobbyId in (
-                select min(hw.hobbyId)
-                from HobbyWeight hw
-                group by hw.hobbyName
-            )
+            select min(hw.hobbyId)
+            from HobbyWeight hw
+            group by hw.hobbyName
+        )
     """)
     List<HobbyWeight> findAllHobbyWeight();
 }
