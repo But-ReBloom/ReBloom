@@ -20,10 +20,4 @@ public interface AchievementRepository extends JpaRepository<Achievement, Long> 
     @NonNull
     @Override
     List<Achievement> findAll();
-
-    // 존재 유무 확인 함수 - achievementId
-    boolean existsByAchievementId(Long achievementId);
-
-    // 존재 유무 확인 함수 - achievementTitle
-    boolean existsByAchievementTitle(String achievementTitle);
 }
