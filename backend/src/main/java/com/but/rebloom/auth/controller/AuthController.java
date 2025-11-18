@@ -84,14 +84,8 @@ public class AuthController {
     @PostMapping("/find/email")
     public ResponseEntity<ApiResponse<GetUserEmailResponse>> findUserEmail(@RequestBody FindEmailRequest findEmailRequest) {
         // 이메일 조회
-        User user = findUserInfoUseCase.findUserEmailByIdAndPw(findEmailRequest);
+        User user = findUserInfoUseCase.findUserIdByIdAndPw(findEmailRequest);
         return ResponseEntity.ok(ApiResponse.success(GetUserEmailResponse.from(user)));
-    }
-
-    @PostMapping("/find/id")
-    public ResponseEntity<ApiResponse<GetUserIdResponse>> findUserId(@RequestBody FindIdRequest findIdRequest) {
-        User user = findUserInfoUseCase.findUserIdByEmailAndPw(findIdRequest);
-        return ResponseEntity.ok(ApiResponse.success(GetUserIdResponse.from(user)));
     }
 
     @PostMapping("/current-user")
