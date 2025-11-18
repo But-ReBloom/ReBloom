@@ -7,6 +7,7 @@ import com.but.rebloom.auth.dto.request.VerifyCodeRequest;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.auth.exception.WrongVerifiedCodeException;
+import com.but.rebloom.common.usecase.EmailSenderUseCase;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -20,16 +21,22 @@ import java.util.Map;
 import java.util.Random;
 
 @Service
-@RequiredArgsConstructor
-public class EmailUseCase {
-    // 이메일 전송용
-    private final JavaMailSender mailSender;
+public class EmailUseCase extends EmailSenderUseCase {
     // 이메일-인증코드 저장용
     private final Map<String, Map<VerificationPurpose, CodeInfo>> codeMap = new HashMap<>();
     // 예외 호출
     private final AuthValidationUseCase authValidationUseCase;
     // 디비 이용
     private final UserRepository userRepository;
+
+    // 생성자 주입
+    public EmailUseCase(JavaMailSender mailSender,
+                        AuthValidationUseCase authValidationUseCase,
+                        UserRepository userRepository) {
+        super(mailSender); // 부모 생성자 호출
+        this.authValidationUseCase = authValidationUseCase;
+        this.userRepository = userRepository;
+    }
 
     // 인증 코드 생성
     private String generateCode() {
@@ -45,14 +52,10 @@ public class EmailUseCase {
         codeMap.computeIfAbsent(emailRequest.getUserEmail(), k -> new HashMap<>())
                 .put(emailRequest.getPurpose(), new CodeInfo(code));
 
-        SimpleMailMessage message = new SimpleMailMessage();
+        String subject = "[이메일 인증 코드]";
+        String text = "ReBloom 인증코드: " + code;
 
-        // purpose에 따라 메세지를 다르게 전송 가능하도록 구성
-        message.setTo(emailRequest.getUserEmail());
-        message.setSubject("[이메일 인증 코드]");
-        message.setText("ReBloom 인증코드: " + code);
-
-        mailSender.send(message);
+        sendEmail(emailRequest.getUserEmail(), subject, text);
 
         return userRepository.findByUserEmail(emailRequest.getUserEmail())
                 .orElseThrow(() -> new UserNotFoundException("유저가 조회되지 않음"));
