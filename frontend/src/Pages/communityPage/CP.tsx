@@ -23,6 +23,7 @@ import {
     import CloseIcon from '../../assets/images/close.svg';
     import { useNavigate } from 'react-router-dom';
     import type { Post } from '../../types/PostTypes';
+    // import Header from '../../components/normal_header/nh';
 
     function Community() {
     const navigate = useNavigate();
@@ -52,6 +53,8 @@ import {
     ];
 
     return (
+        <>
+        {/* <Header/> */}
         <CommunityWrapper>
         <CloseButton onClick={handleCloseClick}>
             <CloseIconImg src={CloseIcon} alt="닫기" />
@@ -105,6 +108,7 @@ import {
             </ContentWrapper>
         </CentralBox>
         </CommunityWrapper>
+        </>
     );
 }
 

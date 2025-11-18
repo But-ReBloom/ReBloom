@@ -18,7 +18,7 @@ import {
 
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
-import { posts } from '../postPage/posts';
+import { posts as initialPosts } from '../postPage/posts';
 
 function MyPostPage() {
     const navigate = useNavigate();
@@ -30,6 +30,28 @@ function MyPostPage() {
     const handleClear = () => {
         setTitle('');
         setContent('');
+    };
+
+    const handleSavePost = () => {
+        if (!title.trim() || !content.trim()) {
+            alert('제목과 내용을 입력해주세요.');
+            return;
+        }
+
+        const existingPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+        const newPost = {
+            id: Date.now(),
+            title,
+            content,
+            category: expandedCategory || '소통',
+            favorite: false,
+            notice: false,
+            tag: '새글',
+        };
+        localStorage.setItem('myPosts', JSON.stringify([newPost, ...existingPosts]));
+
+        handleClear();
+        navigate('/post'); // Post 페이지로 이동
     };
 
     const categories = [
@@ -81,7 +103,7 @@ function MyPostPage() {
                                 </div>
                                 {expandedCategory === category.name && (
                                     <SubMenu>
-                                        {posts
+                                        {[...initialPosts, ...JSON.parse(localStorage.getItem('myPosts') || '[]')]
                                             .filter(post =>
                                                 category.name === '즐겨찾는 게시판'
                                                     ? post.favorite
@@ -117,7 +139,9 @@ function MyPostPage() {
                     <button onClick={handleClear} style={{ backgroundColor: '#ff6b6b' }}>
                         지우기
                     </button>
-                    <button>작성 완료</button>
+                    <button onClick={handleSavePost} style={{ backgroundColor: '#5db9ee', color: '#fff' }}>
+                        작성 완료
+                    </button>
                 </div>
             </PostEditorContainer>
 
@@ -129,3 +153,4 @@ function MyPostPage() {
 }
 
 export default MyPostPage;
+

@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
     Container,
@@ -20,23 +20,30 @@ import {
     SubMenu,
     CommentItem,
     PostDivider,
+    CommentFormContainer
 } from './PD';
-import { posts } from './posts';
 import CloseIcon from '../../assets/images/close.svg';
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
+import { posts as initialPosts } from './posts';
 
 function PostDetail() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+    const [allPosts, setAllPosts] = useState<any[]>([]);
+    const [post, setPost] = useState<any>(null);
 
-    const post = posts.find(p => p.id.toString() === id);
-    const categories = [
-        { name: '공지사항', emoji: '📢' },
-        { name: '즐겨찾는 게시판', emoji: '⭐' },
-        { name: '함께해요', emoji: '🤝' },
-        { name: '소통', emoji: '💬' },
-    ];
+    const [commentAuthor, setCommentAuthor] = useState('');
+    const [commentText, setCommentText] = useState('');
+
+    useEffect(() => {
+        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+        const mergedPosts = [...savedPosts, ...initialPosts];
+        setAllPosts(mergedPosts);
+
+        const currentPost = mergedPosts.find((p: any) => p.id.toString() === id);
+        setPost(currentPost);
+    }, [id]);
 
     const toggleCategory = (category: string) => {
         setExpandedCategory(prev => (prev === category ? null : category));
@@ -56,9 +63,42 @@ function PostDetail() {
         font-weight: bold;
     `;
 
+    const handleAddComment = () => {
+        if (!commentAuthor || !commentText) return;
+
+        const newComment = { author: commentAuthor, text: commentText };
+        const updatedPost = { ...post };
+
+        if (!updatedPost.comments) updatedPost.comments = [];
+        updatedPost.comments.push(newComment);
+
+        const updatedPosts = allPosts.map(p => (p.id === post.id ? updatedPost : p));
+        setAllPosts(updatedPosts);
+        setPost(updatedPost);
+
+        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+        const index = savedPosts.findIndex((p: any) => p.id === post.id);
+        if (index >= 0) {
+            savedPosts[index] = updatedPost;
+        } else {
+            savedPosts.push(updatedPost);
+        }
+        localStorage.setItem('myPosts', JSON.stringify(savedPosts));
+
+        setCommentAuthor('');
+        setCommentText('');
+    };
+
     if (!post) {
         return <Container>존재하지 않는 게시글입니다.</Container>;
     }
+
+    const categories = [
+        { name: '공지사항', emoji: '📢' },
+        { name: '즐겨찾는 게시판', emoji: '⭐' },
+        { name: '함께해요', emoji: '🤝' },
+        { name: '소통', emoji: '💬' },
+    ];
 
     return (
         <Container>
@@ -96,18 +136,18 @@ function PostDetail() {
                                 </div>
                                 {expandedCategory === category.name && (
                                     <SubMenu>
-                                        {posts
-                                            .filter(post =>
+                                        {allPosts
+                                            .filter(p =>
                                                 category.name === '즐겨찾는 게시판'
-                                                    ? post.favorite
-                                                    : post.category === category.name
+                                                    ? p.favorite
+                                                    : p.category === category.name
                                             )
-                                            .map(post => (
+                                            .map(p => (
                                                 <li
-                                                    key={post.id}
-                                                    onClick={() => navigate(`/post/${post.id}`)}
+                                                    key={p.id}
+                                                    onClick={() => navigate(`/post/${p.id}`)}
                                                 >
-                                                    ㄴ {post.title}
+                                                    ㄴ {p.title}
                                                 </li>
                                             ))}
                                     </SubMenu>
@@ -135,11 +175,13 @@ function PostDetail() {
                         </div>
                     </PostItem>
                 </PostList>
-                <PostDivider></PostDivider>
+
+                <PostDivider />
+
                 <div style={{ marginTop: '30px' }}>
                     <h3>💬 댓글</h3>
                     {post.comments && post.comments.length > 0 ? (
-                        post.comments.map((comment, idx) => (
+                        post.comments.map((comment: any, idx: number) => (
                             <CommentItem key={idx}>
                                 <strong>{comment.author}</strong>
                                 <p>{comment.text}</p>
@@ -148,6 +190,23 @@ function PostDetail() {
                     ) : (
                         <p>아직 댓글이 없습니다.</p>
                     )}
+
+                    <CommentFormContainer>
+                        <input
+                            type="text"
+                            placeholder="작성자 이름"
+                            value={commentAuthor}
+                            onChange={(e) => setCommentAuthor(e.target.value)}
+                        />
+                        <textarea
+                            placeholder="댓글 입력"
+                            rows={3}
+                            value={commentText}
+                            onChange={(e) => setCommentText(e.target.value)}
+                        />
+                        <button onClick={handleAddComment}>댓글 작성</button>
+                    </CommentFormContainer>
+
                 </div>
             </ContentArea>
         </Container>

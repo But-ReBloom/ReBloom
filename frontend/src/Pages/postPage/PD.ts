@@ -4,6 +4,7 @@ export const Container = styled.div`
     display: flex;
     background: #f8f9fb;
     min-height: 100vh;
+    position: relative;
 `;
 
 export const Sidebar = styled.aside`
@@ -19,7 +20,7 @@ export const Sidebar = styled.aside`
 export const CafeInfo = styled.div`
     p {
         color: #666;
-        font-size: 0.9rem;        
+        font-size: 0.9rem;
     }
 `;
 
@@ -72,19 +73,28 @@ export const NavMenu = styled.nav`
         border-radius: 5px;
         font-size: 0.95rem;
         font-weight: bold;
+
+        &:hover {
+            background-color: #e6f5ff;
+        }
     }
 `;
 
 export const SubMenu = styled.ul`
     list-style: none;
     margin-left: 7px;
-    margin-bottom: 3px;
     margin-top: 1px;
+    margin-bottom: 3px;
+
     li {
         padding: 4px 0;
         font-size: 0.9rem;
         color: #555;
         cursor: pointer;
+
+        &:hover {
+            color: #2b90d9;
+        }
     }
 `;
 
@@ -113,7 +123,7 @@ export const PostList = styled.div`
 `;
 
 export const PostItem = styled.div<{ $notice?: boolean }>`
-    background: #ffffff; /* 흰색 박스 */
+    background: ${({ $notice }) => ($notice ? '#fffbea' : '#ffffff')};
     border-radius: 8px;
     padding: 20px;
     box-sizing: border-box;
@@ -148,7 +158,7 @@ export const PostDivider = styled.hr`
 `;
 
 export const CommentItem = styled.div`
-    background: #ffffffff;
+    background: #ffffff;
     border-radius: 8px;
     padding: 10px 14px;
     margin-bottom: 8px;
@@ -165,6 +175,28 @@ export const CommentItem = styled.div`
         font-size: 0.95rem;
         line-height: 1.4;
     }
+`;
+
+export const PostCommentBox = styled.div`
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+`;
+
+export const CommentSection = styled.div`
+    background: #f4f6f8;
+    border-radius: 8px;
+    padding: 15px;
+`;
+
+export const SectionTitle = styled.h3`
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    color: #333;
 `;
 
 export const LogoImage = styled.img`
@@ -194,24 +226,43 @@ export const Divider = styled.div`
     background-color: #ddd;
     margin: -5px 0;
 `;
-export const PostCommentBox = styled.div`
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+
+    export const CommentFormContainer = styled.div`
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 25px;
-`;
+    gap: 10px;
 
-export const CommentSection = styled.div`
-    background: #f4f6f8;
-    border-radius: 8px;
-    padding: 15px;
-`;
+    input, textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ffff;
+    font-size: 1rem;
+    font-family: inherit;
 
-export const SectionTitle = styled.h3`
-    margin: 0 0 10px 0;
-    font-size: 1.1rem;
-    color: #333;
-`;
+    &:focus {
+        outline: none;
+        border-color: #2b90d9; 
+        box-shadow: 0 0 3px #2b90d9; 
+    }
+}
+
+
+    button {
+        width: 120px;
+        align-self: flex-end;
+        padding: 10px;
+        background-color: #5db9ee;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+        background-color: #2b90d9;
+        }
+    }
+    `;

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
     Container,
@@ -22,7 +22,7 @@ import {
 } from './pst';
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
-import { posts } from './posts';
+import { posts as initialPosts } from './posts';
 
 const WritePostButton = styled.button`
     width: 100%;
@@ -41,20 +41,56 @@ const WritePostButton = styled.button`
     }
 `;
 
+const PaginationWrapper = styled.div`
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+`;
+
+const PageButton = styled.button<{ active?: boolean }>`
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: ${props => (props.active ? '#2b90d9' : '#f0f0f0')};
+    color: ${props => (props.active ? '#fff' : '#000')};
+`;
+
+const POSTS_PER_PAGE = 9;
+
 function Post() {
     const navigate = useNavigate();
     const [hideNotices, setHideNotices] = useState(false);
     const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [allPosts, setAllPosts] = useState<any[]>([]);
 
-    const handleCloseClick = () => navigate('/main'); // 닫기 → 메인 페이지로
-    const handleToggleNotices = () => setHideNotices(prev => !prev);
+    useEffect(() => {
+        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+        setAllPosts([...savedPosts, ...initialPosts]);
+    }, []);
+
+    const handleCloseClick = () => navigate('/main');
+    const handleToggleNotices = () => {
+        setHideNotices(prev => !prev);
+        setCurrentPage(1);
+    };
     const handleWritePost = () => navigate('/myPostPage');
+    const handlePostClick = (id: number) => navigate(`/post/${id}`);
 
-    const sortedPosts = [...posts].sort((a, b) => {
+    const sortedPosts = [...allPosts].sort((a, b) => {
         if (a.notice && !b.notice) return -1;
         if (!a.notice && b.notice) return 1;
         return 0;
     });
+
+    const filteredPosts = sortedPosts.filter(post => !hideNotices || !post.notice);
+    const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+    const currentPosts = filteredPosts.slice(
+        (currentPage - 1) * POSTS_PER_PAGE,
+        currentPage * POSTS_PER_PAGE
+    );
 
     const categories = [
         { name: '공지사항', emoji: '📢' },
@@ -65,11 +101,6 @@ function Post() {
 
     const toggleCategory = (category: string) => {
         setExpandedCategory(prev => (prev === category ? null : category));
-    };
-
-    // 게시글 클릭 시 상세 페이지 이동
-    const handlePostClick = (id: number) => {
-        navigate(`/post/${id}`);
     };
 
     return (
@@ -104,13 +135,12 @@ function Post() {
                                 </div>
                                 {expandedCategory === category.name && (
                                     <SubMenu>
-                                        {sortedPosts
+                                        {filteredPosts
                                             .filter(post =>
                                                 category.name === '즐겨찾는 게시판'
                                                     ? post.favorite
                                                     : post.category === category.name
                                             )
-                                            .filter(post => !hideNotices || !post.notice)
                                             .map(post => (
                                                 <li
                                                     key={post.id}
@@ -130,26 +160,36 @@ function Post() {
             <ContentArea>
                 <Header>
                     <h1>전체글 보기</h1>
-                    <span>총 {sortedPosts.length}개의 글</span>
+                    <span>총 {filteredPosts.length}개의 글</span>
                     <HideNoticeButton onClick={handleToggleNotices}>
                         {hideNotices ? '공지 보기' : '공지 숨기기'}
                     </HideNoticeButton>
                 </Header>
 
                 <PostList>
-                    {sortedPosts.map(post => {
-                        if (hideNotices && post.notice) return null;
-                        return (
-                            <PostItem
-                                key={post.id}
-                                $notice={post.notice}
-                                onClick={() => handlePostClick(post.id)} >
-                                <Tag>{post.tag}</Tag>
-                                <span>{post.title}</span>
-                            </PostItem>
-                        );
-                    })}
+                    {currentPosts.map(post => (
+                        <PostItem
+                            key={post.id}
+                            $notice={post.notice}
+                            onClick={() => handlePostClick(post.id)}
+                        >
+                            <Tag>{post.tag}</Tag>
+                            <span>{post.title}</span>
+                        </PostItem>
+                    ))}
                 </PostList>
+
+                <PaginationWrapper>
+                    {Array.from({ length: totalPages }, (_, idx) => idx + 1).map(page => (
+                        <PageButton
+                            key={page}
+                            active={page === currentPage}
+                            onClick={() => setCurrentPage(page)}
+                        >
+                            {page}
+                        </PageButton>
+                    ))}
+                </PaginationWrapper>
             </ContentArea>
 
             <CloseButton onClick={handleCloseClick}>
