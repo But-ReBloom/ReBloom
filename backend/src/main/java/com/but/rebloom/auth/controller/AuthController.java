@@ -6,6 +6,7 @@ import com.but.rebloom.auth.dto.response.*;
 import com.but.rebloom.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.auth.usecase.*;
 import com.but.rebloom.common.dto.ApiResponse;
+import com.but.rebloom.auth.usecase.EmailUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -7,6 +7,7 @@ import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.post.domain.Post;
 import com.but.rebloom.reaction.domain.Comment;
+import com.but.rebloom.reaction.dto.request.CommentNotificationRequest;
 import com.but.rebloom.reaction.dto.request.CreateCommentRequest;
 import com.but.rebloom.reaction.dto.request.UpdateCommentRequest;
 import com.but.rebloom.channel.exception.CommentNotFoundException;
@@ -29,6 +30,7 @@ public class CommentUseCase {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     // 함수 호출
+    private final NotificationUseCase notificationUseCase;
     private final FindCurrentUserUseCase findCurrentUserUseCase;
     private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
@@ -55,8 +57,24 @@ public class CommentUseCase {
 
         String comment5AchievementTitle = "좋은 댓글";
         defaultUserAchievementUseCase.updateUserAchievementProgress(user.getUserEmail(), comment1AchievementTitle, 100.0f / 5.0f);
+        
+        Comment savedComment = commentRepository.save(comment);
 
-        return commentRepository.save(comment);
+        // 본인이 작성한 글에 남긴 댓글이 아닐 때만 알림 전송
+        if(!post.getUser().getUserId().equals(user.getUserId())) {
+            CommentNotificationRequest commentNotificationRequest = CommentNotificationRequest.builder()
+                    .ownerUserId(post.getUser().getUserId())
+                    .ownerEmail(post.getUser().getUserEmail())
+                    .commenterUserId(user.getUserId())
+                    .commentContent(comment.getCommentContent())
+                    .commentId(savedComment.getCommentId())
+                    .postId(post.getPostId())
+                    .build();
+
+            notificationUseCase.sendCommentNotification(commentNotificationRequest);
+        }
+
+        return savedComment;
     }
 
     // 특정 댓글 조회
