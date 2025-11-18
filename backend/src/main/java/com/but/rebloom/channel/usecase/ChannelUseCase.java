@@ -32,7 +32,7 @@ public class ChannelUseCase {
     @Transactional
     public Channel requestCreation(CreateChannelRequest request) {
         // 유저 조회
-        User user = userRepository.findByUserId(request.getUserId())
+        User user = userRepository.findByUserEmail(request.getUserEmail())
                 .orElseThrow(() -> new UserNotFoundException("User Not Found"));
 
         // 티어 포인트 확인

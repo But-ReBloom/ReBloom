@@ -15,5 +15,5 @@ public class CreateChannelRequest {
     private String channelDescription;
 
     @NotNull
-    private String userId;
+    private String userEmail;
 }
