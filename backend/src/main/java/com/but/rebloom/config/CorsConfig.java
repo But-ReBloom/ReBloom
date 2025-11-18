@@ -21,7 +21,6 @@ public class CorsConfig {
                                 "http://localhost:8080"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization")
                         .allowCredentials(true);
             }
         };
