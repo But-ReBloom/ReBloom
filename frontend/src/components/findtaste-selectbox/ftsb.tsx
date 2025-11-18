@@ -2,32 +2,33 @@ import { useState, useEffect } from "react";
 import * as S from "./style.ts";
 
 interface SelectBoxProps {
-  pro: string; // 질문 내용
-  selectedValue: number | null; // 현재 선택된 값 (-2 ~ 2)
-  onSelect: (value: number | null) => void; // 선택 시 부모로 전달
+  pro: string;
+  weights: number[]; // 각 질문마다 다른 가중치 배열
+  selectedValue: number | null;
+  onSelect: (value: number | null) => void;
 }
 
-function Select_Box({ pro, selectedValue, onSelect }: SelectBoxProps) {
+function Select_Box({ pro, weights, selectedValue, onSelect }: SelectBoxProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  // 인덱스 ↔ 값 변환 테이블
-  const indexToValue = [2, 1, 0, -1, -2];
+  // ex) [-2, -1, 0, 1, 2]
+  const indexToValue = weights;
+
   const valueToIndex = (value: number | null): number | null => {
     if (value === null) return null;
     return indexToValue.indexOf(value);
   };
 
-  // 부모에서 받은 값(selectedValue)이 변경될 때 activeIndex 갱신
+  // 부모에게 받은 selectedValue → UI에 반영
   useEffect(() => {
     setActiveIndex(valueToIndex(selectedValue));
   }, [selectedValue]);
 
-  // 클릭 시 처리
   const handleClick = (index: number) => {
     const newIndex = activeIndex === index ? null : index;
     setActiveIndex(newIndex);
 
-    // 변환된 값 (-2~2)을 부모로 전달
+    // 선택값(가중치)을 부모로 콜백
     onSelect(newIndex !== null ? indexToValue[newIndex] : null);
   };
 
@@ -57,7 +58,7 @@ function Select_Box({ pro, selectedValue, onSelect }: SelectBoxProps) {
                   className={activeIndex === i ? "action" : ""}
                   onClick={() => handleClick(i)}
                   type="radio"
-                  name={`box-${pro}`} // 같은 질문 그룹 유지
+                  name={`select-${pro}`}
                 />
               );
             })}
