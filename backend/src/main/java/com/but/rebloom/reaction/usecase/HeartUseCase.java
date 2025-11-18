@@ -79,7 +79,12 @@ public class HeartUseCase {
 
     // 특정 게시글의 하트 수 조회
     public Map<String, Long> getHeartCount(Long postId) {
-        return heartRepository.countByPostId(postId);
+        return Map.of(
+                postRepository.findByPostId(postId)
+                        .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음"))
+                        .getPostTitle()
+                , heartRepository.countByPostId(postId)
+        );
     }
 
     // 특정 유저가 특정 게시글에 하트를 눌렀는지 확인

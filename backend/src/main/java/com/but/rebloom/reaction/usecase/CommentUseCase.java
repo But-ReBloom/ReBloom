@@ -1,5 +1,6 @@
 package com.but.rebloom.reaction.usecase;
 
+import com.but.rebloom.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.auth.repository.UserRepository;
@@ -24,11 +25,14 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class CommentUseCase {
+    // 디비 이용
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    // 함수 호출
     private final NotificationUseCase notificationUseCase;
     private final FindCurrentUserUseCase findCurrentUserUseCase;
+    private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     // 댓글 생성
     @Transactional
@@ -48,6 +52,12 @@ public class CommentUseCase {
                 .commentContent(request.getCommentContent())
                 .build();
 
+        String comment1AchievementTitle = "첫 댓글";
+        defaultUserAchievementUseCase.updateUserAchievementToSuccess(user.getUserEmail(), comment1AchievementTitle);
+
+        String comment5AchievementTitle = "좋은 댓글";
+        defaultUserAchievementUseCase.updateUserAchievementProgress(user.getUserEmail(), comment1AchievementTitle, 100.0f / 5.0f);
+        
         Comment savedComment = commentRepository.save(comment);
 
         // 본인이 작성한 글에 남긴 댓글이 아닐 때만 알림 전송
