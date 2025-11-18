@@ -249,8 +249,8 @@ export default function FT_TestPage() {
       });
       if (!response.ok) throw new Error("데이터 전송 실패");
 
-      navigate("/thankyou", {
-        state: { message: "취향테스트 완료!", type: "HobbyTest" },
+      navigate("/test/result", {
+        state: { message: "취향테스트 완료!", type: "HobbyTest", finalAverage },
       });
     } catch (error) {
       console.error(error);

@@ -13,17 +13,17 @@ export default function Thankyou() {
   return (
     <>
       {type === "ExpsReview" ? (
-        <ExpsThank message={message} value={"소중한 리뷰"}/>
+        <ExpsThank message={message} value={"소중한 리뷰"} />
       ) : type === "HobbyTest" ? (
-        <ExpsThank message={message} value={"테스트에 응해주셔서"}/>
+        <ExpsThank message={message} value={"테스트에 응해주셔서"} />
       ) : (
-        <NotFound/>
+        <NotFound />
       )}
     </>
   );
 }
 
-function ExpsThank(props) {
+function ExpsThank(props: { message: string; value: string }) {
   const navigate = useNavigate();
   console.log(props.message);
   return (
@@ -31,7 +31,11 @@ function ExpsThank(props) {
       <S.Wrapper>
         <Header />
         <S.Container>
-          <img src={Hihand} alt="" style={{width : "80px", marginBottom : "40px"}}/>
+          <img
+            src={Hihand}
+            alt=""
+            style={{ width: "80px", marginBottom: "40px" }}
+          />
           <S.Title>수고하셨습니다.</S.Title>
           <S.SubTitle>
             {props.value} 감사합니다. 다음에 또 이용해주세요.
