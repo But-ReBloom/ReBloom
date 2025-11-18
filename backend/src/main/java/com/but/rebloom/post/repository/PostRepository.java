@@ -21,6 +21,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // 인기글 조회
     List<Post> findByPostType(Type type);
 
+    @Query("""
+        select p
+        from Post p
+        where p.postId = :postId
+    """)
+    Post findPostByPostId(@Param("postId") Long postId);
+
     // 특정 키워드를 제목이나 설명에 포함한 게시글 조회(최신순)
     @Query("""
         select p from Post p

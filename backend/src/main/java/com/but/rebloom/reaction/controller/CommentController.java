@@ -6,6 +6,7 @@ import com.but.rebloom.reaction.dto.request.CreateCommentRequest;
 import com.but.rebloom.reaction.dto.request.UpdateCommentRequest;
 import com.but.rebloom.reaction.dto.response.CreateCommentResponse;
 import com.but.rebloom.reaction.dto.response.FindCommentResponse;
+import com.but.rebloom.reaction.dto.response.GetCommentCountResponse;
 import com.but.rebloom.reaction.usecase.CommentUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,18 +54,18 @@ public class CommentController {
 
     // 특정 게시글의 댓글 수 조회
     @GetMapping("/post/{postId}/count")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> getCommentCount(@PathVariable Long postId) {
-        long count = commentUseCase.getCommentCount(postId);
-        return ResponseEntity.ok(ApiResponse.successAsMap("postCount", count));
+    public ResponseEntity<ApiResponse<GetCommentCountResponse>> getCommentCount(@PathVariable Long postId) {
+        Map<String, Long> response = commentUseCase.getCommentCount(postId);
+        return ResponseEntity.ok(ApiResponse.success(GetCommentCountResponse.from(response)));
     }
 
     // 댓글 수정
     @PutMapping("/{commentId}")
     public ResponseEntity<ApiResponse<CreateCommentResponse>> updateComment(
             @PathVariable Long commentId,
-            @RequestParam String userId,
-            @Valid @RequestBody UpdateCommentRequest request) {
-        Comment comment = commentUseCase.updateComment(commentId, userId, request);
+            @Valid @RequestBody UpdateCommentRequest request
+    ) {
+        Comment comment = commentUseCase.updateComment(commentId, request);
         return ResponseEntity.ok(ApiResponse.success(CreateCommentResponse.from(comment)));
     }
 
@@ -72,7 +73,8 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @PathVariable Long commentId,
-            @RequestParam String userId) {
+            @RequestParam String userId
+    ) {
         commentUseCase.deleteComment(commentId, userId);
         return ResponseEntity.ok(ApiResponse.success());
     }
