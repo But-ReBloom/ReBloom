@@ -15,7 +15,6 @@ import org.hibernate.annotations.OnDeleteAction;
 @Builder
 @Table(name = "hearts")
 public class Heart {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "h_id", nullable = false)
