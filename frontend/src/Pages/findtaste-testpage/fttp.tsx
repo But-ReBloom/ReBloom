@@ -228,6 +228,11 @@ export default function FT_TestPage() {
     const finalAverage = calculateFinalAverage();
     console.log("최종 평균 결과:", finalAverage);
 
+    // 테스팅 네비게이션 : 차후 삭제 예정
+    navigate("/test/result", {
+      state: { message: "취향테스트 완료!", type: "HobbyTest", finalAverage },
+    });
+
     // 서버 전송 payload
     const payload = {
       answers,
