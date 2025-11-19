@@ -33,6 +33,4 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
     // 관리자 승인/거절 처리 (일주일 이내)
     @Query("select c from Channel c where c.isAccepted = false and c.channelCreatedAt < :deadline")
     List<Channel> findPendingChannelsOlderThan(@Param("deadline") LocalDateTime deadline);
-
-
 }
