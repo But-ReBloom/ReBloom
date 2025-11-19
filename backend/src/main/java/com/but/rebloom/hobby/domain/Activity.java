@@ -22,10 +22,6 @@ public class Activity {
     @Column(name = "act_id", nullable = false)
     private Long activityId;
 
-    @Column(name = "fk_u_email", nullable = false, unique = true, length = 100,
-            insertable = false, updatable = false)
-    private String userEmail;
-
     @Column(name = "act_name", nullable = false, length = 50)
     private String activityName;
 

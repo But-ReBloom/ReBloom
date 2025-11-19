@@ -23,15 +23,6 @@ public class Post {
     @Column(name = "p_id", nullable = false)
     private Long postId;
 
-    @Column(name = "fk_u_email", nullable = false, insertable = false, updatable = false)
-    private String userEmail;
-
-    @Column(name = "fk_u_id", nullable = false, insertable = false, updatable = false)
-    private String userId;
-
-    @Column(name = "fk_ch_id", nullable = false, insertable = false, updatable = false)
-    private Long channelId;
-
     @Column(name = "p_title", nullable = false)
     private String postTitle;
 

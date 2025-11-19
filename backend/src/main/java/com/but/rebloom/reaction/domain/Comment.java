@@ -24,15 +24,6 @@ public class Comment {
     @Column(name = "co_id", nullable = false)
     private Long commentId;
 
-    @Column(name = "fk_u_email", nullable = false, insertable = false, updatable = false)
-    private String userEmail;
-
-    @Column(name = "fk_u_id", nullable = false, insertable = false, updatable = false)
-    private String userId;
-
-    @Column(name = "fk_p_id", nullable = false, insertable = false, updatable = false)
-    private Long postId;
-
     @Column(name = "co_content", nullable = false, length = 500)
     private String commentContent;
 
