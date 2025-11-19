@@ -55,7 +55,7 @@ export const Title = styled.div`
 `;
 
 export const ResultBox = styled.div`
-  width: 350px;
+  width: 300px;
   height: auto;
   font-size: 24px;
   font-weight: 500;
