@@ -63,6 +63,11 @@ export const ResultBox = styled.div`
   background-color: #fff;
   padding: 15px 32px;
   border-radius: 10px;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 export const ResultLeft = styled.div`
@@ -102,6 +107,11 @@ export const RecommaendBox = styled.button`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-size: 20px;
   font-weight: 400;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 export const ArrowImage = styled.button`
