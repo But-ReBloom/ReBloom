@@ -84,7 +84,9 @@ export const ResultRight = styled.div`
 `;
 
 export const Subtitle = styled.p`
+  width: 100%;
   font-size: 18px;
+  color:#555;
   font-weight: 400;
   margin-top: 10px;
 `;

@@ -17,26 +17,26 @@ export default function TestResult() {
           <S.LeftContainer>
             <S.ResultLeft>
               <S.ResultBox>
-                <S.Subtitle>사회성 : </S.Subtitle>
+                <S.Subtitle>회원님의 사회성 점수</S.Subtitle>
                 {finalAverage.social}
               </S.ResultBox>
               <S.ResultBox>
-                <S.Subtitle>학습력 : </S.Subtitle>
+                <S.Subtitle>회원님의 학습력 점수</S.Subtitle>
                 {finalAverage.learning}
               </S.ResultBox>
               <S.ResultBox>
-                <S.Subtitle>계획력 : </S.Subtitle>
+                <S.Subtitle>회원님의 계획력 점수</S.Subtitle>
                 {finalAverage.planning}
               </S.ResultBox>
             </S.ResultLeft>
 
             <S.ResultRight>
               <S.ResultBox>
-                <S.Subtitle>집중력 : </S.Subtitle>
+                <S.Subtitle>회원님의 집중력 점수</S.Subtitle>
                 {finalAverage.focus}
               </S.ResultBox>
               <S.ResultBox>
-                <S.Subtitle>창의성 : </S.Subtitle>
+                <S.Subtitle>회원님의 창의성 점수</S.Subtitle>
                 {finalAverage.creativity}
               </S.ResultBox>
             </S.ResultRight>
