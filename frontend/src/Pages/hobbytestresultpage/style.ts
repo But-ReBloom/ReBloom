@@ -95,6 +95,11 @@ export const Subtitle = styled.p`
   margin-top: 10px;
 `;
 
+export const Scoretitle = styled.p`
+  color:rgb(0, 106, 255);
+  margin: 0;
+`;
+
 export const RecommaendBox = styled.button`
   display: flex;
   align-items: center;
