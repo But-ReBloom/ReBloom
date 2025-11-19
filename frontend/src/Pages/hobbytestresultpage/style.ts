@@ -24,7 +24,6 @@ export const LeftContainer = styled.div`
   align-items: flex-start;
   gap: 20px;
   padding: 20px;
-  margin-left: none;
   border-radius: 10px;
 `;
 
@@ -86,7 +85,7 @@ export const ResultRight = styled.div`
 export const Subtitle = styled.p`
   width: 100%;
   font-size: 18px;
-  color:#555;
+  color: #555;
   font-weight: 400;
   margin-top: 10px;
 `;
@@ -107,16 +106,18 @@ export const RecommaendBox = styled.button`
 
 export const ArrowImage = styled.button`
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  margin-left: 40px;
   width: 60px;
   height: 60px;
-  background-color: #fff;
-  border: 2px solidrgb(162, 162, 162);
+  background: #fff;
+  border: 2px solid rgb(210, 210, 210);
   border-radius: 50%;
+  cursor: pointer;
   transition: all 0.3s ease;
+
   &:hover {
-    cursor: pointer;
-    transform: scale(1.1);
+    transform: scale(1.2);
   }
 `;
