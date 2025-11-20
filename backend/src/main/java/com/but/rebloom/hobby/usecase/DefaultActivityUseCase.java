@@ -33,7 +33,7 @@ public class DefaultActivityUseCase {
     public Activity findActivityByActivityName(String activityName) {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
-        return activityRepository.findByUserEmailAndActivityName(activityName, userEmail)
+        return activityRepository.findByUser_UserEmailAndActivityName(activityName, userEmail)
                 .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 
@@ -41,7 +41,7 @@ public class DefaultActivityUseCase {
     public List<Activity> findAllActivity() {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
-        return activityRepository.findByUserEmail(userEmail);
+        return activityRepository.findByUser_UserEmail(userEmail);
     }
 
     // Activity 조회 - ActivityRecent(ASC)
@@ -49,7 +49,7 @@ public class DefaultActivityUseCase {
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 
-        return activityRepository.findByUserEmailOrderByActivityRecentAsc(userEmail);
+        return activityRepository.findByUser_UserEmailOrderByActivityRecentAsc(userEmail);
     }
 
     // Activity 조회 - ActivityRecent(DESC)
@@ -57,7 +57,7 @@ public class DefaultActivityUseCase {
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 
-        return activityRepository.findByUserEmailOrderByActivityRecentDesc(userEmail);
+        return activityRepository.findByUser_UserEmailOrderByActivityRecentDesc(userEmail);
     }
 
     // Activity 추가
@@ -85,7 +85,6 @@ public class DefaultActivityUseCase {
                 .activityName(activityName)
                 .activityStart(activityStart)
                 .activityRecent(activityRecent)
-                .userEmail(userEmail)
                 .build();
 
         // 활동 추가

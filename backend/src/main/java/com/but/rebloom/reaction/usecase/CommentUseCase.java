@@ -85,17 +85,17 @@ public class CommentUseCase {
 
     // 특정 게시글의 댓글 목록 조회 (최신순)
     public List<Comment> getCommentsByPost(Long postId) {
-        return commentRepository.findByPostIdOrderByCommentCreatedAtDesc(postId);
+        return commentRepository.findByPost_PostIdOrderByCommentCreatedAtDesc(postId);
     }
 
     // 특정 유저가 작성한 댓글 목록 조회 (최신순)
     public List<Comment> getCommentsByUser(String userId) {
-        return commentRepository.findByUserIdOrderByCommentCreatedAtDesc(userId);
+        return commentRepository.findByUser_UserIdOrderByCommentCreatedAtDesc(userId);
     }
 
     // 특정 게시글의 댓글 수 조회
     public Map<String, Long> getCommentCount(Long postId) {
-        Long commentCount = commentRepository.countByPostId(postId);
+        Long commentCount = commentRepository.countByPost_PostId(postId);
 
         return Map.of(postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음"))

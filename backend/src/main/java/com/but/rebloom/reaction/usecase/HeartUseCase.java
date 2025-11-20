@@ -40,7 +40,7 @@ public class HeartUseCase {
                 .orElseThrow(() -> new PostNotFoundException("Post not found"));
 
         // 이미 하트를 눌렀는지 확인
-        if (heartRepository.existsByUserIdAndPostId(request.getUserId(), request.getPostId())) {
+        if (heartRepository.existsByUser_UserIdAndPost_PostId(request.getUserId(), request.getPostId())) {
             throw new AlreadyUsingHeartException("already heart exists");
         }
 
@@ -69,12 +69,12 @@ public class HeartUseCase {
 
     // 특정 게시글의 하트 목록 조회
     public List<Heart> getHeartsByPost(Long postId) {
-        return heartRepository.findByPostId(postId);
+        return heartRepository.findByPost_PostId(postId);
     }
 
     // 특정 유저가 누른 하트 목록 조회
     public List<Heart> getHeartsByUser(String userId) {
-        return heartRepository.findByUserId(userId);
+        return heartRepository.findByUser_UserId(userId);
     }
 
     // 특정 게시글의 하트 수 조회
@@ -83,13 +83,13 @@ public class HeartUseCase {
                 postRepository.findByPostId(postId)
                         .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음"))
                         .getPostTitle()
-                , heartRepository.countByPostId(postId)
+                , heartRepository.countByPost_PostId(postId)
         );
     }
 
     // 특정 유저가 특정 게시글에 하트를 눌렀는지 확인
     public Map<String, Boolean> checkHeartExists(CheckHeartExistsRequest request) {
-        boolean isSuccess = heartRepository.existsByUserIdAndPostId(request.getUserId(), request.getPostId());
+        boolean isSuccess = heartRepository.existsByUser_UserIdAndPost_PostId(request.getUserId(), request.getPostId());
         String postTitle = postRepository.findByPostId(request.getPostId())
                 .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음"))
                 .getPostTitle();
@@ -100,10 +100,10 @@ public class HeartUseCase {
     @Transactional
     public void deleteHeart(DeleteHeartRequest request) {
         // 하트가 존재하는지 확인
-        if (!heartRepository.existsByUserIdAndPostId(request.getUserId(), request.getPostId())) {
+        if (!heartRepository.existsByUser_UserIdAndPost_PostId(request.getUserId(), request.getPostId())) {
             throw new AlreadyUsingHeartException("하트가 조회되지 않음");
         }
 
-        heartRepository.deleteByUserIdAndPostId(request.getUserId(), request.getPostId());
+        heartRepository.deleteByUser_UserIdAndPost_PostId(request.getUserId(), request.getPostId());
     }
 }

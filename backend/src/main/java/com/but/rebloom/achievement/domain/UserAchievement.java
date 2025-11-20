@@ -23,12 +23,6 @@ public class UserAchievement {
     @Column(name = "fk_ach_id", nullable = false, insertable = false, updatable = false)
     private Long achievementId;
 
-    @Column(name = "fk_u_id", nullable = false)
-    private String userId;
-
-    @Column(name = "fk_ach_title", nullable = false)
-    private String achievementTitle;
-
     @Column(name = "uach_progress", nullable = false)
     private Float userAchievementProgress;
 

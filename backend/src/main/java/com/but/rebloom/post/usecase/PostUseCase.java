@@ -74,12 +74,12 @@ public class PostUseCase {
 
     // 특정 채널의 게시물 목록 조회(최신순)
     public List<Post> getPostsByChannel(Long channelId) {
-        return postRepository.findByChannelIdOrderByPostCreatedAtDesc(channelId);
+        return postRepository.findByChannel_ChannelIdOrderByPostCreatedAtDesc(channelId);
     }
 
     // 특정 유저의 게시물 목록 조회(최신순)
     public List<Post> getPostsByUser(String userId) {
-        return postRepository.findByUserIdOrderByPostCreatedAtDesc(userId);
+        return postRepository.findByUser_UserIdOrderByPostCreatedAtDesc(userId);
     }
 
     // 인기글 조회

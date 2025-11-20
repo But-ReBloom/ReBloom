@@ -27,7 +27,7 @@ public class GetUserAchievementResponse {
         Achievement achievement = userAchievement.getAchievement();
 
         return GetUserAchievementResponse.builder()
-                .userAchievementTitle(userAchievement.getAchievementTitle())
+                .userAchievementTitle(userAchievement.getAchievement().getAchievementTitle())
                 .userAchievementDescription(achievement.getAchievementDescription())
                 .userAchievementRewardPoint(achievement.getAchievementRewardPoint())
                 .userAchievementTierPoint(achievement.getAchievementRewardTierPoint())

@@ -24,7 +24,7 @@ public class AddActivityResponse {
                 .activityName(activity.getActivityName())
                 .activityStart(activity.getActivityStart())
                 .activityRecent(activity.getActivityRecent())
-                .userEmail(activity.getUserEmail())
+                .userEmail(activity.getUser().getUserEmail())
                 .build();
     }
 }

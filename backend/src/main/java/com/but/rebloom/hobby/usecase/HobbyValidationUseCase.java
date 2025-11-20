@@ -72,7 +72,7 @@ public class HobbyValidationUseCase {
 
     // 해당 유저가 하고 있지 않은 활동인지 확인
     public void checkExistActivityByEmailAndActivityName(String email, String activityName) {
-        if (activityRepository.findByUserEmailAndActivityName(email, activityName).isPresent()) {
+        if (activityRepository.findByUser_UserEmailAndActivityName(email, activityName).isPresent()) {
             throw new AlreadyUsingActivityException("이미 활동중인 활동");
         }
     }

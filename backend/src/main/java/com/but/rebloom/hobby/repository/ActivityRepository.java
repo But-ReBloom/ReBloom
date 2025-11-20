@@ -13,14 +13,14 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     Optional<Activity> findByActivityId(Long activityId);
 
     // (activityEmail + userName)으로 객체 조회
-    Optional<Activity> findByUserEmailAndActivityName(String userEmail, String activityName);
+    Optional<Activity> findByUser_UserEmailAndActivityName(String userEmail, String activityName);
 
     // userEmail로 객체 조회
-    List<Activity> findByUserEmail(String userEmail);
+    List<Activity> findByUser_UserEmail(String userEmail);
 
     // activityRecent를 기준으로 오름차순 정렬하여 조회
-    List<Activity> findByUserEmailOrderByActivityRecentAsc(String userEmail);
+    List<Activity> findByUser_UserEmailOrderByActivityRecentAsc(String userEmail);
 
     // activityRecent를 기준으로 내림차순 정렬하여 조회
-    List<Activity> findByUserEmailOrderByActivityRecentDesc(String userEmail);
+    List<Activity> findByUser_UserEmailOrderByActivityRecentDesc(String userEmail);
 }

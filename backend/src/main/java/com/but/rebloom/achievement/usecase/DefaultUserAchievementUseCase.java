@@ -35,7 +35,7 @@ public class DefaultUserAchievementUseCase {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
         String userId = currentUser.getUserId();
 
-        return userAchievementRepository.findAllByUserId(userId);
+        return userAchievementRepository.findAllByUser_UserId(userId);
     }
 
     // 전체 유저 업적 조회 - 유저 이메일
@@ -63,9 +63,7 @@ public class DefaultUserAchievementUseCase {
         List<UserAchievement> initialAchievements = allAchievements.stream()
                 .map(a -> UserAchievement.builder()
                         .userEmail(userEmail)
-                        .userId(userId)
                         .achievementId(a.getAchievementId())
-                        .achievementTitle(a.getAchievementTitle())
                         .userAchievementProgress(0f)
                         .isSuccess(false)
                         .build())
@@ -103,7 +101,7 @@ public class DefaultUserAchievementUseCase {
     @Transactional
     public void updateUserAchievementToSuccess(String userEmail, String achievementTitle) {
         UserAchievement userAchievement = userAchievementRepository
-                .findByUserEmailAndAchievementTitle(userEmail, achievementTitle)
+                .findByUserEmailAndAchievement_AchievementTitle(userEmail, achievementTitle)
                 .orElseThrow(() -> new UserAchievementNotFoundException("유저 업적이 조회되지 않음"));
 
         // 이미 성공했으면 패스
@@ -131,7 +129,7 @@ public class DefaultUserAchievementUseCase {
     @Transactional
     public void updateUserAchievementProgress(String userEmail, String achievementTitle, float progress) {
         UserAchievement userAchievement = userAchievementRepository
-                .findByUserEmailAndAchievementTitle(userEmail, achievementTitle)
+                .findByUserEmailAndAchievement_AchievementTitle(userEmail, achievementTitle)
                 .orElseThrow(() -> new UserAchievementNotFoundException("유저 업적이 조회되지 않음"));
 
         // 이미 성공했으면 패스
