@@ -22,7 +22,7 @@ public class GoogleUserInfoResponse {
 
     public static GoogleUserInfoResponse from(User user, String jwt) {
         return GoogleUserInfoResponse.builder()
-                .id(user.getUserId().toString())
+                .id(user.getUserId())
                 .email(user.getUserEmail())
                 .name(user.getUserName())
                 .accessToken(jwt)
