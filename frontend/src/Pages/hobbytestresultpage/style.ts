@@ -55,7 +55,7 @@ export const Title = styled.div`
 `;
 
 export const ResultBox = styled.div`
-  width: 300px;
+  width: 310px;
   height: auto;
   font-size: 24px;
   font-weight: 500;
@@ -96,7 +96,8 @@ export const Subtitle = styled.p`
 `;
 
 export const Scoretitle = styled.p`
-  color:rgb(0, 106, 255);
+  text-align: end;
+  color: rgb(0, 106, 255);
   margin: 0;
 `;
 
