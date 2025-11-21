@@ -2,7 +2,7 @@ name: CI/CD Docker Deploy
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "feature/docker-backend" ] # 작업중인 브랜치 포함
 
 jobs:
   deploy:
@@ -13,11 +13,18 @@ jobs:
 
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@v1.0.0
+        env:
+          # [중요] 여기서 Secrets를 변수로 꺼내줘야 합니다!
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           port: 22
+          # 위에서 만든 변수들을 가져간다고 명시
           envs: GMAIL_PASSWORD, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, JWT_SECRET
 
           script: |
@@ -34,5 +41,4 @@ jobs:
             
             docker compose down
             docker compose up -d --build
-            
             docker image prune -f
