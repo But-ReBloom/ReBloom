@@ -1,5 +1,6 @@
 package com.but.rebloom.hobby.usecase;
 
+import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.hobby.domain.HobbyScore;
 import com.but.rebloom.hobby.domain.HobbyWeight;
 import com.but.rebloom.hobby.domain.InitialTest;
@@ -23,6 +24,7 @@ public class HobbyTestUseCase {
     public List<HobbyScore> findUserHobbies(UserAnswerRequest answers) {
         List<HobbyWeight> hobbies = hobbyWeightRepository.findAllHobbyWeight();
 
+        // 유저 점수
         double[] userScore = {
                 answers.getSocialScore(),
                 answers.getLearningScore(),
@@ -31,6 +33,7 @@ public class HobbyTestUseCase {
                 answers.getCreativityScore()
         };
 
+        // 카테고리별 존재하는 인접 값과의 거리
         double[] userClosestScore = {
                 Math.abs(hobbyWeightRepository.findByHobbyWeightSocial(userScore[0])
                         .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"))
@@ -49,6 +52,7 @@ public class HobbyTestUseCase {
                         .getHobbyWeightCreativity() - userScore[4])
         };
 
+        // 정렬은 오버헤드 때문에 조건으로 처리
         double minUserClosestScore = userScore[0];
         int index = 0;
         if (minUserClosestScore > userClosestScore[1]) {
@@ -83,23 +87,52 @@ public class HobbyTestUseCase {
                 result = hobbyWeightRepository.findAllByHobbyWeightCreativity(userScore[4]);
                 break;
             default:
-                throw new
+                throw new UserNotFoundException("잘못된 index값");
         }
 
-        return hobbies.stream()
-                .map(h -> new HobbyScore(h, averageAbsoluteDistance(userScore, h)))
-                .sorted(Comparator.comparingDouble(HobbyScore::getDistance))
-                .limit(3)
-                .toList();
+        HobbyScore hobbyScore1 = averageAbsoluteDistance(userScore, result.get(0));
+        HobbyScore hobbyScore2 = averageAbsoluteDistance(userScore, result.get(1));
+        HobbyScore hobbyScore3 = averageAbsoluteDistance(userScore, result.get(2));
+
+        HobbyScore min = hobbyScore1, mid = hobbyScore2, max = hobbyScore3;
+
+        // 최소값 찾기
+        if (mid.getDistance() < min.getDistance()) {
+            HobbyScore tmp = min;
+            min = mid;
+            mid = tmp;
+        }
+        if (max.getDistance() < min.getDistance()) {
+            HobbyScore tmp = min;
+            min = max;
+            max = tmp;
+        }
+
+        // mid와 max 비교
+        if (max.getDistance() < mid.getDistance()) {
+            HobbyScore tmp = mid;
+            mid = max;
+            max = tmp;
+        }
+
+        // 결과
+        HobbyScore hobbyScoreResult1 = min;
+        HobbyScore hobbyScoreResult2 = mid;
+        HobbyScore hobbyScoreResult3 = max;
+
+        return List.of(hobbyScoreResult1, hobbyScoreResult2, hobbyScoreResult3);
     }
 
     // 평균 거리 탐색
-    private double averageAbsoluteDistance(double[] userVector, HobbyWeight hobby) {
-        return (Math.abs(hobby.getHobbyWeightSocial() - userVector[0]) +
-                Math.abs(hobby.getHobbyWeightLearning() - userVector[1]) +
-                Math.abs(hobby.getHobbyWeightPlanning() - userVector[2]) +
-                Math.abs(hobby.getHobbyWeightFocus() - userVector[3]) +
-                Math.abs(hobby.getHobbyWeightCreativity() - userVector[4])) / 5.0;
+    private HobbyScore averageAbsoluteDistance(double[] userVector, HobbyWeight hobby) {
+        return HobbyScore.builder()
+                .hobbyWeight(hobby)
+                .distance((Math.abs(hobby.getHobbyWeightSocial() - userVector[0]) +
+                        Math.abs(hobby.getHobbyWeightLearning() - userVector[1]) +
+                        Math.abs(hobby.getHobbyWeightPlanning() - userVector[2]) +
+                        Math.abs(hobby.getHobbyWeightFocus() - userVector[3]) +
+                        Math.abs(hobby.getHobbyWeightCreativity() - userVector[4])) / 5.0)
+                .build();
     }
 
     // 질문 반환
