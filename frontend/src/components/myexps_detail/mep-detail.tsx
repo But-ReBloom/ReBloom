@@ -33,7 +33,7 @@ export default function MepDetail({ setStep, exp }) {
 
           <S.QuestionBox>
             <S.Boxing>
-              <S.Title>활동명: {exp.data.activityName}</S.Title>
+              <S.Title>{exp.data.activityName} 활동에 대해 만족하시나요?</S.Title>
               <QuestionBox />
             </S.Boxing>
 
