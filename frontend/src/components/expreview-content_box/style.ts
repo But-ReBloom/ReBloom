@@ -9,27 +9,35 @@ export const Content = styled.div`
   height: 100%;
 `;
 
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3%;
+`;
+
 export const Hihand = styled.img`
   width: 80px;
 `;
 
 export const Arrow = styled.img`
-    width: 28px;
+  width: 28px;
   color: white;
 `;
 
 export const Thankyou = styled.h1`
-  margin-top: 5%;
+  margin-top: 15%;
   font-weight: 700;
 `;
 
 export const Announce = styled.h3`
-  font-weight: 700;
+  margin: 0;
+  font-weight: 500;
   color: #a3a3a3;
 `;
 
 export const StartBtn = styled.button`
-  margin-top: 5%;
+  margin-top: 15%;
   display: flex;
   align-items: center;
   justify-content: center;
