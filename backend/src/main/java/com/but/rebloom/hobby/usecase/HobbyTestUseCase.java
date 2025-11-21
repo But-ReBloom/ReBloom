@@ -65,6 +65,27 @@ public class HobbyTestUseCase {
             index = 4;
         }
 
+        List<HobbyWeight> result;
+        switch (index) {
+            case 0:
+                result = hobbyWeightRepository.findAllByHobbyWeightSocial(userScore[0]);
+                break;
+            case 1:
+                result = hobbyWeightRepository.findAllByHobbyWeightLearning(userScore[1]);
+                break;
+            case 2:
+                result = hobbyWeightRepository.findAllByHobbyWeightPlanning(userScore[2]);
+                break;
+            case 3:
+                result = hobbyWeightRepository.findAllByHobbyWeightFocus(userScore[3]);
+                break;
+            case 4:
+                result = hobbyWeightRepository.findAllByHobbyWeightCreativity(userScore[4]);
+                break;
+            default:
+                throw new
+        }
+
         return hobbies.stream()
                 .map(h -> new HobbyScore(h, averageAbsoluteDistance(userScore, h)))
                 .sorted(Comparator.comparingDouble(HobbyScore::getDistance))

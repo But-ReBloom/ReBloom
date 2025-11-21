@@ -67,4 +67,15 @@ public class GlobalExceptionHandler {
                         "message", e.getMessage()
                 ));
     }
+
+    @ExceptionHandler(ServerLogicException.class)
+    public ResponseEntity<Object> handleServerLogic(ServerLogicException e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)   // 500
+                .body(Map.of(
+                        "success", false,
+                        "error_name", "ServerLogicException",
+                        "message", e.getMessage()
+                ));
+    }
 }

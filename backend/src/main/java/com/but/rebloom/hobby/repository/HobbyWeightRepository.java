@@ -177,7 +177,7 @@ public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long> 
         order by abs(hobbyWeightSocial - :h_w_social) asc
         limit 3
     """, nativeQuery = true)
-    Optional<HobbyWeight> findAllByHobbyWeightSocial(@Param("h_w_social") double hobbyWeightSocial);
+    List<HobbyWeight> findAllByHobbyWeightSocial(@Param("h_w_social") double hobbyWeightSocial);
 
     // 취미 가중치 조회 - Learning 기준
     @Query(value = """
@@ -203,7 +203,7 @@ public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long> 
         order by abs(hobbyWeightLearning - :h_w_learning) asc
         limit 3
     """, nativeQuery = true)
-    Optional<HobbyWeight> findAllByHobbyWeightLearning(@Param("h_w_learning") double hobbyWeightLearning);
+    List<HobbyWeight> findAllByHobbyWeightLearning(@Param("h_w_learning") double hobbyWeightLearning);
 
     // 취미 가중치 조회 - Planning 기준
     @Query(value = """
@@ -229,7 +229,7 @@ public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long> 
         order by abs(hobbyWeightPlanning - :h_w_planning) asc
         limit 3
     """, nativeQuery = true)
-    Optional<HobbyWeight> findAllByHobbyWeightPlanning(@Param("h_w_planning") double hobbyWeightPlanning);
+    List<HobbyWeight> findAllByHobbyWeightPlanning(@Param("h_w_planning") double hobbyWeightPlanning);
 
     // 취미 가중치 조회 - Focus 기준
     @Query(value = """
@@ -255,7 +255,7 @@ public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long> 
         order by abs(hobbyWeightFocus - :h_w_focus) asc
         limit 3
     """, nativeQuery = true)
-    Optional<HobbyWeight> findAllByHobbyWeightFocus(@Param("h_w_focus") double hobbyWeightFocus);
+    List<HobbyWeight> findAllByHobbyWeightFocus(@Param("h_w_focus") double hobbyWeightFocus);
 
     // 취미 가중치 조회 - Creativity 기준
     @Query(value = """
@@ -281,5 +281,5 @@ public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long> 
         order by abs(hobbyWeightCreativity - :h_w_creativity) asc
         limit 3
     """, nativeQuery = true)
-    Optional<HobbyWeight> findAllByHobbyWeightCreativity(@Param("h_w_creativity") double hobbyWeightCreativity);
+    List<HobbyWeight> findAllByHobbyWeightCreativity(@Param("h_w_creativity") double hobbyWeightCreativity);
 }
