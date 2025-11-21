@@ -4,7 +4,6 @@ import lombok.*;
 
 @Getter
 @RequiredArgsConstructor
-@AllArgsConstructor
 @Builder
 public class HobbyScore {
     private final HobbyWeight hobbyWeight;
