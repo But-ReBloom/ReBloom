@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
-export default function MyexpsDetail({ setStep }) {
+export default function MepDetail({ setStep, exp }) {
   const navigate = useNavigate();
   const [ReviewData, setWrittenData] = useState("");
 
@@ -26,16 +26,14 @@ export default function MyexpsDetail({ setStep }) {
     <>
       <S.Wrapper>
         <S.Container>
-          {/* ⬅ 여기 클릭하면 index 화면으로 돌아감 */}
+          {/* 이전 버튼 */}
           <S.Arrow onClick={() => setStep("index")}>
             <img src={BlackArrowImg} alt="이전으로 가는 화살표" />
           </S.Arrow>
 
           <S.QuestionBox>
             <S.Boxing>
-              <S.Title>
-                당신은 활동 리뷰에 거짓없고, 사실만 작성할 것입니까?
-              </S.Title>
+              <S.Title>활동명: {exp.data.activityName}</S.Title>
               <QuestionBox />
             </S.Boxing>
 
@@ -44,19 +42,18 @@ export default function MyexpsDetail({ setStep }) {
                 <S.Title style={{ marginLeft: "12px", marginBottom: "12px" }}>
                   이번 활동에 대한 리뷰를 남겨주십시오.
                 </S.Title>
-
                 <S.TextingBox
                   placeholder="최소 100자 이상으로 작성해주십시오."
                   value={ReviewData}
                   onChange={(e) => setWrittenData(e.target.value)}
-                ></S.TextingBox>
+                />
               </S.DetailPlace>
 
               <S.DetailPlace>
                 <S.Title style={{ marginLeft: "12px", marginBottom: "12px" }}>
                   건의 사항
                 </S.Title>
-                <S.TextingBox placeholder="저희 사이트에 건의 사항이 있으시면 남겨주십시오."></S.TextingBox>
+                <S.TextingBox placeholder="저희 사이트에 건의 사항이 있으시면 남겨주십시오." />
               </S.DetailPlace>
             </S.TextPlace>
           </S.QuestionBox>
