@@ -9,7 +9,7 @@ export default function MepCb() {
   return (
     <>
       {step === "index" && <Index setStep={setStep} />}
-      {step === "detail" && <MepDetail />}
+      {step === "detail" && <MepDetail setStep={setStep} />}
     </>
   );
 }
