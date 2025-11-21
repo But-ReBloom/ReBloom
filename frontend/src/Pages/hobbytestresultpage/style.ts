@@ -12,5 +12,128 @@ export const Wrrapper = styled.div`
 
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 0 100px;
+`;
+
+export const LeftContainer = styled.div`
+  width: 300px;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 10px;
+`;
+
+export const RightContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+`;
+
+export const SemiContainer1 = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  gap: 20px;
+`;
+
+export const SemiContainer2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
+  margin-left: 80px;
+`;
+
+export const Title = styled.div`
+  font-size: 32px;
+  font-weight: 700;
+`;
+
+export const ResultBox = styled.div`
+  width: 310px;
+  height: auto;
+  font-size: 24px;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding: 15px 32px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+export const ResultLeft = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+`;
+
+export const ResultRight = styled.div`
+  height: 364px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+`;
+
+export const Subtitle = styled.p`
+  width: 100%;
+  font-size: 18px;
+  color: #555;
+  font-weight: 400;
+  margin-top: 10px;
+`;
+
+export const Scoretitle = styled.p`
+  text-align: end;
+  color: rgb(0, 106, 255);
+  margin: 0;
+`;
+
+export const RecommaendBox = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 400px;
+  height: 150px;
+  border: none;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 20px;
+  font-weight: 400;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+export const ArrowImage = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 40px;
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border: 2px solid rgb(210, 210, 210);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
 `;

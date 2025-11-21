@@ -55,7 +55,7 @@ export default function MyexpsDetail() {
           </S.QuestionBox>
         </S.Container>
         <S.Arrows onClick={handleSubmit}>
-          <img src={BlackArrowImg} alt="이전으로 가는 화살표" />
+          <img src={BlackArrowImg} alt="" />
         </S.Arrows>
       </S.Wrapper>
       <ToastContainer position="top-right" autoClose={2000} />
