@@ -1,4 +1,4 @@
-package com.but.rebloom.channel.exception;
+package com.but.rebloom.reaction.exception;
 
 import com.but.rebloom.common.exception.NotFoundException;
 
