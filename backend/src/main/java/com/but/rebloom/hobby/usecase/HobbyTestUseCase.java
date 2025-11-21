@@ -4,6 +4,7 @@ import com.but.rebloom.hobby.domain.HobbyScore;
 import com.but.rebloom.hobby.domain.HobbyWeight;
 import com.but.rebloom.hobby.domain.InitialTest;
 import com.but.rebloom.hobby.dto.request.UserAnswerRequest;
+import com.but.rebloom.hobby.exception.HobbyNotFoundException;
 import com.but.rebloom.hobby.repository.HobbyWeightRepository;
 import com.but.rebloom.hobby.repository.InitialTestRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,40 @@ public class HobbyTestUseCase {
                 answers.getFocusScore(),
                 answers.getCreativityScore()
         };
+
+        double[] userClosestScore = {
+                Math.abs(hobbyWeightRepository.findByHobbyWeightSocial(userScore[0])
+                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"))
+                        .getHobbyWeightSocial() - userScore[0]),
+                Math.abs(hobbyWeightRepository.findByHobbyWeightLearning(userScore[1])
+                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"))
+                        .getHobbyWeightLearning() - userScore[1]),
+                Math.abs(hobbyWeightRepository.findByHobbyWeightPlanning(userScore[2])
+                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"))
+                        .getHobbyWeightPlanning() - userScore[2]),
+                Math.abs(hobbyWeightRepository.findByHobbyWeightFocus(userScore[3])
+                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"))
+                        .getHobbyWeightFocus() - userScore[3]),
+                Math.abs(hobbyWeightRepository.findByHobbyWeightCreativity(userScore[4])
+                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"))
+                        .getHobbyWeightCreativity() - userScore[4])
+        };
+
+        double minUserClosestScore = userScore[0];
+        int index = 0;
+        if (minUserClosestScore > userClosestScore[1]) {
+            minUserClosestScore = userClosestScore[1];
+            index = 1;
+        } else if (minUserClosestScore < userClosestScore[2]) {
+            minUserClosestScore = userClosestScore[2];
+            index = 2;
+        } else if (minUserClosestScore < userClosestScore[3]) {
+            minUserClosestScore = userClosestScore[3];
+            index = 3;
+        } else if (minUserClosestScore < userClosestScore[4]) {
+            minUserClosestScore = userClosestScore[4];
+            index = 4;
+        }
 
         return hobbies.stream()
                 .map(h -> new HobbyScore(h, averageAbsoluteDistance(userScore, h)))
