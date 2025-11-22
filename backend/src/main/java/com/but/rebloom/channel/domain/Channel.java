@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "channels")
 public class Channel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ch_id")
@@ -38,6 +37,15 @@ public class Channel {
 
     @Column(name = "ch_is_accepted", nullable = false)
     private Boolean isAccepted = false;
+
+    @Column(name = "ch_lk_hobby_1", nullable = false)
+    private Long ChannelLinkedHobby1;
+
+    @Column(name = "ch_lk_hobby_2", nullable = true)
+    private Long ChannelLinkedHobby2;
+
+    @Column(name = "ch_lk_hobby_3", nullable = true)
+    private Long ChannelLinkedHobby3;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email")
