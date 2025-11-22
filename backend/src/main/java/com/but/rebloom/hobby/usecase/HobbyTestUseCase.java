@@ -58,13 +58,13 @@ public class HobbyTestUseCase {
         if (minUserClosestScore > userClosestScore[1]) {
             minUserClosestScore = userClosestScore[1];
             index = 1;
-        } else if (minUserClosestScore < userClosestScore[2]) {
+        } if (minUserClosestScore > userClosestScore[2]) {
             minUserClosestScore = userClosestScore[2];
             index = 2;
-        } else if (minUserClosestScore < userClosestScore[3]) {
+        } if (minUserClosestScore > userClosestScore[3]) {
             minUserClosestScore = userClosestScore[3];
             index = 3;
-        } else if (minUserClosestScore < userClosestScore[4]) {
+        } if (minUserClosestScore > userClosestScore[4]) {
             minUserClosestScore = userClosestScore[4];
             index = 4;
         }
