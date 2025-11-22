@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long> {
+public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long>, CustomHobbyWeightRepository {
     // 취미 가중치 조회 - 전체
     @Query("""
         select distinct hw
@@ -22,6 +22,36 @@ public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long> 
         )
     """)
     List<HobbyWeight> findAllHobbyWeight();
+
+
+    @Query(value = """
+        with candidates as (
+            (
+                select *
+                from hobbies
+                where :category >= :category_value
+                order by :category asc
+                limit :limit
+            )
+            union all
+            (
+                select *
+                from hobbies
+                where :category < :category_value
+                order by :category desc
+                limit :limit
+            )
+        )
+        select *
+        from candidates
+        order by abs(:category - :category_value) asc
+        limit :limit
+    """, nativeQuery = true)
+    Optional<HobbyWeight> findByHobbyWeightCategoryAndLimit(
+            @Param("category") String category,
+            @Param("category_value") double hobbyWeightSocial,
+            @Param("limit") int limit
+    );
 
     // 취미 가중치 조회 - Social 기준
     @Query(value = """

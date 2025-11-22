@@ -22,8 +22,6 @@ public class HobbyTestUseCase {
 
     // 결과에 따른 취미 탐색
     public List<HobbyScore> findUserHobbies(UserAnswerRequest answers) {
-        List<HobbyWeight> hobbies = hobbyWeightRepository.findAllHobbyWeight();
-
         // 유저 점수
         double[] userScore = {
                 answers.getSocialScore(),
@@ -35,20 +33,25 @@ public class HobbyTestUseCase {
 
         // 카테고리별 존재하는 인접 값과의 거리
         double[] userClosestScore = {
-                Math.abs(hobbyWeightRepository.findByHobbyWeightSocial(userScore[0])
-                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"))
+                Math.abs(hobbyWeightRepository
+                        .findByCategoryAndLimit("h_w_social", userScore[0], 1)
+                                .getFirst()
                         .getHobbyWeightSocial() - userScore[0]),
-                Math.abs(hobbyWeightRepository.findByHobbyWeightLearning(userScore[1])
-                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"))
+                Math.abs(hobbyWeightRepository
+                        .findByCategoryAndLimit("h_w_learning", userScore[1], 1)
+                        .getFirst()
                         .getHobbyWeightLearning() - userScore[1]),
-                Math.abs(hobbyWeightRepository.findByHobbyWeightPlanning(userScore[2])
-                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"))
+                Math.abs(hobbyWeightRepository
+                        .findByCategoryAndLimit("h_w_planning", userScore[2], 1)
+                        .getFirst()
                         .getHobbyWeightPlanning() - userScore[2]),
-                Math.abs(hobbyWeightRepository.findByHobbyWeightFocus(userScore[3])
-                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"))
+                Math.abs(hobbyWeightRepository
+                        .findByCategoryAndLimit("h_w_focus", userScore[3], 1)
+                        .getFirst()
                         .getHobbyWeightFocus() - userScore[3]),
-                Math.abs(hobbyWeightRepository.findByHobbyWeightCreativity(userScore[4])
-                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"))
+                Math.abs(hobbyWeightRepository
+                        .findByCategoryAndLimit("h_w_creativity", userScore[4], 1)
+                        .getFirst()
                         .getHobbyWeightCreativity() - userScore[4])
         };
 
@@ -72,19 +75,19 @@ public class HobbyTestUseCase {
         List<HobbyWeight> result;
         switch (index) {
             case 0:
-                result = hobbyWeightRepository.findAllByHobbyWeightSocial(userScore[0]);
+                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_social", userScore[0], 3);
                 break;
             case 1:
-                result = hobbyWeightRepository.findAllByHobbyWeightLearning(userScore[1]);
+                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_learning", userScore[1], 3);
                 break;
             case 2:
-                result = hobbyWeightRepository.findAllByHobbyWeightPlanning(userScore[2]);
+                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_planning", userScore[2], 3);
                 break;
             case 3:
-                result = hobbyWeightRepository.findAllByHobbyWeightFocus(userScore[3]);
+                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_focus", userScore[3], 3);
                 break;
             case 4:
-                result = hobbyWeightRepository.findAllByHobbyWeightCreativity(userScore[4]);
+                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_creativity", userScore[4], 3);
                 break;
             default:
                 throw new UserNotFoundException("잘못된 index값");
