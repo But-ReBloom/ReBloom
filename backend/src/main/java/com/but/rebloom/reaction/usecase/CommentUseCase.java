@@ -10,7 +10,7 @@ import com.but.rebloom.reaction.domain.Comment;
 import com.but.rebloom.reaction.dto.request.CommentNotificationRequest;
 import com.but.rebloom.reaction.dto.request.CreateCommentRequest;
 import com.but.rebloom.reaction.dto.request.UpdateCommentRequest;
-import com.but.rebloom.channel.exception.CommentNotFoundException;
+import com.but.rebloom.reaction.exception.CommentNotFoundException;
 import com.but.rebloom.channel.exception.ForbiddenAccessException;
 import com.but.rebloom.channel.exception.PostNotFoundException;
 import com.but.rebloom.reaction.repository.CommentRepository;

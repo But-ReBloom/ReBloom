@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long> {
+public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long>, CustomHobbyWeightRepository {
     // 취미 가중치 조회 - 전체
     @Query("""
         select distinct hw

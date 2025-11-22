@@ -1,9 +1,11 @@
 package com.but.rebloom.hobby.usecase;
 
+import com.but.rebloom.auth.exception.UserNotFoundException;
 import com.but.rebloom.hobby.domain.HobbyScore;
 import com.but.rebloom.hobby.domain.HobbyWeight;
 import com.but.rebloom.hobby.domain.InitialTest;
 import com.but.rebloom.hobby.dto.request.UserAnswerRequest;
+import com.but.rebloom.hobby.exception.HobbyNotFoundException;
 import com.but.rebloom.hobby.repository.HobbyWeightRepository;
 import com.but.rebloom.hobby.repository.InitialTestRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +22,7 @@ public class HobbyTestUseCase {
 
     // 결과에 따른 취미 탐색
     public List<HobbyScore> findUserHobbies(UserAnswerRequest answers) {
-        List<HobbyWeight> hobbies = hobbyWeightRepository.findAllHobbyWeight();
-
+        // 유저 점수
         double[] userScore = {
                 answers.getSocialScore(),
                 answers.getLearningScore(),
@@ -30,20 +31,111 @@ public class HobbyTestUseCase {
                 answers.getCreativityScore()
         };
 
-        return hobbies.stream()
-                .map(h -> new HobbyScore(h, averageAbsoluteDistance(userScore, h)))
-                .sorted(Comparator.comparingDouble(HobbyScore::getDistance))
-                .limit(3)
-                .toList();
+        // 카테고리별 존재하는 인접 값과의 거리
+        double[] userClosestScore = {
+                Math.abs(hobbyWeightRepository
+                        .findByCategoryAndLimit("h_w_social", userScore[0], 1)
+                                .getFirst()
+                        .getHobbyWeightSocial() - userScore[0]),
+                Math.abs(hobbyWeightRepository
+                        .findByCategoryAndLimit("h_w_learning", userScore[1], 1)
+                        .getFirst()
+                        .getHobbyWeightLearning() - userScore[1]),
+                Math.abs(hobbyWeightRepository
+                        .findByCategoryAndLimit("h_w_planning", userScore[2], 1)
+                        .getFirst()
+                        .getHobbyWeightPlanning() - userScore[2]),
+                Math.abs(hobbyWeightRepository
+                        .findByCategoryAndLimit("h_w_focus", userScore[3], 1)
+                        .getFirst()
+                        .getHobbyWeightFocus() - userScore[3]),
+                Math.abs(hobbyWeightRepository
+                        .findByCategoryAndLimit("h_w_creativity", userScore[4], 1)
+                        .getFirst()
+                        .getHobbyWeightCreativity() - userScore[4])
+        };
+
+        // 정렬은 오버헤드 때문에 조건으로 처리
+        double minUserClosestScore = userScore[0];
+        int index = 0;
+        if (minUserClosestScore > userClosestScore[1]) {
+            minUserClosestScore = userClosestScore[1];
+            index = 1;
+        } if (minUserClosestScore > userClosestScore[2]) {
+            minUserClosestScore = userClosestScore[2];
+            index = 2;
+        } if (minUserClosestScore > userClosestScore[3]) {
+            minUserClosestScore = userClosestScore[3];
+            index = 3;
+        } if (minUserClosestScore > userClosestScore[4]) {
+            minUserClosestScore = userClosestScore[4];
+            index = 4;
+        }
+
+        List<HobbyWeight> result;
+        switch (index) {
+            case 0:
+                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_social", userScore[0], 3);
+                break;
+            case 1:
+                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_learning", userScore[1], 3);
+                break;
+            case 2:
+                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_planning", userScore[2], 3);
+                break;
+            case 3:
+                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_focus", userScore[3], 3);
+                break;
+            case 4:
+                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_creativity", userScore[4], 3);
+                break;
+            default:
+                throw new UserNotFoundException("잘못된 index값");
+        }
+
+        HobbyScore hobbyScore1 = averageAbsoluteDistance(userScore, result.get(0));
+        HobbyScore hobbyScore2 = averageAbsoluteDistance(userScore, result.get(1));
+        HobbyScore hobbyScore3 = averageAbsoluteDistance(userScore, result.get(2));
+
+        HobbyScore min = hobbyScore1, mid = hobbyScore2, max = hobbyScore3;
+
+        // 최소값 찾기
+        if (mid.getDistance() < min.getDistance()) {
+            HobbyScore tmp = min;
+            min = mid;
+            mid = tmp;
+        }
+        if (max.getDistance() < min.getDistance()) {
+            HobbyScore tmp = min;
+            min = max;
+            max = tmp;
+        }
+
+        // mid와 max 비교
+        if (max.getDistance() < mid.getDistance()) {
+            HobbyScore tmp = mid;
+            mid = max;
+            max = tmp;
+        }
+
+        // 결과
+        HobbyScore hobbyScoreResult1 = min;
+        HobbyScore hobbyScoreResult2 = mid;
+        HobbyScore hobbyScoreResult3 = max;
+
+        return List.of(hobbyScoreResult1, hobbyScoreResult2, hobbyScoreResult3);
     }
 
     // 평균 거리 탐색
-    private double averageAbsoluteDistance(double[] userVector, HobbyWeight hobby) {
-        return (Math.abs(hobby.getHobbyWeightSocial() - userVector[0]) +
-                Math.abs(hobby.getHobbyWeightLearning() - userVector[1]) +
-                Math.abs(hobby.getHobbyWeightPlanning() - userVector[2]) +
-                Math.abs(hobby.getHobbyWeightFocus() - userVector[3]) +
-                Math.abs(hobby.getHobbyWeightCreativity() - userVector[4])) / 5.0;
+    private HobbyScore averageAbsoluteDistance(double[] userVector, HobbyWeight hobby) {
+        return HobbyScore.builder()
+                .hobbyWeight(hobby)
+                .distance((Math.abs(hobby.getHobbyWeightSocial() - userVector[0]) +
+                        Math.abs(hobby.getHobbyWeightLearning() - userVector[1]) +
+                        Math.abs(hobby.getHobbyWeightPlanning() - userVector[2]) +
+                        Math.abs(hobby.getHobbyWeightFocus() - userVector[3]) +
+                        Math.abs(hobby.getHobbyWeightCreativity() - userVector[4])) / 5.0)
+                .build();
     }
 
     // 질문 반환
