@@ -27,7 +27,7 @@ services:
       TOMCAT_RELAXED_PATH_CHARS: "[]|{}^`<>\"'"
       TOMCAT_RELAXED_QUERY_CHARS: "[]|{}^`<>\"'"
       TOMCAT_URI_ENCODING: UTF-8
-      
+
     restart: always
 
   db:
