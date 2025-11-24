@@ -46,6 +46,9 @@ create table channels (
                           ch_description text not null,
                           ch_created_at datetime not null default current_timestamp,
                           ch_is_accepted boolean not null default false,
+                          ch_lk_hobby_1 bigint not null,
+                          ch_lk_hobby_2 bigint null,
+                          ch_lk_hobby_3 bigint null,
                           foreign key (fk_u_email) references users(u_email) on delete cascade
 );
 
