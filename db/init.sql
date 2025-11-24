@@ -1,3 +1,4 @@
+drop schema ReBloom;
 create database if not exists ReBloom character set utf8mb4 collate utf8mb4_unicode_ci;
 use ReBloom;
 
