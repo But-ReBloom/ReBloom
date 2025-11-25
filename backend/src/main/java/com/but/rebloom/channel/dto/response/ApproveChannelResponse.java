@@ -1,5 +1,6 @@
 package com.but.rebloom.channel.dto.response;
 
+import com.but.rebloom.auth.domain.TierName;
 import com.but.rebloom.channel.domain.Channel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +18,8 @@ public class ApproveChannelResponse {
     private Long channelId;
     @NotNull
     private String userId;
+    @NotNull
+    private TierName userTier;
     @NotNull
     private String channelTitle;
     @NotNull
@@ -40,6 +43,7 @@ public class ApproveChannelResponse {
         return ApproveChannelResponse.builder()
                 .channelId(channel.getChannelId())
                 .userId(channel.getUser().getUserId())
+                .userTier(channel.getUser().getUserTier())
                 .channelTitle(channel.getChannelTitle())
                 .channelIntro(channel.getChannelIntro())
                 .channelDescription(channel.getChannelDescription())

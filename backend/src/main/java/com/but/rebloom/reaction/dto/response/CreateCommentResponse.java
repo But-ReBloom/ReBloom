@@ -1,5 +1,6 @@
 package com.but.rebloom.reaction.dto.response;
 
+import com.but.rebloom.auth.domain.TierName;
 import com.but.rebloom.reaction.domain.Comment;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -15,6 +16,8 @@ public class CreateCommentResponse {
     @NotNull
     private String userId;
     @NotNull
+    private TierName userTier;
+    @NotNull
     private String userName;
     @NotNull
     private Long postId;
@@ -27,6 +30,7 @@ public class CreateCommentResponse {
         return CreateCommentResponse.builder()
                 .commentId(comment.getCommentId())
                 .userId(comment.getUser().getUserId())
+                .userTier(comment.getUser().getUserTier())
                 .userName(comment.getUser().getUserName())
                 .postId(comment.getPost().getPostId())
                 .commentContent(comment.getCommentContent())
