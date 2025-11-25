@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class ActivityReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ar_id")
+    @Column(name = "actr_review_id")
     private Long reviewId;
 
     @Column(name = "fk_u_email", nullable = false)
@@ -28,10 +28,9 @@ public class ActivityReview {
     @Column(name = "fk_h_id", nullable = false)
     private Long hobbyId;
 
-    @Column(name = "ar_content", columnDefinition = "TEXT")
+    @Column(name = "actr_review_text", columnDefinition = "TEXT")
     private String reviewContent;
 
-    // 취향 벡터 변화량
     @Column(name = "ar_social_delta", nullable = false)
     private Double socialDelta;
 
