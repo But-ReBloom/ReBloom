@@ -3,10 +3,8 @@ package com.but.rebloom.auth.dto.request;
 import com.but.rebloom.auth.domain.Provider;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class SignupRequest {
     @NotNull
     private String userEmail;
@@ -17,5 +15,5 @@ public class SignupRequest {
     @NotNull
     private String userName;
     @NotNull
-    private Provider provider;
+    private Provider userProvider;
 }

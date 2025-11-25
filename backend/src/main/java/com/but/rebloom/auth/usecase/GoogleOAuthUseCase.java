@@ -2,6 +2,7 @@ package com.but.rebloom.auth.usecase;
 
 import com.but.rebloom.auth.domain.Provider;
 import com.but.rebloom.auth.domain.User;
+import com.but.rebloom.auth.dto.request.GoogleLoginAuthorizeCodeRequest;
 import com.but.rebloom.auth.dto.response.GoogleUserInfoResponse;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.auth.exception.WrongVerifiedCodeException;
@@ -26,16 +27,16 @@ public class GoogleOAuthUseCase {
     private String clientSecret;
 
     // 인증 코드 추출
-    public User execute(String authorizationCode) {
-        String accessToken = getAccessToken(authorizationCode);
+    public User execute(GoogleLoginAuthorizeCodeRequest request) {
+        String accessToken = getAccessToken(request.getAuthorizationCode());
         GoogleUserInfoResponse googleUser = getUserInfo(accessToken);
 
-        return userRepository.findByUserEmailAndProvider(googleUser.getEmail(), Provider.GOOGLE)
+        return userRepository.findByUserEmail(googleUser.getEmail())
                 .orElseGet(() -> userRepository.save(User.builder()
                         .userEmail(googleUser.getEmail())
                         .userName(googleUser.getName())
                         .userPassword("")
-                        .provider(Provider.GOOGLE)
+                        .userProvider(Provider.GOOGLE)
                         .build()));
     }
 

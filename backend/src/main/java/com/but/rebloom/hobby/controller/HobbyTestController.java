@@ -1,9 +1,11 @@
 package com.but.rebloom.hobby.controller;
 
-import com.but.rebloom.hobby.domain.HobbyWeight;
+import com.but.rebloom.channel.domain.Channel;
+import com.but.rebloom.common.dto.ApiResponse;
+import com.but.rebloom.hobby.domain.HobbyScore;
 import com.but.rebloom.hobby.domain.InitialTest;
 import com.but.rebloom.hobby.dto.request.UserAnswerRequest;
-import com.but.rebloom.hobby.dto.response.HobbyScoreResponse;
+import com.but.rebloom.hobby.dto.response.HobbyTestResponse;
 import com.but.rebloom.hobby.usecase.HobbyTestUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,22 +24,15 @@ public class HobbyTestController {
     // 질문지 조회
     // dto 의존성 제거
     @GetMapping("/questions")
-    public ResponseEntity<List<InitialTest>> getQuestions() {
+    public ResponseEntity<ApiResponse<List<InitialTest>>> getQuestions() {
         List<InitialTest> questions = hobbyTestUseCase.getQuestions();
-        return ResponseEntity.ok(questions);
+        return ResponseEntity.ok(ApiResponse.success(questions));
     }
 
-     // 활동 추천 로직
-    @PostMapping("/recommend")
-    public ResponseEntity<List<HobbyScoreResponse>> recommendHobby(@RequestBody List<UserAnswerRequest> answers) {
-        List<Map<HobbyWeight, Double>> hobbies = hobbyTestUseCase.findUserHobbies(answers);
-        return ResponseEntity.ok(
-                hobbies.stream()
-                        .map(m -> HobbyScoreResponse.from(
-                                m.keySet().iterator().next(),
-                                m.values().iterator().next()
-                        ))
-                        .toList()
-        );
-    }
+     // 활동, 채널 추천 로직
+     @PostMapping("/recommend")
+     public ResponseEntity<ApiResponse<HobbyTestResponse>> recommendHobby(@RequestBody UserAnswerRequest answers) {
+         Map<List<HobbyScore>, List<Channel>> responses = hobbyTestUseCase.findUserHobbies(answers);
+         return ResponseEntity.ok(ApiResponse.success(HobbyTestResponse.from(responses)));
+     }
 }

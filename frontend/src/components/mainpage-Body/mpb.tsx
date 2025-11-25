@@ -16,12 +16,12 @@ export const Body = () => {
           </S.IntroSmall>
         </S.IntroTextBox>
         <S.BodyButtons>
-          <Link to="/login">
+          <Link to="/explore/taste">
             <S.GoFindTasteButton>Taste Activity</S.GoFindTasteButton>
           </Link>
           <S.IntroButtons
             onClick={() => {
-              navigate("/");
+              navigate("/taste/hobby");
             }}
             id="go-findTaste_Hobbytest"
           >

@@ -5,26 +5,21 @@ import com.but.rebloom.auth.domain.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 @Builder
 public class LoginResponse {
     @NotNull
-    private Boolean success;
-    @NotNull
     private String userEmail;
     @NotNull
-    private Provider provider;
+    private Provider userProvider;
     @NotNull
     private String token;
 
     public static LoginResponse from(User user, String jwtToken) {
         return LoginResponse.builder()
-                .success(true)
                 .userEmail(user.getUserEmail())
-                .provider(user.getProvider())
+                .userProvider(user.getUserProvider())
                 .token(jwtToken)
                 .build();
     }

@@ -5,10 +5,8 @@ import com.but.rebloom.auth.domain.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 @Builder
 public class GoogleUserInfoResponse {
     @NotNull
@@ -24,11 +22,11 @@ public class GoogleUserInfoResponse {
 
     public static GoogleUserInfoResponse from(User user, String jwt) {
         return GoogleUserInfoResponse.builder()
-                .id(user.getUserId().toString())
+                .id(user.getUserId())
                 .email(user.getUserEmail())
                 .name(user.getUserName())
                 .accessToken(jwt)
-                .provider(user.getProvider())
+                .provider(user.getUserProvider())
                 .build();
     }
 }

@@ -10,34 +10,33 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class  InitialTest {
-
+public class InitialTest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "question_id")
-    private Long id;
+    @Column(name = "it_question_id")
+    private Long initialTestId;
 
-    @Column(name = "set_no", nullable = false)
-    private int setNo;
+    @Column(name = "it_set_no", nullable = false)
+    private Integer initialTestSetNumber;
 
-    @Column(name = "category", nullable = false)
-    private String category;
+    @Column(name = "it_category", nullable = false, length = 255)
+    private String initialTestCategory;
 
-    @Column(name = "question", nullable = false)
-    private String question;
+    @Column(name = "it_question", nullable = false, length = 255)
+    private String initialTestQuestion;
 
-    @Column(name = "weight1", nullable = false)
-    private double weight1;
+    @Column(name = "it_w_social", nullable = false)
+    private Double initialTestSocialWeight;
 
-    @Column(name = "weight2", nullable = false)
-    private double weight2;
+    @Column(name = "it_w_learning", nullable = false)
+    private Double initialTestLearningWeight;
 
-    @Column(name = "weight3")
-    private double weight3;
+    @Column(name = "it_w_planning", nullable = false)
+    private Double initialTestPlanningWeight;
 
-    @Column(name = "weight4")
-    private double weight4;
+    @Column(name = "it_w_focus", nullable = false)
+    private Double initialTestFocusWeight;
 
-    @Column(name = "weight5")
-    private double weight5;
+    @Column(name = "it_w_creativity", nullable = false)
+    private Double initialTestCreativityWeight;
 }

@@ -1,27 +1,22 @@
 package com.but.rebloom.hobby.dto.response;
 
-import com.but.rebloom.hobby.domain.HobbyWeight;
+import com.but.rebloom.hobby.domain.HobbyScore;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 @Builder
 public class HobbyScoreResponse {
     @NotNull
-    private Boolean success;
-    @NotNull
     private String hobbyName;
     @NotNull
-    private double distance;
+    private Double distance;
 
-    public static HobbyScoreResponse from(HobbyWeight hobbyWeight, Double distance) {
+    public static HobbyScoreResponse from(HobbyScore hobbyScore) {
         return HobbyScoreResponse.builder()
-                .success(true)
-                .hobbyName(hobbyWeight.getHobbyName())
-                .distance(distance)
+                .hobbyName(hobbyScore.getHobbyWeight().getHobbyName())
+                .distance(hobbyScore.getDistance())
                 .build();
     }
 }

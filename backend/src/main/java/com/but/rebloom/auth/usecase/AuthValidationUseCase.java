@@ -13,11 +13,6 @@ public class AuthValidationUseCase {
     // DI
     private final ValidationUseCase validationUseCase;
 
-    // 널 값 확인 - 한 요소
-    public <T> void checkNull(T element) {
-        validationUseCase.checkNull(element);
-    }
-
     // 널 값 확인 - 로그인
     public void checkNull(LoginRequest loginRequest) {
         String userEmail = loginRequest.getUserEmail();
@@ -82,20 +77,5 @@ public class AuthValidationUseCase {
         if (userName.length() < 1 || userName.length() > 20) {
             throw new IllegalArgumentException("이름 오류");
         }
-    }
-
-    // 존재하는지 확인
-    public void checkExistAccount(String userEmail, String userId) {
-        validationUseCase.checkExistAccount(userEmail, userId);
-    }
-
-    // 존재하는지 확인
-    public void checkExistAccountByUserEmail(String userEmail) {
-        validationUseCase.checkExistAccountByUserEmail(userEmail);
-    }
-
-    // 존재하는지 확인
-    public void checkExistAccountByUserId(String userId) {
-        validationUseCase.checkExistAccountByUserId(userId);
     }
 }

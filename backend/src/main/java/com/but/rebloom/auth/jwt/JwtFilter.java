@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -27,12 +26,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private static final List<String> PERMIT_ALL_PATHS = Arrays.asList(
             "/",
-            "/auth/email/**",
             "/auth/signup",
             "/auth/login",
-            "/auth/login/google",
-            "/auth/find/**",
-            "/email/**",
+            "/auth/login/**",
+            "/auth/email/**",
+            "/achievement/**",
+            "/user-achievement/**",
+            "/channel/**",
+            "/post/**",
+            "/hobby-test/**",
+            "/activity/**",
+            "/comment/**",
+            "/heart/**",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/api-docs",

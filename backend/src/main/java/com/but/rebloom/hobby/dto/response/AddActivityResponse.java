@@ -4,16 +4,12 @@ import com.but.rebloom.hobby.domain.Activity;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
-@Setter
 @Builder
 public class AddActivityResponse {
-    @NotNull
-    private Boolean success;
     @NotNull
     private String activityName;
     @NotNull
@@ -25,11 +21,10 @@ public class AddActivityResponse {
 
     public static AddActivityResponse from(Activity activity) {
         return AddActivityResponse.builder()
-                .success(true)
                 .activityName(activity.getActivityName())
                 .activityStart(activity.getActivityStart())
                 .activityRecent(activity.getActivityRecent())
-                .userEmail(activity.getUserEmail())
+                .userEmail(activity.getUser().getUserEmail())
                 .build();
     }
 }

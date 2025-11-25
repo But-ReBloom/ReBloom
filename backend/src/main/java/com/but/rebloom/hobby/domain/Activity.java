@@ -3,7 +3,8 @@ package com.but.rebloom.hobby.domain;
 import com.but.rebloom.auth.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
@@ -18,25 +19,22 @@ import java.time.LocalDate;
 public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "activity_id", nullable = false)
+    @Column(name = "act_id", nullable = false)
     private Long activityId;
 
-    @Column(name = "activity_name", nullable = false)
+    @Column(name = "act_name", nullable = false, length = 50)
     private String activityName;
 
-    @Column(name = "activity_start", nullable = false)
-    @CreationTimestamp
+    @Column(name = "act_start", nullable = false)
     private LocalDate activityStart;
 
-    @Column(name = "activity_recent", nullable = false)
+    @Column(name = "act_recent", nullable = false)
     @UpdateTimestamp
-    private LocalDate activityRecent;
+    @Builder.Default
+    private LocalDate activityRecent = LocalDate.now();
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "email", referencedColumnName = "email",
-                insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email", updatable = false, insertable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
-
-    @Column(name = "email", nullable = false)
-    private String userEmail;
 }

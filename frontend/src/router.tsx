@@ -11,12 +11,17 @@ import NotFound from "./Pages/404page/NF.tsx";
 import ExpReviewPage from "./Pages/expReviewpage/Exr.tsx";
 import MyExps from "./Pages/myExpspage/MEP.tsx";
 import EPT from "./Pages/exploreTaste/EPT.tsx";
+<<<<<<< HEAD
 import Community from "./Pages/communityPage/CP";
 import MainPage from "./Pages/MainPage/MP";
 import MyPost from "./Pages/myPostPage/myPost";
 import Post from "./Pages/postPage/post";
 import PostDetail from "./Pages/postPage/PostDetail";
 
+=======
+import TestResult from "./Pages/hobbytestresultpage/hobbytestresultpage.tsx";
+import Thankyou from "./components/thanktou/thankyou.tsx";
+>>>>>>> 240c33b22f560ae63c68a42ea4015ae853a1b962
 
 //경로명세 라우터
 const router = createBrowserRouter([
@@ -53,12 +58,24 @@ const router = createBrowserRouter([
     element: <SignUpPage />,
   },
   {
-    path:"/forgot/email",
-    element: <FindEmail />
+    path: "/forgot/email",
+    element: <FindEmail />,
   },
   {
-    path:"/forgot/password",
-    element: <FindPassWord/>,
+    path: "/forgot/password",
+    element: <FindPassWord />,
+  },
+  {
+    path: "/taste",
+    element: <FT_HobbyTest />,
+  },
+  {
+    path: "/taste/hobby",
+    element: <FT_HobbyTest_Description />,
+  },
+  {
+    path: "taste/hobby/test",
+    element: <FT_TestPage />,
   },
   {
     path:"/taste",
@@ -74,19 +91,27 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <NotFound/>,
+    element: <NotFound />,
   },
   {
     path: "/expreview",
-    element: <ExpReviewPage/>,
+    element: <ExpReviewPage />,
   },
   {
     path: "/myexps",
-    element: <MyExps/>,
+    element: <MyExps />,
   },
   {
     path: "/explore/taste",
-    element: <EPT/>,
+    element: <EPT />,
+  },
+  {
+    path: "/thankyou",
+    element: <Thankyou />,
+  },
+  {
+    path: "/test/result",
+    element: <TestResult/>,
   },
 ]);
 
