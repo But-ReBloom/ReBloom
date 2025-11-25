@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Getter
 @Builder
-public class CreateChannelResponse {
+public class FindChannelDetailedInfoResponse {
     @NotNull
     private Long channelId;
     @NotNull
@@ -29,12 +29,12 @@ public class CreateChannelResponse {
     @NotBlank
     private String linkedHobbyName;
 
-    public static CreateChannelResponse from(Map<Channel, String> response) {
+    public static FindChannelDetailedInfoResponse from(Map<Channel, String> response) {
         Map.Entry<Channel, String> entry = response.entrySet().iterator().next();
         Channel channel = entry.getKey();
         String linkedHobbyName = entry.getValue();
 
-        return CreateChannelResponse.builder()
+        return FindChannelDetailedInfoResponse.builder()
                 .channelId(channel.getChannelId())
                 .userId(channel.getUser().getUserId())
                 .channelTitle(channel.getChannelTitle())

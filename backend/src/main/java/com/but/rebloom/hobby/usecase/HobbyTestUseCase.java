@@ -1,6 +1,8 @@
 package com.but.rebloom.hobby.usecase;
 
 import com.but.rebloom.auth.exception.UserNotFoundException;
+import com.but.rebloom.channel.domain.Channel;
+import com.but.rebloom.channel.repository.ChannelRepository;
 import com.but.rebloom.hobby.domain.HobbyScore;
 import com.but.rebloom.hobby.domain.HobbyWeight;
 import com.but.rebloom.hobby.domain.InitialTest;
@@ -19,9 +21,10 @@ public class HobbyTestUseCase {
     // 디비 이용
     private final InitialTestRepository initialTestRepository;
     private final HobbyWeightRepository hobbyWeightRepository;
+    private final ChannelRepository channelRepository;
 
     // 결과에 따른 취미 탐색
-    public List<HobbyScore> findUserHobbies(UserAnswerRequest answers) {
+    public Map<List<HobbyScore>, List<Channel>> findUserHobbies(UserAnswerRequest answers) {
         // 유저 점수
         double[] userScore = {
                 answers.getSocialScore(),
@@ -123,7 +126,18 @@ public class HobbyTestUseCase {
         HobbyScore hobbyScoreResult2 = mid;
         HobbyScore hobbyScoreResult3 = max;
 
-        return List.of(hobbyScoreResult1, hobbyScoreResult2, hobbyScoreResult3);
+        List<Channel> channels = channelRepository
+                .findByChannelLinkedHobby(hobbyScoreResult1.getHobbyWeight().getHobbyId());
+
+        if (channels.isEmpty()) {
+            channels = channelRepository
+                    .findByChannelLinkedHobby(hobbyScoreResult2.getHobbyWeight().getHobbyId());
+        } if (channels.isEmpty()) {
+            channels = channelRepository
+                    .findByChannelLinkedHobby(hobbyScoreResult3.getHobbyWeight().getHobbyId());
+        }
+
+        return Map.of(List.of(hobbyScoreResult1, hobbyScoreResult2, hobbyScoreResult3), channels);
     }
 
     // 평균 거리 탐색
