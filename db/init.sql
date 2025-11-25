@@ -15,8 +15,7 @@ create table users (
                        u_tier varchar(20) not null default 'BRONZE',
                        u_recent_date date not null,
                        u_streak int not null default 1
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table activities (
                             act_id bigint not null auto_increment primary key,
@@ -25,8 +24,7 @@ create table activities (
                             act_start date not null,
                             act_recent date not null,
                             foreign key (fk_u_email) references users(u_email) on delete cascade
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table activity_reviews (
                                   actr_review_id bigint not null auto_increment primary key,
@@ -38,8 +36,7 @@ create table activity_reviews (
                                   actr_review_text text not null,
                                   foreign key (fk_act_id) references activities(act_id) on delete cascade,
                                   foreign key (fk_u_email) references users(u_email) on delete cascade
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table channels (
                           ch_id bigint not null auto_increment primary key,
@@ -53,8 +50,7 @@ create table channels (
                           ch_lk_hobby_2 bigint null,
                           ch_lk_hobby_3 bigint null,
                           foreign key (fk_u_email) references users(u_email) on delete cascade
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table posts (
                        p_id bigint not null auto_increment primary key,
@@ -71,8 +67,7 @@ create table posts (
                        foreign key (fk_ch_id) references channels(ch_id) on delete cascade,
                        foreign key (fk_u_email) references users(u_email) on delete cascade,
                        foreign key (fk_u_id) references users(u_id) on delete cascade on update cascade
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table comments (
                           co_id bigint not null auto_increment primary key,
@@ -84,8 +79,7 @@ create table comments (
                           foreign key (fk_p_id) references posts(p_id) on delete cascade,
                           foreign key (fk_u_email) references users(u_email) on delete cascade,
                           foreign key (fk_u_id) references users(u_id) on delete cascade on update cascade
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table hearts (
                         h_id bigint not null auto_increment primary key,
@@ -95,8 +89,7 @@ create table hearts (
                         foreign key (fk_u_email) references users(u_email) on delete cascade,
                         foreign key (fk_p_id) references posts(p_id) on delete cascade,
                         foreign key (fk_u_id) references users(u_id) on delete cascade on update cascade
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table achieves (
                           ach_id bigint not null auto_increment primary key,
@@ -104,8 +97,7 @@ create table achieves (
                           ach_description text not null,
                           ach_reward_point int not null,
                           ach_reward_tier_point int not null
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table users_to_achieves (
                                    fk_u_email varchar(100) not null,
@@ -115,8 +107,7 @@ create table users_to_achieves (
                                    primary key (fk_u_email, fk_ach_id),
                                    foreign key (fk_u_email) references users(u_email) on delete cascade,
                                    foreign key (fk_ach_id) references achieves(ach_id) on delete cascade
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table notifications (
                                n_id bigint not null auto_increment primary key,
@@ -129,15 +120,13 @@ create table notifications (
                                n_created_at datetime not null default current_timestamp,
                                foreign key (fk_u_email) references users(u_email) on delete cascade,
                                foreign key (fk_u_sender_id) references users(u_id) on delete set null on update cascade
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table clubs (
                        cl_id bigint not null auto_increment primary key,
                        cl_name varchar(100) not null,
                        cl_description varchar(255) default ''
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table users_clubs (
                              fk_u_email varchar(255) not null primary key,
@@ -146,8 +135,7 @@ create table users_clubs (
                              uc_role varchar(255) not null default 'MEMBER',
                              foreign key (fk_u_email) references users(u_email) on delete cascade,
                              foreign key (fk_cl_id) references clubs(cl_id) on delete cascade
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table initial_tests (
                                it_question_id bigint not null auto_increment primary key,
@@ -159,8 +147,7 @@ create table initial_tests (
                                it_w_planning double not null,
                                it_w_focus double not null,
                                it_w_creativity double not null
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table hobbies (
                          h_id bigint not null auto_increment primary key,
@@ -170,15 +157,13 @@ create table hobbies (
                          h_w_planning double not null,
                          h_w_focus double not null,
                          h_w_creativity double not null
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 create table tier_rank (
                            tr_name varchar(20) not null primary key,
                            tr_min_point int not null,
                            tr_max_point int not null
-)
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 alter table users
     add constraint fk_u_current_act
@@ -318,3 +303,12 @@ create index hobbies_focus
 
 create index hobbies_creativity
     on hobbies(h_w_creativity);
+
+create index channels_linked_hobby_1
+    on channels(ch_lk_hobby_1);
+
+create index channels_linked_hobby_2
+    on channels(ch_lk_hobby_2);
+
+create index channels_linked_hobby_3
+    on channels(ch_lk_hobby_3);
