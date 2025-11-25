@@ -49,7 +49,6 @@ function FT_HobbyTest_Description() {
           </S.StartConnect_Button>
         </S.RowContainer>
       </S.MainContainer>
-      <ToastContainer />
     </S.Background>
   );
 }
