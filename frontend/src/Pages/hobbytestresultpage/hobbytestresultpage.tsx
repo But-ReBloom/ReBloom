@@ -6,7 +6,7 @@ import Arrow from "../../assets/images/blackarrow.svg";
 export default function TestResult() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { finalAverage } = location.state || {};
+  const { finalAverage, recommendations } = location.state || {};
 
   return (
     <S.Background>
@@ -18,26 +18,26 @@ export default function TestResult() {
             <S.ResultLeft>
               <S.ResultBox>
                 <S.Subtitle>회원님의 사회성 점수</S.Subtitle>
-                <S.Scoretitle>{finalAverage.social}</S.Scoretitle>
+                <S.Scoretitle>{finalAverage?.social?.toFixed(1)}</S.Scoretitle>
               </S.ResultBox>
               <S.ResultBox>
                 <S.Subtitle>회원님의 학습력 점수</S.Subtitle>
-                <S.Scoretitle>{finalAverage.learning}</S.Scoretitle>
+                <S.Scoretitle>{finalAverage?.learning?.toFixed(1)}</S.Scoretitle>
               </S.ResultBox>
               <S.ResultBox>
                 <S.Subtitle>회원님의 계획력 점수</S.Subtitle>
-                <S.Scoretitle>{finalAverage.planning}</S.Scoretitle>
+                <S.Scoretitle>{finalAverage?.planning?.toFixed(1)}</S.Scoretitle>
               </S.ResultBox>
             </S.ResultLeft>
 
             <S.ResultRight>
               <S.ResultBox>
                 <S.Subtitle>회원님의 집중력 점수</S.Subtitle>
-                <S.Scoretitle>{finalAverage.focus}</S.Scoretitle>
+                <S.Scoretitle>{finalAverage?.focus?.toFixed(1)}</S.Scoretitle>
               </S.ResultBox>
               <S.ResultBox>
                 <S.Subtitle>회원님의 창의성 점수</S.Subtitle>
-                <S.Scoretitle>{finalAverage.creativity}</S.Scoretitle>
+                <S.Scoretitle>{finalAverage?.creativity?.toFixed(1)}</S.Scoretitle>
               </S.ResultBox>
             </S.ResultRight>
           </S.LeftContainer>
@@ -45,17 +45,15 @@ export default function TestResult() {
 
         <S.SemiContainer2>
           <S.RightContainer>
-            <S.RecommaendBox>
-              테스트 결과로 인한 추천 활동 위치 1
-            </S.RecommaendBox>
-
-            <S.RecommaendBox>
-              테스트 결과로 인한 추천 활동 위치 2
-            </S.RecommaendBox>
-
-            <S.RecommaendBox>
-              테스트 결과로 인한 추천 활동 위치 3
-            </S.RecommaendBox>
+            {recommendations && recommendations.length > 0 ? (
+              recommendations.map((rec: any, index: number) => (
+                <S.RecommaendBox key={index}>
+                  {index + 1}. {rec.hobbyName}
+                </S.RecommaendBox>
+              ))
+            ) : (
+              <S.RecommaendBox>추천 활동이 없습니다.</S.RecommaendBox>
+            )}
           </S.RightContainer>
           <S.ArrowImage
             onClick={() =>
