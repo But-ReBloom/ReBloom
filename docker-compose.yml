@@ -20,13 +20,18 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       JWT_SECRET: ${JWT_SECRET}
       SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_REDIRECT_URI: "http://3.35.21.19:8080/auth/login/google"
-
+      JAVA_TOOL_OPTIONS: "-Dfile.encoding=UTF-8"
       SERVER_ENCODING_ENABLED: true
       SERVER_ENCODING_CHARSET: UTF-8
       SERVER_ENCODING_FORCE: true
       TOMCAT_RELAXED_PATH_CHARS: "[]|{}^`<>\"'"
       TOMCAT_RELAXED_QUERY_CHARS: "[]|{}^`<>\"'"
       TOMCAT_URI_ENCODING: UTF-8
+
+      LANG: ko_KR.UTF-8
+      LANGUAGE: ko_KR:ko
+      LC_ALL: ko_KR.UTF-8
+      TZ: Asia/Seoul
 
     restart: always
 
