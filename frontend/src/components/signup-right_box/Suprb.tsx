@@ -4,6 +4,7 @@ import Dodum from "../../assets/images/dodamdodam.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { authApi } from "../../api/auth";
 
 export default function Suprb() {
   const navigate = useNavigate();
@@ -13,20 +14,36 @@ export default function Suprb() {
   const [userID, setUserID] = useState("");
   const [userName, setUserName] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (
       userEmail.trim() &&
       password.trim() &&
       userID.trim() &&
       userName.trim()
     ) {
-      toast.success(
-        <>
-          환영합니다! {userID}님! <br /> 기다려주세요. 이동중 입니다.
-        </>
-      );
+      try {
+        const response = await authApi.signup({
+          userEmail,
+          userId: userID,
+          userPassword: password,
+          userName,
+          userProvider: "SELF",
+        });
 
-      navigate("/login", { state: { id: userID } });
+        if (response.success) {
+          toast.success(
+            <>
+              환영합니다! {userID}님! <br /> 기다려주세요. 이동중 입니다.
+            </>
+          );
+          navigate("/login", { state: { id: userID } });
+        } else {
+          toast.error(response.message || "회원가입 중 오류가 발생했습니다.");
+        }
+      } catch (error) {
+        toast.error("회원가입 중 오류가 발생했습니다.");
+        console.error(error);
+      }
     } else {
       toast.error(<>빈 칸이 있어선 안됩니다.</>);
     }

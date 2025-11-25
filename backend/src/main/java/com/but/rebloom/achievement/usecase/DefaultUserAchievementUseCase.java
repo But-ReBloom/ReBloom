@@ -102,7 +102,11 @@ public class DefaultUserAchievementUseCase {
     public void updateUserAchievementToSuccess(String userEmail, String achievementTitle) {
         UserAchievement userAchievement = userAchievementRepository
                 .findByUserEmailAndAchievement_AchievementTitle(userEmail, achievementTitle)
-                .orElseThrow(() -> new UserAchievementNotFoundException("유저 업적이 조회되지 않음"));
+                .orElse(null);
+
+        if (userAchievement == null) {
+            return;
+        }
 
         // 이미 성공했으면 패스
         if (userAchievement.getIsSuccess().equals(true))
@@ -130,7 +134,11 @@ public class DefaultUserAchievementUseCase {
     public void updateUserAchievementProgress(String userEmail, String achievementTitle, float progress) {
         UserAchievement userAchievement = userAchievementRepository
                 .findByUserEmailAndAchievement_AchievementTitle(userEmail, achievementTitle)
-                .orElseThrow(() -> new UserAchievementNotFoundException("유저 업적이 조회되지 않음"));
+                .orElse(null);
+
+        if (userAchievement == null) {
+            return;
+        }
 
         // 이미 성공했으면 패스
         if (userAchievement.getIsSuccess().equals(true))
