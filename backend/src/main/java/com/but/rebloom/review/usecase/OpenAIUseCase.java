@@ -8,6 +8,7 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,25 +72,86 @@ public class OpenAIUseCase {
         }
     }
 
-    /* AI 응답에서 JSON 배열만 추출 */
-    private String cleanJsonResponse(String response) {
-        int start = response.indexOf("[");
-        int end = response.lastIndexOf("]") + 1;
+    // 답변을 벡터로 변환
+    public Map<String, Double> convertAnswerToVector(String question, String answer, String dimension) {
+        String prompt = String.format(
+                """
+                다음 질문과 답변을 분석하여 '%s' 차원의 점수 변화량을 -2에서 +2 사이로 평가해주세요.
+                
+                질문: %s
+                답변: %s
+                
+                평가 기준:
+                - 매우 부정적/낮음: -2
+                - 부정적/낮음: -1
+                - 보통/중립: 0
+                - 긍정적/높음: +1
+                - 매우 긍정적/높음: +2
+                
+                다음 JSON 형식으로만 응답해주세요 (다른 설명 없이 JSON만):
+                {"dimension": "%s", "score": 점수}
+                """,
+                dimension, question, answer, dimension
+        );
 
-        if (start >= 0 && end > start) {
-            return response.substring(start, end);
+        try {
+            ChatClient chatClient = chatClientBuilder
+                    .defaultOptions(OpenAiChatOptions.builder()
+                            .withTemperature(0.3)
+                            .build())
+                    .build();
+
+            String response = chatClient.prompt()
+                    .user(prompt)
+                    .call()
+                    .content();
+
+            log.info("AI 벡터 분석 응답: {}", response);
+
+            // JSON 파싱
+            String cleanedResponse = cleanJsonResponse(response);
+            Map<String, Object> result = objectMapper.readValue(cleanedResponse, Map.class);
+
+            String parsedDimension = (String) result.get("dimension");
+            Double score = parseScore(result.get("score"));
+
+            Map<String, Double> vectorMap = new HashMap<>();
+            vectorMap.put(parsedDimension, score);
+            return vectorMap;
+
+        } catch (Exception e) {
+            log.error("벡터 변환 중 오류 발생", e);
+            // 기본값 반환
+            return Map.of(dimension, 0.0);
         }
-        return response;
     }
 
-    /* 기본 질문 목록 (AI 실패 시 사용) */
+    // JSON 응답 정제 (```json ``` 제거)
+    private String cleanJsonResponse(String response) {
+        return response
+                .replaceAll("```json", "")
+                .replaceAll("```", "")
+                .trim();
+    }
+
+    // score 파싱 (Integer 또는 Double 처리)
+    private Double parseScore(Object score) {
+        if (score instanceof Integer) {
+            return ((Integer) score).doubleValue();
+        } else if (score instanceof Double) {
+            return (Double) score;
+        }
+        return 0.0;
+    }
+
+    // 기본 질문 (AI 호출 실패 시)
     private List<Map<String, String>> getDefaultQuestions() {
         return List.of(
-                Map.of("question", "이 활동을 하면서 가장 기억에 남았던 순간은 무엇인가요?", "dimension", "social"),
-                Map.of("question", "이 활동을 통해 새롭게 배운 점이 있다면 무엇인가요?", "dimension", "learning"),
-                Map.of("question", "이 활동을 하기 위해 어떤 준비나 계획을 하셨나요?", "dimension", "planning"),
-                Map.of("question", "활동하는 동안 어느 정도 몰입할 수 있었나요?", "dimension", "focus"),
-                Map.of("question", "이 활동이 창의적인 표현이나 아이디어에 어떤 영향을 주었나요?", "dimension", "creativity")
+                Map.of("question", "이번 활동에서 다른 사람들과 어떻게 교류했나요?", "dimension", "social"),
+                Map.of("question", "새로 배우거나 익힌 것이 있나요?", "dimension", "learning"),
+                Map.of("question", "활동을 어떻게 계획하고 준비했나요?", "dimension", "planning"),
+                Map.of("question", "활동에 얼마나 집중할 수 있었나요?", "dimension", "focus"),
+                Map.of("question", "자신만의 창의적인 시도를 했나요?", "dimension", "creativity")
         );
     }
 }
