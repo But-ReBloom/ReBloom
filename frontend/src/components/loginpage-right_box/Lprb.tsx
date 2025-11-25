@@ -4,6 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import * as S from "./style.ts";
 import Dodum from "../../assets/images/dodamdodam.svg";
 import Google from "../../assets/images/Google.svg";
+import { authApi } from "../../api/auth";
 
 export default function Right_box() {
   const navigate = useNavigate();
@@ -26,28 +27,17 @@ export default function Right_box() {
     }
 
     try {
-      const response = await fetch("", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userEmail,
-          userPassword: password,
-          provider: "SELF",
-        }),
+      const response = await authApi.login({
+        userEmail,
+        userPassword: password,
+        userProvider: "SELF",
       });
 
-      if (!response.ok) {
-        throw new Error(`서버 응답이 올바르지 않습니다. (${response.status})`);
-      }
-
-      const data = await response.json();
-
-      if (data.success) {
-        navigate("/", { state: { id: data.userID } });
+      if (response.success) {
+        // Store token if needed, e.g., localStorage.setItem('token', response.data.token);
+        navigate("/", { state: { id: response.data.userEmail } }); // Using email as ID for now since ID is not in response
       } else {
-        toast.error("서버와의 통신 중 오류가 발생했습니다.");
+        toast.error(response.message || "서버와의 통신 중 오류가 발생했습니다.");
       }
     } catch (error) {
       toast.error("이메일 또는 비밀번호가 일치하지 않습니다.");
