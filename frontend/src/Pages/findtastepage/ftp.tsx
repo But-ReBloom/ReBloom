@@ -1,6 +1,6 @@
 import FT_Body from "../../components/findtaste-Body/ftb.tsx";
 // import FT_Header from "../../components/findtaste-Header/fth.tsx";
-import Header from "../../components/normal_header/nh.tsx";
+import Header from "../../components/mainpage-Header/mph.tsx";
 import * as S from "./style.ts";
 
 function FT_HobbyTest() {

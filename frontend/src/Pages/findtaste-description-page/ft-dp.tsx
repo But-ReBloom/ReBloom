@@ -2,19 +2,19 @@ import { useState } from "react";
 import Header from "../../components/normal_header/nh.tsx";
 import FT_HobbyTest_Description_Box from "../../components/ftdescription-box/ft-d.tsx";
 import * as S from "./style.ts";
-import { ToastContainer, toast } from "react-toastify";
+// import { ToastContainer, toast } from "react-toastify";
 
 function FT_HobbyTest_Description() {
   const [selectedValue, setSelectedValue] = useState<number | null>(null);
 
   const handleNext = () => {
-    if (selectedValue === null) {
-      toast.warning("먼저 선택해주세요!", {
-        position: "bottom-center",
-        autoClose: 2000,
-      });
-      return;
-    }
+    // if (selectedValue === null) {
+    //   toast.warning("먼저 선택해주세요!", {
+    //     position: "bottom-center",
+    //     autoClose: 2000,
+    //   });
+    //   return;
+    // }
     window.location.href = "/taste/hobby/test";
   };
 
@@ -49,7 +49,6 @@ function FT_HobbyTest_Description() {
           </S.StartConnect_Button>
         </S.RowContainer>
       </S.MainContainer>
-      <ToastContainer />
     </S.Background>
   );
 }

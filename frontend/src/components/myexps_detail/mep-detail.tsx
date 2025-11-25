@@ -13,6 +13,7 @@ export default function MepDetail({ setStep, exp }) {
     if (ReviewData.length < 100) {
       toast.error("리뷰는 100자 이상 작성하셔야 합니다.");
     } else {
+      // TODO: Implement API call to submit review
       navigate("/thankyou", {
         state: {
           message: `활동리뷰를 마무리한 사람이세요~~~`,
@@ -33,7 +34,7 @@ export default function MepDetail({ setStep, exp }) {
 
           <S.QuestionBox>
             <S.Boxing>
-              <S.Title>{exp.data.activityName} 활동에 대해 만족하시나요?</S.Title>
+              <S.Title>{exp.activityName} 활동에 대해 만족하시나요?</S.Title>
               <QuestionBox />
             </S.Boxing>
 

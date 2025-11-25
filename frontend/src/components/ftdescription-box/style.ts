@@ -25,7 +25,10 @@ export const Text = styled.p`
     font-family: Pretendard;
     font-size: 20px;
     font-style: normal;
+<<<<<<< HEAD
+=======
     font-weight: 500;
+>>>>>>> 240c33b22f560ae63c68a42ea4015ae853a1b962
 `;
 
 export const Select_Button_Box = styled.div`
