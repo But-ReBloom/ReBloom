@@ -94,12 +94,12 @@ public class CommentUseCase {
     }
 
     // 특정 게시글의 댓글 수 조회
-    public Map<String, Long> getCommentCount(Long postId) {
+    public Map<Post, Long> getCommentCount(Long postId) {
         Long commentCount = commentRepository.countByPost_PostId(postId);
 
         return Map.of(postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음"))
-                .getPostTitle(), commentCount);
+                , commentCount);
     }
 
     // 댓글 수정

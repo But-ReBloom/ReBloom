@@ -1,5 +1,6 @@
 package com.but.rebloom.post.dto.response;
 
+import com.but.rebloom.auth.domain.TierName;
 import com.but.rebloom.post.domain.Post;
 import com.but.rebloom.post.domain.Status;
 import com.but.rebloom.post.domain.Type;
@@ -16,6 +17,8 @@ public class CreatePostResponse {
     private Long postId;
     @NotNull
     private String userId;
+    @NotNull
+    private TierName userTier;
     @NotNull
     private Long channelId;
     @NotNull
@@ -37,6 +40,7 @@ public class CreatePostResponse {
         return CreatePostResponse.builder()
                 .postId(post.getPostId())
                 .userId(post.getUser().getUserId())
+                .userTier(post.getUser().getUserTier())
                 .channelId(post.getChannel().getChannelId())
                 .postTitle(post.getPostTitle())
                 .postContent(post.getPostContent())

@@ -1,6 +1,7 @@
 package com.but.rebloom.reaction.controller;
 
 import com.but.rebloom.common.dto.ApiResponse;
+import com.but.rebloom.post.domain.Post;
 import com.but.rebloom.reaction.domain.Comment;
 import com.but.rebloom.reaction.dto.request.CreateCommentRequest;
 import com.but.rebloom.reaction.dto.request.UpdateCommentRequest;
@@ -55,7 +56,7 @@ public class CommentController {
     // 특정 게시글의 댓글 수 조회
     @GetMapping("/post/{postId}/count")
     public ResponseEntity<ApiResponse<GetCommentCountResponse>> getCommentCount(@PathVariable Long postId) {
-        Map<String, Long> response = commentUseCase.getCommentCount(postId);
+        Map<Post, Long> response = commentUseCase.getCommentCount(postId);
         return ResponseEntity.ok(ApiResponse.success(GetCommentCountResponse.from(response)));
     }
 
