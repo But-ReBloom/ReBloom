@@ -1,3 +1,4 @@
+drop schema ReBloom;
 create database if not exists ReBloom character set utf8mb4 collate utf8mb4_unicode_ci;
 use ReBloom;
 
@@ -45,6 +46,9 @@ create table channels (
                           ch_description text not null,
                           ch_created_at datetime not null default current_timestamp,
                           ch_is_accepted boolean not null default false,
+                          ch_lk_hobby_1 bigint not null,
+                          ch_lk_hobby_2 bigint null,
+                          ch_lk_hobby_3 bigint null,
                           foreign key (fk_u_email) references users(u_email) on delete cascade
 );
 
@@ -299,3 +303,12 @@ create index hobbies_focus
 
 create index hobbies_creativity
     on hobbies(h_w_creativity);
+
+create index channels_linked_hobby_1
+    on channels(ch_lk_hobby_1);
+
+create index channels_linked_hobby_2
+    on channels(ch_lk_hobby_2);
+
+create index channels_linked_hobby_3
+    on channels(ch_lk_hobby_3);
