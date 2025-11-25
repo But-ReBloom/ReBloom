@@ -48,7 +48,7 @@ function OneExpInfo({ exp, setStep, setSelectedExp }) {
               alt="페이지 아이콘"
               style={{ width: "20px", height: "20px" }}
             />
-            {exp.data.activityName}
+            {exp.activityName}
           </S.ExpInfo>
 
           <S.ExpInfo>
@@ -57,7 +57,7 @@ function OneExpInfo({ exp, setStep, setSelectedExp }) {
               alt="활동 날짜"
               style={{ width: "20px", height: "20px" }}
             />
-            {exp.data.activityStart}
+            {exp.activityStart}
           </S.ExpInfo>
         </S.Locates>
 

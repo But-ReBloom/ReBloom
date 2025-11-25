@@ -22,3 +22,23 @@ export interface HobbyScoreResponse {
     hobbyName: string;
     distance: number;
 }
+
+export interface AddActivityRequest {
+    activityName: string;
+    activityStart: string;
+    activityRecent: string;
+    userEmail: string;
+}
+
+export interface AddActivityResponse {
+    activityName: string;
+    activityStart: string;
+    activityRecent: string;
+    userEmail: string;
+}
+
+export interface FindActivityResponse {
+    activityName: string;
+    activityStart: string;
+    activityRecent: string;
+}
