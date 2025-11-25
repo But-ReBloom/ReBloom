@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,9 +24,9 @@ public class ChannelController {
     // 채널 생성 요청
     @PostMapping("/request")
     public ResponseEntity<ApiResponse<CreateChannelResponse>> createChannel(@Valid @RequestBody CreateChannelRequest request) {
-        Map<Channel, String> response = channelUseCase.requestCreation(request);
+        Channel channel = channelUseCase.requestCreation(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(CreateChannelResponse.from(response)));
+                .body(ApiResponse.success(CreateChannelResponse.from(channel)));
     }
 
     // 채널 검색
