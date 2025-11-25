@@ -35,8 +35,8 @@ public class ChannelController {
     // 채널 검색
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<FindChannelResponse>> searchChannel(@ModelAttribute SearchChannelRequest request) {
-        List<Channel> channels = channelUseCase.findChannel(request);
-        return ResponseEntity.ok(ApiResponse.success(FindChannelResponse.from(channels)));
+        List<Map<Channel, String>> responses = channelUseCase.findChannel(request);
+        return ResponseEntity.ok(ApiResponse.success(FindChannelResponse.from(responses)));
     }
 
     // 특정 채널 조회
@@ -49,15 +49,15 @@ public class ChannelController {
     // 승인된 채널 목록 조회
     @GetMapping("/admin/approve")
     public ResponseEntity<ApiResponse<FindChannelResponse>> getApprovedChannels() {
-        List<Channel> channels = channelUseCase.getApprovedChannels();
-        return ResponseEntity.ok(ApiResponse.success(FindChannelResponse.from(channels)));
+        List<Map<Channel, String>> responses = channelUseCase.getApprovedChannels();
+        return ResponseEntity.ok(ApiResponse.success(FindChannelResponse.from(responses)));
     }
 
     // 승인 대기 채널 목록 조회
     @GetMapping("/admin/pending")
     public ResponseEntity<ApiResponse<FindChannelResponse>> getPendingChannels() {
-        List<Channel> channels = channelUseCase.getPendingChannels();
-        return ResponseEntity.ok(ApiResponse.success(FindChannelResponse.from(channels)));
+        List<Map<Channel, String>> responses = channelUseCase.getPendingChannels();
+        return ResponseEntity.ok(ApiResponse.success(FindChannelResponse.from(responses)));
     }
 
     // 채널 승인

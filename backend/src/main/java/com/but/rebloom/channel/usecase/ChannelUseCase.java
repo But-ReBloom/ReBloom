@@ -84,23 +84,52 @@ public class ChannelUseCase {
     }
 
     // 채널 검색
-    public List<Channel> findChannel(SearchChannelRequest request) {
+    public List<Map<Channel, String>> findChannel(SearchChannelRequest request) {
         List<Channel> channels = channelRepository
                 .searchByKeyword(request.getKeyword());
 
         return channels.stream()
                 .filter(Channel::getIsAccepted)
+                .map(channel -> {
+                    String hobbyName = activityRepository
+                            .findById(channel.getChannelLinkedHobby1())
+                            .map(Activity::getActivityName)
+                            .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+                    return Map.of(channel, hobbyName);
+                })
                 .collect(Collectors.toList());
     }
 
     // 승인된 채널 목록
-    public List<Channel> getApprovedChannels() {
-        return channelRepository.findByIsAcceptedTrue();
+    public List<Map<Channel, String>> getApprovedChannels() {
+        List<Channel> channels = channelRepository.findByIsAcceptedTrue();
+
+        return channels.stream()
+                .filter(Channel::getIsAccepted)
+                .map(channel -> {
+                    String hobbyName = activityRepository
+                            .findById(channel.getChannelLinkedHobby1())
+                            .map(Activity::getActivityName)
+                            .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+                    return Map.of(channel, hobbyName);
+                })
+                .collect(Collectors.toList());
     }
 
     // 승인대기 채널 목록
-    public List<Channel> getPendingChannels() {
-        return channelRepository.findByIsAcceptedFalse();
+    public List<Map<Channel, String>> getPendingChannels() {
+        List<Channel> channels = channelRepository.findByIsAcceptedFalse();
+
+        return channels.stream()
+                .filter(Channel::getIsAccepted)
+                .map(channel -> {
+                    String hobbyName = activityRepository
+                            .findById(channel.getChannelLinkedHobby1())
+                            .map(Activity::getActivityName)
+                            .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+                    return Map.of(channel, hobbyName);
+                })
+                .collect(Collectors.toList());
     }
 
     // 채널 승인
