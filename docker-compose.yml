@@ -41,13 +41,16 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: Rebloom@1234
       MYSQL_DATABASE: ReBloom
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Rebloom@1234
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./mysql/my.cnf:/etc/my.cnf:ro
     restart: always
-
-volumes:
-  db_data:
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --init_connect="SET NAMES utf8mb4"
+      --character-set-client-handshake=FALSE
