@@ -105,7 +105,7 @@ public class ChannelUseCase {
 
     // 채널 승인
     @Transactional
-    public Channel approveChannel(Long channelId) {
+    public Map<Channel, List<String>> approveChannel(Long channelId) {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
 
@@ -113,8 +113,24 @@ public class ChannelUseCase {
             throw new AlreadyProcessedChannelException("This channel is already accepted");
         }
 
+        Activity activity1 = activityRepository.findByActivityId(channel.getChannelLinkedHobby1())
+                .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+
+        Activity activity2 = null;
+        Activity activity3 = null;
+
+        if (channel.getChannelLinkedHobby2() != null) {
+            activity2 = activityRepository.findByActivityId(channel.getChannelLinkedHobby2())
+                    .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+        } if (channel.getChannelLinkedHobby3() != null) {
+            activity3 = activityRepository.findByActivityId(channel.getChannelLinkedHobby3())
+                    .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+        }
+
         channel.setIsAccepted(true);
-        return channelRepository.save(channel);
+        channelRepository.save(channel);
+
+        return Map.of(channel, List.of(activity1.getActivityName(), activity2.getActivityName(), activity3.getActivityName()));
     }
 
     // 채널 거절
@@ -139,8 +155,13 @@ public class ChannelUseCase {
     }
 
     // 특정 채널 조회
-    public Channel getChannel(Long channelId) {
-        return channelRepository.findById(channelId)
+    public Map<Channel, String> getChannel(Long channelId) {
+        Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
+
+        Activity activity = activityRepository.findByActivityId(channel.getChannelLinkedHobby1())
+                .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+
+        return Map.of(channel, activity.getActivityName());
     }
 }
