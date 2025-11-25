@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -63,4 +64,22 @@ public class User {
     @Column(name = "u_streak", nullable = false)
     @Builder.Default
     private Integer userStreak = 1;
+
+    @Column(name = "u_vector_social")
+    private String VectorSocial;
+
+    @Column(name = "u_vector_learning")
+    private String VectorLearning;
+
+    @Column(name = "u_vector_planning")
+    private String VectorPlanning;
+
+    @Column(name = "u_vector_focus")
+    private String VectorFocus;
+
+    @Column(name = "u_vector_creativity")
+    private String VectorCreativity;
+
+    @Column(name = "u_vector_updated_at")
+    private LocalDateTime vectorUpdatedAt;
 }

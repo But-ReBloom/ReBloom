@@ -4,7 +4,6 @@ import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.hobby.domain.HobbyWeight;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -60,10 +59,4 @@ public class ActivityReview {
     @JoinColumn(name = "fk_h_id", referencedColumnName = "h_id", insertable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private HobbyWeight hobby;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
-
 }
