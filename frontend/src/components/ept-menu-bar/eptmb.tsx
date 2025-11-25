@@ -40,17 +40,7 @@ export default function EPTmenuBar() {
   return (
     <>
       <S.Wrapper>
-        <S.Container>
-          <S.MenuContent>
-            <Link to="/taste/hobby">
-              <S.MenuBox>취향 테스트</S.MenuBox>
-            </Link>
-            <Link to="/expreview">
-              <S.MenuBox>활동 리뷰</S.MenuBox>
-            </Link>
-            <S.MenuBox>취향 초기화</S.MenuBox>
-          </S.MenuContent>
-        </S.Container>
+        <S.Container></S.Container>
 
         {/* 아래부터 카드 부분 */}
         <S.IntroduceUs>
@@ -74,6 +64,20 @@ export default function EPTmenuBar() {
               <NextPButton />
             </S.Btn>
           </S.IntroCon>
+          <S.Menu>
+            <p style={{ fontSize: "28px", fontWeight: "650", marginTop: "0" }}>
+              다양한 콘텐츠!
+            </p>
+            <S.MenuContent>
+              <Link to="/taste/hobby">
+                <S.MenuBox>취향 테스트</S.MenuBox>
+              </Link>
+              <Link to="/expreview">
+                <S.MenuBox>활동 리뷰</S.MenuBox>
+              </Link>
+              <S.MenuBox>취향 초기화</S.MenuBox>
+            </S.MenuContent>
+          </S.Menu>
         </S.IntroduceUs>
       </S.Wrapper>
     </>

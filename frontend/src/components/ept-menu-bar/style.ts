@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: rgb(255, 255, 255);
+  background: linear-gradient(103deg, #bbe4fc 15.07%, #ffffff 108.45%);
 `;
 
 export const Container = styled.div`
@@ -13,10 +13,23 @@ export const Container = styled.div`
   justify-content: center;
 `;
 
+export const Menu = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 60px;
+  border-radius: 20px;
+  border: 2px solid #dedede;
+  width: 300px;
+  height: 450px;
+  background: #fff;
+`;
+
 export const MenuContent = styled.div`
   display: flex;
-  flex-direction: row;
-  gap: 100px;
+  flex-direction: column;
+  gap: 40px;
 `;
 
 export const MenuBox = styled.button`
@@ -43,12 +56,13 @@ export const IntroCon = styled.div`
   border-radius: 20px;
   border: 2px solid #dedede;
   width: 60%;
-  height: 350px;
+  height: 450px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   text-align: center;
+  background: #fff;
   p {
     font-size: 18px;
     margin-bottom: 10px;
@@ -57,15 +71,15 @@ export const IntroCon = styled.div`
 `;
 
 export const IntroTexting = styled.div`
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const IntroduceUs = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 52px;
+  margin-top: 80px;
   width: 100%;
 `;
 
@@ -76,7 +90,7 @@ export const Btn = styled.button`
   margin: 0 20px;
   transition: all 0.3s ease;
 
-  &:hover{
+  &:hover {
     transform: scale(1.2);
   }
 `;

@@ -13,6 +13,7 @@ import MyExps from "./Pages/myExpspage/MEP.tsx";
 import EPT from "./Pages/exploreTaste/EPT.tsx";
 import TestResult from "./Pages/hobbytestresultpage/hobbytestresultpage.tsx";
 import Thankyou from "./components/thanktou/thankyou.tsx";
+import Mypage from "./Pages/mypage/Mypage.tsx";
 
 //경로명세 라우터
 const router = createBrowserRouter([
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
     path: "/test/result",
     element: <TestResult/>,
   },
+  {
+    path: "/mypage",
+    element: <Mypage/>,
+  }
 ]);
 
 export default router;
