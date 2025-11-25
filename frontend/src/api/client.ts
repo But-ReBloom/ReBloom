@@ -1,4 +1,4 @@
-const BASE_URL = "http://api.rebloom.co.kr";
+const BASE_URL = "http://localhost:8080";
 
 export const client = async (endpoint: string, options: RequestInit = {}) => {
   const url = `${BASE_URL}${endpoint}`;
