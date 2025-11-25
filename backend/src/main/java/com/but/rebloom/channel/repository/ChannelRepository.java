@@ -31,13 +31,14 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
     List<Channel> findByIsAcceptedFalse();
 
     // 연관 취미로 채널 목록 검색
-    List<Channel> findByChannelLinkedHobby1(Long hobby1Id);
-
-    // 연관 취미로 채널 목록 검색
-    List<Channel> findByChannelLinkedHobby2(Long hobby2Id);
-
-    // 연관 취미로 채널 목록 검색
-    List<Channel> findByChannelLinkedHobby3(Long hobby3Id);
+    @Query("""
+        select c from
+        Channel c
+        where c.ChannelLinkedHobby1 = :hobbyId
+            or c.ChannelLinkedHobby2 = :hobbyId
+            or c.ChannelLinkedHobby3 = :hobbyId
+    """)
+    List<Channel> findByChannelLinkedHobby(@Param("hobbyId") Long hobbyId);
 
     // 관리자 승인/거절 처리 (일주일 이내)
     @Query("select c from Channel c where c.isAccepted = false and c.channelCreatedAt < :deadline")

@@ -1,11 +1,11 @@
 package com.but.rebloom.hobby.controller;
 
+import com.but.rebloom.channel.domain.Channel;
 import com.but.rebloom.common.dto.ApiResponse;
 import com.but.rebloom.hobby.domain.HobbyScore;
-import com.but.rebloom.hobby.domain.HobbyWeight;
 import com.but.rebloom.hobby.domain.InitialTest;
 import com.but.rebloom.hobby.dto.request.UserAnswerRequest;
-import com.but.rebloom.hobby.dto.response.HobbyScoreResponse;
+import com.but.rebloom.hobby.dto.response.HobbyTestResponse;
 import com.but.rebloom.hobby.usecase.HobbyTestUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +29,10 @@ public class HobbyTestController {
         return ResponseEntity.ok(ApiResponse.success(questions));
     }
 
-     // 활동 추천 로직
+     // 활동, 채널 추천 로직
      @PostMapping("/recommend")
-     public ResponseEntity<ApiResponse<List<HobbyScoreResponse>>> recommendHobby(@RequestBody UserAnswerRequest answers) {
-         List<HobbyScore> hobbies = hobbyTestUseCase.findUserHobbies(answers);
-
-         return ResponseEntity.ok(ApiResponse.success(
-                 hobbies.stream()
-                         .map(HobbyScoreResponse::from)
-                         .toList()
-         ));
+     public ResponseEntity<ApiResponse<HobbyTestResponse>> recommendHobby(@RequestBody UserAnswerRequest answers) {
+         Map<List<HobbyScore>, List<Channel>> responses = hobbyTestUseCase.findUserHobbies(answers);
+         return ResponseEntity.ok(ApiResponse.success(HobbyTestResponse.from(responses)));
      }
 }
