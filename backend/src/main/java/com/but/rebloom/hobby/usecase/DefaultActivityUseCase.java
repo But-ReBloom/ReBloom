@@ -1,6 +1,7 @@
 package com.but.rebloom.hobby.usecase;
 
 import com.but.rebloom.auth.domain.User;
+import com.but.rebloom.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.hobby.exception.ActivityNotFoundException;
 import com.but.rebloom.hobby.domain.Activity;
@@ -8,6 +9,8 @@ import com.but.rebloom.hobby.dto.request.AddActivityRequest;
 import com.but.rebloom.hobby.repository.ActivityRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,6 +25,7 @@ public class DefaultActivityUseCase {
     private final HobbyValidationUseCase hobbyValidationUseCase;
     // 로그인중인 유저 정보 추출에 이용
     private final FindCurrentUserUseCase findCurrentUserUseCase;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // Activity 조회 - ActivityId
     public Activity findActivityByActivityId(Long activityId) {
@@ -30,7 +34,10 @@ public class DefaultActivityUseCase {
     }
 
     // Activity 조회 - ActivityName
-    public Activity findActivityByActivityName(String activityName) {
+    public Activity findActivityByActivityName(String token, String activityName) {
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
         return activityRepository.findByUser_UserEmailAndActivityName(activityName, userEmail)
@@ -38,14 +45,20 @@ public class DefaultActivityUseCase {
     }
 
     // 전체 Activity 조회
-    public List<Activity> findAllActivity() {
+    public List<Activity> findAllActivity(String token) {
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
         return activityRepository.findByUser_UserEmail(userEmail);
     }
 
     // Activity 조회 - ActivityRecent(ASC)
-    public List<Activity> findActivityOrderByActivityRecentAsc() {
+    public List<Activity> findActivityOrderByActivityRecentAsc(String token) {
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 
@@ -53,7 +66,10 @@ public class DefaultActivityUseCase {
     }
 
     // Activity 조회 - ActivityRecent(DESC)
-    public List<Activity> findActivityOrderByActivityRecentDesc() {
+    public List<Activity> findActivityOrderByActivityRecentDesc(String token) {
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 

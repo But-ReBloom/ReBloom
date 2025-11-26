@@ -6,10 +6,7 @@ import com.but.rebloom.hobby.dto.response.FindActivityResponse;
 import com.but.rebloom.hobby.usecase.DefaultActivityUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,15 +27,20 @@ public class ActivityFindController {
 
     // Activity 조회 - ActivityName
     @GetMapping("/name/{activityName}")
-    public ResponseEntity<ApiResponse<FindActivityResponse>> findActivityByActivityName(@PathVariable String activityName) {
-        Activity activity = defaultActivityUseCase.findActivityByActivityName(activityName);
+    public ResponseEntity<ApiResponse<FindActivityResponse>> findActivityByActivityName(
+            @RequestHeader String token,
+            @PathVariable String activityName
+    ) {
+        Activity activity = defaultActivityUseCase.findActivityByActivityName(token, activityName);
         return ResponseEntity.ok(ApiResponse.success(FindActivityResponse.from(activity)));
     }
 
     // Activity 조회
     @GetMapping("/normal")
-    public ResponseEntity<ApiResponse<List<FindActivityResponse>>> findActivity() {
-        List<Activity> activities = defaultActivityUseCase.findAllActivity();
+    public ResponseEntity<ApiResponse<List<FindActivityResponse>>> findActivity(
+            @RequestHeader String token
+    ) {
+        List<Activity> activities = defaultActivityUseCase.findAllActivity(token);
 
         // List<Activity> -> List<FindActivityResponse>로 변환
         return ResponseEntity.ok(
@@ -52,8 +54,10 @@ public class ActivityFindController {
 
     // Activity 조회 - ActivityRecent(ASC)
     @GetMapping("/normal/recent/asc")
-    public ResponseEntity<ApiResponse<List<FindActivityResponse>>> findActivityOrderByRecentActivityAsc() {
-        List<Activity> activities = defaultActivityUseCase.findActivityOrderByActivityRecentAsc();
+    public ResponseEntity<ApiResponse<List<FindActivityResponse>>> findActivityOrderByRecentActivityAsc(
+            @RequestHeader String token
+    ) {
+        List<Activity> activities = defaultActivityUseCase.findActivityOrderByActivityRecentAsc(token);
 
         // List<Activity> -> List<FindActivityResponse>로 변환
         return ResponseEntity.ok(
@@ -67,8 +71,10 @@ public class ActivityFindController {
 
     // Activity 조회 - ActivityRecent(DESC)
     @GetMapping("/normal/recent/desc")
-    public ResponseEntity<ApiResponse<List<FindActivityResponse>>> findActivityOrderByRecentActivityDesc() {
-        List<Activity> activities = defaultActivityUseCase.findActivityOrderByActivityRecentDesc();
+    public ResponseEntity<ApiResponse<List<FindActivityResponse>>> findActivityOrderByRecentActivityDesc(
+            @RequestHeader String token
+    ) {
+        List<Activity> activities = defaultActivityUseCase.findActivityOrderByActivityRecentDesc(token);
 
         // List<Activity> -> List<FindActivityResponse>로 변환
         return ResponseEntity.ok(
