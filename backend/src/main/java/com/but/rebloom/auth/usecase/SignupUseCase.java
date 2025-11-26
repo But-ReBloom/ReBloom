@@ -59,7 +59,7 @@ public class SignupUseCase {
         userRepository.flush();
 
         // 초기 유저 업적 생성
-        defaultUserAchievementUseCase.createDefaultUserAchievement(userEmail, userId);
+        defaultUserAchievementUseCase.createDefaultUserAchievement(userEmail);
 
         // 업적 성공 처리
         String signupAchievementTitle = "시작이 반이다.";
