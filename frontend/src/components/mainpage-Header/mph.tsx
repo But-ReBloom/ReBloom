@@ -1,28 +1,53 @@
 import logo from "../../assets/images/Rebloom-logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as S from "./style.ts";
 import Menu_Bar from "../menu-bar/mb.tsx";
 
-function Header() {
-  //메인 페이지_헤더
+function Header({ props }) {
+  const navigate = useNavigate();
+  const userId = props?.state?.id; // ← 로그인 이메일/아이디
+
+  const handleLogout = () => {
+    // 필요 시 토큰 삭제
+    // localStorage.removeItem("token");
+
+    navigate("/", { state: null }); // 상태 초기화
+  };
+
   return (
-    <>
-      <S.HeaderContainer>
-        <Link to="/">
-          <S.Logo_svg src={logo} />
-        </Link>
-        <S.HeaderRight>
-          <Menu_Bar />
+    <S.HeaderContainer>
+      <Link to="/">
+        <S.Logo_svg src={logo} />
+      </Link>
+
+      <S.HeaderRight>
+        <Menu_Bar />
+
+        {/* 🔥 로그인 여부에 따라 조건부 렌더링 */}
+        {userId ? (
+          <div className="user-info-box">
+            <S.LogoutContainer>
+              <span className="user-name">{userId} 님</span>
+              <button
+                className="login-button-go-lp"
+                id="login-box_button"
+                onClick={handleLogout}
+              >
+                로그아웃
+              </button>
+            </S.LogoutContainer>
+          </div>
+        ) : (
           <div className="go-login-button">
             <Link to="/login">
               <button className="login-button-go-lp" id="login-box_button">
-                Login
+                로그인
               </button>
             </Link>
           </div>
-        </S.HeaderRight>
-      </S.HeaderContainer>
-    </>
+        )}
+      </S.HeaderRight>
+    </S.HeaderContainer>
   );
 }
 

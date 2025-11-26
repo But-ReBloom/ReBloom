@@ -14,10 +14,11 @@ function MainPage() {
       toast.success(`환영합니다! ${userId}님!`);
     }
   }, [location.state]);
+
   //메인페이지
   return (
     <S.MainPage_Container>
-      <Header />
+      <Header props={{ state: location.state }} />
       <Body />
     </S.MainPage_Container>
   );
