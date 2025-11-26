@@ -76,8 +76,11 @@ public class PostController {
 
     // 게시글 삭제(유저 본인)
     @DeleteMapping("/{postId}")
-    public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postId) {
-        postUseCase.deletePost(postId);
+    public ResponseEntity<ApiResponse<Void>> deletePost(
+            @RequestHeader String token,
+            @PathVariable Long postId
+    ) {
+        postUseCase.deletePost(token, postId);
         return ResponseEntity.ok(ApiResponse.success());
     }
 

@@ -3,6 +3,7 @@ package com.but.rebloom.post.usecase;
 import com.but.rebloom.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.auth.domain.User;
 import com.but.rebloom.auth.exception.UserNotFoundException;
+import com.but.rebloom.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.auth.repository.UserRepository;
 import com.but.rebloom.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.channel.domain.Channel;
@@ -20,6 +21,8 @@ import com.but.rebloom.channel.repository.ChannelRepository;
 import com.but.rebloom.post.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,10 +30,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PostUseCase {
+    // 디비 접근
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ChannelRepository channelRepository;
+    // 함수 호출
     private final FindCurrentUserUseCase findCurrentUserUseCase;
+    private final JwtTokenProvider jwtTokenProvider;
     private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     // 게시글 생성
@@ -143,9 +149,12 @@ public class PostUseCase {
 
     // 게시글 삭제(유저 본인)
     @Transactional
-    public void deletePost(Long postId) {
+    public void deletePost(String token, Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
+
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String userId = findCurrentUserUseCase.getCurrentUser().getUserId();
 
