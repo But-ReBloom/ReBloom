@@ -25,10 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private static final List<String> PERMIT_ALL_PATHS = Arrays.asList(
             "/",
-            "/auth/signup",
-            "/auth/login",
-            "/auth/login/**",
-            "/auth/email/**",
+            "/auth/**",
             "/achievement/**",
             "/user-achievement/**",
             "/channel/**",

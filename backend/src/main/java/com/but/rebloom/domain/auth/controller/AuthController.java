@@ -102,10 +102,8 @@ public class AuthController {
     }
 
     @PostMapping("/current-user")
-    public ResponseEntity<ApiResponse<FindUserInfoResponse>> findCurrentUser(
-            @RequestHeader String token
-    ) {
-        User user = findCurrentUserUseCase.getCurrentUserByToken(token);
+    public ResponseEntity<ApiResponse<FindUserInfoResponse>> findCurrentUser() {
+        User user = findCurrentUserUseCase.getCurrentUser();
         return ResponseEntity.ok(ApiResponse.success(FindUserInfoResponse.from(user)));
     }
 }
