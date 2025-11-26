@@ -69,16 +69,22 @@ public class AuthController {
     }
 
     @PatchMapping("/update/id")
-    public ResponseEntity<ApiResponse<UpdateIdResponse>> updateUserId(@RequestBody UpdateUserIdRequest request) {
+    public ResponseEntity<ApiResponse<UpdateIdResponse>> updateUserId(
+            @RequestHeader String token,
+            @RequestBody UpdateUserIdRequest request
+    ) {
         // 아이디 변경 및 반환
-        User user = updateUserInfoUseCase.updateUserId(request);
+        User user = updateUserInfoUseCase.updateUserId(token, request);
         return ResponseEntity.ok(ApiResponse.success(UpdateIdResponse.from(user)));
     }
 
     @PatchMapping("/update/pw")
-    public ResponseEntity<ApiResponse<GetUserEmailResponse>> updateUserPw(@RequestBody UpdateUserPasswordRequest request) {
+    public ResponseEntity<ApiResponse<GetUserEmailResponse>> updateUserPw(
+            @RequestHeader String token,
+            @RequestBody UpdateUserPasswordRequest request
+    ) {
         // 비밀번호 변경
-        User user = updateUserInfoUseCase.updateUserPassword(request);
+        User user = updateUserInfoUseCase.updateUserPassword(token, request);
         return ResponseEntity.ok(ApiResponse.success(GetUserEmailResponse.from(user)));
     }
 
@@ -97,8 +103,10 @@ public class AuthController {
     }
 
     @PostMapping("/current-user")
-    public ResponseEntity<ApiResponse<FindUserInfoResponse>> findCurrentUser() {
-        User user = findCurrentUserUseCase.getCurrentUser();
+    public ResponseEntity<ApiResponse<FindUserInfoResponse>> findCurrentUser(
+            @RequestHeader String token
+    ) {
+        User user = findCurrentUserUseCase.getCurrentUserByToken(token);
         return ResponseEntity.ok(ApiResponse.success(FindUserInfoResponse.from(user)));
     }
 }
