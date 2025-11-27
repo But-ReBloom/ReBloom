@@ -23,9 +23,6 @@ public class Activity {
     @Column(name = "act_id", nullable = false)
     private Long activityId;
 
-    @Column(name = "act_name", nullable = false, length = 50)
-    private String activityName;
-
     @Column(name = "act_start", nullable = false)
     @CreationTimestamp
     private LocalDate activityStart;
@@ -39,4 +36,9 @@ public class Activity {
     @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email", updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_h_id", referencedColumnName = "h_id", updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Hobby hobby;
 }

@@ -4,7 +4,6 @@ import com.but.rebloom.global.exception.IllegalArgumentException;
 import com.but.rebloom.global.usecase.ValidationUseCase;
 import com.but.rebloom.domain.hobby.exception.AlreadyUsingActivityException;
 import com.but.rebloom.domain.hobby.exception.WrongTimeStampException;
-import com.but.rebloom.domain.hobby.dto.request.AddActivityRequest;
 import com.but.rebloom.domain.hobby.repository.ActivityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,8 +59,8 @@ public class HobbyValidationUseCase {
     }
 
     // 해당 유저가 하고 있지 않은 활동인지 확인
-    public void checkExistActivityByEmailAndActivityName(String email, String activityName) {
-        if (activityRepository.findByUser_UserEmailAndActivityName(email, activityName).isPresent()) {
+    public void checkExistActivityByEmailAndHobby_HobbyId(String email, Long hobbyId) {
+        if (activityRepository.findByUser_UserEmailAndHobby_HobbyId(email, hobbyId).isPresent()) {
             throw new AlreadyUsingActivityException("이미 활동중인 활동");
         }
     }

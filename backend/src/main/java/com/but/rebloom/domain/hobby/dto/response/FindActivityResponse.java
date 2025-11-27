@@ -19,7 +19,7 @@ public class FindActivityResponse {
 
     public static FindActivityResponse from(Activity activity) {
         return FindActivityResponse.builder()
-                .activityName(activity.getActivityName())
+                .activityName(activity.getHobby().getHobbyName())
                 .activityStart(activity.getActivityStart())
                 .activityRecent(activity.getActivityRecent())
                 .build();

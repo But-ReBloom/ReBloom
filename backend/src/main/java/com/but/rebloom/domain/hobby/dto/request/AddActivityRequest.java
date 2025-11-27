@@ -8,5 +8,7 @@ import java.time.LocalDate;
 @Getter
 public class AddActivityRequest {
     @NotNull
-    private String activityName;
+    private Long hobbyId;
+    @NotNull
+    private String userEmail;
 }

@@ -7,7 +7,9 @@ import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.hobby.exception.ActivityNotFoundException;
 import com.but.rebloom.domain.hobby.domain.Activity;
 import com.but.rebloom.domain.hobby.dto.request.AddActivityRequest;
+import com.but.rebloom.domain.hobby.exception.HobbyNotFoundException;
 import com.but.rebloom.domain.hobby.repository.ActivityRepository;
+import com.but.rebloom.domain.hobby.repository.HobbyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,12 +26,13 @@ public class DefaultActivityUseCase {
     // 로그인중인 유저 정보 추출에 이용
     private final FindCurrentUserUseCase findCurrentUserUseCase;
     private final UserRepository userRepository;
+    private final HobbyRepository hobbyRepository;
 
     // Activity 조회 - ActivityId
     public Activity findActivityByActivityId(Long activityId) {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
-        return activityRepository.findByUser_UserEmailAndActivityId(userEmail, activityId)
+        return activityRepository.findByUser_UserEmailAndHobby_HobbyId(userEmail, activityId)
                 .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 
@@ -37,7 +40,7 @@ public class DefaultActivityUseCase {
     public Activity findActivityByActivityName(String activityName) {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
-        return activityRepository.findByUser_UserEmailAndActivityName(userEmail, activityName)
+        return activityRepository.findByUser_UserEmailAndHobby_HobbyName(userEmail, activityName)
                 .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 
@@ -67,19 +70,18 @@ public class DefaultActivityUseCase {
     // Activity 추가
     @Transactional
     public Activity addActivity(AddActivityRequest request) {
-        String activityName = request.getActivityName();
+        Long hobbyId = request.getHobbyId();
 
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
-        // 각 요소별 예외처리
-        hobbyValidationUseCase.checkActivityName(activityName);
-
         // 이미 활동중인 활동인지 확인
-        hobbyValidationUseCase.checkExistActivityByEmailAndActivityName(userEmail, activityName);
+        hobbyValidationUseCase.checkExistActivityByEmailAndHobby_HobbyId(userEmail, hobbyId);
 
         // 활동 생성
         Activity activity = Activity.builder()
-                .activityName(activityName)
+                .hobby(hobbyRepository.findByHobbyId(request.getHobbyId())
+                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"))
+                )
                 .user(userRepository.findByUserEmail(userEmail)
                         .orElseThrow(() -> new UserNotFoundException("유저가 조회되지 않음"))
                 )

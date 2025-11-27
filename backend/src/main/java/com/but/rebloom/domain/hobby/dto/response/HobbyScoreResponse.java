@@ -15,7 +15,7 @@ public class HobbyScoreResponse {
 
     public static HobbyScoreResponse from(HobbyScore hobbyScore) {
         return HobbyScoreResponse.builder()
-                .hobbyName(hobbyScore.getHobbyWeight().getHobbyName())
+                .hobbyName(hobbyScore.getHobby().getHobbyName())
                 .distance(hobbyScore.getDistance())
                 .build();
     }

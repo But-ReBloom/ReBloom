@@ -21,7 +21,7 @@ public class AddActivityResponse {
 
     public static AddActivityResponse from(Activity activity) {
         return AddActivityResponse.builder()
-                .activityName(activity.getActivityName())
+                .activityName(activity.getHobby().getHobbyName())
                 .activityStart(activity.getActivityStart())
                 .activityRecent(activity.getActivityRecent())
                 .userEmail(activity.getUser().getUserEmail())
