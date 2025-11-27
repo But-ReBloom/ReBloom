@@ -3,11 +3,11 @@ package com.but.rebloom.domain.hobby.usecase;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
+import com.but.rebloom.domain.hobby.domain.Hobby;
 import com.but.rebloom.domain.hobby.domain.HobbyScore;
-import com.but.rebloom.domain.hobby.domain.HobbyWeight;
 import com.but.rebloom.domain.hobby.domain.InitialTest;
 import com.but.rebloom.domain.hobby.dto.request.UserAnswerRequest;
-import com.but.rebloom.domain.hobby.repository.HobbyWeightRepository;
+import com.but.rebloom.domain.hobby.repository.HobbyRepository;
 import com.but.rebloom.domain.hobby.repository.InitialTestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import java.util.*;
 public class HobbyTestUseCase {
     // 디비 이용
     private final InitialTestRepository initialTestRepository;
-    private final HobbyWeightRepository hobbyWeightRepository;
+    private final HobbyRepository hobbyRepository;
     private final ChannelRepository channelRepository;
 
     // 결과에 따른 취미 탐색
@@ -35,23 +35,23 @@ public class HobbyTestUseCase {
 
         // 카테고리별 존재하는 인접 값과의 거리
         double[] userClosestScore = {
-                Math.abs(hobbyWeightRepository
+                Math.abs(hobbyRepository
                         .findByCategoryAndLimit("h_w_social", userScore[0], 1)
                                 .getFirst()
                         .getHobbyWeightSocial() - userScore[0]),
-                Math.abs(hobbyWeightRepository
+                Math.abs(hobbyRepository
                         .findByCategoryAndLimit("h_w_learning", userScore[1], 1)
                         .getFirst()
                         .getHobbyWeightLearning() - userScore[1]),
-                Math.abs(hobbyWeightRepository
+                Math.abs(hobbyRepository
                         .findByCategoryAndLimit("h_w_planning", userScore[2], 1)
                         .getFirst()
                         .getHobbyWeightPlanning() - userScore[2]),
-                Math.abs(hobbyWeightRepository
+                Math.abs(hobbyRepository
                         .findByCategoryAndLimit("h_w_focus", userScore[3], 1)
                         .getFirst()
                         .getHobbyWeightFocus() - userScore[3]),
-                Math.abs(hobbyWeightRepository
+                Math.abs(hobbyRepository
                         .findByCategoryAndLimit("h_w_creativity", userScore[4], 1)
                         .getFirst()
                         .getHobbyWeightCreativity() - userScore[4])
@@ -74,22 +74,22 @@ public class HobbyTestUseCase {
             index = 4;
         }
 
-        List<HobbyWeight> result;
+        List<Hobby> result;
         switch (index) {
             case 0:
-                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_social", userScore[0], 3);
+                result = hobbyRepository.findByCategoryAndLimit("h_w_social", userScore[0], 3);
                 break;
             case 1:
-                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_learning", userScore[1], 3);
+                result = hobbyRepository.findByCategoryAndLimit("h_w_learning", userScore[1], 3);
                 break;
             case 2:
-                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_planning", userScore[2], 3);
+                result = hobbyRepository.findByCategoryAndLimit("h_w_planning", userScore[2], 3);
                 break;
             case 3:
-                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_focus", userScore[3], 3);
+                result = hobbyRepository.findByCategoryAndLimit("h_w_focus", userScore[3], 3);
                 break;
             case 4:
-                result = hobbyWeightRepository.findByCategoryAndLimit("h_w_creativity", userScore[4], 3);
+                result = hobbyRepository.findByCategoryAndLimit("h_w_creativity", userScore[4], 3);
                 break;
             default:
                 throw new UserNotFoundException("잘못된 index값");
@@ -126,23 +126,23 @@ public class HobbyTestUseCase {
         HobbyScore hobbyScoreResult3 = max;
 
         List<Channel> channels = channelRepository
-                .findByChannelLinkedHobby(hobbyScoreResult1.getHobbyWeight().getHobbyId());
+                .findByChannelLinkedHobby(hobbyScoreResult1.getHobby().getHobbyId());
 
         if (channels.isEmpty()) {
             channels = channelRepository
-                    .findByChannelLinkedHobby(hobbyScoreResult2.getHobbyWeight().getHobbyId());
+                    .findByChannelLinkedHobby(hobbyScoreResult2.getHobby().getHobbyId());
         } if (channels.isEmpty()) {
             channels = channelRepository
-                    .findByChannelLinkedHobby(hobbyScoreResult3.getHobbyWeight().getHobbyId());
+                    .findByChannelLinkedHobby(hobbyScoreResult3.getHobby().getHobbyId());
         }
 
         return Map.of(List.of(hobbyScoreResult1, hobbyScoreResult2, hobbyScoreResult3), channels);
     }
 
     // 평균 거리 탐색
-    private HobbyScore averageAbsoluteDistance(double[] userVector, HobbyWeight hobby) {
+    private HobbyScore averageAbsoluteDistance(double[] userVector, Hobby hobby) {
         return HobbyScore.builder()
-                .hobbyWeight(hobby)
+                .hobby(hobby)
                 .distance((Math.abs(hobby.getHobbyWeightSocial() - userVector[0]) +
                         Math.abs(hobby.getHobbyWeightLearning() - userVector[1]) +
                         Math.abs(hobby.getHobbyWeightPlanning() - userVector[2]) +

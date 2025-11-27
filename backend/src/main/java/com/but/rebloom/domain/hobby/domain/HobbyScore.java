@@ -6,6 +6,6 @@ import lombok.*;
 @RequiredArgsConstructor
 @Builder
 public class HobbyScore {
-    private final HobbyWeight hobbyWeight;
+    private final Hobby hobby;
     private final double distance;
 }

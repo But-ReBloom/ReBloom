@@ -1,6 +1,6 @@
 package com.but.rebloom.domain.hobby.repository;
 
-import com.but.rebloom.domain.hobby.domain.HobbyWeight;
+import com.but.rebloom.domain.hobby.domain.Hobby;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
-public class CustomHobbyWeightRepositoryImpl implements CustomHobbyWeightRepository {
+public class CustomHobbyRepositoryImpl implements CustomHobbyRepository {
     private final EntityManager entityManager;
 
     private static final Set<String> ALLOWED_CATEGORIES = Set.of(
@@ -22,7 +22,7 @@ public class CustomHobbyWeightRepositoryImpl implements CustomHobbyWeightReposit
     );
 
     @Override
-    public List<HobbyWeight> findByCategoryAndLimit(String category, double value, int limit) {
+    public List<Hobby> findByCategoryAndLimit(String category, double value, int limit) {
         if (!ALLOWED_CATEGORIES.contains(category)) {
             throw new IllegalArgumentException("잘못된 카테고리");
         }
@@ -55,7 +55,7 @@ public class CustomHobbyWeightRepositoryImpl implements CustomHobbyWeightReposit
             limit :limit
             """, category, category, category, category, category);
 
-        List<HobbyWeight> results = entityManager.createNativeQuery(sqlQuery, HobbyWeight.class)
+        List<Hobby> results = entityManager.createNativeQuery(sqlQuery, Hobby.class)
                 .setParameter("value", value)
                 .setParameter("limit", limit)
                 .getResultList();

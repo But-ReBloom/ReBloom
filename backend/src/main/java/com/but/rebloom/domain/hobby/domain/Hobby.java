@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Table(name = "hobbies")
-public class HobbyWeight {
+public class Hobby {
     @Id
     @Column(name = "h_id", nullable = false, unique = true, length = 255)
     private Long hobbyId;
