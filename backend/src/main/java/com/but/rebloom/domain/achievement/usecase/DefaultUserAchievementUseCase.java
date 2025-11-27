@@ -9,14 +9,11 @@ import com.but.rebloom.domain.achievement.repository.UserAchievementRepository;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.TierNotFoundException;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
-import com.but.rebloom.domain.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.DefaultTierUseCase;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,13 +29,9 @@ public class DefaultUserAchievementUseCase {
     private final FindCurrentUserUseCase findCurrentUserUseCase;
     // 함수 홏출
     private final DefaultTierUseCase defaultTierUseCase;
-    private final JwtTokenProvider jwtTokenProvider;
 
     // 전체 유저 업적 조회 - 유저 아이디
-    public List<UserAchievement> finaAllUserAchievementsByUserId(String token) {
-        Authentication authentication = jwtTokenProvider.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
+    public List<UserAchievement> finaAllUserAchievementsByUserId() {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
         String userId = currentUser.getUserId();
 
@@ -46,10 +39,7 @@ public class DefaultUserAchievementUseCase {
     }
 
     // 전체 유저 업적 조회 - 유저 이메일
-    public List<UserAchievement> finaAllUserAchievementsByUserEmail(String token) {
-        Authentication authentication = jwtTokenProvider.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
+    public List<UserAchievement> finaAllUserAchievementsByUserEmail() {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
         String userEmail = currentUser.getUserEmail();
 
@@ -57,13 +47,7 @@ public class DefaultUserAchievementUseCase {
     }
 
     // 유저 업적 조회 - (유저 이메일 + 업적 아이디)
-    public UserAchievement findUserAchievementByUserEmailAndAchievementId(
-            String token,
-            Long achievementId
-    ) {
-        Authentication authentication = jwtTokenProvider.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
+    public UserAchievement findUserAchievementByUserEmailAndAchievementId(Long achievementId) {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
         String userEmail = currentUser.getUserEmail();
 

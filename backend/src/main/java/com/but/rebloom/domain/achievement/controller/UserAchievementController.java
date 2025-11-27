@@ -19,10 +19,8 @@ public class UserAchievementController {
 
     // 전체 유저 업적 조회 - 유저 아이디
     @GetMapping("/id")
-    public ResponseEntity<ApiResponse<List<GetUserAchievementResponse>>> getUserAchievementsByUserId(
-            @RequestHeader String token
-    ) {
-        List<UserAchievement> response = defaultUserAchievementUseCase.finaAllUserAchievementsByUserId(token);
+    public ResponseEntity<ApiResponse<List<GetUserAchievementResponse>>> getUserAchievementsByUserId() {
+        List<UserAchievement> response = defaultUserAchievementUseCase.finaAllUserAchievementsByUserId();
         return ResponseEntity.ok(
                 ApiResponse.success(
                     response.stream()
@@ -34,10 +32,8 @@ public class UserAchievementController {
 
     // 전체 유저 업적 조회 - 유저 이메일
     @GetMapping("/email")
-    public ResponseEntity<ApiResponse<List<GetUserAchievementResponse>>> getUserAchievementsByUserEmail(
-            @RequestHeader String token
-    ) {
-        List<UserAchievement> response = defaultUserAchievementUseCase.finaAllUserAchievementsByUserEmail(token);
+    public ResponseEntity<ApiResponse<List<GetUserAchievementResponse>>> getUserAchievementsByUserEmail() {
+        List<UserAchievement> response = defaultUserAchievementUseCase.finaAllUserAchievementsByUserEmail();
         return ResponseEntity.ok(
                 ApiResponse.success(
                         response.stream()
@@ -50,10 +46,10 @@ public class UserAchievementController {
     // 유저 업적 조회 - (유저 이메일 + 업적 아이디)
     @GetMapping("/id/{achievementId}")
     public ResponseEntity<ApiResponse<GetUserAchievementResponse>> getUserAchievementsByUserEmailAndAchievementId(
-            @RequestHeader String token,
             @PathVariable Long achievementId
     ) {
-        UserAchievement response = defaultUserAchievementUseCase.findUserAchievementByUserEmailAndAchievementId(token, achievementId);
+        UserAchievement response = defaultUserAchievementUseCase
+                .findUserAchievementByUserEmailAndAchievementId(achievementId);
         return ResponseEntity.ok(ApiResponse.success(GetUserAchievementResponse.from(response)));
     }
 }
