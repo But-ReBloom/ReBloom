@@ -34,7 +34,7 @@ public class FindUserInfoUseCase {
     }
 
     // 아이디 찾기
-    public User findUserIdByIdAndPw(FindIdRequest findIdRequest) {
+    public User findUserIdByEmailAndPw(FindIdRequest findIdRequest) {
         String userEmail = findIdRequest.getUserEmail();
         String userPassword = findIdRequest.getUserPassword();
 
