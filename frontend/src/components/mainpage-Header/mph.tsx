@@ -23,7 +23,6 @@ function Header({ props }) {
       <S.HeaderRight>
         <Menu_Bar />
 
-        {/* 🔥 로그인 여부에 따라 조건부 렌더링 */}
         {userId ? (
           <div className="user-info-box">
             <S.LogoutContainer>
