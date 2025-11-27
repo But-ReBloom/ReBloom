@@ -37,7 +37,9 @@ export default function Right_box() {
         // Store token if needed, e.g., localStorage.setItem('token', response.data.token);
         navigate("/", { state: { id: response.data.userEmail } }); // Using email as ID for now since ID is not in response
       } else {
-        toast.error(response.message || "서버와의 통신 중 오류가 발생했습니다.");
+        toast.error(
+          response.message || "서버와의 통신 중 오류가 발생했습니다."
+        );
       }
     } catch (error) {
       toast.error("이메일 또는 비밀번호가 일치하지 않습니다.");
