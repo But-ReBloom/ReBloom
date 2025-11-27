@@ -26,7 +26,7 @@ public class ChannelController {
 
     // 채널 생성 요청
     @PostMapping("/request")
-    public ResponseEntity<ApiResponse<CreateChannelResponse>> createChannel(@Valid @RequestBody CreateChannelRequest request) {
+    public ResponseEntity<ApiResponse<CreateChannelResponse>> createChannel(@RequestBody CreateChannelRequest request) {
         Map<Channel, String> response = channelUseCase.requestCreation(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(CreateChannelResponse.from(response)));

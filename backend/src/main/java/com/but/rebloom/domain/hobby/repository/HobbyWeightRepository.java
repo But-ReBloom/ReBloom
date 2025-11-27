@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long>, CustomHobbyWeightRepository {
@@ -20,4 +21,6 @@ public interface HobbyWeightRepository extends JpaRepository<HobbyWeight, Long>,
         )
     """)
     List<HobbyWeight> findAllHobbyWeight();
+
+    Optional<HobbyWeight> findByHobbyId(Long hobbyId);
 }

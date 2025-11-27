@@ -13,6 +13,9 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     Optional<Activity> findByActivityId(Long activityId);
 
     // (activityEmail + userName)으로 객체 조회
+    Optional<Activity> findByUser_UserEmailAndActivityId(String userEmail, Long activityId);
+
+    // (activityEmail + userName)으로 객체 조회
     Optional<Activity> findByUser_UserEmailAndActivityName(String userEmail, String activityName);
 
     // userEmail로 객체 조회

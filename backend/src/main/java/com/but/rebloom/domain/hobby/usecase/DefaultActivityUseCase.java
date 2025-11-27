@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -28,7 +27,9 @@ public class DefaultActivityUseCase {
 
     // Activity 조회 - ActivityId
     public Activity findActivityByActivityId(Long activityId) {
-        return activityRepository.findByActivityId(activityId)
+        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
+
+        return activityRepository.findByUser_UserEmailAndActivityId(userEmail, activityId)
                 .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 
@@ -36,7 +37,7 @@ public class DefaultActivityUseCase {
     public Activity findActivityByActivityName(String activityName) {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
-        return activityRepository.findByUser_UserEmailAndActivityName(activityName, userEmail)
+        return activityRepository.findByUser_UserEmailAndActivityName(userEmail, activityName)
                 .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 

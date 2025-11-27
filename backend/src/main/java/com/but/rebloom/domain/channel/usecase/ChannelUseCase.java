@@ -12,8 +12,11 @@ import com.but.rebloom.domain.channel.exception.InsufficientPointException;
 import com.but.rebloom.domain.channel.exception.InsufficientTeirPointException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.hobby.domain.Activity;
+import com.but.rebloom.domain.hobby.domain.HobbyWeight;
 import com.but.rebloom.domain.hobby.exception.ActivityNotFoundException;
+import com.but.rebloom.domain.hobby.exception.HobbyNotFoundException;
 import com.but.rebloom.domain.hobby.repository.ActivityRepository;
+import com.but.rebloom.domain.hobby.repository.HobbyWeightRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +31,7 @@ public class ChannelUseCase {
     // 디비 접근
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
-    private final ActivityRepository activityRepository;
+    private final HobbyWeightRepository hobbyWeightRepository;
 
     private static final int requiredPoints = 500; // 채널 생성에 필요한 포인트 임시
     private static final int requiredTierPoint = 500; // 채널 생성할 때 요구되는 최소 티어 임시
@@ -52,18 +55,18 @@ public class ChannelUseCase {
         user.setUserPoint(user.getUserPoint() - requiredPoints);
         userRepository.save(user);
 
-        Activity activity1 = activityRepository.findByActivityId(request.getChannelLinkedHobby1())
-                .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+        HobbyWeight hobby1 = hobbyWeightRepository.findByHobbyId(request.getChannelLinkedHobby1())
+                .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
 
-        Activity activity2 = null;
-        Activity activity3 = null;
+        HobbyWeight hobby2 = null;
+        HobbyWeight hobby3 = null;
 
         if (request.getChannelLinkedHobby2() != null) {
-            activity2 = activityRepository.findByActivityId(request.getChannelLinkedHobby2())
-                    .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+            hobby2 = hobbyWeightRepository.findByHobbyId(request.getChannelLinkedHobby2())
+                    .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
         } if (request.getChannelLinkedHobby3() != null) {
-            activity3 = activityRepository.findByActivityId(request.getChannelLinkedHobby3())
-                    .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+            hobby3 = hobbyWeightRepository.findByHobbyId(request.getChannelLinkedHobby3())
+                    .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
         }
 
         // 채널 생성(승인 대기)
@@ -80,7 +83,7 @@ public class ChannelUseCase {
 
         channelRepository.save(channel);
 
-        return Map.of(channel, activity1.getActivityName());
+        return Map.of(channel, hobby1.getHobbyName());
     }
 
     // 채널 검색
@@ -91,10 +94,10 @@ public class ChannelUseCase {
         return channels.stream()
                 .filter(Channel::getIsAccepted)
                 .map(channel -> {
-                    String hobbyName = activityRepository
-                            .findById(channel.getChannelLinkedHobby1())
-                            .map(Activity::getActivityName)
-                            .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+                    String hobbyName = hobbyWeightRepository
+                            .findByHobbyId(channel.getChannelLinkedHobby1())
+                            .map(HobbyWeight::getHobbyName)
+                            .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
                     return Map.of(channel, hobbyName);
                 })
                 .collect(Collectors.toList());
@@ -107,10 +110,10 @@ public class ChannelUseCase {
         return channels.stream()
                 .filter(Channel::getIsAccepted)
                 .map(channel -> {
-                    String hobbyName = activityRepository
-                            .findById(channel.getChannelLinkedHobby1())
-                            .map(Activity::getActivityName)
-                            .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+                    String hobbyName = hobbyWeightRepository
+                            .findByHobbyId(channel.getChannelLinkedHobby1())
+                            .map(HobbyWeight::getHobbyName)
+                            .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
                     return Map.of(channel, hobbyName);
                 })
                 .collect(Collectors.toList());
@@ -123,10 +126,10 @@ public class ChannelUseCase {
         return channels.stream()
                 .filter(Channel::getIsAccepted)
                 .map(channel -> {
-                    String hobbyName = activityRepository
-                            .findById(channel.getChannelLinkedHobby1())
-                            .map(Activity::getActivityName)
-                            .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+                    String hobbyName = hobbyWeightRepository
+                            .findByHobbyId(channel.getChannelLinkedHobby1())
+                            .map(HobbyWeight::getHobbyName)
+                            .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
                     return Map.of(channel, hobbyName);
                 })
                 .collect(Collectors.toList());
@@ -142,24 +145,24 @@ public class ChannelUseCase {
             throw new AlreadyProcessedChannelException("This channel is already accepted");
         }
 
-        Activity activity1 = activityRepository.findByActivityId(channel.getChannelLinkedHobby1())
-                .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+        HobbyWeight hobby1 = hobbyWeightRepository.findByHobbyId(channel.getChannelLinkedHobby1())
+                .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
 
-        Activity activity2 = null;
-        Activity activity3 = null;
+        HobbyWeight hobby2 = null;
+        HobbyWeight hobby3 = null;
 
         if (channel.getChannelLinkedHobby2() != null) {
-            activity2 = activityRepository.findByActivityId(channel.getChannelLinkedHobby2())
+            hobby2 = hobbyWeightRepository.findByHobbyId(channel.getChannelLinkedHobby2())
                     .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
         } if (channel.getChannelLinkedHobby3() != null) {
-            activity3 = activityRepository.findByActivityId(channel.getChannelLinkedHobby3())
+            hobby2 = hobbyWeightRepository.findByHobbyId(channel.getChannelLinkedHobby3())
                     .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
         }
 
         channel.setIsAccepted(true);
         channelRepository.save(channel);
 
-        return Map.of(channel, List.of(activity1.getActivityName(), activity2.getActivityName(), activity3.getActivityName()));
+        return Map.of(channel, List.of(hobby1.getHobbyName(), hobby2.getHobbyName(), hobby3.getHobbyName()));
     }
 
     // 채널 거절
@@ -188,9 +191,9 @@ public class ChannelUseCase {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
 
-        Activity activity = activityRepository.findByActivityId(channel.getChannelLinkedHobby1())
+        HobbyWeight hobby = hobbyWeightRepository.findByHobbyId(channel.getChannelLinkedHobby1())
                 .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
 
-        return Map.of(channel, activity.getActivityName());
+        return Map.of(channel, hobby.getHobbyName());
     }
 }
