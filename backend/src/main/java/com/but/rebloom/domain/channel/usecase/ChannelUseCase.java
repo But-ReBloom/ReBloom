@@ -74,9 +74,12 @@ public class ChannelUseCase {
                 .channelIntro(request.getChannelIntro())
                 .channelDescription(request.getChannelDescription())
                 .isAccepted(false)
-                .ChannelLinkedHobby1(request.getChannelLinkedHobby1())
-                .ChannelLinkedHobby2(request.getChannelLinkedHobby2())
-                .ChannelLinkedHobby3(request.getChannelLinkedHobby3())
+                .channelLinkedHobby1(hobbyRepository.findByHobbyId(request.getChannelLinkedHobby1())
+                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음")))
+                .channelLinkedHobby2(hobbyRepository.findByHobbyId(request.getChannelLinkedHobby2())
+                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음")))
+                .channelLinkedHobby3(hobbyRepository.findByHobbyId(request.getChannelLinkedHobby3())
+                        .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음")))
                 .build();
 
         channelRepository.save(channel);
@@ -93,7 +96,7 @@ public class ChannelUseCase {
                 .filter(Channel::getIsAccepted)
                 .map(channel -> {
                     String hobbyName = hobbyRepository
-                            .findByHobbyId(channel.getChannelLinkedHobby1())
+                            .findByHobbyId(channel.getChannelLinkedHobby1().getHobbyId())
                             .map(Hobby::getHobbyName)
                             .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
                     return Map.of(channel, hobbyName);
@@ -109,7 +112,7 @@ public class ChannelUseCase {
                 .filter(Channel::getIsAccepted)
                 .map(channel -> {
                     String hobbyName = hobbyRepository
-                            .findByHobbyId(channel.getChannelLinkedHobby1())
+                            .findByHobbyId(channel.getChannelLinkedHobby1().getHobbyId())
                             .map(Hobby::getHobbyName)
                             .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
                     return Map.of(channel, hobbyName);
@@ -125,7 +128,7 @@ public class ChannelUseCase {
                 .filter(Channel::getIsAccepted)
                 .map(channel -> {
                     String hobbyName = hobbyRepository
-                            .findByHobbyId(channel.getChannelLinkedHobby1())
+                            .findByHobbyId(channel.getChannelLinkedHobby1().getHobbyId())
                             .map(Hobby::getHobbyName)
                             .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
                     return Map.of(channel, hobbyName);
@@ -143,17 +146,17 @@ public class ChannelUseCase {
             throw new AlreadyProcessedChannelException("This channel is already accepted");
         }
 
-        Hobby hobby1 = hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby1())
+        Hobby hobby1 = hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby1().getHobbyId())
                 .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
 
         Hobby hobby2 = null;
         Hobby hobby3 = null;
 
         if (channel.getChannelLinkedHobby2() != null) {
-            hobby2 = hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby2())
+            hobby2 = hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby2().getHobbyId())
                     .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
         } if (channel.getChannelLinkedHobby3() != null) {
-            hobby2 = hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby3())
+            hobby2 = hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby3().getHobbyId())
                     .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
         }
 
@@ -189,7 +192,7 @@ public class ChannelUseCase {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
 
-        Hobby hobby = hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby1())
+        Hobby hobby = hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby1().getHobbyId())
                 .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
 
         return Map.of(channel, hobby.getHobbyName());

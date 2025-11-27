@@ -1,6 +1,8 @@
 package com.but.rebloom.domain.channel.domain;
 
 import com.but.rebloom.domain.auth.domain.User;
+import com.but.rebloom.domain.hobby.domain.Activity;
+import com.but.rebloom.domain.hobby.domain.Hobby;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -38,14 +40,20 @@ public class Channel {
     @Column(name = "ch_is_accepted", nullable = false)
     private Boolean isAccepted = false;
 
-    @Column(name = "ch_lk_hobby_1", nullable = false)
-    private Long ChannelLinkedHobby1;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ch_lk_act_1_id", referencedColumnName = "h_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Hobby channelLinkedHobby1;
 
-    @Column(name = "ch_lk_hobby_2", nullable = true)
-    private Long ChannelLinkedHobby2;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ch_lk_act_2_id", referencedColumnName = "h_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Hobby channelLinkedHobby2;
 
-    @Column(name = "ch_lk_hobby_3", nullable = true)
-    private Long ChannelLinkedHobby3;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ch_lk_act_3_id", referencedColumnName = "h_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Hobby channelLinkedHobby3;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email")

@@ -30,13 +30,11 @@ public class FindChannelDetailedInfoResponse {
     @NotNull
     private LocalDateTime channelCreatedAt;
     @NotBlank
-    private String linkedHobbyName;
+    private String linkedHobbyName1;
+    private String linkedHobbyName2;
+    private String linkedHobbyName3;
 
-    public static FindChannelDetailedInfoResponse from(Map<Channel, String> response) {
-        Map.Entry<Channel, String> entry = response.entrySet().iterator().next();
-        Channel channel = entry.getKey();
-        String linkedHobbyName = entry.getValue();
-
+    public static FindChannelDetailedInfoResponse from(Channel channel) {
         return FindChannelDetailedInfoResponse.builder()
                 .channelId(channel.getChannelId())
                 .userId(channel.getUser().getUserId())
@@ -46,7 +44,7 @@ public class FindChannelDetailedInfoResponse {
                 .channelDescription(channel.getChannelDescription())
                 .isAccepted(channel.getIsAccepted())
                 .channelCreatedAt(channel.getChannelCreatedAt())
-                .linkedHobbyName(linkedHobbyName)
+                .linkedHobbyName1(channel.getChannelLinkedHobby1())
                 .build();
     }
 }

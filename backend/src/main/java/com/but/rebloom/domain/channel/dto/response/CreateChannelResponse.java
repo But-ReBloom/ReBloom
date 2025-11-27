@@ -30,13 +30,11 @@ public class CreateChannelResponse {
     @NotNull
     private LocalDateTime channelCreatedAt;
     @NotBlank
-    private String linkedHobbyName;
+    private String linkedHobbyName1;
+    private String linkedHobbyName2;
+    private String linkedHobbyName3;
 
-    public static CreateChannelResponse from(Map<Channel, String> response) {
-        Map.Entry<Channel, String> entry = response.entrySet().iterator().next();
-        Channel channel = entry.getKey();
-        String linkedHobbyName = entry.getValue();
-
+    public static CreateChannelResponse from(Channel channel) {
         return CreateChannelResponse.builder()
                 .channelId(channel.getChannelId())
                 .userId(channel.getUser().getUserId())
@@ -46,7 +44,9 @@ public class CreateChannelResponse {
                 .channelDescription(channel.getChannelDescription())
                 .isAccepted(channel.getIsAccepted())
                 .channelCreatedAt(channel.getChannelCreatedAt())
-                .linkedHobbyName(linkedHobbyName)
+                .linkedHobbyName1(channel.getChannelLinkedActivity1().getHobby().getHobbyName())
+                .linkedHobbyName2(channel.getChannelLinkedActivity2().getHobby().getHobbyName())
+                .linkedHobbyName3(channel.getChannelLinkedActivity3().getHobby().getHobbyName())
                 .build();
     }
 }
