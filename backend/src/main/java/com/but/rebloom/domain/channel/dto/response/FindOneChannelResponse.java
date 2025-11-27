@@ -20,8 +20,14 @@ public class FindOneChannelResponse {
     private TierName userTier;
     @NotBlank
     private String channelIntro;
+    @NotNull
+    private Long linkedHobbyId1;
     @NotBlank
-    private String linkedHobbyName;
+    private String linkedHobbyName1;
+    private Long linkedHobbyId2;
+    private String linkedHobbyName2;
+    private Long linkedHobbyId3;
+    private String linkedHobbyName3;
 
     public static FindOneChannelResponse from(Map<Channel, String> response) {
         Map.Entry<Channel, String> entry = response.entrySet().iterator().next();
@@ -33,7 +39,12 @@ public class FindOneChannelResponse {
                 .userId(channel.getUser().getUserId())
                 .userTier(channel.getUser().getUserTier())
                 .channelIntro(channel.getChannelIntro())
-                .linkedHobbyName(linkedHobbyName)
+                .linkedHobbyId1(channel.getChannelLinkedHobby1().getHobbyId())
+                .linkedHobbyName1(channel.getChannelLinkedHobby1().getHobbyName())
+                .linkedHobbyId2(channel.getChannelLinkedHobby2().getHobbyId())
+                .linkedHobbyName2(channel.getChannelLinkedHobby2().getHobbyName())
+                .linkedHobbyId3(channel.getChannelLinkedHobby3().getHobbyId())
+                .linkedHobbyName3(channel.getChannelLinkedHobby3().getHobbyName())
                 .build();
     }
 }

@@ -29,9 +29,13 @@ public class FindChannelDetailedInfoResponse {
     private Boolean isAccepted;
     @NotNull
     private LocalDateTime channelCreatedAt;
+    @NotNull
+    private Long linkedHobbyId1;
     @NotBlank
     private String linkedHobbyName1;
+    private Long linkedHobbyId2;
     private String linkedHobbyName2;
+    private Long linkedHobbyId3;
     private String linkedHobbyName3;
 
     public static FindChannelDetailedInfoResponse from(Channel channel) {
@@ -44,7 +48,12 @@ public class FindChannelDetailedInfoResponse {
                 .channelDescription(channel.getChannelDescription())
                 .isAccepted(channel.getIsAccepted())
                 .channelCreatedAt(channel.getChannelCreatedAt())
-                .linkedHobbyName1(channel.getChannelLinkedHobby1())
+                .linkedHobbyId1(channel.getChannelLinkedHobby1().getHobbyId())
+                .linkedHobbyName1(channel.getChannelLinkedHobby1().getHobbyName())
+                .linkedHobbyId2(channel.getChannelLinkedHobby2().getHobbyId())
+                .linkedHobbyName2(channel.getChannelLinkedHobby2().getHobbyName())
+                .linkedHobbyId3(channel.getChannelLinkedHobby3().getHobbyId())
+                .linkedHobbyName3(channel.getChannelLinkedHobby3().getHobbyName())
                 .build();
     }
 }
