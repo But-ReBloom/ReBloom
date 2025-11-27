@@ -18,7 +18,6 @@ public class ActivityFindController {
     private final DefaultActivityUseCase defaultActivityUseCase;
 
     // Activity 조회 - ActivityId
-    // 서비스로직 DTO 종속성 방지를 위하여 제거
     @GetMapping("/id/{activityId}")
     public ResponseEntity<ApiResponse<FindActivityResponse>> findActivityByUserId(
             @PathVariable Long activityId
