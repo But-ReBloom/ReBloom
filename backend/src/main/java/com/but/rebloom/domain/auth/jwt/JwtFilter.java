@@ -35,7 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
             "/channel/**",
             "/post/**",
             "/hobby-test/**",
-            "/activity/**",
+            "/activity/find/**",
             "/comment/**",
             "/heart/**",
             "/swagger-ui/**",

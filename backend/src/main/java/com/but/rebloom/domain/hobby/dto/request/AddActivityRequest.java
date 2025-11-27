@@ -9,10 +9,4 @@ import java.time.LocalDate;
 public class AddActivityRequest {
     @NotNull
     private String activityName;
-    @NotNull
-    private LocalDate activityStart;
-    @NotNull
-    private LocalDate activityRecent;
-    @NotNull
-    private String userEmail;
 }

@@ -1,7 +1,8 @@
 package com.but.rebloom.domain.hobby.usecase;
 
 import com.but.rebloom.domain.auth.domain.User;
-import com.but.rebloom.domain.auth.jwt.JwtTokenProvider;
+import com.but.rebloom.domain.auth.exception.UserNotFoundException;
+import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.hobby.exception.ActivityNotFoundException;
 import com.but.rebloom.domain.hobby.domain.Activity;
@@ -9,8 +10,6 @@ import com.but.rebloom.domain.hobby.dto.request.AddActivityRequest;
 import com.but.rebloom.domain.hobby.repository.ActivityRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,7 +24,7 @@ public class DefaultActivityUseCase {
     private final HobbyValidationUseCase hobbyValidationUseCase;
     // 로그인중인 유저 정보 추출에 이용
     private final FindCurrentUserUseCase findCurrentUserUseCase;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
 
     // Activity 조회 - ActivityId
     public Activity findActivityByActivityId(Long activityId) {
@@ -34,10 +33,7 @@ public class DefaultActivityUseCase {
     }
 
     // Activity 조회 - ActivityName
-    public Activity findActivityByActivityName(String token, String activityName) {
-        Authentication authentication = jwtTokenProvider.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
+    public Activity findActivityByActivityName(String activityName) {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
         return activityRepository.findByUser_UserEmailAndActivityName(activityName, userEmail)
@@ -45,20 +41,14 @@ public class DefaultActivityUseCase {
     }
 
     // 전체 Activity 조회
-    public List<Activity> findAllActivity(String token) {
-        Authentication authentication = jwtTokenProvider.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
+    public List<Activity> findAllActivity() {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
         return activityRepository.findByUser_UserEmail(userEmail);
     }
 
     // Activity 조회 - ActivityRecent(ASC)
-    public List<Activity> findActivityOrderByActivityRecentAsc(String token) {
-        Authentication authentication = jwtTokenProvider.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
+    public List<Activity> findActivityOrderByActivityRecentAsc() {
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 
@@ -66,10 +56,7 @@ public class DefaultActivityUseCase {
     }
 
     // Activity 조회 - ActivityRecent(DESC)
-    public List<Activity> findActivityOrderByActivityRecentDesc(String token) {
-        Authentication authentication = jwtTokenProvider.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
+    public List<Activity> findActivityOrderByActivityRecentDesc() {
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 
@@ -80,18 +67,11 @@ public class DefaultActivityUseCase {
     @Transactional
     public Activity addActivity(AddActivityRequest request) {
         String activityName = request.getActivityName();
-        LocalDate activityStart = request.getActivityStart();
-        LocalDate activityRecent = request.getActivityRecent();
-        String userEmail = request.getUserEmail();
+
+        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
         // 각 요소별 예외처리
         hobbyValidationUseCase.checkActivityName(activityName);
-        hobbyValidationUseCase.checkActivityStart(activityStart);
-        hobbyValidationUseCase.checkActivityRecent(activityRecent, activityStart);
-        hobbyValidationUseCase.checkUserEmail(userEmail);
-
-        // 존재하지 않는 유저인지 확인
-        hobbyValidationUseCase.checkNotExistAccountByUserEmail(userEmail);
 
         // 이미 활동중인 활동인지 확인
         hobbyValidationUseCase.checkExistActivityByEmailAndActivityName(userEmail, activityName);
@@ -99,8 +79,9 @@ public class DefaultActivityUseCase {
         // 활동 생성
         Activity activity = Activity.builder()
                 .activityName(activityName)
-                .activityStart(activityStart)
-                .activityRecent(activityRecent)
+                .user(userRepository.findByUserEmail(userEmail)
+                        .orElseThrow(() -> new UserNotFoundException("유저가 조회되지 않음"))
+                )
                 .build();
 
         // 활동 추가

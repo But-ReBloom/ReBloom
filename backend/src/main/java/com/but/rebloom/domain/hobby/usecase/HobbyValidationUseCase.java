@@ -19,17 +19,6 @@ public class HobbyValidationUseCase {
     // 디비 이용
     private final ActivityRepository activityRepository;
 
-    // 널 값 확인 - Activity 추가
-    public void checkNull(AddActivityRequest addActivityRequest) {
-        String activityName = addActivityRequest.getActivityName();
-        LocalDate activityStart = addActivityRequest.getActivityStart();
-        LocalDate activityRecent = addActivityRequest.getActivityRecent();
-
-        if (activityName.isEmpty() || activityStart == null || activityRecent == null) {
-            throw new IllegalArgumentException("빈 값이 존재");
-        }
-    }
-
     // 활동 이름 확인
     public void checkActivityName(String activityName) {
         if (activityName.length() < 1 || activityName.length() > 20) {
