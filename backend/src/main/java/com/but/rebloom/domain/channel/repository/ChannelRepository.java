@@ -34,9 +34,11 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
     @Query("""
         select c from
         Channel c
-        where c.ChannelLinkedHobby1 = :hobbyId
-            or c.ChannelLinkedHobby2 = :hobbyId
-            or c.ChannelLinkedHobby3 = :hobbyId
+        where :hobbyId in (
+            c.channelLinkedHobby1.hobbyId,
+            c.channelLinkedHobby2.hobbyId,
+            c.channelLinkedHobby3.hobbyId
+        )
     """)
     List<Channel> findByChannelLinkedHobby(@Param("hobbyId") Long hobbyId);
 
