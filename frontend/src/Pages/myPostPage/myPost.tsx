@@ -14,15 +14,20 @@ import {
     NavMenu,
     SubMenu,
     PostEditorContainer,
+    CategorySelectWrapper,
+    CategorySelect,
 } from './MYP';
 
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
 import { posts as initialPosts } from '../postPage/posts';
 
+
 function MyPostPage() {
     const navigate = useNavigate();
     const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+
+    const [selectedCategory, setSelectedCategory] = useState('소통');
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
@@ -39,19 +44,22 @@ function MyPostPage() {
         }
 
         const existingPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+
         const newPost = {
             id: Date.now(),
             title,
             content,
-            category: expandedCategory || '소통',
+            category: selectedCategory,
             favorite: false,
-            notice: false,
-            tag: '새글',
+            notice: selectedCategory === '공지사항',
+            tag: selectedCategory, // 카테고리명으로 tag 지정
+            comments: [],
         };
+
         localStorage.setItem('myPosts', JSON.stringify([newPost, ...existingPosts]));
 
         handleClear();
-        navigate('/post'); // Post 페이지로 이동
+        navigate('/post');
     };
 
     const categories = [
@@ -101,6 +109,7 @@ function MyPostPage() {
                                 <div onClick={() => toggleCategory(category.name)}>
                                     {category.emoji} {category.name}
                                 </div>
+
                                 {expandedCategory === category.name && (
                                     <SubMenu>
                                         {[...initialPosts, ...JSON.parse(localStorage.getItem('myPosts') || '[]')]
@@ -110,9 +119,16 @@ function MyPostPage() {
                                                     : post.category === category.name
                                             )
                                             .map(post => (
-                                                <li key={post.id}>ㄴ {post.title}</li>
+                                                <li
+                                                    key={post.id}
+                                                    onClick={() => navigate(`/post/${post.id}`)}
+                                                    style={{ cursor: 'pointer' }}
+                                                >
+                                                    ㄴ {post.title}
+                                                </li>
                                             ))}
                                     </SubMenu>
+
                                 )}
                             </li>
                         ))}
@@ -121,13 +137,28 @@ function MyPostPage() {
             </Sidebar>
 
             <PostEditorContainer>
+                <CategorySelectWrapper>
+                    <CategorySelect
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                    >
+                        {categories.map(c => (
+                            <option key={c.name} value={c.name}>
+                                {c.emoji} {c.name}
+                            </option>
+                        ))}
+                    </CategorySelect>
+                </CategorySelectWrapper>
+
                 <h2>게시글 작성</h2>
+
                 <input
                     type="text"
                     placeholder="제목을 입력하세요"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
+
                 <textarea
                     placeholder="내용을 입력하세요"
                     rows={15}
@@ -136,10 +167,16 @@ function MyPostPage() {
                 ></textarea>
 
                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                    <button onClick={handleClear} style={{ backgroundColor: '#ff6b6b' }}>
+                    <button
+                        onClick={handleClear}
+                        style={{ backgroundColor: '#ff6b6b' }}
+                    >
                         지우기
                     </button>
-                    <button onClick={handleSavePost} style={{ backgroundColor: '#5db9ee', color: '#fff' }}>
+                    <button
+                        onClick={handleSavePost}
+                        style={{ backgroundColor: '#5db9ee', color: '#fff' }}
+                    >
                         작성 완료
                     </button>
                 </div>
@@ -153,4 +190,3 @@ function MyPostPage() {
 }
 
 export default MyPostPage;
-
