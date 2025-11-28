@@ -29,11 +29,7 @@ public class FindOneChannelResponse {
     private Long linkedHobbyId3;
     private String linkedHobbyName3;
 
-    public static FindOneChannelResponse from(Map<Channel, String> response) {
-        Map.Entry<Channel, String> entry = response.entrySet().iterator().next();
-        Channel channel = entry.getKey();
-        String linkedHobbyName = entry.getValue();
-
+    public static FindOneChannelResponse from(Channel channel) {
         return FindOneChannelResponse.builder()
                 .channelName(channel.getChannelTitle())
                 .userId(channel.getUser().getUserId())

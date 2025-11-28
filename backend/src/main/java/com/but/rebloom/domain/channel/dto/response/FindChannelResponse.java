@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -17,8 +16,8 @@ public class FindChannelResponse {
     @NotNull
     private Integer totalCount;
 
-    public static FindChannelResponse from(List<Map<Channel, String>> responses) {
-        List<FindOneChannelResponse> channelResponses = responses.stream()
+    public static FindChannelResponse from(List<Channel> channels) {
+        List<FindOneChannelResponse> channelResponses = channels.stream()
                 .map(FindOneChannelResponse::from)
                 .collect(Collectors.toList());
 
