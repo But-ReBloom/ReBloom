@@ -1,5 +1,6 @@
 package com.but.rebloom.domain.auth.domain;
 
+import com.but.rebloom.domain.hobby.domain.Activity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -20,10 +21,6 @@ public class User {
 
     @Column(name = "u_id", nullable = false, unique = true, length = 255)
     private String userId;
-
-    @Column(name = "u_current_act", nullable = true)
-    @Builder.Default
-    private Long userCurrentActivity = null;
 
     @Column(name = "u_password", nullable = false, length = 255)
     private String userPassword;
@@ -62,4 +59,9 @@ public class User {
     @Column(name = "u_streak", nullable = false)
     @Builder.Default
     private Integer userStreak = 1;
+
+    @JoinColumn(name = "u_current_act", referencedColumnName = "act_id", nullable = true)
+    @Builder.Default
+    @OneToOne(fetch = FetchType.LAZY)
+    private Activity userCurrentActivity = null;
 }
