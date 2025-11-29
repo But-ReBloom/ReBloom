@@ -12,10 +12,10 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     // activityId로 객체 조회
     Optional<Activity> findByActivityId(Long activityId);
 
-    // (activityEmail + userName)으로 객체 조회
+    // (userEmail + hobbyId)으로 객체 조회
     Optional<Activity> findByUser_UserEmailAndHobby_HobbyId(String userEmail, Long hobbyId);
 
-    // (activityEmail + userName)으로 객체 조회
+    // (userEmail + hobbyName)으로 객체 조회
     Optional<Activity> findByUser_UserEmailAndHobby_HobbyName(String userEmail, String hobbyName);
 
     // userEmail로 객체 전체 조회

@@ -112,7 +112,7 @@ public class AuthController {
     // Activity 변경
     @PostMapping("/change")
     public ResponseEntity<ApiResponse<ChangeActivityResponse>> changeActivity(@RequestBody ChangeActivityRequest request) {
-        User user = defaultActivityUseCase.changeActivity(request);
+        User user = updateUserInfoUseCase.updateUserCurrentActivity(request);
         return ResponseEntity.ok(ApiResponse.success(ChangeActivityResponse.from(user)));
     }
 }

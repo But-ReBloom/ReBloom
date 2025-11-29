@@ -32,15 +32,21 @@ public class DefaultActivityUseCase {
     public Activity findActivityByActivityId(Long activityId) {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
-        return activityRepository.findByUser_UserEmailAndHobby_HobbyId(userEmail, activityId)
+        Activity activity = activityRepository.findByActivityId(activityId)
                 .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
+
+        if (!activity.getUser().getUserEmail().equals(userEmail)) {
+            throw new ActivityNotFoundException("활동 조회 실패");
+        }
+
+        return activity;
     }
 
     // Activity 조회 - ActivityName
-    public Activity findActivityByActivityName(String activityName) {
+    public Activity findActivityByActivityName(String hobbyName) {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
-        return activityRepository.findByUser_UserEmailAndHobby_HobbyName(userEmail, activityName)
+        return activityRepository.findByUser_UserEmailAndHobby_HobbyName(userEmail, hobbyName)
                 .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
     }
 
