@@ -20,6 +20,9 @@ public class UserChannel {
     @Column(name = "fk_ch_id", nullable = false, insertable = false, updatable = false)
     private Long channelId;
 
+    @Column(name = "uc_message", nullable = false)
+    private String applyMessage;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "uc_status", nullable = false)
     @Builder.Default

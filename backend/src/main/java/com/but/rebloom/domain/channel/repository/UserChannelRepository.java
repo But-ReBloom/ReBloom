@@ -21,4 +21,7 @@ public interface UserChannelRepository extends JpaRepository<UserChannel, Long> 
 
     // 유저 채널 확인
     Optional<UserChannel> findByChannelIdAndUserEmail(Long channelId, String email);
+
+    // 유저 채널 목록 확인
+    Optional<UserChannel> findByUserEmail(String email);
 }

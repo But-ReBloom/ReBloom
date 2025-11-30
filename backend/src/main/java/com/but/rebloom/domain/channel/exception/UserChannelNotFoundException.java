@@ -2,8 +2,8 @@ package com.but.rebloom.domain.channel.exception;
 
 import com.but.rebloom.global.exception.NotFoundException;
 
-public class PostNotFoundException extends NotFoundException {
-    public PostNotFoundException(String message) {
+public class UserChannelNotFoundException extends NotFoundException {
+    public UserChannelNotFoundException(String message) {
         super(message);
     }
 }
