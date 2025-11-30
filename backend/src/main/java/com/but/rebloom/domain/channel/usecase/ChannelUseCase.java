@@ -122,6 +122,15 @@ public class ChannelUseCase {
         }
 
         channel.setIsAccepted(true);
+
+        UserChannel userChannel = UserChannel.builder()
+                .channelId(channelId)
+                .userEmail(channel.getUser().getUserEmail())
+                .userChannelVerifyStatus(VerifyStatus.APPROVED)
+                .build();
+
+        userChannelRepository.save(userChannel);
+
         return channelRepository.save(channel);
     }
 
