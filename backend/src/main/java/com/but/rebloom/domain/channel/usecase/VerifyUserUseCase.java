@@ -1,5 +1,6 @@
 package com.but.rebloom.domain.channel.usecase;
 
+import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.domain.UserChannel;
@@ -25,10 +26,26 @@ public class VerifyUserUseCase {
     // 함수 호출
     private final FindCurrentUserUseCase findCurrentUserUseCase;
 
-    // 신청 목록 확인
+    // 채널의 신청 목록 확인
     public List<UserChannel> getApplyUsersByChannelId(Long channelId) {
+        User user = findCurrentUserUseCase.getCurrentUser();
+        Channel channel = channelRepository.findByChannelId(channelId)
+                .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
+
+        if (!user.getUserEmail().equals(channel.getUser().getUserEmail())) {
+            throw new NoAuthorityException("조회할 권한이 없습니다.");
+        }
+
         return userChannelRepository.findByChannelIdAndUserChannelVerifyStatus(
                 channelId,
+                VerifyStatus.WAITING
+        );
+    }
+
+    // 유저의 신청 목록 확인
+    public List<UserChannel> getApplyUsersByUserEmail(String userEmail) {
+        return userChannelRepository.findByUserEmailAndUserChannelVerifyStatus(
+                userEmail,
                 VerifyStatus.WAITING
         );
     }

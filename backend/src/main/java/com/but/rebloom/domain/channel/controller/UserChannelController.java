@@ -20,12 +20,21 @@ import java.util.List;
 public class UserChannelController {
     private final VerifyUserUseCase verifyUserUseCase;
 
-    // 가입 목록 조회
+    // 특정 채널의 가입 목록 조회
     @PostMapping("/member/find/{channelId}")
-    public ResponseEntity<ApiResponse<GetUserChannelInfoResponse>> findUserChannel(
+    public ResponseEntity<ApiResponse<GetUserChannelInfoResponse>> findUserChannelByChannelId(
             @PathVariable Long channelId
     ) {
         List<UserChannel> userChannels = verifyUserUseCase.getApplyUsersByChannelId(channelId);
+        return ResponseEntity.ok(ApiResponse.success(GetUserChannelInfoResponse.from(userChannels)));
+    }
+
+    // 특정 유저의 가입 목록 조회
+    @PostMapping("/member/find/{userEmail}")
+    public ResponseEntity<ApiResponse<GetUserChannelInfoResponse>> findUserChannelByUserEmail(
+            @PathVariable String userEmail
+    ) {
+        List<UserChannel> userChannels = verifyUserUseCase.getApplyUsersByUserEmail(userEmail);
         return ResponseEntity.ok(ApiResponse.success(GetUserChannelInfoResponse.from(userChannels)));
     }
 

@@ -16,6 +16,12 @@ public interface UserChannelRepository extends JpaRepository<UserChannel, Long> 
             VerifyStatus userChannelVerifyStatus
     );
 
+    // 특정유저의 채널 목록 조회
+    List<UserChannel> findByUserEmailAndUserChannelVerifyStatus(
+            String userEmail,
+            VerifyStatus userChannelVerifyStatus
+    );
+
     // 존재하는지 확인
     boolean existsByChannelIdAndUserEmail(Long channelId, String email);
 
