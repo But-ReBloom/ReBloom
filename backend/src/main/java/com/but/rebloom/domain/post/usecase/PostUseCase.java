@@ -1,11 +1,13 @@
 package com.but.rebloom.domain.post.usecase;
 
 import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
+import com.but.rebloom.domain.auth.domain.Role;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
+import com.but.rebloom.global.exception.NoAuthorityException;
 import com.but.rebloom.domain.post.domain.Post;
 import com.but.rebloom.domain.post.domain.Status;
 import com.but.rebloom.domain.post.domain.Type;
@@ -102,6 +104,12 @@ public class PostUseCase {
     // 인증 게시글 승인
     @Transactional
     public Post approvePost(Long postId) {
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+
+        if (!currentUser.getUserRole().equals(Role.ADMIN)) {
+            throw new NoAuthorityException("승인할 권한이 없습니다.");
+        }
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 

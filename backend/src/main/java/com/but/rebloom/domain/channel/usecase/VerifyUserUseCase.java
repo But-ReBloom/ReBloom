@@ -11,6 +11,7 @@ import com.but.rebloom.domain.channel.dto.request.RejectMemberRequest;
 import com.but.rebloom.domain.channel.exception.*;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
+import com.but.rebloom.global.exception.NoAuthorityException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

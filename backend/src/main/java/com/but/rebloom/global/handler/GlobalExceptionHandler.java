@@ -11,6 +11,16 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(NoAuthorityException.class)
+    public ResponseEntity<Object> handleNoAuthority(NoAuthorityException e) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)    // 401
+                .body(Map.of(
+                        "success", false,
+                        "error_name", "NoAuthorityException",
+                        "message", e.getMessage()
+                ));
+    }
 
     @ExceptionHandler(AlreadyUsingException.class)
     public ResponseEntity<Object> handleAlreadyUsing(AlreadyUsingException e) {

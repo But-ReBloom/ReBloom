@@ -1,6 +1,4 @@
-package com.but.rebloom.domain.channel.exception;
-
-import com.but.rebloom.global.exception.AuthenticationException;
+package com.but.rebloom.global.exception;
 
 public class NoAuthorityException extends AuthenticationException {
     public NoAuthorityException(String message) {

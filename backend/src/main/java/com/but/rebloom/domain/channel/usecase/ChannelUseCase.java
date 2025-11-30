@@ -17,6 +17,7 @@ import com.but.rebloom.domain.hobby.domain.Hobby;
 import com.but.rebloom.domain.hobby.exception.ActivityNotFoundException;
 import com.but.rebloom.domain.hobby.exception.HobbyNotFoundException;
 import com.but.rebloom.domain.hobby.repository.HobbyRepository;
+import com.but.rebloom.global.exception.NoAuthorityException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
