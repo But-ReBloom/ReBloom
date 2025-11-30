@@ -25,7 +25,7 @@ public class PostController {
     private final PostUseCase postUseCase;
 
     // 게시글 생성
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ApiResponse<CreatePostResponse>> createPost(@Valid @RequestBody CreatePostRequest request) {
         Post post = postUseCase.createPost(request);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -33,49 +33,49 @@ public class PostController {
     }
 
     // 특정 게시글 조회
-    @GetMapping("/{postId}")
+    @GetMapping("/find/{postId}")
     public ResponseEntity<ApiResponse<CreatePostResponse>> findPost(@PathVariable Long postId) {
         Post post = postUseCase.getPost(postId);
         return ResponseEntity.ok(ApiResponse.success(CreatePostResponse.from(post)));
     }
 
     // 특정 채널의 게시글 목록 조회
-    @GetMapping("/channel/{channelId}")
+    @GetMapping("/find/channel/{channelId}")
     public ResponseEntity<ApiResponse<FindPostResponse>> getPostsByChannel(@PathVariable Long channelId) {
         List<Post> posts = postUseCase.getPostsByChannel(channelId);
         return ResponseEntity.ok(ApiResponse.success(FindPostResponse.from(posts)));
     }
 
     // 특정 유저의 게시글 목록 조회
-    @GetMapping("/user/{userId}")
+    @GetMapping("/find/user/{userId}")
     public ResponseEntity<ApiResponse<FindPostResponse>> getPostsByUser(@PathVariable String userId) {
         List<Post> posts = postUseCase.getPostsByUser(userId);
         return ResponseEntity.ok(ApiResponse.success(FindPostResponse.from(posts)));
     }
 
     // 인기글 조회
-    @GetMapping("/popular")
+    @GetMapping("/find/popular")
     public ResponseEntity<ApiResponse<FindPostResponse>> getPopularPosts() {
         List<Post> posts = postUseCase.getPopularPosts();
         return ResponseEntity.ok(ApiResponse.success(FindPostResponse.from(posts)));
     }
 
     // 게시글 검색
-    @GetMapping("/search")
+    @GetMapping("/find/keyword")
     public ResponseEntity<ApiResponse<FindPostResponse>> searchPosts(@ModelAttribute SearchPostsRequest request) {
         List<Post> posts = postUseCase.searchPosts(request);
         return ResponseEntity.ok(ApiResponse.success(FindPostResponse.from(posts)));
     }
 
     // 게시글 수정
-    @PutMapping("/{postId}")
+    @PutMapping("/update/{postId}")
     public ResponseEntity<ApiResponse<CreatePostResponse>> updatePost(@PathVariable Long postId, @Valid @RequestBody UpdatePostRequest request) {
         Post post = postUseCase.updatePost(postId, request);
         return ResponseEntity.ok(ApiResponse.success(CreatePostResponse.from(post)));
     }
 
     // 게시글 삭제(유저 본인)
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("/delete/{postId}")
     public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postId) {
         postUseCase.deletePost(postId);
         return ResponseEntity.ok(ApiResponse.success());

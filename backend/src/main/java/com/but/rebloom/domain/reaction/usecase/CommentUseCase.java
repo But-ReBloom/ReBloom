@@ -1,6 +1,7 @@
 package com.but.rebloom.domain.reaction.usecase;
 
 import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
+import com.but.rebloom.domain.auth.domain.Role;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
@@ -15,6 +16,7 @@ import com.but.rebloom.domain.reaction.exception.CommentNotFoundException;
 import com.but.rebloom.domain.channel.exception.ForbiddenAccessException;
 import com.but.rebloom.domain.reaction.repository.CommentRepository;
 import com.but.rebloom.domain.post.repository.PostRepository;
+import com.but.rebloom.global.exception.NoAuthorityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,10 +110,10 @@ public class CommentUseCase {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
-        String userId = findCurrentUserUseCase.getCurrentUser().getUserId();
+        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
         // 작성자 확인
-        if (!comment.getUser().getUserId().equals(userId)) {
+        if (!comment.getUser().getUserEmail().equals(userEmail)) {
             throw new ForbiddenAccessException("본인이 작성한 댓글만 수정 가능");
         }
 
@@ -123,12 +125,12 @@ public class CommentUseCase {
 
     // 댓글 삭제 (일반 유저)
     @Transactional
-    public void deleteComment(Long commentId, String userId) {
+    public void deleteComment(Long commentId, String userEmail) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
         // 작성자 확인
-        if (!comment.getUser().getUserId().equals(userId)) {
+        if (!comment.getUser().getUserEmail().equals(userEmail)) {
             throw new ForbiddenAccessException("본인이 작성한 댓글만 삭제가능");
         }
 
@@ -138,6 +140,12 @@ public class CommentUseCase {
     // 댓글 삭제 (관리자)
     @Transactional
     public void deleteCommentByAdmin(Long commentId) {
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+
+        if (!currentUser.getUserRole().equals(Role.ADMIN)) {
+            throw new NoAuthorityException("삭제할 권한이 없습니다.");
+        }
+
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("댓글이 조회되지 않음"));
         commentRepository.delete(comment);
