@@ -14,6 +14,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class VerifyUserUseCase {
@@ -22,6 +24,14 @@ public class VerifyUserUseCase {
     private final UserChannelRepository userChannelRepository;
     // 함수 호출
     private final FindCurrentUserUseCase findCurrentUserUseCase;
+
+    // 신청 목록 확인
+    public List<UserChannel> getApplyUsersByChannelId(Long channelId) {
+        return userChannelRepository.findByChannelIdAndUserChannelVerifyStatus(
+                channelId,
+                VerifyStatus.WAITING
+        );
+    }
 
     // 가입 신청
     @Transactional

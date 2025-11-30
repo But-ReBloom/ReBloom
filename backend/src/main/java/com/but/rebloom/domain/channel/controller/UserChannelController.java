@@ -4,21 +4,30 @@ import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.dto.request.ApplyMemberRequest;
 import com.but.rebloom.domain.channel.dto.request.RejectMemberRequest;
 import com.but.rebloom.domain.channel.dto.response.ApplyMemberResponse;
+import com.but.rebloom.domain.channel.dto.response.GetUserChannelInfoResponse;
 import com.but.rebloom.domain.channel.dto.response.RejectMemberResponse;
 import com.but.rebloom.domain.channel.usecase.VerifyUserUseCase;
 import com.but.rebloom.global.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/channel/member")
 public class UserChannelController {
     private final VerifyUserUseCase verifyUserUseCase;
+
+    // 가입 목록 조회
+    @PostMapping("/member/find/{channelId}")
+    public ResponseEntity<ApiResponse<GetUserChannelInfoResponse>> findUserChannel(
+            @PathVariable Long channelId
+    ) {
+        List<UserChannel> userChannels = verifyUserUseCase.getApplyUsersByChannelId(channelId);
+        return ResponseEntity.ok(ApiResponse.success(GetUserChannelInfoResponse.from(userChannels)));
+    }
 
     // 가입 요청
     @PostMapping("/member/apply")
