@@ -26,7 +26,7 @@ public class HeartController {
     private final HeartUseCase heartUseCase;
 
     // 하트 생성 (좋아요 누르기)
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<ApiResponse<CreateHeartResponse>> createHeart(@Valid @RequestBody CreateHeartRequest request) {
         Heart heart = heartUseCase.createHeart(request);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -34,35 +34,35 @@ public class HeartController {
     }
 
     // 특정 게시글의 하트 목록 조회
-    @GetMapping("/post/{postId}")
+    @GetMapping("/find/post/{postId}")
     public ResponseEntity<ApiResponse<FindHeartResponse>> getHeartsByPost(@PathVariable Long postId) {
         List<Heart> hearts = heartUseCase.getHeartsByPost(postId);
         return ResponseEntity.ok(ApiResponse.success(FindHeartResponse.from(hearts)));
     }
 
     // 특정 유저가 누른 하트 목록 조회
-    @GetMapping("/user/{userId}")
+    @GetMapping("/find/user/{userId}")
     public ResponseEntity<ApiResponse<FindHeartResponse>> getHeartsByUser(@PathVariable String userId) {
         List<Heart> hearts = heartUseCase.getHeartsByUser(userId);
         return ResponseEntity.ok(ApiResponse.success(FindHeartResponse.from(hearts)));
     }
 
     // 특정 게시글의 하트 수 조회
-    @GetMapping("/post/{postId}/count")
+    @GetMapping("/find/post/{postId}/count")
     public ResponseEntity<ApiResponse<GetHeartCountResponse>> getHeartCount(@PathVariable Long postId) {
         Map<String, Long> response = heartUseCase.getHeartCount(postId);
         return ResponseEntity.ok(ApiResponse.success(GetHeartCountResponse.from(response)));
     }
 
     // 특정 유저가 특정 게시글에 하트를 눌렀는지 확인
-    @GetMapping("/check")
+    @GetMapping("/find/check")
     public ResponseEntity<ApiResponse<CheckHeartExistsResponse>> checkHeartExists(@ModelAttribute CheckHeartExistsRequest request) {
         Map<String, Boolean> response = heartUseCase.checkHeartExists(request);
         return ResponseEntity.ok(ApiResponse.success(CheckHeartExistsResponse.from(response)));
     }
 
     // 하트 취소 (좋아요 취소)
-    @DeleteMapping
+    @DeleteMapping("/remove")
     public ResponseEntity<ApiResponse<Void>> deleteHeart(@Valid @RequestBody DeleteHeartRequest request) {
         heartUseCase.deleteHeart(request);
         return ResponseEntity.ok(ApiResponse.success());

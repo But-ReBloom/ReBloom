@@ -25,7 +25,7 @@ public class CommentController {
     private final CommentUseCase commentUseCase;
 
     // 댓글 생성
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ApiResponse<CreateCommentResponse>> createComment(@Valid @RequestBody CreateCommentRequest request) {
         Comment comment = commentUseCase.createComment(request);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -33,35 +33,35 @@ public class CommentController {
     }
 
     // 특정 댓글 조회
-    @GetMapping("/{commentId}")
+    @GetMapping("/find/{commentId}")
     public ResponseEntity<ApiResponse<CreateCommentResponse>> getComment(@PathVariable Long commentId) {
         Comment comment = commentUseCase.getComment(commentId);
         return ResponseEntity.ok(ApiResponse.success(CreateCommentResponse.from(comment)));
     }
 
     // 특정 게시글의 댓글 목록 조회
-    @GetMapping("/post/{postId}")
+    @GetMapping("/find/post/{postId}")
     public ResponseEntity<ApiResponse<FindCommentResponse>> getCommentsByPost(@PathVariable Long postId) {
         List<Comment> comments = commentUseCase.getCommentsByPost(postId);
         return ResponseEntity.ok(ApiResponse.success(FindCommentResponse.from(comments)));
     }
 
     // 특정 유저가 작성한 댓글 목록 조회
-    @GetMapping("/user/{userId}")
+    @GetMapping("/find/user/{userId}")
     public ResponseEntity<ApiResponse<FindCommentResponse>> getCommentsByUser(@PathVariable String userId) {
         List<Comment> comments = commentUseCase.getCommentsByUser(userId);
         return ResponseEntity.ok(ApiResponse.success(FindCommentResponse.from(comments)));
     }
 
     // 특정 게시글의 댓글 수 조회
-    @GetMapping("/post/{postId}/count")
+    @GetMapping("/find/post/{postId}/count")
     public ResponseEntity<ApiResponse<GetCommentCountResponse>> getCommentCount(@PathVariable Long postId) {
         Map<Post, Long> response = commentUseCase.getCommentCount(postId);
         return ResponseEntity.ok(ApiResponse.success(GetCommentCountResponse.from(response)));
     }
 
     // 댓글 수정
-    @PutMapping("/{commentId}")
+    @PutMapping("/update/{commentId}")
     public ResponseEntity<ApiResponse<CreateCommentResponse>> updateComment(
             @PathVariable Long commentId,
             @Valid @RequestBody UpdateCommentRequest request
@@ -71,7 +71,7 @@ public class CommentController {
     }
 
     // 댓글 삭제 (일반 유저)
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("/delete/{commentId}")
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @PathVariable Long commentId,
             @RequestParam String userId
