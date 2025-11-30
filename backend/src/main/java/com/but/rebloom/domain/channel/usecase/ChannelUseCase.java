@@ -1,17 +1,16 @@
 package com.but.rebloom.domain.channel.usecase;
 
+import com.but.rebloom.domain.auth.domain.Role;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
+import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.domain.VerifyStatus;
 import com.but.rebloom.domain.channel.dto.request.CreateChannelRequest;
 import com.but.rebloom.domain.channel.dto.request.SearchChannelRequest;
-import com.but.rebloom.domain.channel.exception.AlreadyProcessedChannelException;
-import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
-import com.but.rebloom.domain.channel.exception.InsufficientPointException;
-import com.but.rebloom.domain.channel.exception.InsufficientTeirPointException;
+import com.but.rebloom.domain.channel.exception.*;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.hobby.domain.Hobby;
@@ -32,6 +31,7 @@ public class ChannelUseCase {
     private final UserRepository userRepository;
     private final HobbyRepository hobbyRepository;
     private final UserChannelRepository userChannelRepository;
+    private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     private static final int requiredPoints = 500; // 채널 생성에 필요한 포인트 임시
     private static final int requiredTierPoint = 500; // 채널 생성할 때 요구되는 최소 티어 임시
@@ -92,17 +92,35 @@ public class ChannelUseCase {
 
     // 승인된 채널 목록
     public List<Channel> getApprovedChannels() {
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+
+        if (!currentUser.getUserRole().equals(Role.ADMIN)) {
+            throw new NoAuthorityException("거절할 권한이 없습니다.");
+        }
+
         return channelRepository.findByIsAcceptedTrue();
     }
 
     // 승인대기 채널 목록
     public List<Channel> getPendingChannels() {
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+
+        if (!currentUser.getUserRole().equals(Role.ADMIN)) {
+            throw new NoAuthorityException("거절할 권한이 없습니다.");
+        }
+
         return channelRepository.findByIsAcceptedFalse();
     }
 
     // 채널 승인
     @Transactional
     public Channel approveChannel(Long channelId) {
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+
+        if (!currentUser.getUserRole().equals(Role.ADMIN)) {
+            throw new NoAuthorityException("거절할 권한이 없습니다.");
+        }
+
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
 
@@ -137,6 +155,12 @@ public class ChannelUseCase {
     // 채널 거절
     @Transactional
     public void rejectChannel(Long channelId) {
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+
+        if (!currentUser.getUserRole().equals(Role.ADMIN)) {
+            throw new NoAuthorityException("거절할 권한이 없습니다.");
+        }
+
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
 
@@ -157,7 +181,7 @@ public class ChannelUseCase {
 
     // 특정 채널 조회
     public Channel getChannel(Long channelId) {
-        return channelRepository.findById(channelId)
+        return channelRepository.findByChannelIdAndIsAcceptedTrue(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
     }
 

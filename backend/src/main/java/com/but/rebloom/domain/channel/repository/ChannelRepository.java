@@ -13,13 +13,14 @@ import java.util.Optional;
 @Repository
 public interface ChannelRepository extends JpaRepository<Channel, Long> {
     // ID로 채널 조회
-    Optional<Channel> findByChannelId(Long channelId);
+    Optional<Channel> findByChannelIdAndIsAcceptedTrue(Long channelId);
 
     // 특정 키워드를 제목이나 설명에 포함한 채널 조회
     @Query("""
         select c from Channel c
-        where c.channelTitle like concat('%', :keyword, '%')
-            or c.channelDescription like concat('%', :keyword, '%')
+        where (c.channelTitle like concat('%', :keyword, '%')
+            or c.channelDescription like concat('%', :keyword, '%'))
+            and c.isAccepted = true
         order by c.channelTitle asc
     """)
     List<Channel> searchByKeyword(@Param("keyword") String keyword);

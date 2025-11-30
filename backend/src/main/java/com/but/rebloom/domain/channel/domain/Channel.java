@@ -1,7 +1,6 @@
 package com.but.rebloom.domain.channel.domain;
 
 import com.but.rebloom.domain.auth.domain.User;
-import com.but.rebloom.domain.hobby.domain.Activity;
 import com.but.rebloom.domain.hobby.domain.Hobby;
 import jakarta.persistence.*;
 import lombok.*;
