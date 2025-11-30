@@ -9,21 +9,18 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ApplyMemberResponse {
+public class RejectMemberResponse {
     @NotBlank
     private String userEmail;
     @NotNull
     private Long channelId;
-    @NotBlank
-    private String applyMessage;
     @NotNull
     private VerifyStatus verifyStatus;
 
-    public static ApplyMemberResponse from(UserChannel userChannel) {
-        return ApplyMemberResponse.builder()
+    public static RejectMemberResponse from(UserChannel userChannel) {
+        return RejectMemberResponse.builder()
                 .userEmail(userChannel.getUserEmail())
                 .channelId(userChannel.getChannelId())
-                .applyMessage(userChannel.getApplyMessage())
                 .verifyStatus(userChannel.getUserChannelVerifyStatus())
                 .build();
     }
