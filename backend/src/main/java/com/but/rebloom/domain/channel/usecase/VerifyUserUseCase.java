@@ -5,6 +5,7 @@ import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.domain.VerifyStatus;
 import com.but.rebloom.domain.channel.dto.request.ApplyMemberRequest;
+import com.but.rebloom.domain.channel.dto.request.ApproveMemberRequest;
 import com.but.rebloom.domain.channel.dto.request.RejectMemberRequest;
 import com.but.rebloom.domain.channel.exception.*;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
@@ -67,6 +68,33 @@ public class VerifyUserUseCase {
         }
 
         userChannel.setUserChannelVerifyStatus(VerifyStatus.REJECTED);
+        return userChannelRepository.save(userChannel);
+    }
+
+    // 가입 승인
+    @Transactional
+    public UserChannel approveMemberVerification(ApproveMemberRequest approveMemberRequest) {
+        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
+
+        Channel channel = channelRepository.findByChannelId(approveMemberRequest.getChannelId())
+                .orElseThrow(() -> new ChannelNotFoundException("채널이 조회되지 않음"));
+
+        if (!userEmail.equals(channel.getUser().getUserEmail())) {
+            throw new NoAuthorityException("승인할 권한이 없습니다.");
+        }
+
+        UserChannel userChannel = userChannelRepository
+                .findByChannelIdAndUserEmail(
+                        channel.getChannelId(),
+                        approveMemberRequest.getUserEmail()
+                )
+                .orElseThrow(() -> new UserChannelNotFoundException("유저 채널 조회 실패"));
+
+        if (!userChannel.getUserChannelVerifyStatus().equals(VerifyStatus.WAITING)) {
+            throw new WrongStatusException("대기 상태가 아닙니다.");
+        }
+
+        userChannel.setUserChannelVerifyStatus(VerifyStatus.APPROVED);
         return userChannelRepository.save(userChannel);
     }
 }

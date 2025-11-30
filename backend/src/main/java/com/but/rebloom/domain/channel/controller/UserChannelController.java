@@ -37,4 +37,13 @@ public class UserChannelController {
         UserChannel userChannel = verifyUserUseCase.rejectMemberVerification(request);
         return ResponseEntity.ok(ApiResponse.success(RejectMemberResponse.from(userChannel)));
     }
+
+    // 가입 승인
+    @PostMapping("/member/reject")
+    public ResponseEntity<ApiResponse<RejectMemberResponse>> approveChannel(
+            @RequestBody RejectMemberRequest request
+    ) {
+        UserChannel userChannel = verifyUserUseCase.rejectMemberVerification(request);
+        return ResponseEntity.ok(ApiResponse.success(RejectMemberResponse.from(userChannel)));
+    }
 }
