@@ -1,13 +1,10 @@
 package com.but.rebloom.domain.channel.controller;
 
 import com.but.rebloom.domain.channel.domain.Channel;
-import com.but.rebloom.domain.channel.domain.UserChannel;
-import com.but.rebloom.domain.channel.dto.request.ApplyMemberRequest;
 import com.but.rebloom.domain.channel.dto.request.CreateChannelRequest;
 import com.but.rebloom.domain.channel.dto.request.SearchChannelRequest;
 import com.but.rebloom.domain.channel.dto.response.*;
 import com.but.rebloom.domain.channel.usecase.ChannelUseCase;
-import com.but.rebloom.domain.channel.usecase.VerifyUserUseCase;
 import com.but.rebloom.global.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +18,6 @@ import java.util.List;
 @RequestMapping("/channel")
 public class ChannelController {
     private final ChannelUseCase channelUseCase;
-    private final VerifyUserUseCase verifyUserUseCase;
 
     // 채널 생성 요청
     @PostMapping("/create")
@@ -71,14 +67,5 @@ public class ChannelController {
     public ResponseEntity<ApiResponse<Void>> rejectChannel(@PathVariable Long channelId) {
         channelUseCase.rejectChannel(channelId);
         return ResponseEntity.ok(ApiResponse.success());
-    }
-
-    // 가입 요청
-    @PostMapping("/apply")
-    public ResponseEntity<ApiResponse<ApplyMemberResponse>> rejectChannel(
-            @RequestBody ApplyMemberRequest request
-    ) {
-        UserChannel userChannel = verifyUserUseCase.applyMemberVerification(request);
-        return ResponseEntity.ok(ApiResponse.success(ApplyMemberResponse.from(userChannel)));
     }
 }
