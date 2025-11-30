@@ -1,6 +1,7 @@
 package com.but.rebloom.domain.channel.controller;
 
 import com.but.rebloom.domain.channel.domain.Channel;
+import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.dto.request.CreateChannelRequest;
 import com.but.rebloom.domain.channel.dto.request.SearchChannelRequest;
 import com.but.rebloom.domain.channel.dto.response.*;
@@ -39,6 +40,13 @@ public class ChannelController {
     public ResponseEntity<ApiResponse<FindChannelDetailedInfoResponse>> getChannel(@PathVariable Long channelId) {
         Channel response = channelUseCase.getChannel(channelId);
         return ResponseEntity.ok(ApiResponse.success(FindChannelDetailedInfoResponse.from(response)));
+    }
+
+    // 특정 채널의 유저 목록 조회
+    @GetMapping("/{channelId}/find/member")
+    public ResponseEntity<ApiResponse<GetUserChannelInfoResponse>> getChannelUser(@PathVariable Long channelId) {
+        List<UserChannel> userChannels = channelUseCase.getChannelUser(channelId);
+        return ResponseEntity.ok(ApiResponse.success(GetUserChannelInfoResponse.from(userChannels)));
     }
 
     // 승인된 채널 목록 조회

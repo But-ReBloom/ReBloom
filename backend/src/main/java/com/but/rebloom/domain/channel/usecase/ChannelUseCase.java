@@ -4,6 +4,8 @@ import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.channel.domain.Channel;
+import com.but.rebloom.domain.channel.domain.UserChannel;
+import com.but.rebloom.domain.channel.domain.VerifyStatus;
 import com.but.rebloom.domain.channel.dto.request.CreateChannelRequest;
 import com.but.rebloom.domain.channel.dto.request.SearchChannelRequest;
 import com.but.rebloom.domain.channel.exception.AlreadyProcessedChannelException;
@@ -11,6 +13,7 @@ import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.domain.channel.exception.InsufficientPointException;
 import com.but.rebloom.domain.channel.exception.InsufficientTeirPointException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
+import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.hobby.domain.Hobby;
 import com.but.rebloom.domain.hobby.exception.ActivityNotFoundException;
 import com.but.rebloom.domain.hobby.exception.HobbyNotFoundException;
@@ -28,6 +31,7 @@ public class ChannelUseCase {
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
     private final HobbyRepository hobbyRepository;
+    private final UserChannelRepository userChannelRepository;
 
     private static final int requiredPoints = 500; // 채널 생성에 필요한 포인트 임시
     private static final int requiredTierPoint = 500; // 채널 생성할 때 요구되는 최소 티어 임시
@@ -146,5 +150,13 @@ public class ChannelUseCase {
     public Channel getChannel(Long channelId) {
         return channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
+    }
+
+    // 특정 채널의 유저 목록 조회
+    public List<UserChannel> getChannelUser(Long channelId) {
+        return userChannelRepository.findByChannelIdAndUserChannelVerifyStatus(
+                channelId,
+                VerifyStatus.APPROVED
+        );
     }
 }
