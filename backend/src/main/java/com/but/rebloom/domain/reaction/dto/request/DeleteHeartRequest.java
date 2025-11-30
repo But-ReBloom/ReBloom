@@ -9,5 +9,5 @@ public class DeleteHeartRequest {
     private String userId;
 
     @NotNull
-    private long postId;
+    private Long postId;
 }

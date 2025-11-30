@@ -3,6 +3,7 @@ package com.but.rebloom.domain.reaction.usecase;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
+import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.post.domain.Post;
 import com.but.rebloom.domain.post.exception.PostNotFoundException;
 import com.but.rebloom.domain.reaction.domain.Heart;
@@ -11,8 +12,10 @@ import com.but.rebloom.domain.reaction.dto.request.CreateHeartRequest;
 import com.but.rebloom.domain.reaction.dto.request.DeleteHeartRequest;
 import com.but.rebloom.domain.reaction.exception.AlreadyUsingHeartException;
 import com.but.rebloom.domain.reaction.dto.request.HeartNotificationRequest;
+import com.but.rebloom.domain.reaction.exception.HeartNotFoundException;
 import com.but.rebloom.domain.reaction.repository.HeartRepository;
 import com.but.rebloom.domain.post.repository.PostRepository;
+import com.but.rebloom.global.exception.NoAuthorityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +30,7 @@ public class HeartUseCase {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final NotificationUseCase notificationUseCase;
+    private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     // 하트 생성 (좋아요 누르기)
     @Transactional
@@ -99,9 +103,13 @@ public class HeartUseCase {
     // 하트 삭제 (좋아요 취소)
     @Transactional
     public void deleteHeart(DeleteHeartRequest request) {
-        // 하트가 존재하는지 확인
-        if (!heartRepository.existsByUser_UserIdAndPost_PostId(request.getUserId(), request.getPostId())) {
-            throw new AlreadyUsingHeartException("하트가 조회되지 않음");
+        Heart heart = heartRepository.findByPost_PostIdAndUser_UserId(request.getPostId(), request.getUserId())
+                    .orElseThrow(() -> new HeartNotFoundException("하트조회 실패"));
+
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+
+        if (!currentUser.getUserEmail().equals(heart.getUser().getUserEmail())) {
+            throw new NoAuthorityException("취소할 권한이 없습니다.");
         }
 
         heartRepository.deleteByUser_UserIdAndPost_PostId(request.getUserId(), request.getPostId());
