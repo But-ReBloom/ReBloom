@@ -29,21 +29,21 @@ public class ChannelController {
     }
 
     // 채널 검색
-    @GetMapping("/search")
+    @GetMapping("/find/keyword")
     public ResponseEntity<ApiResponse<FindChannelResponse>> searchChannel(@ModelAttribute SearchChannelRequest request) {
         List<Channel> responses = channelUseCase.findChannel(request);
         return ResponseEntity.ok(ApiResponse.success(FindChannelResponse.from(responses)));
     }
 
     // 특정 채널 조회
-    @GetMapping("/{channelId}")
+    @GetMapping("/find/{channelId}")
     public ResponseEntity<ApiResponse<FindChannelDetailedInfoResponse>> getChannel(@PathVariable Long channelId) {
         Channel response = channelUseCase.getChannel(channelId);
         return ResponseEntity.ok(ApiResponse.success(FindChannelDetailedInfoResponse.from(response)));
     }
 
     // 특정 채널의 유저 목록 조회
-    @GetMapping("/{channelId}/find/member")
+    @GetMapping("/find/{channelId}/find/member")
     public ResponseEntity<ApiResponse<GetUserChannelInfoResponse>> getChannelUser(@PathVariable Long channelId) {
         List<UserChannel> userChannels = channelUseCase.getChannelUser(channelId);
         return ResponseEntity.ok(ApiResponse.success(GetUserChannelInfoResponse.from(userChannels)));

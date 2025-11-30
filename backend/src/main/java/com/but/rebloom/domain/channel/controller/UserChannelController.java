@@ -2,11 +2,9 @@ package com.but.rebloom.domain.channel.controller;
 
 import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.dto.request.ApplyMemberRequest;
+import com.but.rebloom.domain.channel.dto.request.ApproveMemberRequest;
 import com.but.rebloom.domain.channel.dto.request.RejectMemberRequest;
-import com.but.rebloom.domain.channel.dto.response.ApplyMemberResponse;
-import com.but.rebloom.domain.channel.dto.response.GetUserChannelDetailedInfoResponse;
-import com.but.rebloom.domain.channel.dto.response.GetUserChannelInfoResponse;
-import com.but.rebloom.domain.channel.dto.response.RejectMemberResponse;
+import com.but.rebloom.domain.channel.dto.response.*;
 import com.but.rebloom.domain.channel.usecase.VerifyUserUseCase;
 import com.but.rebloom.global.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -84,11 +82,11 @@ public class UserChannelController {
     }
 
     // 가입 승인
-    @PostMapping("/member/reject")
-    public ResponseEntity<ApiResponse<RejectMemberResponse>> approveChannel(
-            @RequestBody RejectMemberRequest request
+    @PostMapping("/member/approve")
+    public ResponseEntity<ApiResponse<ApproveMemberResponse>> approveChannel(
+            @RequestBody ApproveMemberRequest request
     ) {
-        UserChannel userChannel = verifyUserUseCase.rejectMemberVerification(request);
-        return ResponseEntity.ok(ApiResponse.success(RejectMemberResponse.from(userChannel)));
+        UserChannel userChannel = verifyUserUseCase.approveMemberVerification(request);
+        return ResponseEntity.ok(ApiResponse.success(ApproveMemberResponse.from(userChannel)));
     }
 }

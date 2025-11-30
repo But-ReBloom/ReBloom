@@ -95,7 +95,7 @@ public class ChannelUseCase {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
 
         if (!currentUser.getUserRole().equals(Role.ADMIN)) {
-            throw new NoAuthorityException("거절할 권한이 없습니다.");
+            throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
         return channelRepository.findByIsAcceptedTrue();
@@ -106,7 +106,7 @@ public class ChannelUseCase {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
 
         if (!currentUser.getUserRole().equals(Role.ADMIN)) {
-            throw new NoAuthorityException("거절할 권한이 없습니다.");
+            throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
         return channelRepository.findByIsAcceptedFalse();
@@ -118,7 +118,7 @@ public class ChannelUseCase {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
 
         if (!currentUser.getUserRole().equals(Role.ADMIN)) {
-            throw new NoAuthorityException("거절할 권한이 없습니다.");
+            throw new NoAuthorityException("승인할 권한이 없습니다.");
         }
 
         Channel channel = channelRepository.findById(channelId)
