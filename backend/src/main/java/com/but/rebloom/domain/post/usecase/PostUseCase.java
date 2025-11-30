@@ -3,7 +3,6 @@ package com.but.rebloom.domain.post.usecase;
 import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
-import com.but.rebloom.domain.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
@@ -21,8 +20,6 @@ import com.but.rebloom.domain.post.exception.PostNotFoundException;
 import com.but.rebloom.domain.post.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +33,6 @@ public class PostUseCase {
     private final ChannelRepository channelRepository;
     // 함수 호출
     private final FindCurrentUserUseCase findCurrentUserUseCase;
-    private final JwtTokenProvider jwtTokenProvider;
     private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     // 게시글 생성
@@ -46,7 +42,7 @@ public class PostUseCase {
         User user = userRepository.findByUserId(request.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User Not Found"));
 
-        Channel channel = channelRepository.findByChannelId(request.getChannelId())
+        Channel channel = channelRepository.findByChannelIdAndIsAcceptedTrue(request.getChannelId())
                 .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
 
         // 게시글 생성
@@ -149,13 +145,9 @@ public class PostUseCase {
 
     // 게시글 삭제(유저 본인)
     @Transactional
-    public void deletePost(String token, Long postId) {
+    public void deletePost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
-
-        Authentication authentication = jwtTokenProvider.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String userId = findCurrentUserUseCase.getCurrentUser().getUserId();
 
         // 작성자 확인

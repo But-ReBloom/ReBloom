@@ -3,7 +3,6 @@ package com.but.rebloom.domain.reaction.usecase;
 import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
-import com.but.rebloom.domain.auth.jwt.JwtTokenProvider;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.post.domain.Post;
@@ -17,8 +16,6 @@ import com.but.rebloom.domain.channel.exception.ForbiddenAccessException;
 import com.but.rebloom.domain.reaction.repository.CommentRepository;
 import com.but.rebloom.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +32,6 @@ public class CommentUseCase {
     // 함수 호출
     private final NotificationUseCase notificationUseCase;
     private final FindCurrentUserUseCase findCurrentUserUseCase;
-    private final JwtTokenProvider jwtTokenProvider;
     private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     // 댓글 생성
@@ -108,12 +104,9 @@ public class CommentUseCase {
 
     // 댓글 수정
     @Transactional
-    public Comment updateComment(Long commentId, String token, UpdateCommentRequest request) {
+    public Comment updateComment(Long commentId, UpdateCommentRequest request) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
-
-        Authentication authentication = jwtTokenProvider.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String userId = findCurrentUserUseCase.getCurrentUser().getUserId();
 
