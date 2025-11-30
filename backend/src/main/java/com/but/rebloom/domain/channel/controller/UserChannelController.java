@@ -52,6 +52,19 @@ public class UserChannelController {
         return ResponseEntity.ok(ApiResponse.success(GetUserChannelDetailedInfoResponse.from(userChannel)));
     }
 
+    // 특정 유저, 특정 채널의 유저채널 정보 조회
+    @PostMapping("/member/find/{channelId}/{userEmail}")
+    public ResponseEntity<ApiResponse<GetUserChannelDetailedInfoResponse>> findUserChannelByEmailAndId(
+            @PathVariable String userEmail,
+            @PathVariable Long channelId
+    ) {
+        UserChannel userChannel = verifyUserUseCase.getApplyUsersByUserEmailAndChannelId(
+                userEmail,
+                channelId
+        );
+        return ResponseEntity.ok(ApiResponse.success(GetUserChannelDetailedInfoResponse.from(userChannel)));
+    }
+
     // 가입 요청
     @PostMapping("/member/apply")
     public ResponseEntity<ApiResponse<ApplyMemberResponse>> applyChannel(

@@ -64,6 +64,12 @@ public class VerifyUserUseCase {
                 .orElseThrow(() -> new UserChannelNotFoundException("유저 채널 조회 실패"));
     }
 
+    // 유저의 특정 채널 신청 목록 확인
+    public UserChannel getApplyUsersByUserEmailAndChannelId(String userEmail, Long channelId) {
+        return userChannelRepository.findByChannelIdAndUserEmail(channelId, userEmail)
+                .orElseThrow(() -> new UserChannelNotFoundException("유저 채널 조회 실패"));
+    }
+
     // 가입 신청
     @Transactional
     public UserChannel applyMemberVerification(ApplyMemberRequest applyMemberRequest) {
