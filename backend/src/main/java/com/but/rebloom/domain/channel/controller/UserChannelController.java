@@ -4,6 +4,7 @@ import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.dto.request.ApplyMemberRequest;
 import com.but.rebloom.domain.channel.dto.request.RejectMemberRequest;
 import com.but.rebloom.domain.channel.dto.response.ApplyMemberResponse;
+import com.but.rebloom.domain.channel.dto.response.GetUserChannelDetailedInfoResponse;
 import com.but.rebloom.domain.channel.dto.response.GetUserChannelInfoResponse;
 import com.but.rebloom.domain.channel.dto.response.RejectMemberResponse;
 import com.but.rebloom.domain.channel.usecase.VerifyUserUseCase;
@@ -36,6 +37,19 @@ public class UserChannelController {
     ) {
         List<UserChannel> userChannels = verifyUserUseCase.getApplyUsersByUserEmail(userEmail);
         return ResponseEntity.ok(ApiResponse.success(GetUserChannelInfoResponse.from(userChannels)));
+    }
+
+    // 특정 채널, 특정 유저의 유저채널 정보 조회
+    @PostMapping("/member/find/{channelId}/{userEmail}")
+    public ResponseEntity<ApiResponse<GetUserChannelDetailedInfoResponse>> findUserChannelByIdAndEmail(
+            @PathVariable Long channelId,
+            @PathVariable String userEmail
+    ) {
+        UserChannel userChannel = verifyUserUseCase.getApplyUsersByChannelIdAndUserEmail(
+                channelId,
+                userEmail
+        );
+        return ResponseEntity.ok(ApiResponse.success(GetUserChannelDetailedInfoResponse.from(userChannel)));
     }
 
     // 가입 요청

@@ -50,6 +50,20 @@ public class VerifyUserUseCase {
         );
     }
 
+    // 채널의 특정 유저 신청 목록 확인
+    public UserChannel getApplyUsersByChannelIdAndUserEmail(Long channelId, String userEmail) {
+        User user = findCurrentUserUseCase.getCurrentUser();
+        Channel channel = channelRepository.findByChannelId(channelId)
+                .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
+
+        if (!user.getUserEmail().equals(channel.getUser().getUserEmail())) {
+            throw new NoAuthorityException("조회할 권한이 없습니다.");
+        }
+
+        return userChannelRepository.findByChannelIdAndUserEmail(channelId, userEmail)
+                .orElseThrow(() -> new UserChannelNotFoundException("유저 채널 조회 실패"));
+    }
+
     // 가입 신청
     @Transactional
     public UserChannel applyMemberVerification(ApplyMemberRequest applyMemberRequest) {
