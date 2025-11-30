@@ -123,6 +123,12 @@ public class PostUseCase {
     // 인증 게시글 거절
     @Transactional
     public Post rejectPost(Long postId) {
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+
+        if (!currentUser.getUserRole().equals(Role.ADMIN)) {
+            throw new NoAuthorityException("거절할 권한이 없습니다.");
+        }
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
@@ -139,9 +145,10 @@ public class PostUseCase {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
-        // 작성자 확인
-        if (!post.getUser().getUserId().equals(request.getUserId())) {
-            throw new ForbiddenAccessException("본인이 작성한 게시글만 수정 가능");
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+
+        if (!currentUser.getUserEmail().equals(post.getUser().getUserEmail())) {
+            throw new NoAuthorityException("수정할 권한이 없습니다.");
         }
 
         // 게시글 수정
@@ -156,11 +163,11 @@ public class PostUseCase {
     public void deletePost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
-        String userId = findCurrentUserUseCase.getCurrentUser().getUserId();
 
-        // 작성자 확인
-        if (!post.getUser().getUserId().equals(userId)) {
-            throw new ForbiddenAccessException("본인이 작성한 게시글만 삭제 가능");
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+
+        if (!currentUser.getUserEmail().equals(post.getUser().getUserEmail())) {
+            throw new NoAuthorityException("삭제할 권한이 없습니다.");
         }
 
         postRepository.delete(post);
@@ -171,6 +178,12 @@ public class PostUseCase {
     public void deletePostByAdmin(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
+
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+
+        if (!currentUser.getUserRole().equals(Role.ADMIN)) {
+            throw new NoAuthorityException("삭제할 권한이 없습니다.");
+        }
 
         postRepository.delete(post);
     }
