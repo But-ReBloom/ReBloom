@@ -1,47 +1,63 @@
 version: '3.8'
 
 services:
-  app:
-    build: ./backend
-    container_name: spring-app
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
+  db:
+    image: mysql:8.0
+    container_name: rebloom-db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ReBloom?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8mb4
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: Rebloom@1234
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ReBloom
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/my.conf:/etc/mysql/conf.d/my.cnf
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - rebloom-net
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-      DB_PASSWORD: Rebloom@1234
+  backend:
+    build: ./backend
+    container_name: rebloom-backend
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
       GMAIL_PASSWORD: ${GMAIL_PASSWORD}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       JWT_SECRET: ${JWT_SECRET}
-      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_REDIRECT_URI: "http://3.35.21.19:8080/auth/login/google"
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ReBloom?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "8080"
+    networks:
+      - rebloom-net
 
-      SERVER_ENCODING_ENABLED: true
-      SERVER_ENCODING_CHARSET: UTF-8
-      SERVER_ENCODING_FORCE: true
-      TOMCAT_RELAXED_PATH_CHARS: "[]|{}^`<>\"'"
-      TOMCAT_RELAXED_QUERY_CHARS: "[]|{}^`<>\"'"
-      TOMCAT_URI_ENCODING: UTF-8
-
-    restart: always
-
-  db:
-    image: mysql:8.0
-    container_name: mysql-db
-    environment:
-      MYSQL_ROOT_PASSWORD: Rebloom@1234
+  nginx:
+    image: nginx:latest
+    container_name: rebloom-nginx
     ports:
-      - "3306:3306"
+      - "80:80"
     volumes:
-      - db_data:/var/lib/mysql
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: always
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - backend
+    networks:
+      - rebloom-net
+
+networks:
+  rebloom-net:
+    driver: bridge
 
 volumes:
   db_data:
