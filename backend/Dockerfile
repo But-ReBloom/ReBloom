@@ -1,31 +1,10 @@
-FROM gradle:jdk21-alpine AS builder
+FROM gradle:7.6-jdk17 AS builder
 WORKDIR /app
+COPY . .
+RUN ./gradlew clean build -x test
 
-RUN apk update && apk add --no-cache \
-    musl-locales \
-    musl-locales-lang
-
-ENV LANG=ko_KR.UTF-8
-ENV LC_ALL=ko_KR.UTF-8
-ENV TZ=Asia/Seoul
-ENV JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
-
-COPY --chown=gradle:gradle . .
-
-RUN gradle bootJar -x test --no-daemon
-
-FROM eclipse-temurin:21-jre-alpine
+FROM openjdk:17-jdk-slim
 WORKDIR /app
-
-RUN apk update && apk add --no-cache \
-    musl-locales \
-    musl-locales-lang
-
-ENV LANG=ko_KR.UTF-8
-ENV LC_ALL=ko_KR.UTF-8
-ENV TZ=Asia/Seoul
-
 COPY --from=builder /app/build/libs/*.jar app.jar
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-Dfile.encoding=UTF-8", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -1,45 +1,55 @@
-name: CI/CD Docker Deploy
+name: Deploy to EC2
 
 on:
   push:
-    branches: [ "main", "feature/docker-backend" ]
+    branches:
+      - main
+      - feature/docker-backend
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy to Server via SSH
-        uses: appleboy/ssh-action@v1.0.0
-        env:
-          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: 22
-          envs: GMAIL_PASSWORD,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,JWT_SECRET
+          node-version: '18'
+
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "docker-compose.yml,backend/Dockerfile,backend/build.gradle,backend/src,backend/gradle,backend/gradlew,db/init.sql,nginx/conf.d/app.conf,frontend/dist"
+          target: "/home/ubuntu/rebloom"
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            set -e
-              
-            if [ ! -d "rebloom-app" ]; then
-            git clone https://github.com/${{ github.repository }}.git rebloom-app
-            fi
+            cd /home/ubuntu/rebloom
+            # Create .env file from secrets
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" > .env
+            echo "GMAIL_PASSWORD=${{ secrets.GMAIL_PASSWORD }}" >> .env
+            echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+            echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
             
-            cd rebloom-app
-            git fetch --all
-            git reset --hard origin/main
+            # Stop and remove existing containers
+            docker-compose down
             
-            echo "GMAIL_PASSWORD=$GMAIL_PASSWORD" > .env
-            echo "GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" >> .env
-            echo "GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET" >> .env
-            echo "JWT_SECRET=$JWT_SECRET" >> .env
-            
-            docker compose down --remove-orphans  # ← 여기 핵심 추가!
-            docker compose up -d --build
-            docker image prune -a -f              # ← buildkit CACHED 이미지 포함 정리
+            # Rebuild and start
+            docker-compose up -d --build
