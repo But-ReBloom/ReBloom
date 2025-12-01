@@ -8,18 +8,8 @@ export const Container = styled.div`
 `;
 
 export const LogoImage = styled.img`
-    top: 17px;
-    left: 36px;
     width: 160px;
-    height: auto;
     cursor: pointer;
-    transform: scale(1);
-    transition: transform 0.3s ease; 
-
-    &:hover {
-        transform: scale(1.1);
-        transition-duration: 0.15s; 
-    }
 `;
 
 export const CloseButton = styled.button`
@@ -29,7 +19,6 @@ export const CloseButton = styled.button`
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
 `;
 
 export const CloseIconImg = styled.img`
@@ -39,7 +28,7 @@ export const CloseIconImg = styled.img`
 
 export const Sidebar = styled.aside`
     width: 280px;
-    background: #ffffffff;
+    background: #ffffffc6;
     border-right: 1px solid #ddd;
     padding: 20px 20px 30px 20px;
     display: flex;
@@ -91,7 +80,6 @@ export const ProfileSection = styled.div`
     }
 `;
 
-/* ================= Write Post Button ================= */
 export const WritePostButton = styled.button`
     width: 100%;
     padding: 10px;
@@ -109,7 +97,6 @@ export const WritePostButton = styled.button`
     }
 `;
 
-/* ================= Search Box ================= */
 export const SearchBox = styled.div`
     margin-top: -10px;
     input {
@@ -133,17 +120,17 @@ export const NavMenu = styled.nav`
         border-radius: 5px;
         font-size: 0.95rem;
         font-weight: bold;
+
         &:hover {
             background-color: #e6f5ff;
         }
     }
 `;
-
 export const SubMenu = styled.ul`
     list-style: none;
     margin-left: 7px;
-    margin-bottom: 3px;
     margin-top: 1px;
+    margin-bottom: 3px;
 
     li {
         padding: 4px 0;
@@ -159,54 +146,91 @@ export const SubMenu = styled.ul`
 
 export const PostEditorContainer = styled.div`
     width: 1000px;
-    height: 600px;
-    margin: 75px auto; 
-    padding: 30px; /* 안쪽 여백 조절 */
+    margin: 60px auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.07);
     display: flex;
     flex-direction: column;
     gap: 15px;
 
-    background: rgba(250, 250, 250, 0.7);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
     h2 {
-        margin-bottom: 22px;
-        margin-left: 20px;
+        margin-left: 30px;
         font-size: 30px;
+        font-weight: 600;
     }
 
-    input {
-        padding: 10px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
-        background-color: #fff;
-    }
-
+    input,
     textarea {
-        padding: 10px;
+        padding: 12px;
         border-radius: 6px;
         border: 1px solid #ccc;
+        background: #fff;
         font-size: 1rem;
-        resize: vertical;
-        background-color: #fff;
+        transition: all 0.2s ease;
+
+        &:focus {
+            outline: none;
+            border-color: #2b90d9;
+            box-shadow: 0 0 3px #2b90d9;
+        }
     }
 
     button {
-        align-self: flex-end;
-        
         padding: 10px 20px;
-        background-color: #5db9eeff;
+        background-color: #5db9ee;
         color: white;
         border: none;
         border-radius: 6px;
         cursor: pointer;
         font-weight: bold;
+        transition: 0.2s;
 
         &:hover {
-            background-color: #5db9eeac;
+            background-color: #2b90d9;
         }
     }
+`;
+
+export const CategorySelectWrapper = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 25px;
+    margin-bottom: -70px;
+    position: relative;
+`;
+
+export const CategorySelect = styled.select`
+    width: 180px;
+    padding: 10px 40px 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    &:focus {
+        outline: none;
+        border-color: #2b90d9;
+        box-shadow: 0 0 4px #2b90d9;
+    }
+`;
+
+export const CategoryArrow = styled.div`
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    width: 14px;
+    height: 14px;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='24' width='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px;
 `;
