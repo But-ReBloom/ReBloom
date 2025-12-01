@@ -19,7 +19,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "docker-compose.yml,backend/Dockerfile,backend/build.gradle,backend/src,backend/gradle,backend/gradlew,db/init.sql"
+          source: "docker-compose.yml,backend/Dockerfile,backend/build.gradle,backend/src,backend/gradle,backend/gradlew,db/init.sql,nginx/conf.d/app.conf"
           target: "/home/ubuntu/rebloom"
 
       - name: Deploy to EC2

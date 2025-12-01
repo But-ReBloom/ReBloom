@@ -34,8 +34,20 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    expose:
+      - "8080"
+    networks:
+      - rebloom-net
+
+  nginx:
+    image: nginx:latest
+    container_name: rebloom-nginx
     ports:
-      - "80:8080"
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - backend
     networks:
       - rebloom-net
 
