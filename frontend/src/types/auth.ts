@@ -35,10 +35,61 @@ export interface VerifyCodeRequest {
     code: string;
 }
 
+export interface GoogleLoginAuthorizeCodeRequest {
+    code: string;
+    redirectUri: string;
+}
+
+export interface UpdateUserIdRequest {
+    updateUserId: string;
+}
+
+export interface UpdateUserPasswordRequest {
+    updateUserPassword: string;
+}
+
 export interface FindEmailRequest {
-    // Add fields based on backend if needed
+    userId: string;
+    userPassword: string;
 }
 
 export interface FindIdRequest {
-    // Add fields based on backend if needed
+    userEmail: string;
+    userPassword: string;
+}
+
+export interface ChangeActivityRequest {
+    activityId: number;
+}
+
+export interface GoogleUserInfoResponse {
+    userEmail: string;
+    userName: string;
+    token: string;
+}
+
+export interface UpdateIdResponse {
+    userId: string;
+    userEmail: string;
+}
+
+export interface GetUserEmailResponse {
+    userEmail: string;
+}
+
+export interface GetUserIdResponse {
+    userId: string;
+}
+
+export interface FindUserInfoResponse {
+    userId: string;
+    userEmail: string;
+    userName: string;
+    userProvider: Provider;
+    userActivityId: number;
+}
+
+export interface ChangeActivityResponse {
+    userId: string;
+    activityId: number;
 }
