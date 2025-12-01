@@ -22,8 +22,7 @@ public class CorsConfig {
                                 "https://rebloom.co.kr",
                                 "https://www.rebloom.co.kr",
                                 "http://rebloom.co.kr",
-                                "http://www.rebloom.co.kr",
-                                "https://api.rebloom.co.kr"
+                                "http://www.rebloom.co.kr"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowCredentials(true);
