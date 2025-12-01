@@ -38,3 +38,5 @@ out/
 .vscode/
 
 .DS_Storenode_modules/
+backend/src/main/java/com/but/rebloom/config/CorsConfig.java
+backend/src/main/java/com/but/rebloom/config/SwaggerConfig.java
