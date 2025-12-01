@@ -155,6 +155,7 @@ public class ChannelUseCase {
                 .channelId(channelId)
                 .userEmail(channel.getUser().getUserEmail())
                 .userChannelVerifyStatus(VerifyStatus.APPROVED)
+                .applyMessage("")
                 .build();
 
         userChannelRepository.save(userChannel);
