@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
     @Bean
-    public OpenAPI customOpenAPI() {
+    public OpenAPI rebloomOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
                         .title("Rebloom API")
