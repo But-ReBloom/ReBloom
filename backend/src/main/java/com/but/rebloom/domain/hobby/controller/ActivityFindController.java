@@ -26,15 +26,6 @@ public class ActivityFindController {
         return ResponseEntity.ok(ApiResponse.success(FindActivityResponse.from(activity)));
     }
 
-    // Activity 조회 - ActivityName
-    @GetMapping("/name/{activityName}")
-    public ResponseEntity<ApiResponse<FindActivityResponse>> findActivityByActivityName(
-            @PathVariable String activityName
-    ) {
-        Activity activity = defaultActivityUseCase.findActivityByActivityName(activityName);
-        return ResponseEntity.ok(ApiResponse.success(FindActivityResponse.from(activity)));
-    }
-
     // Activity 조회
     @GetMapping("/normal")
     public ResponseEntity<ApiResponse<List<FindActivityResponse>>> findActivity() {

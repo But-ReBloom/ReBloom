@@ -42,14 +42,6 @@ public class DefaultActivityUseCase {
         return activity;
     }
 
-    // Activity 조회 - ActivityName
-    public Activity findActivityByActivityName(String hobbyName) {
-        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
-
-        return activityRepository.findByUser_UserEmailAndHobby_HobbyName(userEmail, hobbyName)
-                .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
-    }
-
     // 전체 Activity 조회
     public List<Activity> findAllActivity() {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
