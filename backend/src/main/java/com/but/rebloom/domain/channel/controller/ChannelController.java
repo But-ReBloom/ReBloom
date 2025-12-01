@@ -50,28 +50,28 @@ public class ChannelController {
     }
 
     // 승인된 채널 목록 조회
-    @GetMapping("/admin/approve")
+    @GetMapping("/admin/find/approve")
     public ResponseEntity<ApiResponse<FindChannelResponse>> getApprovedChannels() {
         List<Channel> responses = channelUseCase.getApprovedChannels();
         return ResponseEntity.ok(ApiResponse.success(FindChannelResponse.from(responses)));
     }
 
     // 승인 대기 채널 목록 조회
-    @GetMapping("/admin/pending")
+    @GetMapping("/admin/find/pending")
     public ResponseEntity<ApiResponse<FindChannelResponse>> getPendingChannels() {
         List<Channel> responses = channelUseCase.getPendingChannels();
         return ResponseEntity.ok(ApiResponse.success(FindChannelResponse.from(responses)));
     }
 
     // 채널 승인
-    @PatchMapping("/admin/{channelId}/approve")
+    @PatchMapping("/admin/approve/{channelId}")
     public ResponseEntity<ApiResponse<ApproveChannelResponse>> approveChannel(@PathVariable Long channelId) {
         Channel response = channelUseCase.approveChannel(channelId);
         return ResponseEntity.ok(ApiResponse.success(ApproveChannelResponse.from(response)));
     }
 
     // 채널 거절
-    @DeleteMapping("/admin/{channelId}/reject")
+    @DeleteMapping("/admin/reject/{channelId}")
     public ResponseEntity<ApiResponse<Void>> rejectChannel(@PathVariable Long channelId) {
         channelUseCase.rejectChannel(channelId);
         return ResponseEntity.ok(ApiResponse.success());
