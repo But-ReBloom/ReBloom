@@ -20,12 +20,6 @@ public class DefaultAchievementUseCase {
                 .orElseThrow(() -> new AchievementNotFoundException("존재하지 않는 업적 아이디"));
     }
 
-    // 업적 조회 - 업적 제목
-    public Achievement findAchievementByTitle(String achievementTitle) {
-        return achievementRepository.findByAchievementTitle(achievementTitle)
-                .orElseThrow(() -> new AchievementNotFoundException("존재하지 않는 업적 제목"));
-    }
-
     // 업적 리스트 조회
     public List<Achievement> findAllAchievements() {
         return achievementRepository.findAll();

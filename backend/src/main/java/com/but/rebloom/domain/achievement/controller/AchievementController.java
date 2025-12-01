@@ -36,11 +36,4 @@ public class AchievementController {
         Achievement response = defaultAchievementUseCase.findAchievementById(achievementId);
         return ResponseEntity.ok(ApiResponse.success(GetAchievementResponse.from(response)));
     }
-
-    // 업적 조회 - 업적 제목
-    @GetMapping("/title/{achievementTitle}")
-    public ResponseEntity<ApiResponse<GetAchievementResponse>> findAchievementByTitle(@PathVariable String achievementTitle) {
-        Achievement response = defaultAchievementUseCase.findAchievementByTitle(achievementTitle);
-        return ResponseEntity.ok(ApiResponse.success(GetAchievementResponse.from(response)));
-    }
 }
