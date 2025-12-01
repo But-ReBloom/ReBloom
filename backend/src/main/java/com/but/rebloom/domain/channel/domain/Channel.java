@@ -40,18 +40,18 @@ public class Channel {
     private Boolean isAccepted = false;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ch_lk_act_1_id", referencedColumnName = "h_id", nullable = false)
+    @JoinColumn(name = "ch_lk_h_1_id", referencedColumnName = "h_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Hobby channelLinkedHobby1;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ch_lk_act_2_id", referencedColumnName = "h_id", nullable = true)
+    @JoinColumn(name = "ch_lk_h_2_id", referencedColumnName = "h_id", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Builder.Default
     private Hobby channelLinkedHobby2 = null;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ch_lk_act_3_id", referencedColumnName = "h_id", nullable = true)
+    @JoinColumn(name = "ch_lk_h_3_id", referencedColumnName = "h_id", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Builder.Default
     private Hobby channelLinkedHobby3 = null;
