@@ -13,13 +13,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+
+      - name: Clean up old files
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            rm -rf /home/ubuntu/rebloom/*
+
       - name: Copy files to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "docker-compose.yml,backend/Dockerfile,backend/build.gradle,backend/src,backend/gradle,backend/gradlew,db/init.sql,db/my.conf,nginx/conf.d/app.conf"
+          source: "docker-compose.yml,backend/Dockerfile,backend/build.gradle,backend/src,backend/gradle,backend/gradlew,db/init.sql,db/my.conf,nginx/conf.d/app.conf,frontend/dist"
           target: "/home/ubuntu/rebloom"
 
       - name: Deploy to EC2
