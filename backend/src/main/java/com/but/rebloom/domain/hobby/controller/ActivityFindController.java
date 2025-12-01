@@ -18,7 +18,7 @@ public class ActivityFindController {
     private final DefaultActivityUseCase defaultActivityUseCase;
 
     // Activity 조회 - ActivityId
-    @GetMapping("/id/{activityId}")
+    @GetMapping("/activity-id/{activityId}")
     public ResponseEntity<ApiResponse<FindActivityResponse>> findActivityByUserId(
             @PathVariable Long activityId
     ) {

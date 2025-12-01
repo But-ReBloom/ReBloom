@@ -103,7 +103,7 @@ public class AuthController {
     }
 
     // 현재 유저 조회
-    @PostMapping("/current-user")
+    @PostMapping("/find/current-user")
     public ResponseEntity<ApiResponse<FindUserInfoResponse>> findCurrentUser() {
         User user = findCurrentUserUseCase.getCurrentUser();
         return ResponseEntity.ok(ApiResponse.success(FindUserInfoResponse.from(user)));

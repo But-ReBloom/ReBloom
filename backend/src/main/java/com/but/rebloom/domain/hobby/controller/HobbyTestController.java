@@ -23,7 +23,7 @@ public class HobbyTestController {
 
     // 질문지 조회
     // dto 의존성 제거
-    @GetMapping("/questions")
+    @GetMapping("/get/questions")
     public ResponseEntity<ApiResponse<List<InitialTest>>> getQuestions() {
         List<InitialTest> questions = hobbyTestUseCase.getQuestions();
         return ResponseEntity.ok(ApiResponse.success(questions));

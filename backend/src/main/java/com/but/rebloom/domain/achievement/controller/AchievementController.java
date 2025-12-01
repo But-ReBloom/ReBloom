@@ -18,7 +18,7 @@ public class AchievementController {
     private final DefaultAchievementUseCase defaultAchievementUseCase;
 
     // 전제 업적 조회
-    @GetMapping("/all")
+    @GetMapping("/find/all")
     public ResponseEntity<ApiResponse<List<GetAchievementResponse>>> findAllAchievements() {
         List<Achievement> response = defaultAchievementUseCase.findAllAchievements();
         return ResponseEntity.ok(
@@ -31,7 +31,7 @@ public class AchievementController {
     }
 
     // 업적 조회 - 업적 아이디
-    @GetMapping("/id/{achievementId}")
+    @GetMapping("/find/id/{achievementId}")
     public ResponseEntity<ApiResponse<GetAchievementResponse>> findAchievementById(@PathVariable Long achievementId) {
         Achievement response = defaultAchievementUseCase.findAchievementById(achievementId);
         return ResponseEntity.ok(ApiResponse.success(GetAchievementResponse.from(response)));
