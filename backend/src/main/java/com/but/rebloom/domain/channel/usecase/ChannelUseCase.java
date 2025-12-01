@@ -44,6 +44,10 @@ public class ChannelUseCase {
         User user = userRepository.findByUserEmail(request.getUserEmail())
                 .orElseThrow(() -> new UserNotFoundException("User Not Found"));
 
+        if (channelRepository.existsByChannelTitle(request.getChannelTitle())) {
+            throw new AlreadyUsingChannelException("이미 존재하는 채널 이름");
+        }
+
         // 티어 포인트 확인
         if (user.getUserTierPoint() < requiredTierPoint) {
             throw new InsufficientTeirPointException("Tier point not enough");
@@ -65,9 +69,14 @@ public class ChannelUseCase {
         if (request.getChannelLinkedHobby2() != null) {
             hobby2 = hobbyRepository.findByHobbyId(request.getChannelLinkedHobby2())
                     .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
-        } if (request.getChannelLinkedHobby3() != null) {
+        } else {
+            hobby2 = hobby1;
+        }
+        if (request.getChannelLinkedHobby3() != null) {
             hobby3 = hobbyRepository.findByHobbyId(request.getChannelLinkedHobby3())
                     .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
+        } else {
+            hobby3 = hobby1;
         }
 
         // 채널 생성(승인 대기)
