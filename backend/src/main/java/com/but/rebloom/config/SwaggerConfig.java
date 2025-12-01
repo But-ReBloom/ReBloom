@@ -1,4 +1,4 @@
-package com.but.rebloom.config;
+package com.but.rebloom.global.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
     @Bean
-    public OpenAPI rebloomOpenAPI() {
+    public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
                         .title("Rebloom API")
