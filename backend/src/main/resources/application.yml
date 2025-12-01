@@ -45,7 +45,6 @@ spring:
 
   ai:
     openai:
-      base-url: api.openai.com
       api-key: ${OPENAI_API_KEY}
       chat:
         options:
