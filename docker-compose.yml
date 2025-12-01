@@ -29,20 +29,7 @@ services:
     depends_on:
       - db
     ports:
-      - "8080:8080"
-    networks:
-      - rebloom-net
-
-  nginx:
-    image: nginx:latest
-    container_name: rebloom-nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./frontend/dist:/usr/share/nginx/html
-    depends_on:
-      - backend
+      - "80:8080"
     networks:
       - rebloom-net
 
