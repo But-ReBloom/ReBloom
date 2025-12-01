@@ -18,7 +18,14 @@ public class CorsConfig {
                                 "http://localhost:5500",
                                 "http://localhost:3000",
                                 "http://localhost:5173",
-                                "http://localhost:8080"
+                                "http://localhost:8080",
+
+                                "http://rebloom.co.kr",
+                                "http://api.rebloom.co.kr",
+
+                                "https://rebloom.co.kr",
+                                "https://api.rebloom.co.kr"
+
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowCredentials(true);
