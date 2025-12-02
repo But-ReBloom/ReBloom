@@ -83,11 +83,10 @@ public class SignupTest {
                 Provider.SELF
         );
 
-        // When
         when(userRepository.existsByUserEmail(signupRequest.getUserEmail()))
                 .thenReturn(true);
 
-        // Then
+        // When & Then
         assertThrows(AlreadyUsingUserException.class,
                 () -> signupUseCase.signup(signupRequest));
     }
