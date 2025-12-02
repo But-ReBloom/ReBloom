@@ -4,6 +4,7 @@ import com.but.rebloom.domain.auth.domain.Provider;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.domain.VerificationPurpose;
 import com.but.rebloom.domain.auth.dto.request.VerifyCodeRequest;
+import com.but.rebloom.domain.auth.exception.WrongVerifiedCodeException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.EmailUseCase;
 import org.assertj.core.api.Assertions;
@@ -26,7 +27,7 @@ public class VerifyCodeTest {
     private UserRepository userRepository;
 
     @InjectMocks
-    private EmailUseCase emailUseCase; // codeMap = new HashMap<>() 유지됨
+    private EmailUseCase emailUseCase;
 
     @Test
     @DisplayName("코드 인증 테스트 - 성공")
@@ -38,7 +39,6 @@ public class VerifyCodeTest {
                 VerificationPurpose.SIGN_UP
         );
 
-        // EmailUseCase 내부의 codeMap 에 직접 값 세팅
         EmailUseCase.CodeInfo mockCodeInfo = new EmailUseCase.CodeInfo(
                 "123456",
                 LocalDateTime.now()
@@ -64,5 +64,30 @@ public class VerifyCodeTest {
         // Then
         Assertions.assertThat(user.getUserEmail())
                 .isEqualTo(verifyCodeRequest.getUserEmail());
+    }
+
+    @Test
+    @DisplayName("코드 인증 테스트 - 잘못된 인증코드로 인한 실패")
+    public void verifyCodeFailByWrongVerifyCodeTest() {
+        // Given
+        VerifyCodeRequest verifyCodeRequest = new VerifyCodeRequest(
+                "testemail@email.com",
+                "123456",
+                VerificationPurpose.SIGN_UP
+        );
+
+        EmailUseCase.CodeInfo mockCodeInfo = new EmailUseCase.CodeInfo(
+                "234567",
+                LocalDateTime.now()
+        );
+
+        emailUseCase
+                .getCodeMap()
+                .computeIfAbsent(verifyCodeRequest.getUserEmail(), k -> new HashMap<>())
+                .put(VerificationPurpose.SIGN_UP, mockCodeInfo);
+
+        // When & Then
+        org.junit.jupiter.api.Assertions.assertThrows(WrongVerifiedCodeException.class,
+                () -> emailUseCase.verifyCode(verifyCodeRequest));
     }
 }
