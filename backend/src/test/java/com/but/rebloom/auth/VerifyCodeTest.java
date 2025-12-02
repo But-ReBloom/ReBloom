@@ -16,10 +16,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class VerifyCodeTest {
@@ -87,7 +89,32 @@ public class VerifyCodeTest {
                 .put(VerificationPurpose.SIGN_UP, mockCodeInfo);
 
         // When & Then
-        org.junit.jupiter.api.Assertions.assertThrows(WrongVerifiedCodeException.class,
+        assertThrows(WrongVerifiedCodeException.class,
+                () -> emailUseCase.verifyCode(verifyCodeRequest));
+    }
+
+    @Test
+    @DisplayName("코드 인증 테스트 - 인증코드 만료로 인한 실패")
+    public void verifyCodeFailByExpiredCodeTest() {
+        // Given
+        VerifyCodeRequest verifyCodeRequest = new VerifyCodeRequest(
+                "testemail@email.com",
+                "123456",
+                VerificationPurpose.SIGN_UP
+        );
+
+        EmailUseCase.CodeInfo mockCodeInfo = new EmailUseCase.CodeInfo(
+                "123456",
+                LocalDateTime.now().minus(1, ChronoUnit.DAYS)
+        );
+
+        emailUseCase
+                .getCodeMap()
+                .computeIfAbsent(verifyCodeRequest.getUserEmail(), k -> new HashMap<>())
+                .put(VerificationPurpose.SIGN_UP, mockCodeInfo);
+
+        // When & Then
+        assertThrows(WrongVerifiedCodeException.class,
                 () -> emailUseCase.verifyCode(verifyCodeRequest));
     }
 }
