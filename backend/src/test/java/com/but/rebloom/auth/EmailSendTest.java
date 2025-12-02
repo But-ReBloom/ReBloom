@@ -3,7 +3,6 @@ package com.but.rebloom.auth;
 import com.but.rebloom.domain.auth.domain.VerificationPurpose;
 import com.but.rebloom.domain.auth.dto.request.SendVerificationEmailRequest;
 import com.but.rebloom.global.usecase.EmailSenderUseCase;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
