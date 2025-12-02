@@ -30,20 +30,6 @@ public class DefaultUserAchievementUseCase {
     // 함수 홏출
     private final DefaultTierUseCase defaultTierUseCase;
 
-    // 전체 유저 업적 조회 - 유저 아이디
-    public List<UserAchievement> finaAllUserAchievementsByUserId() {
-        User currentUser = findCurrentUserUseCase.getCurrentUser();
-        String userId = currentUser.getUserId();
-
-        List<UserAchievement> userAchievements = userAchievementRepository.findAllByUser_UserId(userId);
-
-        if (userAchievements.isEmpty()) {
-            throw new UserAchievementNotFoundException("유저 업적 조회 실패");
-        }
-
-        return userAchievements;
-    }
-
     // 전체 유저 업적 조회 - 유저 이메일
     public List<UserAchievement> finaAllUserAchievementsByUserEmail() {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
