@@ -8,6 +8,7 @@ import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.AuthValidationUseCase;
 import com.but.rebloom.domain.auth.usecase.LoginUseCase;
+import com.but.rebloom.global.exception.IllegalArgumentException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,7 +73,7 @@ public class LoginTest {
     }
 
     @Test
-    @DisplayName("로그인 테스트 - 존재하지 않는 유저 실패")
+    @DisplayName("로그인 테스트 - 존재하지 않는 유저로 인한 실패")
     public void loginFailByNotFoundUserTest() {
         // Given
         LoginRequest loginRequest = new LoginRequest(
@@ -83,6 +84,22 @@ public class LoginTest {
 
         // When & Then
         assertThrows(UserNotFoundException.class,
+                () -> loginUseCase.login(loginRequest));
+    }
+
+    @Test
+    @DisplayName("로그인 테스트 - 잘못된 로그인 환경으로 인한 실패")
+    public void loginFailByWrongLoginSituationTest() {
+
+        // Given
+        LoginRequest loginRequest = new LoginRequest(
+                "testemail@email.com",
+                "userPasswor123!",
+                Provider.DODAM
+        );
+
+        // When & Then
+        assertThrows(IllegalArgumentException.class,
                 () -> loginUseCase.login(loginRequest));
     }
 }
