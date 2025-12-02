@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -67,9 +68,9 @@ public class LoginTest {
         User user = loginUseCase.login(loginRequest);
 
         // Then
-        Assertions.assertThat(user.getUserEmail()).isEqualTo(loginRequest.getUserEmail());
-        Assertions.assertThat(user.getUserProvider()).isEqualTo(loginRequest.getUserProvider());
-        Assertions.assertThat(user.getUserStreak()).isEqualTo(1);
+        assertThat(user.getUserEmail()).isEqualTo(loginRequest.getUserEmail());
+        assertThat(user.getUserProvider()).isEqualTo(loginRequest.getUserProvider());
+        assertThat(user.getUserStreak()).isEqualTo(1);
     }
 
     @Test

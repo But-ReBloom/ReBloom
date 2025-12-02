@@ -21,6 +21,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -65,7 +66,7 @@ public class VerifyCodeTest {
         User user = emailUseCase.verifyCode(verifyCodeRequest);
 
         // Then
-        Assertions.assertThat(user.getUserEmail())
+        assertThat(user.getUserEmail())
                 .isEqualTo(verifyCodeRequest.getUserEmail());
     }
 

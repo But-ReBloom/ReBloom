@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -65,10 +66,10 @@ public class SignupTest {
         User user = signupUseCase.signup(signupRequest);
 
         // Then
-        Assertions.assertThat(user.getUserEmail()).isEqualTo(signupRequest.getUserEmail());
-        Assertions.assertThat(user.getUserId()).isEqualTo(signupRequest.getUserId());
-        Assertions.assertThat(user.getUserName()).isEqualTo(signupRequest.getUserName());
-        Assertions.assertThat(user.getUserProvider()).isEqualTo(signupRequest.getUserProvider());
+        assertThat(user.getUserEmail()).isEqualTo(signupRequest.getUserEmail());
+        assertThat(user.getUserId()).isEqualTo(signupRequest.getUserId());
+        assertThat(user.getUserName()).isEqualTo(signupRequest.getUserName());
+        assertThat(user.getUserProvider()).isEqualTo(signupRequest.getUserProvider());
     }
 
     @Test

@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
@@ -63,7 +64,7 @@ public class EmailSendTest {
                 .when(javaMailSender).send(any(SimpleMailMessage.class));
 
         // When & Then
-        Assertions.assertThrows(RuntimeException.class,
+        assertThrows(RuntimeException.class,
                 () -> emailSenderUseCase.sendEmail(to, subject, text));
     }
 }
