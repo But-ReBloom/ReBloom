@@ -3,6 +3,7 @@ package com.but.rebloom.auth.normal;
 import com.but.rebloom.domain.auth.domain.Provider;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.AlreadyUsingUserException;
+import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.AuthValidationUseCase;
 import com.but.rebloom.domain.auth.usecase.DefaultUserUseCase;
@@ -71,6 +72,22 @@ public class UpdateUserIdInnerTest {
 
         // When & Then
         assertThrows(AlreadyUsingUserException.class,
+                () -> defaultUserUseCase.updateUserId(userEmail, userNewId));
+    }
+
+    @Test
+    @DisplayName("유저 아이디 수정 테스트 - 성공")
+    public void updateUserIdFailByUserNotFoundTest() {
+        // Given
+        String userEmail = "testemail@email.com";
+        String userNewId = "testnewid";
+
+        doNothing().when(authValidationUseCase).checkUserId(userNewId);
+        when(userRepository.existsByUserId(anyString()))
+                .thenReturn(false);
+
+        // When & Then
+        assertThrows(UserNotFoundException.class,
                 () -> defaultUserUseCase.updateUserId(userEmail, userNewId));
     }
 }
