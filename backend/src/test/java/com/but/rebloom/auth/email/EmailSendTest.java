@@ -1,4 +1,4 @@
-package com.but.rebloom.auth;
+package com.but.rebloom.auth.email;
 
 import com.but.rebloom.domain.auth.domain.VerificationPurpose;
 import com.but.rebloom.domain.auth.dto.request.SendVerificationEmailRequest;

@@ -1,4 +1,4 @@
-package com.but.rebloom.auth;
+package com.but.rebloom.auth.update;
 
 import com.but.rebloom.domain.auth.domain.Provider;
 import com.but.rebloom.domain.auth.domain.User;

@@ -1,8 +1,8 @@
-package com.but.rebloom.auth;
+package com.but.rebloom.auth.find;
 
 import com.but.rebloom.domain.auth.domain.Provider;
 import com.but.rebloom.domain.auth.domain.User;
-import com.but.rebloom.domain.auth.dto.request.FindIdRequest;
+import com.but.rebloom.domain.auth.dto.request.FindEmailRequest;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.AuthValidationUseCase;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class FindUserIdByEmailAndPwTest {
+public class FindUserEmailByIdAndPwTest {
     @Mock
     private AuthValidationUseCase authValidationUseCase;
     @Mock
@@ -34,49 +34,48 @@ public class FindUserIdByEmailAndPwTest {
     private FindUserInfoUseCase findUserInfoUseCase;
 
     @Test
-    @DisplayName("이메일, 비번을 통한 아이디 조회 - 성공")
-    public void findUserIdByEmailAndPwSuccessTest() {
+    @DisplayName("아이디, 비번을 통한 이메일 조회 - 성공")
+    public void findUserEmailByIdAndPwSuccessTest() {
         // Given
-        FindIdRequest findIdRequest = new FindIdRequest(
-                "testemail@email.com",
+        FindEmailRequest findEmailRequest = new FindEmailRequest(
+                "testid123",
                 "testPassword123!"
         );
 
         User mockUser = User.builder()
                 .userEmail("testemail@email.com")
-                .userId("testid123")
                 .userPassword("userPasswor123!")
                 .userProvider(Provider.SELF)
                 .build();
 
-        doNothing().when(authValidationUseCase).checkUserEmail(findIdRequest.getUserEmail());
-        doNothing().when(authValidationUseCase).checkUserPassword(findIdRequest.getUserPassword());
-        when(userRepository.findByUserEmail(findIdRequest.getUserEmail()))
+        doNothing().when(authValidationUseCase).checkUserId(findEmailRequest.getUserId());
+        doNothing().when(authValidationUseCase).checkUserPassword(findEmailRequest.getUserPassword());
+        when(userRepository.findByUserId(findEmailRequest.getUserId()))
                 .thenReturn(Optional.of(mockUser));
-        when(passwordEncoder.matches(findIdRequest.getUserPassword(), mockUser.getUserPassword()))
+        when(passwordEncoder.matches(findEmailRequest.getUserPassword(), mockUser.getUserPassword()))
                 .thenReturn(true);
 
         // When
-        User user = findUserInfoUseCase.findUserIdByEmailAndPw(findIdRequest);
+        User user = findUserInfoUseCase.findUserEmailByIdAndPw(findEmailRequest);
 
         // Then
-        assertThat(user.getUserId()).isEqualTo("testid123");
+        assertThat(user.getUserEmail()).isEqualTo("testemail@email.com");
     }
 
     @Test
     @DisplayName("아이디, 비번을 통한 이메일 조회 - 유저 조회 실패로 인한 실패")
-    public void findUserIdByEmailAndPwFailByUserNotFoundTest() {
+    public void findUserEmailByIdAndPwFailByUserNotFoundTest() {
         // Given
-        FindIdRequest findIdRequest = new FindIdRequest(
-                "testemail@email.com",
+        FindEmailRequest findEmailRequest = new FindEmailRequest(
+                "testid123",
                 "testPassword123!"
         );
 
-        doNothing().when(authValidationUseCase).checkUserEmail(findIdRequest.getUserEmail());
-        doNothing().when(authValidationUseCase).checkUserPassword(findIdRequest.getUserPassword());
+        doNothing().when(authValidationUseCase).checkUserId(findEmailRequest.getUserId());
+        doNothing().when(authValidationUseCase).checkUserPassword(findEmailRequest.getUserPassword());
 
         // When & Then
         assertThrows(UserNotFoundException.class,
-                () -> findUserInfoUseCase.findUserIdByEmailAndPw(findIdRequest));
+                () -> findUserInfoUseCase.findUserEmailByIdAndPw(findEmailRequest));
     }
 }

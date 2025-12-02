@@ -1,4 +1,4 @@
-package com.but.rebloom.auth;
+package com.but.rebloom.auth.signup;
 
 import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.Provider;
@@ -8,7 +8,6 @@ import com.but.rebloom.domain.auth.exception.AlreadyUsingUserException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.AuthValidationUseCase;
 import com.but.rebloom.domain.auth.usecase.SignupUseCase;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

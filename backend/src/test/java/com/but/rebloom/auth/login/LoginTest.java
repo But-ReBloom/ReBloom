@@ -1,4 +1,4 @@
-package com.but.rebloom.auth;
+package com.but.rebloom.auth.login;
 
 import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.Provider;
