@@ -4,7 +4,6 @@ import com.but.rebloom.domain.achievement.domain.Achievement;
 import com.but.rebloom.domain.achievement.exception.AchievementNotFoundException;
 import com.but.rebloom.domain.achievement.repository.AchievementRepository;
 import com.but.rebloom.domain.achievement.usecase.DefaultAchievementUseCase;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,13 +46,13 @@ public class FindAchievementByIdTest {
     }
 
     @Test
-    @DisplayName("업적 조회(아이디) 테스트 - 성공")
+    @DisplayName("업적 조회(아이디) 테스트 - 업적 조회 실패로 인한 실패")
     public void findAchievementByIdFailByAchievementNotFoundTest() {
         // Given
         Long achievementId = 1000L;
 
         // When & Then
-        Assertions.assertThrows(AchievementNotFoundException.class,
+        assertThrows(AchievementNotFoundException.class,
                 () -> defaultAchievementUseCase.findAchievementById(achievementId));
     }
 }

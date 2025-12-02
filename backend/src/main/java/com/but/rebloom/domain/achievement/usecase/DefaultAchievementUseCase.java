@@ -22,7 +22,7 @@ public class DefaultAchievementUseCase {
 
     // 업적 리스트 조회
     public List<Achievement> findAllAchievements() {
-        List<Achievement> achievements =  achievementRepository.findAll();
+        List<Achievement> achievements = achievementRepository.findAll();
 
         if (achievements.isEmpty()) {
             throw new AchievementNotFoundException("업적 조회 실패");
