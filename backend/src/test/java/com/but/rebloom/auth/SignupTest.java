@@ -4,10 +4,11 @@ import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.Provider;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.dto.request.SignupRequest;
+import com.but.rebloom.domain.auth.exception.AlreadyUsingUserException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.AuthValidationUseCase;
 import com.but.rebloom.domain.auth.usecase.SignupUseCase;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,10 +17,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SignupTest {
@@ -64,9 +65,29 @@ public class SignupTest {
         User user = signupUseCase.signup(signupRequest);
 
         // Then
-        Assertions.assertEquals("testuseremail@email.com", user.getUserEmail());
-        Assertions.assertEquals("testuser123", user.getUserId());
-        Assertions.assertEquals("testname", user.getUserName());
-        Assertions.assertEquals(Provider.SELF, user.getUserProvider());
+        Assertions.assertThat(user.getUserEmail()).isEqualTo(signupRequest.getUserEmail());
+        Assertions.assertThat(user.getUserId()).isEqualTo(signupRequest.getUserId());
+        Assertions.assertThat(user.getUserName()).isEqualTo(signupRequest.getUserName());
+        Assertions.assertThat(user.getUserProvider()).isEqualTo(signupRequest.getUserProvider());
+    }
+
+    @Test
+    @DisplayName("회원가입 - 이메일 중복 실패")
+    public void signupFailByEmailTest() {
+        // Given
+        SignupRequest signupRequest = new SignupRequest(
+                "hjbin_25@dgsw.hs.kr",
+                "testuser123",
+                "testPassword123!",
+                "testname",
+                Provider.SELF
+        );
+
+        // When
+        when(userRepository.existsByUserEmail("hjbin_25@dgsw.hs.kr"))
+                .thenReturn(true);
+
+        assertThrows(AlreadyUsingUserException.class,
+                () -> signupUseCase.signup(signupRequest));
     }
 }
