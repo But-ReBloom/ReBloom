@@ -35,7 +35,13 @@ public class DefaultUserAchievementUseCase {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
         String userId = currentUser.getUserId();
 
-        return userAchievementRepository.findAllByUser_UserId(userId);
+        List<UserAchievement> userAchievements = userAchievementRepository.findAllByUser_UserId(userId);
+
+        if (userAchievements.isEmpty()) {
+            throw new UserAchievementNotFoundException("유저 업적 조회 실패");
+        }
+
+        return userAchievements;
     }
 
     // 전체 유저 업적 조회 - 유저 이메일
@@ -43,7 +49,13 @@ public class DefaultUserAchievementUseCase {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
         String userEmail = currentUser.getUserEmail();
 
-        return userAchievementRepository.findAllByUserEmail(userEmail);
+        List<UserAchievement> userAchievements = userAchievementRepository.findAllByUserEmail(userEmail);
+
+        if (userAchievements.isEmpty()) {
+            throw new UserAchievementNotFoundException("유저 업적 조회 실패");
+        }
+
+        return userAchievements;
     }
 
     // 유저 업적 조회 - (유저 이메일 + 업적 아이디)

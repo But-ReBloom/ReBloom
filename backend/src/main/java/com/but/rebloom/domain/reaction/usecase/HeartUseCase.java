@@ -73,31 +73,41 @@ public class HeartUseCase {
 
     // 특정 게시글의 하트 목록 조회
     public List<Heart> getHeartsByPost(Long postId) {
-        return heartRepository.findByPost_PostId(postId);
+        List<Heart> hearts = heartRepository.findByPost_PostId(postId);
+
+        if (hearts.isEmpty()) {
+            throw new HeartNotFoundException("하트 조회 실패");
+        }
+
+        return hearts;
     }
 
     // 특정 유저가 누른 하트 목록 조회
     public List<Heart> getHeartsByUser(String userId) {
-        return heartRepository.findByUser_UserId(userId);
+        List<Heart> hearts = heartRepository.findByUser_UserId(userId);
+
+        if (hearts.isEmpty()) {
+            throw new HeartNotFoundException("하트 조회 실패");
+        }
+
+        return hearts;
     }
 
     // 특정 게시글의 하트 수 조회
-    public Map<String, Long> getHeartCount(Long postId) {
+    public Map<Post, Long> getHeartCount(Long postId) {
         return Map.of(
                 postRepository.findByPostId(postId)
                         .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음"))
-                        .getPostTitle()
                 , heartRepository.countByPost_PostId(postId)
         );
     }
 
     // 특정 유저가 특정 게시글에 하트를 눌렀는지 확인
-    public Map<String, Boolean> checkHeartExists(CheckHeartExistsRequest request) {
+    public Map<Post, Boolean> checkHeartExists(CheckHeartExistsRequest request) {
         boolean isSuccess = heartRepository.existsByUser_UserIdAndPost_PostId(request.getUserId(), request.getPostId());
-        String postTitle = postRepository.findByPostId(request.getPostId())
-                .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음"))
-                .getPostTitle();
-        return Map.of(postTitle, isSuccess);
+        Post post = postRepository.findByPostId(request.getPostId())
+                .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음"));
+        return Map.of(post, isSuccess);
     }
 
     // 하트 삭제 (좋아요 취소)

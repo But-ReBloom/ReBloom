@@ -33,7 +33,7 @@ public class PostController {
     }
 
     // 특정 게시글 조회
-    @GetMapping("/find/{postId}")
+    @GetMapping("/find/post/{postId}")
     public ResponseEntity<ApiResponse<CreatePostResponse>> findPost(@PathVariable Long postId) {
         Post post = postUseCase.getPost(postId);
         return ResponseEntity.ok(ApiResponse.success(CreatePostResponse.from(post)));
@@ -68,14 +68,14 @@ public class PostController {
     }
 
     // 게시글 수정
-    @PutMapping("/update/{postId}")
+    @PutMapping("/update/post/{postId}")
     public ResponseEntity<ApiResponse<CreatePostResponse>> updatePost(@PathVariable Long postId, @Valid @RequestBody UpdatePostRequest request) {
         Post post = postUseCase.updatePost(postId, request);
         return ResponseEntity.ok(ApiResponse.success(CreatePostResponse.from(post)));
     }
 
     // 게시글 삭제(유저 본인)
-    @DeleteMapping("/delete/{postId}")
+    @DeleteMapping("/delete/post/{postId}")
     public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postId) {
         postUseCase.deletePost(postId);
         return ResponseEntity.ok(ApiResponse.success());
@@ -83,7 +83,7 @@ public class PostController {
 
     // admin
     // 게시글 삭제 (관리자)
-    @DeleteMapping("/admin/{postId}")
+    @DeleteMapping("/admin/post/{postId}")
     public ResponseEntity<ApiResponse<Void>> deletePostByAdmin(@PathVariable Long postId) {
         postUseCase.deletePostByAdmin(postId);
         return ResponseEntity.ok(ApiResponse.success());
@@ -97,14 +97,14 @@ public class PostController {
     }
 
     // 인증 게시글 승인 (관리자용)
-    @PatchMapping("/admin/{postId}/approve")
+    @PatchMapping("/admin/post/{postId}/approve")
     public ResponseEntity<ApiResponse<CreatePostResponse>> approvePost(@PathVariable Long postId) {
         Post post = postUseCase.approvePost(postId);
         return ResponseEntity.ok(ApiResponse.success(CreatePostResponse.from(post)));
     }
 
     // 인증 게시글 거절 (관리자용)
-    @PatchMapping("/admin/{postId}/reject")
+    @PatchMapping("/admin/post/{postId}/reject")
     public ResponseEntity<ApiResponse<CreatePostResponse>> rejectPost(@PathVariable Long postId) {
         Post post = postUseCase.rejectPost(postId);
         return ResponseEntity.ok(ApiResponse.success(CreatePostResponse.from(post)));

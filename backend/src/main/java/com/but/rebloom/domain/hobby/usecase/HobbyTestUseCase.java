@@ -7,6 +7,7 @@ import com.but.rebloom.domain.hobby.domain.Hobby;
 import com.but.rebloom.domain.hobby.domain.HobbyScore;
 import com.but.rebloom.domain.hobby.domain.InitialTest;
 import com.but.rebloom.domain.hobby.dto.request.UserAnswerRequest;
+import com.but.rebloom.domain.hobby.exception.InitialTestNotFoundException;
 import com.but.rebloom.domain.hobby.repository.HobbyRepository;
 import com.but.rebloom.domain.hobby.repository.InitialTestRepository;
 import lombok.RequiredArgsConstructor;
@@ -156,6 +157,12 @@ public class HobbyTestUseCase {
         Random random = new Random();
         int num = random.nextInt(10) + 1;
 
-        return initialTestRepository.findBySetNo(num, (num + 1) % 10);
+        List<InitialTest> initialTests = initialTestRepository.findBySetNo(num, (num + 1) % 10);
+
+        if (initialTests.isEmpty()) {
+            throw new InitialTestNotFoundException("초기 질문 조회 실패");
+        }
+
+        return initialTests;
     }
 }

@@ -19,6 +19,7 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
     @Query("""
         select c from Channel c
         where (c.channelTitle like concat('%', :keyword, '%')
+            or c.channelIntro like concat('%', :keyword, '%')
             or c.channelDescription like concat('%', :keyword, '%'))
             and c.isAccepted = true
         order by c.channelTitle asc

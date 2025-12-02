@@ -21,8 +21,8 @@ public class GetUserChannelDetailedInfoResponse {
 
     public static GetUserChannelDetailedInfoResponse from(UserChannel userChannel) {
         return GetUserChannelDetailedInfoResponse.builder()
-                .userEmail(userChannel.getUserEmail())
-                .channelId(userChannel.getChannelId())
+                .userEmail(userChannel.getUser().getUserEmail())
+                .channelId(userChannel.getChannel().getChannelId())
                 .verifyStatus(userChannel.getUserChannelVerifyStatus())
                 .applyMessage(userChannel.getApplyMessage())
                 .build();

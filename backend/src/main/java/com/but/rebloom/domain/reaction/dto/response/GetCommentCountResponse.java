@@ -19,18 +19,18 @@ public class GetCommentCountResponse {
     @NotNull
     private TierName userTier;
     @NotNull
-    private Long postCount;
+    private Long commentCount;
 
     public static GetCommentCountResponse from(Map<Post, Long> response) {
         Map.Entry<Post, Long> entry = response.entrySet().iterator().next();
         Post post = entry.getKey();
-        Long postCount = entry.getValue();
+        Long commentCount = entry.getValue();
 
         return GetCommentCountResponse.builder()
                 .postTitle(post.getPostTitle())
                 .userId(post.getUser().getUserId())
                 .userTier(post.getUser().getUserTier())
-                .postCount(postCount)
+                .commentCount(commentCount)
                 .build();
     }
 }

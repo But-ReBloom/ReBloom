@@ -58,7 +58,7 @@ public class CommentUseCase {
         defaultUserAchievementUseCase.updateUserAchievementToSuccess(user.getUserEmail(), comment1AchievementTitle);
 
         String comment5AchievementTitle = "좋은 댓글";
-        defaultUserAchievementUseCase.updateUserAchievementProgress(user.getUserEmail(), comment1AchievementTitle, 100.0f / 5.0f);
+        defaultUserAchievementUseCase.updateUserAchievementProgress(user.getUserEmail(), comment5AchievementTitle, 100.0f / 5.0f);
         
         Comment savedComment = commentRepository.save(comment);
 
@@ -87,12 +87,24 @@ public class CommentUseCase {
 
     // 특정 게시글의 댓글 목록 조회 (최신순)
     public List<Comment> getCommentsByPost(Long postId) {
-        return commentRepository.findByPost_PostIdOrderByCommentCreatedAtDesc(postId);
+        List<Comment> comments = commentRepository.findByPost_PostIdOrderByCommentCreatedAtDesc(postId);
+
+        if (comments.isEmpty()) {
+            throw new CommentNotFoundException("게시글 조회 실패");
+        }
+
+        return comments;
     }
 
     // 특정 유저가 작성한 댓글 목록 조회 (최신순)
     public List<Comment> getCommentsByUser(String userId) {
-        return commentRepository.findByUser_UserIdOrderByCommentCreatedAtDesc(userId);
+        List<Comment> comments = commentRepository.findByUser_UserIdOrderByCommentCreatedAtDesc(userId);
+
+        if (comments.isEmpty()) {
+            throw new CommentNotFoundException("게시글 조회 실패");
+        }
+
+        return comments;
     }
 
     // 특정 게시글의 댓글 수 조회
@@ -125,12 +137,12 @@ public class CommentUseCase {
 
     // 댓글 삭제 (일반 유저)
     @Transactional
-    public void deleteComment(Long commentId, String userEmail) {
+    public void deleteComment(Long commentId, String userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
         // 작성자 확인
-        if (!comment.getUser().getUserEmail().equals(userEmail)) {
+        if (!(comment.getUser().getUserId().equals(userId))) {
             throw new ForbiddenAccessException("본인이 작성한 댓글만 삭제가능");
         }
 

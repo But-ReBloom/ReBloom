@@ -33,7 +33,7 @@ public class CommentController {
     }
 
     // 특정 댓글 조회
-    @GetMapping("/find/{commentId}")
+    @GetMapping("/find/comment/{commentId}")
     public ResponseEntity<ApiResponse<CreateCommentResponse>> getComment(@PathVariable Long commentId) {
         Comment comment = commentUseCase.getComment(commentId);
         return ResponseEntity.ok(ApiResponse.success(CreateCommentResponse.from(comment)));
