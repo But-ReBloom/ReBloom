@@ -1,11 +1,13 @@
 package com.but.rebloom.userachievement.find;
 
 import com.but.rebloom.domain.achievement.domain.UserAchievement;
+import com.but.rebloom.domain.achievement.exception.UserAchievementNotFoundException;
 import com.but.rebloom.domain.achievement.repository.UserAchievementRepository;
 import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.Provider;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,5 +56,25 @@ public class FindUserAchievementByUserEmailAndAchievementIdTest {
 
         // Then
         assertThat(userAchievement).isEqualTo(mockUserAchievement);
+    }
+
+    @Test
+    @DisplayName("유저 업적 조회(이메일, 아이디) - 유저 업적 조회 실패로 인한 실패")
+    public void findUserAchievementByUserEmailAndAchievementIdFailByUserAchievementNotFoundTest() {
+        // Given
+        Long achievementId = 1000L;
+
+        User mockUser = User.builder()
+                .userEmail("userEmail")
+                .userPassword("userPasswor123!")
+                .userProvider(Provider.SELF)
+                .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+
+        // When & Then
+        Assertions.assertThrows(UserAchievementNotFoundException.class,
+                () -> defaultUserAchievementUseCase.findUserAchievementByUserEmailAndAchievementId(achievementId));
     }
 }
