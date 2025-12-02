@@ -2,9 +2,6 @@ package com.but.rebloom.auth;
 
 import com.but.rebloom.domain.auth.domain.VerificationPurpose;
 import com.but.rebloom.domain.auth.dto.request.SendVerificationEmailRequest;
-import com.but.rebloom.domain.auth.repository.UserRepository;
-import com.but.rebloom.domain.auth.usecase.AuthValidationUseCase;
-import com.but.rebloom.domain.auth.usecase.EmailUseCase;
 import com.but.rebloom.global.usecase.EmailSenderUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -24,13 +21,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class EmailSendTest {
     @Mock
-    private UserRepository userRepository;
-    @Mock
     private JavaMailSender javaMailSender;
-    @Mock
-    private AuthValidationUseCase authValidationUseCase;
-    @InjectMocks
-    private EmailUseCase emailUseCase;
     @InjectMocks
     private EmailSenderUseCase emailSenderUseCase;
 
