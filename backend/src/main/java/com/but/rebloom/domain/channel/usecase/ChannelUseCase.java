@@ -42,7 +42,7 @@ public class ChannelUseCase {
     public Channel requestCreation(CreateChannelRequest request) {
         // 유저 조회
         User user = userRepository.findByUserEmail(request.getUserEmail())
-                .orElseThrow(() -> new UserNotFoundException("User Not Found"));
+                .orElseThrow(() -> new UserNotFoundException("유저 조회 실패"));
 
         if (channelRepository.existsByChannelTitle(request.getChannelTitle())) {
             throw new AlreadyUsingChannelException("이미 존재하는 채널 이름");
@@ -50,12 +50,12 @@ public class ChannelUseCase {
 
         // 티어 포인트 확인
         if (user.getUserTierPoint() < requiredTierPoint) {
-            throw new InsufficientTeirPointException("Tier point not enough");
+            throw new InsufficientTeirPointException("티어 포인트가 부족함");
         }
         user.setUserTierPoint(user.getUserTierPoint() - requiredTierPoint);
         //포인트 확인
         if (user.getUserPoint() < requiredPoints) {
-            throw new InsufficientPointException("Point not enough");
+            throw new InsufficientPointException("포인트가 부족함");
         }
         user.setUserPoint(user.getUserPoint() - requiredPoints);
         userRepository.save(user);
@@ -96,8 +96,14 @@ public class ChannelUseCase {
 
     // 채널 검색
     public List<Channel> findChannel(SearchChannelRequest request) {
-        return channelRepository
+        List<Channel> channels = channelRepository
                 .searchByKeyword(request.getKeyword());
+
+        if (channels.isEmpty()) {
+            throw new ChannelNotFoundException("채널 조회 실패");
+        }
+
+        return channels;
     }
 
     // 승인된 채널 목록
@@ -108,7 +114,13 @@ public class ChannelUseCase {
             throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
-        return channelRepository.findByIsAcceptedTrue();
+        List<Channel> channels = channelRepository.findByIsAcceptedTrue();
+
+        if (channels.isEmpty()) {
+            throw new ChannelNotFoundException("채널 조회 실패");
+        }
+
+        return channels;
     }
 
     // 승인대기 채널 목록
@@ -119,7 +131,13 @@ public class ChannelUseCase {
             throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
-        return channelRepository.findByIsAcceptedFalse();
+        List<Channel> channels = channelRepository.findByIsAcceptedFalse();
+
+        if (channels.isEmpty()) {
+            throw new ChannelNotFoundException("채널 조회 실패");
+        }
+
+        return channels;
     }
 
     // 채널 승인
@@ -132,10 +150,10 @@ public class ChannelUseCase {
         }
 
         Channel channel = channelRepository.findById(channelId)
-                .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
+                .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
 
         if (channel.getIsAccepted()) {
-            throw new AlreadyProcessedChannelException("This channel is already accepted");
+            throw new AlreadyProcessedChannelException("이미 승인된 채널");
         }
 
         hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby1().getHobbyId())
@@ -173,10 +191,10 @@ public class ChannelUseCase {
         }
 
         Channel channel = channelRepository.findById(channelId)
-                .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
+                .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
 
         if (channel.getIsAccepted()) {
-            throw new AlreadyProcessedChannelException("This channel is already rejected");
+            throw new AlreadyProcessedChannelException("이미 거절된 채널");
         }
 
         User user = channel.getUser();
@@ -193,14 +211,21 @@ public class ChannelUseCase {
     // 특정 채널 조회
     public Channel getChannel(Long channelId) {
         return channelRepository.findByChannelIdAndIsAcceptedTrue(channelId)
-                .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
+                .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
     }
 
     // 특정 채널의 유저 목록 조회
     public List<UserChannel> getChannelUser(Long channelId) {
-        return userChannelRepository.findByChannel_ChannelIdAndUserChannelVerifyStatus(
-                channelId,
-                VerifyStatus.APPROVED
-        );
+        List<UserChannel> userChannels = userChannelRepository
+                .findByChannel_ChannelIdAndUserChannelVerifyStatus(
+                    channelId,
+                    VerifyStatus.APPROVED
+                );
+
+        if (userChannels.isEmpty()) {
+            throw new ChannelNotFoundException("유저 채널 조회 실패");
+        }
+
+        return userChannels;
     }
 }

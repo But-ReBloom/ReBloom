@@ -87,12 +87,24 @@ public class CommentUseCase {
 
     // 특정 게시글의 댓글 목록 조회 (최신순)
     public List<Comment> getCommentsByPost(Long postId) {
-        return commentRepository.findByPost_PostIdOrderByCommentCreatedAtDesc(postId);
+        List<Comment> comments = commentRepository.findByPost_PostIdOrderByCommentCreatedAtDesc(postId);
+
+        if (comments.isEmpty()) {
+            throw new CommentNotFoundException("게시글 조회 실패");
+        }
+
+        return comments;
     }
 
     // 특정 유저가 작성한 댓글 목록 조회 (최신순)
     public List<Comment> getCommentsByUser(String userId) {
-        return commentRepository.findByUser_UserIdOrderByCommentCreatedAtDesc(userId);
+        List<Comment> comments = commentRepository.findByUser_UserIdOrderByCommentCreatedAtDesc(userId);
+
+        if (comments.isEmpty()) {
+            throw new CommentNotFoundException("게시글 조회 실패");
+        }
+
+        return comments;
     }
 
     // 특정 게시글의 댓글 수 조회

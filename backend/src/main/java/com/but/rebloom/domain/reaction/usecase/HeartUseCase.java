@@ -73,12 +73,24 @@ public class HeartUseCase {
 
     // 특정 게시글의 하트 목록 조회
     public List<Heart> getHeartsByPost(Long postId) {
-        return heartRepository.findByPost_PostId(postId);
+        List<Heart> hearts = heartRepository.findByPost_PostId(postId);
+
+        if (hearts.isEmpty()) {
+            throw new HeartNotFoundException("하트 조회 실패");
+        }
+
+        return hearts;
     }
 
     // 특정 유저가 누른 하트 목록 조회
     public List<Heart> getHeartsByUser(String userId) {
-        return heartRepository.findByUser_UserId(userId);
+        List<Heart> hearts = heartRepository.findByUser_UserId(userId);
+
+        if (hearts.isEmpty()) {
+            throw new HeartNotFoundException("하트 조회 실패");
+        }
+
+        return hearts;
     }
 
     // 특정 게시글의 하트 수 조회

@@ -38,10 +38,17 @@ public class VerifyUserUseCase {
             throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
-        return userChannelRepository.findByChannel_ChannelIdAndUserChannelVerifyStatus(
-                channelId,
-                VerifyStatus.WAITING
-        );
+        List<UserChannel> userChannels = userChannelRepository
+                .findByChannel_ChannelIdAndUserChannelVerifyStatus(
+                        channelId,
+                        VerifyStatus.WAITING
+                );
+
+        if (userChannels.isEmpty()) {
+            throw new UserChannelNotFoundException("유저 채널 조회 실패");
+        }
+
+        return userChannels;
     }
 
     // 유저의 신청 목록 확인
@@ -52,10 +59,17 @@ public class VerifyUserUseCase {
             throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
-        return userChannelRepository.findByUser_UserEmailAndUserChannelVerifyStatus(
-                userEmail,
-                VerifyStatus.WAITING
-        );
+        List<UserChannel> userChannels = userChannelRepository
+                .findByUser_UserEmailAndUserChannelVerifyStatus(
+                        userEmail,
+                        VerifyStatus.WAITING
+                );
+
+        if (userChannels.isEmpty()) {
+            throw new UserChannelNotFoundException("유저 채널 조회 실패");
+        }
+
+        return userChannels;
     }
 
     // 채널의 특정 유저 신청 목록 확인

@@ -86,27 +86,57 @@ public class PostUseCase {
 
     // 특정 채널의 게시물 목록 조회(최신순)
     public List<Post> getPostsByChannel(Long channelId) {
-        return postRepository.findByChannel_ChannelIdOrderByPostCreatedAtDesc(channelId);
+        List<Post> posts = postRepository.findByChannel_ChannelIdOrderByPostCreatedAtDesc(channelId);
+
+        if (posts.isEmpty()) {
+            throw new PostNotFoundException("게시글 조회 실패");
+        }
+
+        return posts;
     }
 
     // 특정 유저의 게시물 목록 조회(최신순)
     public List<Post> getPostsByUser(String userId) {
-        return postRepository.findByUser_UserIdOrderByPostCreatedAtDesc(userId);
+        List<Post> posts = postRepository.findByUser_UserIdOrderByPostCreatedAtDesc(userId);
+
+        if (posts.isEmpty()) {
+            throw new PostNotFoundException("게시글 조회 실패");
+        }
+
+        return posts;
     }
 
     // 인기글 조회
     public List<Post> getPopularPosts() {
-        return postRepository.findByPostType(Type.POPULAR);
+        List<Post> posts = postRepository.findByPostType(Type.POPULAR);
+
+        if (posts.isEmpty()) {
+            throw new PostNotFoundException("게시글 조회 실패");
+        }
+
+        return posts;
     }
 
     // 게시글 검색
     public List<Post> searchPosts(SearchPostsRequest request) {
-        return postRepository.searchByKeyword(request.getKeyword());
+        List<Post> posts = postRepository.searchByKeyword(request.getKeyword());
+
+        if (posts.isEmpty()) {
+            throw new PostNotFoundException("게시글 조회 실패");
+        }
+
+        return posts;
     }
 
     // 인증 게시글 상태별 조회
     public List<Post> getPostsByStatus(Status status) {
-        return postRepository.findByPostStatus(status);
+        List<Post> posts = postRepository.findByPostStatus(status);
+
+        if (posts.isEmpty()) {
+            throw new PostNotFoundException("게시글 조회 실패");
+        }
+
+        return posts;
     }
 
     // 인증 게시글 승인
