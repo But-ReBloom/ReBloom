@@ -37,7 +37,7 @@ public class SignupTest {
 
     @Test
     @DisplayName("회원가입 테스트 - 성공")
-    public void signupTest() {
+    public void signupSuccessTest() {
         // Given
         SignupRequest signupRequest = new SignupRequest(
                 "testuseremail@email.com",
@@ -72,7 +72,7 @@ public class SignupTest {
     }
 
     @Test
-    @DisplayName("회원가입 - 이메일 중복 실패")
+    @DisplayName("회원가입 테스트 - 이메일 중복 실패")
     public void signupFailByEmailTest() {
         // Given
         SignupRequest signupRequest = new SignupRequest(
@@ -84,9 +84,10 @@ public class SignupTest {
         );
 
         // When
-        when(userRepository.existsByUserEmail("hjbin_25@dgsw.hs.kr"))
+        when(userRepository.existsByUserEmail(signupRequest.getUserEmail()))
                 .thenReturn(true);
 
+        // Then
         assertThrows(AlreadyUsingUserException.class,
                 () -> signupUseCase.signup(signupRequest));
     }
