@@ -7,13 +7,13 @@ import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.AuthValidationUseCase;
 import com.but.rebloom.domain.auth.usecase.DefaultUserUseCase;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -24,20 +24,22 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UpdateUserIdInnerTest {
+public class UpdateUserPasswordInnerTest {
     @Mock
     private UserRepository userRepository;
     @Mock
     private AuthValidationUseCase authValidationUseCase;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @InjectMocks
     private DefaultUserUseCase defaultUserUseCase;
 
     @Test
-    @DisplayName("유저 아이디 수정 테스트 - 성공")
-    public void updateUserIdSuccessTest() {
+    @DisplayName("유저 비밀번호 수정 테스트 - 성공")
+    public void updateUserPasswordSuccessTest() {
         // Given
         String userEmail = "testemail@email.com";
-        String userNewId = "testnewid";
+        String userNewPassword = "testnewpassword";
 
         User mockUser = User.builder()
                 .userEmail(userEmail)
@@ -46,48 +48,30 @@ public class UpdateUserIdInnerTest {
                 .userProvider(Provider.SELF)
                 .build();
 
-        doNothing().when(authValidationUseCase).checkUserId(userNewId);
-        when(userRepository.existsByUserId(userNewId))
-                .thenReturn(false);
+        when(passwordEncoder.encode(userNewPassword))
+                .thenReturn(userNewPassword);
+        doNothing().when(authValidationUseCase).checkUserPassword(userNewPassword);
         when(userRepository.findByUserEmail(userEmail))
                 .thenReturn(Optional.of(mockUser));
 
         // When
-        User user = defaultUserUseCase.updateUserId(userEmail, userNewId);
+        User user = defaultUserUseCase.updateUserPassword(userEmail, userNewPassword);
 
         // Then
-        assertThat(user.getUserId()).isEqualTo(userNewId);
+        assertThat(user.getUserPassword()).isEqualTo(userNewPassword);
     }
 
     @Test
-    @DisplayName("유저 아이디 수정 테스트 - 존재하는 아이디로 인한 실패")
-    public void updateUserIdFailByAlreadyUsingUserTest() {
+    @DisplayName("유저 비밀번호 수정 테스트 - 유저 조회 실패로 인한 실패")
+    public void updateUserPasswordFailByUserNotFoundTest() {
         // Given
         String userEmail = "testemail@email.com";
-        String userNewId = "testnewid";
+        String userNewPassword = "testnewpassword";
 
-        doNothing().when(authValidationUseCase).checkUserId(userNewId);
-        when(userRepository.existsByUserId(anyString()))
-                .thenReturn(true);
-
-        // When & Then
-        assertThrows(AlreadyUsingUserException.class,
-                () -> defaultUserUseCase.updateUserId(userEmail, userNewId));
-    }
-
-    @Test
-    @DisplayName("유저 아이디 수정 테스트 - 유저 조회 실패로 인한 실패")
-    public void updateUserIdFailByUserNotFoundTest() {
-        // Given
-        String userEmail = "testemail@email.com";
-        String userNewId = "testnewid";
-
-        doNothing().when(authValidationUseCase).checkUserId(userNewId);
-        when(userRepository.existsByUserId(anyString()))
-                .thenReturn(false);
+        doNothing().when(authValidationUseCase).checkUserPassword(userNewPassword);
 
         // When & Then
         assertThrows(UserNotFoundException.class,
-                () -> defaultUserUseCase.updateUserId(userEmail, userNewId));
+                () -> defaultUserUseCase.updateUserPassword(userEmail, userNewPassword));
     }
 }
