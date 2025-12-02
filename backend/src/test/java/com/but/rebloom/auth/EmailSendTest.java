@@ -6,6 +6,7 @@ import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.AuthValidationUseCase;
 import com.but.rebloom.domain.auth.usecase.EmailUseCase;
 import com.but.rebloom.global.usecase.EmailSenderUseCase;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -51,5 +53,26 @@ public class EmailSendTest {
         // Then
         verify(javaMailSender, times(1))
                 .send(any(SimpleMailMessage.class));
+    }
+
+    @Test
+    @DisplayName("이메일 전송 테스트 - 런타임으로 인한 실패")
+    public void sendEmailFailByRuntimeTest() {
+        // Given
+        SendVerificationEmailRequest emailRequest = new SendVerificationEmailRequest(
+                "testemail@email.com",
+                VerificationPurpose.SIGN_UP
+        );
+
+        String to = null;
+        String subject = "알림";
+        String text = "내용입니다.";
+
+        doThrow(new RuntimeException("모종의 오류"))
+                .when(javaMailSender).send(any(SimpleMailMessage.class));
+
+        // When & Then
+        Assertions.assertThrows(RuntimeException.class,
+                () -> emailSenderUseCase.sendEmail(to, subject, text));
     }
 }
