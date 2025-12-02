@@ -58,7 +58,7 @@ public class CommentUseCase {
         defaultUserAchievementUseCase.updateUserAchievementToSuccess(user.getUserEmail(), comment1AchievementTitle);
 
         String comment5AchievementTitle = "좋은 댓글";
-        defaultUserAchievementUseCase.updateUserAchievementProgress(user.getUserEmail(), comment1AchievementTitle, 100.0f / 5.0f);
+        defaultUserAchievementUseCase.updateUserAchievementProgress(user.getUserEmail(), comment5AchievementTitle, 100.0f / 5.0f);
         
         Comment savedComment = commentRepository.save(comment);
 
@@ -125,12 +125,12 @@ public class CommentUseCase {
 
     // 댓글 삭제 (일반 유저)
     @Transactional
-    public void deleteComment(Long commentId, String userEmail) {
+    public void deleteComment(Long commentId, String userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
         // 작성자 확인
-        if (!comment.getUser().getUserEmail().equals(userEmail)) {
+        if (!(comment.getUser().getUserId().equals(userId))) {
             throw new ForbiddenAccessException("본인이 작성한 댓글만 삭제가능");
         }
 

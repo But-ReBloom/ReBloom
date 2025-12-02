@@ -19,8 +19,8 @@ public class RejectMemberResponse {
 
     public static RejectMemberResponse from(UserChannel userChannel) {
         return RejectMemberResponse.builder()
-                .userEmail(userChannel.getUserEmail())
-                .channelId(userChannel.getChannelId())
+                .userEmail(userChannel.getUser().getUserEmail())
+                .channelId(userChannel.getChannel().getChannelId())
                 .verifyStatus(userChannel.getUserChannelVerifyStatus())
                 .build();
     }

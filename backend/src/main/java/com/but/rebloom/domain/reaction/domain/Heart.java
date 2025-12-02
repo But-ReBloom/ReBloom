@@ -21,12 +21,12 @@ public class Heart {
     private Long heartId;
 
     @ManyToOne
-    @JoinColumn(name = "fk_u_email", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "fk_u_email", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "fk_p_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "fk_p_id", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 }

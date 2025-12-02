@@ -1,5 +1,6 @@
 package com.but.rebloom.domain.channel.usecase;
 
+import com.but.rebloom.domain.auth.domain.Role;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
@@ -33,11 +34,11 @@ public class VerifyUserUseCase {
         Channel channel = channelRepository.findByChannelIdAndIsAcceptedTrue(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
 
-        if (!user.getUserEmail().equals(channel.getUser().getUserEmail())) {
+        if (!(user.getUserEmail().equals(channel.getUser().getUserEmail()) || user.getUserRole().equals(Role.ADMIN))) {
             throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
-        return userChannelRepository.findByChannelIdAndUserChannelVerifyStatus(
+        return userChannelRepository.findByChannel_ChannelIdAndUserChannelVerifyStatus(
                 channelId,
                 VerifyStatus.WAITING
         );
@@ -47,11 +48,11 @@ public class VerifyUserUseCase {
     public List<UserChannel> getApplyUsersByUserEmail(String userEmail) {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
 
-        if (!currentUser.getUserEmail().equals(userEmail)) {
+        if (!(currentUser.getUserEmail().equals(userEmail) || currentUser.getUserRole().equals(Role.ADMIN))) {
             throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
-        return userChannelRepository.findByUserEmailAndUserChannelVerifyStatus(
+        return userChannelRepository.findByUser_UserEmailAndUserChannelVerifyStatus(
                 userEmail,
                 VerifyStatus.WAITING
         );
@@ -63,55 +64,57 @@ public class VerifyUserUseCase {
         Channel channel = channelRepository.findByChannelIdAndIsAcceptedTrue(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
 
-        if (!user.getUserEmail().equals(channel.getUser().getUserEmail())) {
+        if (!(user.getUserEmail().equals(channel.getUser().getUserEmail()) || user.getUserRole().equals(Role.ADMIN))) {
             throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
-        return userChannelRepository.findByChannelIdAndUserEmail(channelId, userEmail)
+        return userChannelRepository.findByChannel_ChannelIdAndUser_UserEmail(channelId, userEmail)
                 .orElseThrow(() -> new UserChannelNotFoundException("유저 채널 조회 실패"));
     }
 
     // 유저의 특정 채널 신청 목록 확인
     public UserChannel getApplyUsersByUserEmailAndChannelId(String userEmail, Long channelId) {
-        return userChannelRepository.findByChannelIdAndUserEmail(channelId, userEmail)
+        return userChannelRepository.findByChannel_ChannelIdAndUser_UserEmail(channelId, userEmail)
                 .orElseThrow(() -> new UserChannelNotFoundException("유저 채널 조회 실패"));
     }
 
     // 가입 신청
     @Transactional
     public UserChannel applyMemberVerification(ApplyMemberRequest applyMemberRequest) {
-        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
+        User user = findCurrentUserUseCase.getCurrentUser();
 
-        Long channelId = channelRepository.findByChannelIdAndIsAcceptedTrue(applyMemberRequest.getChannelId())
-                .orElseThrow(() -> new ChannelNotFoundException("채널이 조회되지 않음")).getChannelId();
+        Channel channel = channelRepository.findByChannelIdAndIsAcceptedTrue(applyMemberRequest.getChannelId())
+                .orElseThrow(() -> new ChannelNotFoundException("채널이 조회되지 않음"));
 
         if (userChannelRepository
-                .existsByChannelIdAndUserEmail(channelId, userEmail)) {
+                .existsByChannel_ChannelIdAndUser_UserEmail(channel.getChannelId(), user.getUserEmail())) {
             throw new AlreadyUsingUserChannelException("이미 지원한 채널");
         }
 
-        return UserChannel.builder()
-                .userEmail(userEmail)
-                .channelId(channelId)
+        UserChannel userChannel = UserChannel.builder()
+                .user(user)
+                .channel(channel)
                 .userChannelVerifyStatus(VerifyStatus.WAITING)
                 .applyMessage(applyMemberRequest.getApplyMessage())
                 .build();
+
+        return userChannelRepository.save(userChannel);
     }
 
     // 가입 거절
     @Transactional
     public UserChannel rejectMemberVerification(RejectMemberRequest rejectMemberRequest) {
-        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
 
         Channel channel = channelRepository.findByChannelIdAndIsAcceptedTrue(rejectMemberRequest.getChannelId())
                 .orElseThrow(() -> new ChannelNotFoundException("채널이 조회되지 않음"));
 
-        if (!userEmail.equals(channel.getUser().getUserEmail())) {
+        if (!(currentUser.getUserEmail().equals(channel.getUser().getUserEmail()) || currentUser.getUserRole().equals(Role.ADMIN))) {
             throw new NoAuthorityException("거절할 권한이 없습니다.");
         }
 
         UserChannel userChannel = userChannelRepository
-                .findByChannelIdAndUserEmail(
+                .findByChannel_ChannelIdAndUser_UserEmail(
                     channel.getChannelId(),
                     rejectMemberRequest.getUserEmail()
                 )
@@ -128,17 +131,17 @@ public class VerifyUserUseCase {
     // 가입 승인
     @Transactional
     public UserChannel approveMemberVerification(ApproveMemberRequest approveMemberRequest) {
-        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
 
         Channel channel = channelRepository.findByChannelIdAndIsAcceptedTrue(approveMemberRequest.getChannelId())
                 .orElseThrow(() -> new ChannelNotFoundException("채널이 조회되지 않음"));
 
-        if (!userEmail.equals(channel.getUser().getUserEmail())) {
+        if (!(currentUser.getUserEmail().equals(channel.getUser().getUserEmail()) || currentUser.getUserRole().equals(Role.ADMIN))) {
             throw new NoAuthorityException("승인할 권한이 없습니다.");
         }
 
         UserChannel userChannel = userChannelRepository
-                .findByChannelIdAndUserEmail(
+                .findByChannel_ChannelIdAndUser_UserEmail(
                         channel.getChannelId(),
                         approveMemberRequest.getUserEmail()
                 )

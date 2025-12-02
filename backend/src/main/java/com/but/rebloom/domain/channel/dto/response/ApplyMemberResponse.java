@@ -21,8 +21,8 @@ public class ApplyMemberResponse {
 
     public static ApplyMemberResponse from(UserChannel userChannel) {
         return ApplyMemberResponse.builder()
-                .userEmail(userChannel.getUserEmail())
-                .channelId(userChannel.getChannelId())
+                .userEmail(userChannel.getUser().getUserEmail())
+                .channelId(userChannel.getChannel().getChannelId())
                 .applyMessage(userChannel.getApplyMessage())
                 .verifyStatus(userChannel.getUserChannelVerifyStatus())
                 .build();

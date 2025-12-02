@@ -54,8 +54,11 @@ public class PostUseCase {
                 .postTitle(request.getPostTitle())
                 .postContent(request.getPostContent())
                 .postImage(request.getPostImage())
-                .postType(request.getPostType() != null ? request.getPostType() : Type.NORMAL)
                 .build();
+
+        if (request.getPostType() != null) {
+            post.setPostType(request.getPostType());
+        }
 
         String post1AchievementTitle = "커뮤니티 시작!";
         defaultUserAchievementUseCase.updateUserAchievementToSuccess(user.getUserEmail(), post1AchievementTitle);
@@ -71,6 +74,11 @@ public class PostUseCase {
 
         // 조회수 증가
         post.setPostViewers(post.getPostViewers() + 1);
+
+        if (post.getPostViewers() >= 100) {
+            post.setPostType(Type.POPULAR);
+        }
+
         postRepository.save(post);
 
         return post;

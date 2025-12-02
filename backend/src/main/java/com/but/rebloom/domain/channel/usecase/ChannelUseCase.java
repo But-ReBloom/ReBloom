@@ -152,8 +152,8 @@ public class ChannelUseCase {
         channel.setIsAccepted(true);
 
         UserChannel userChannel = UserChannel.builder()
-                .channelId(channelId)
-                .userEmail(channel.getUser().getUserEmail())
+                .channel(channel)
+                .user(channel.getUser())
                 .userChannelVerifyStatus(VerifyStatus.APPROVED)
                 .applyMessage("")
                 .build();
@@ -198,7 +198,7 @@ public class ChannelUseCase {
 
     // 특정 채널의 유저 목록 조회
     public List<UserChannel> getChannelUser(Long channelId) {
-        return userChannelRepository.findByChannelIdAndUserChannelVerifyStatus(
+        return userChannelRepository.findByChannel_ChannelIdAndUserChannelVerifyStatus(
                 channelId,
                 VerifyStatus.APPROVED
         );

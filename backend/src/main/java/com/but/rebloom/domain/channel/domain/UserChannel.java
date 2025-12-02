@@ -1,5 +1,6 @@
 package com.but.rebloom.domain.channel.domain;
 
+import com.but.rebloom.domain.auth.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,12 +14,14 @@ import lombok.*;
 @Table(name = "user_to_channels")
 public class UserChannel {
     @Id
-    @Column(name = "fk_u_email", nullable = false)
-    private String userEmail;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_u_email", nullable = false)
+    private User user;
 
     @Id
-    @Column(name = "fk_ch_id", nullable = false, insertable = false, updatable = false)
-    private Long channelId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_ch_id", nullable = false)
+    private Channel channel;
 
     @Column(name = "uc_message", nullable = false)
     private String applyMessage;
