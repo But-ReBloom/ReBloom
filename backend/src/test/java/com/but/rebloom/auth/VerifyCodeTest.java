@@ -4,6 +4,7 @@ import com.but.rebloom.domain.auth.domain.Provider;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.domain.VerificationPurpose;
 import com.but.rebloom.domain.auth.dto.request.VerifyCodeRequest;
+import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.exception.WrongVerifiedCodeException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.EmailUseCase;
@@ -115,6 +116,31 @@ public class VerifyCodeTest {
 
         // When & Then
         assertThrows(WrongVerifiedCodeException.class,
+                () -> emailUseCase.verifyCode(verifyCodeRequest));
+    }
+
+    @Test
+    @DisplayName("코드 인증 테스트 - 유저 조회 실패로 인한 실패")
+    public void verifyCodeFailByUserNotFoundTest() {
+        // Given
+        VerifyCodeRequest verifyCodeRequest = new VerifyCodeRequest(
+                "testemail@email.com",
+                "123456",
+                VerificationPurpose.SIGN_UP
+        );
+
+        EmailUseCase.CodeInfo mockCodeInfo = new EmailUseCase.CodeInfo(
+                "123456",
+                LocalDateTime.now()
+        );
+
+        emailUseCase
+                .getCodeMap()
+                .computeIfAbsent(verifyCodeRequest.getUserEmail(), k -> new HashMap<>())
+                .put(VerificationPurpose.SIGN_UP, mockCodeInfo);
+
+        // When & Then
+        assertThrows(UserNotFoundException.class,
                 () -> emailUseCase.verifyCode(verifyCodeRequest));
     }
 }
