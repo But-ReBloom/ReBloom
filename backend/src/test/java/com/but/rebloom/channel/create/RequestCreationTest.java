@@ -11,6 +11,7 @@ import com.but.rebloom.domain.channel.exception.InsufficientTierPointException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.usecase.ChannelUseCase;
 import com.but.rebloom.domain.hobby.domain.Hobby;
+import com.but.rebloom.domain.hobby.exception.HobbyNotFoundException;
 import com.but.rebloom.domain.hobby.repository.HobbyRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -182,6 +183,35 @@ public class RequestCreationTest {
 
         // When & Then
         assertThrows(InsufficientPointException.class,
+                () -> channelUseCase.requestCreation(createChannelRequest));
+    }
+
+    @Test
+    @DisplayName("채널 생성 요청 테스트 - 취미 조회 실패으로 인한 실패")
+    public void requestCreationFailByHobbyNotFoundTest() {
+        // Given
+        CreateChannelRequest createChannelRequest = new CreateChannelRequest(
+                "channelTitle",
+                "channelIntro",
+                "channelDescription",
+                "userEmail",
+                1L,
+                2L,
+                3L
+        );
+
+        User mockUser = User.builder()
+                .userPoint(1000)
+                .userTierPoint(1000)
+                .build();
+
+        when(userRepository.findByUserEmail(createChannelRequest.getUserEmail()))
+                .thenReturn(Optional.of(mockUser));
+        when(channelRepository.existsByChannelTitle(createChannelRequest.getChannelTitle()))
+                .thenReturn(false);
+
+        // When & Then
+        assertThrows(HobbyNotFoundException.class,
                 () -> channelUseCase.requestCreation(createChannelRequest));
     }
 }
