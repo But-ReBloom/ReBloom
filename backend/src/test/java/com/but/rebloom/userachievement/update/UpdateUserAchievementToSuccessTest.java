@@ -2,6 +2,7 @@ package com.but.rebloom.userachievement.update;
 
 import com.but.rebloom.domain.achievement.domain.Achievement;
 import com.but.rebloom.domain.achievement.domain.UserAchievement;
+import com.but.rebloom.domain.achievement.exception.AchievementNotFoundException;
 import com.but.rebloom.domain.achievement.exception.UserAchievementNotFoundException;
 import com.but.rebloom.domain.achievement.repository.AchievementRepository;
 import com.but.rebloom.domain.achievement.repository.UserAchievementRepository;
@@ -9,6 +10,8 @@ import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.Provider;
 import com.but.rebloom.domain.auth.domain.TierName;
 import com.but.rebloom.domain.auth.domain.User;
+import com.but.rebloom.domain.auth.exception.TierNotFoundException;
+import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.DefaultTierUseCase;
 import org.junit.jupiter.api.DisplayName;
@@ -113,6 +116,123 @@ public class UpdateUserAchievementToSuccessTest {
 
         // When & Then
         assertThrows(UserAchievementNotFoundException.class,
+                () -> defaultUserAchievementUseCase.updateUserAchievementToSuccess(userEmail, achievementTitle));
+    }
+
+    @Test
+    @DisplayName("유저 업데이트 성공 전환 테스트 - 업적 조회 실패로 인한 실패")
+    public void updateUserAchievementToSuccessFailByAchievementNotFoundTest() {
+        // Given
+        String userEmail = "user@email.com";
+        String achievementTitle = "achievementTitle";
+
+        Achievement mockAchievement = Achievement.builder()
+                .achievementId(1L)
+                .achievementTitle(achievementTitle)
+                .achievementRewardPoint(100)
+                .achievementRewardTierPoint(10)
+                .build();
+
+        User mockUser = User.builder()
+                .userEmail(userEmail)
+                .userPassword("userPasswor123!")
+                .userProvider(Provider.SELF)
+                .userTierPoint(0)
+                .userTier(TierName.IRON)
+                .build();
+
+        UserAchievement mockUserAchievement = UserAchievement.builder()
+                .achievement(mockAchievement)
+                .user(mockUser)
+                .isSuccess(false)
+                .userAchievementProgress(0f)
+                .build();
+
+        when(userAchievementRepository.findByUserEmailAndAchievement_AchievementTitle(userEmail, achievementTitle))
+                .thenReturn(Optional.of(mockUserAchievement));
+
+        // When & Then
+        assertThrows(AchievementNotFoundException.class,
+                () -> defaultUserAchievementUseCase.updateUserAchievementToSuccess(userEmail, achievementTitle));
+    }
+
+    @Test
+    @DisplayName("유저 업데이트 성공 전환 테스트 - 유저 조회 실패로 인한 실패")
+    public void updateUserAchievementToSuccessFailByUserNotFoundTest() {
+        // Given
+        String userEmail = "user@email.com";
+        String achievementTitle = "achievementTitle";
+
+        Achievement mockAchievement = Achievement.builder()
+                .achievementId(1L)
+                .achievementTitle(achievementTitle)
+                .achievementRewardPoint(100)
+                .achievementRewardTierPoint(10)
+                .build();
+
+        User mockUser = User.builder()
+                .userEmail(userEmail)
+                .userPassword("userPasswor123!")
+                .userProvider(Provider.SELF)
+                .userTierPoint(0)
+                .userTier(TierName.IRON)
+                .build();
+
+        UserAchievement mockUserAchievement = UserAchievement.builder()
+                .achievement(mockAchievement)
+                .user(mockUser)
+                .isSuccess(false)
+                .userAchievementProgress(0f)
+                .build();
+
+        when(userAchievementRepository.findByUserEmailAndAchievement_AchievementTitle(userEmail, achievementTitle))
+                .thenReturn(Optional.of(mockUserAchievement));
+        when(achievementRepository.findByAchievementTitle(achievementTitle))
+                .thenReturn(Optional.of(mockAchievement));
+
+        // When & Then
+        assertThrows(UserNotFoundException.class,
+                () -> defaultUserAchievementUseCase.updateUserAchievementToSuccess(userEmail, achievementTitle));
+    }
+
+    @Test
+    @DisplayName("유저 업데이트 성공 전환 테스트 - 티어 조회 실패로 인한 실패")
+    public void updateUserAchievementToSuccessFailByTierNotFoundTest() {
+        // Given
+        String userEmail = "user@email.com";
+        String achievementTitle = "achievementTitle";
+
+        Achievement mockAchievement = Achievement.builder()
+                .achievementId(1L)
+                .achievementTitle(achievementTitle)
+                .achievementRewardPoint(100)
+                .achievementRewardTierPoint(10)
+                .build();
+
+        User mockUser = User.builder()
+                .userEmail(userEmail)
+                .userPassword("userPasswor123!")
+                .userProvider(Provider.SELF)
+                .userTierPoint(0)
+                .userTier(TierName.IRON)
+                .build();
+
+        UserAchievement mockUserAchievement = UserAchievement.builder()
+                .achievement(mockAchievement)
+                .user(mockUser)
+                .isSuccess(false)
+                .userAchievementProgress(0f)
+                .build();
+
+        when(userAchievementRepository.findByUserEmailAndAchievement_AchievementTitle(userEmail, achievementTitle))
+                .thenReturn(Optional.of(mockUserAchievement));
+        when(achievementRepository.findByAchievementTitle(achievementTitle))
+                .thenReturn(Optional.of(mockAchievement));
+        when(userRepository.findByUserEmail(userEmail))
+                .thenReturn(Optional.of(mockUser));
+
+        // When & Then
+        assertThrows(TierNotFoundException.class,
                 () -> defaultUserAchievementUseCase.updateUserAchievementToSuccess(userEmail, achievementTitle));
     }
 }
