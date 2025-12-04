@@ -33,9 +33,7 @@ export interface HobbyTestResponse {
 }
 
 export interface AddActivityRequest {
-    activityName: string;
-    activityStart: string;
-    activityRecent: string;
+    hobbyId: number;
     userEmail: string;
 }
 

@@ -17,7 +17,11 @@ export interface ChannelMemberRequest {
     userEmail: string;
 }
 
-export type ApplyMemberRequest = ChannelMemberRequest;
+export interface ApplyMemberRequest {
+    channelId: number;
+    applyMessage: string;
+}
+
 export type ApproveMemberRequest = ChannelMemberRequest;
 export type RejectMemberRequest = ChannelMemberRequest;
 
@@ -45,23 +49,37 @@ export interface FindChannelResponse {
 export interface FindChannelDetailedInfoResponse extends CreateChannelResponse {
 }
 
-export interface UserChannelResponse {
-    userChannelId: number;
-    userId: string;
+export type VerifyStatus = "WAITING" | "APPROVED" | "REJECTED";
+
+export interface GetUserChannelDetailedInfoResponse {
+    userEmail: string;
     channelId: number;
-    isAccepted: boolean;
-    appliedAt: string;
+    verifyStatus: VerifyStatus;
+    applyMessage: string;
 }
 
 export interface GetUserChannelInfoResponse {
-    userChannels: UserChannelResponse[];
-}
-
-export interface GetUserChannelDetailedInfoResponse extends UserChannelResponse {
+    userChannels: GetUserChannelDetailedInfoResponse[];
+    applyCount: number;
 }
 
 export interface ApproveChannelResponse extends CreateChannelResponse {}
 
-export type ApplyMemberResponse = UserChannelResponse;
-export type RejectMemberResponse = UserChannelResponse;
-export type ApproveMemberResponse = UserChannelResponse;
+export interface ApplyMemberResponse {
+    userEmail: string;
+    channelId: number;
+    applyMessage: string;
+    verifyStatus: VerifyStatus;
+}
+
+export interface RejectMemberResponse {
+    userEmail: string;
+    channelId: number;
+    verifyStatus: VerifyStatus;
+}
+
+export interface ApproveMemberResponse {
+    userEmail: string;
+    channelId: number;
+    verifyStatus: VerifyStatus;
+}

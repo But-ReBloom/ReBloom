@@ -20,8 +20,8 @@ export default function GoogleCallback() {
           if (response.success) {
             // Store token if needed
             // localStorage.setItem('token', response.data.token);
-            toast.success(`환영합니다, ${response.data.userName}님!`);
-            navigate("/", { state: { id: response.data.userEmail } });
+            toast.success(`환영합니다, ${response.data.name}님!`);
+            navigate("/", { state: { id: response.data.email } });
           } else {
             toast.error("구글 로그인 실패");
             navigate("/login");

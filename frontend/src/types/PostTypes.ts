@@ -1,4 +1,4 @@
-export type PostType = 'NORMAL' | 'NOTICE' | 'EVENT'; // Adjust based on backend enum
+export type PostType = 'NORMAL' | 'POPULAR' | 'CERT'; // Adjust based on backend enum
 export type PostStatus = 'APPROVED' | 'PENDING' | 'REJECTED'; // Adjust based on backend enum
 
 export interface CreatePostRequest {
@@ -15,10 +15,10 @@ export interface SearchPostsRequest {
 }
 
 export interface UpdatePostRequest {
-    postTitle?: string;
-    postContent?: string;
+    userId: string;
+    postTitle: string;
+    postContent: string;
     postImage?: string;
-    postType?: PostType;
 }
 
 export interface CreatePostResponse {
@@ -37,6 +37,7 @@ export interface CreatePostResponse {
 
 export interface FindPostResponse {
     posts: CreatePostResponse[];
+    totalCount: number;
 }
 
 // Keep existing type for compatibility if needed, or refactor

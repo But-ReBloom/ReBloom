@@ -26,18 +26,21 @@ export interface SignupResponse {
     userProvider: Provider;
 }
 
+export type VerificationPurpose = 'SIGN_UP' | 'UPDATE_INFO';
+
 export interface SendVerificationEmailRequest {
-    email: string;
+    userEmail: string;
+    purpose: VerificationPurpose;
 }
 
 export interface VerifyCodeRequest {
-    email: string;
+    userEmail: string;
     code: string;
+    purpose: VerificationPurpose;
 }
 
 export interface GoogleLoginAuthorizeCodeRequest {
-    code: string;
-    redirectUri: string;
+    authorizationCode: string;
 }
 
 export interface UpdateUserIdRequest {
@@ -63,14 +66,16 @@ export interface ChangeActivityRequest {
 }
 
 export interface GoogleUserInfoResponse {
-    userEmail: string;
-    userName: string;
-    token: string;
+    id: string;
+    email: string;
+    name: string;
+    accessToken: string;
+    provider: Provider;
 }
 
 export interface UpdateIdResponse {
-    userId: string;
     userEmail: string;
+    userNewId: string;
 }
 
 export interface GetUserEmailResponse {
@@ -82,14 +87,19 @@ export interface GetUserIdResponse {
 }
 
 export interface FindUserInfoResponse {
-    userId: string;
     userEmail: string;
+    userId: string;
     userName: string;
+    userRole: string; // Assuming Role is a string or enum
+    userTierPoint: number;
+    userPoint: number;
     userProvider: Provider;
-    userActivityId: number;
 }
 
 export interface ChangeActivityResponse {
+    userEmail: string;
     userId: string;
+    userName: string;
     activityId: number;
+    activityName: string;
 }

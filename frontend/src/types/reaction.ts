@@ -16,16 +16,21 @@ export interface CreateHeartResponse {
 
 export interface FindHeartResponse {
     hearts: CreateHeartResponse[];
+    totalCount: number;
 }
 
 export interface CountResponse {
     count: number;
 }
 
-export type GetHeartCountResponse = CountResponse;
+export interface GetHeartCountResponse {
+    postTitle: string;
+    heartCount: number;
+}
 
 export interface CheckHeartExistsResponse {
-    exists: boolean;
+    postTitle: string;
+    isExists: boolean;
 }
 
 export interface CreateCommentRequest {
@@ -35,6 +40,7 @@ export interface CreateCommentRequest {
 }
 
 export interface UpdateCommentRequest {
+    commentId: number;
     commentContent: string;
 }
 
@@ -50,6 +56,12 @@ export interface CreateCommentResponse {
 
 export interface FindCommentResponse {
     comments: CreateCommentResponse[];
+    totalCount: number;
 }
 
-export type GetCommentCountResponse = CountResponse;
+export interface GetCommentCountResponse {
+    postTitle: string;
+    userId: string;
+    userTier: string;
+    postCount: number;
+}
