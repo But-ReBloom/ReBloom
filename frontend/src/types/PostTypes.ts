@@ -1,5 +1,5 @@
-export type PostType = 'NORMAL' | 'POPULAR' | 'CERT'; // Adjust based on backend enum
-export type PostStatus = 'APPROVED' | 'PENDING' | 'REJECTED'; // Adjust based on backend enum
+export type PostType = 'NORMAL' | 'POPULAR' | 'CERT';
+export type PostStatus = 'APPROVED' | 'PENDING' | 'REJECTED';
 
 export interface CreatePostRequest {
     userId: string;
