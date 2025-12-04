@@ -50,6 +50,8 @@ public class LoginUseCase {
         LocalDate recentLoginDate = user.getUserRecentDate();
         if (recentLoginDate.isBefore(LocalDate.now().minusDays(1))) {
             user.setUserStreak(user.getUserStreak() + 1);
+        } else {
+            user.setUserStreak(1);
         }
 
         user.setUserRecentDate(LocalDate.now());
