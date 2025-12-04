@@ -5,11 +5,13 @@ import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.dto.request.CreateChannelRequest;
+import com.but.rebloom.domain.channel.exception.AlreadyUsingChannelException;
+import com.but.rebloom.domain.channel.exception.InsufficientPointException;
+import com.but.rebloom.domain.channel.exception.InsufficientTierPointException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.usecase.ChannelUseCase;
 import com.but.rebloom.domain.hobby.domain.Hobby;
 import com.but.rebloom.domain.hobby.repository.HobbyRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -91,7 +94,94 @@ public class RequestCreationTest {
         );
 
         // When & Then
-        Assertions.assertThrows(UserNotFoundException.class,
+        assertThrows(UserNotFoundException.class,
+                () -> channelUseCase.requestCreation(createChannelRequest));
+    }
+
+    @Test
+    @DisplayName("채널 생성 요청 테스트 - 이미 존재하는 채널명으로 인한 실패")
+    public void requestCreationFailByAlreadyUsingChannelTest() {
+        // Given
+        CreateChannelRequest createChannelRequest = new CreateChannelRequest(
+                "channelTitle",
+                "channelIntro",
+                "channelDescription",
+                "userEmail",
+                1L,
+                2L,
+                3L
+        );
+
+        User mockUser = User.builder()
+                .userPoint(1000)
+                .userTierPoint(1000)
+                .build();
+
+        when(userRepository.findByUserEmail(createChannelRequest.getUserEmail()))
+                .thenReturn(Optional.of(mockUser));
+        when(channelRepository.existsByChannelTitle(createChannelRequest.getChannelTitle()))
+                .thenReturn(true);
+
+        // When & Then
+        assertThrows(AlreadyUsingChannelException.class,
+                () -> channelUseCase.requestCreation(createChannelRequest));
+    }
+
+    @Test
+    @DisplayName("채널 생성 요청 테스트 - 티어 포인트 부족으로 인한 실패")
+    public void requestCreationFailByInsufficientTierPointTest() {
+        // Given
+        CreateChannelRequest createChannelRequest = new CreateChannelRequest(
+                "channelTitle",
+                "channelIntro",
+                "channelDescription",
+                "userEmail",
+                1L,
+                2L,
+                3L
+        );
+
+        User mockUser = User.builder()
+                .userPoint(1000)
+                .userTierPoint(0)
+                .build();
+
+        when(userRepository.findByUserEmail(createChannelRequest.getUserEmail()))
+                .thenReturn(Optional.of(mockUser));
+        when(channelRepository.existsByChannelTitle(createChannelRequest.getChannelTitle()))
+                .thenReturn(false);
+
+        // When & Then
+        assertThrows(InsufficientTierPointException.class,
+                () -> channelUseCase.requestCreation(createChannelRequest));
+    }
+
+    @Test
+    @DisplayName("채널 생성 요청 테스트 - 포인트 부족으로 인한 실패")
+    public void requestCreationFailByInsufficientPointTest() {
+        // Given
+        CreateChannelRequest createChannelRequest = new CreateChannelRequest(
+                "channelTitle",
+                "channelIntro",
+                "channelDescription",
+                "userEmail",
+                1L,
+                2L,
+                3L
+        );
+
+        User mockUser = User.builder()
+                .userPoint(0)
+                .userTierPoint(1000)
+                .build();
+
+        when(userRepository.findByUserEmail(createChannelRequest.getUserEmail()))
+                .thenReturn(Optional.of(mockUser));
+        when(channelRepository.existsByChannelTitle(createChannelRequest.getChannelTitle()))
+                .thenReturn(false);
+
+        // When & Then
+        assertThrows(InsufficientPointException.class,
                 () -> channelUseCase.requestCreation(createChannelRequest));
     }
 }

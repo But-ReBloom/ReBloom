@@ -50,7 +50,7 @@ public class ChannelUseCase {
 
         // 티어 포인트 확인
         if (user.getUserTierPoint() < requiredTierPoint) {
-            throw new InsufficientTeirPointException("티어 포인트가 부족함");
+            throw new InsufficientTierPointException("티어 포인트가 부족함");
         }
         user.setUserTierPoint(user.getUserTierPoint() - requiredTierPoint);
         //포인트 확인
