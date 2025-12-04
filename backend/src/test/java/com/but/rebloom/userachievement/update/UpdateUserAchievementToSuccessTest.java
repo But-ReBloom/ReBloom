@@ -2,6 +2,7 @@ package com.but.rebloom.userachievement.update;
 
 import com.but.rebloom.domain.achievement.domain.Achievement;
 import com.but.rebloom.domain.achievement.domain.UserAchievement;
+import com.but.rebloom.domain.achievement.exception.UserAchievementNotFoundException;
 import com.but.rebloom.domain.achievement.repository.AchievementRepository;
 import com.but.rebloom.domain.achievement.repository.UserAchievementRepository;
 import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
@@ -20,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -100,5 +102,17 @@ public class UpdateUserAchievementToSuccessTest {
         // Then
         assertThat(mockUserAchievement.getUserAchievementProgress()).isEqualTo(100f);
         assertThat(mockUserAchievement.getIsSuccess()).isTrue();
+    }
+
+    @Test
+    @DisplayName("유저 업데이트 성공 전환 테스트 - 유저 업적 조회 실패로 인한 실패")
+    public void updateUserAchievementToSuccessFailByUserAchievementNotFoundTest() {
+        // Given
+        String userEmail = "user@email.com";
+        String achievementTitle = "achievementTitle";
+
+        // When & Then
+        assertThrows(UserAchievementNotFoundException.class,
+                () -> defaultUserAchievementUseCase.updateUserAchievementToSuccess(userEmail, achievementTitle));
     }
 }
