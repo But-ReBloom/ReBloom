@@ -1,5 +1,6 @@
 package com.but.rebloom.domain.reaction.dto.response;
 
+import com.but.rebloom.domain.post.domain.Post;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -15,13 +16,13 @@ public class CheckHeartExistsResponse {
     @NotNull
     private Boolean isExists;
 
-    public static CheckHeartExistsResponse from(Map<String, Boolean> response) {
-        Map.Entry<String, Boolean> entry = response.entrySet().iterator().next();
-        String postTitle = entry.getKey();
+    public static CheckHeartExistsResponse from(Map<Post, Boolean> response) {
+        Map.Entry<Post, Boolean> entry = response.entrySet().iterator().next();
+        Post post = entry.getKey();
         Boolean isExists = entry.getValue();
 
         return CheckHeartExistsResponse.builder()
-                .postTitle(postTitle)
+                .postTitle(post.getPostTitle())
                 .isExists(isExists)
                 .build();
     }

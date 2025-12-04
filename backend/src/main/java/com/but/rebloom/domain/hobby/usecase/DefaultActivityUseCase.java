@@ -35,7 +35,7 @@ public class DefaultActivityUseCase {
         Activity activity = activityRepository.findByActivityId(activityId)
                 .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
 
-        if (!activity.getUser().getUserEmail().equals(userEmail)) {
+        if (activity.getUser().getUserEmail().equals(userEmail)) {
             throw new ActivityNotFoundException("활동 조회 실패");
         }
 
@@ -46,7 +46,13 @@ public class DefaultActivityUseCase {
     public List<Activity> findAllActivity() {
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
 
-        return activityRepository.findByUser_UserEmail(userEmail);
+        List<Activity> activities = activityRepository.findByUser_UserEmail(userEmail);
+
+        if (activities.isEmpty()) {
+            throw new ActivityNotFoundException("활동 조회 실패");
+        }
+
+        return activities;
     }
 
     // Activity 조회 - ActivityRecent(ASC)
@@ -54,7 +60,13 @@ public class DefaultActivityUseCase {
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 
-        return activityRepository.findByUser_UserEmailOrderByActivityRecentAsc(userEmail);
+        List<Activity> activities = activityRepository.findByUser_UserEmailOrderByActivityRecentAsc(userEmail);
+
+        if (activities.isEmpty()) {
+            throw new ActivityNotFoundException("활동 조회 실패");
+        }
+
+        return activities;
     }
 
     // Activity 조회 - ActivityRecent(DESC)
@@ -62,7 +74,13 @@ public class DefaultActivityUseCase {
         User user = findCurrentUserUseCase.getCurrentUser();
         String userEmail = user.getUserEmail();
 
-        return activityRepository.findByUser_UserEmailOrderByActivityRecentDesc(userEmail);
+        List<Activity> activities = activityRepository.findByUser_UserEmailOrderByActivityRecentDesc(userEmail);
+
+        if (activities.isEmpty()) {
+            throw new ActivityNotFoundException("활동 조회 실패");
+        }
+
+        return activities;
     }
 
     // Activity 추가

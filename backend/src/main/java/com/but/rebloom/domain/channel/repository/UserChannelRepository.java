@@ -11,23 +11,23 @@ import java.util.Optional;
 @Repository
 public interface UserChannelRepository extends JpaRepository<UserChannel, Long> {
     // 특정채널의 유저 목록 조회
-    List<UserChannel> findByChannelIdAndUserChannelVerifyStatus(
+    List<UserChannel> findByChannel_ChannelIdAndUserChannelVerifyStatus(
             Long channelId,
             VerifyStatus userChannelVerifyStatus
     );
 
     // 특정유저의 채널 목록 조회
-    List<UserChannel> findByUserEmailAndUserChannelVerifyStatus(
+    List<UserChannel> findByUser_UserEmailAndUserChannelVerifyStatus(
             String userEmail,
             VerifyStatus userChannelVerifyStatus
     );
 
     // 존재하는지 확인
-    boolean existsByChannelIdAndUserEmail(Long channelId, String email);
+    boolean existsByChannel_ChannelIdAndUser_UserEmail(Long channelId, String email);
 
     // 유저 채널 확인
-    Optional<UserChannel> findByChannelIdAndUserEmail(Long channelId, String email);
+    Optional<UserChannel> findByChannel_ChannelIdAndUser_UserEmail(Long channelId, String email);
 
     // 유저 채널 목록 확인
-    Optional<UserChannel> findByUserEmail(String email);
+    Optional<UserChannel> findByUser_UserEmail(String email);
 }

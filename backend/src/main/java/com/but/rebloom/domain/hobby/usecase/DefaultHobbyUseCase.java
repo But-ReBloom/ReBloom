@@ -16,7 +16,13 @@ public class DefaultHobbyUseCase {
 
     // 전체 취미 조회
     public List<Hobby> getAllHobbies() {
-        return hobbyRepository.findAllHobby();
+        List<Hobby> hobbies = hobbyRepository.findAllHobby();
+
+        if (hobbies.isEmpty()) {
+            throw new HobbyNotFoundException("취미 조회 실패");
+        }
+
+        return hobbies;
     }
 
     // 취미 조회 - 아이디

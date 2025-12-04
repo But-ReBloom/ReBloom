@@ -39,7 +39,8 @@ public class Post {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "p_status")
-    private Status postStatus;
+    @Builder.Default
+    private Status postStatus = Status.PENDING;
 
     @CreationTimestamp
     @Column(name = "p_created_at", nullable = false, updatable = false)
@@ -50,12 +51,12 @@ public class Post {
     private Integer postViewers = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_ch_id", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "fk_ch_id", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Channel channel;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 }

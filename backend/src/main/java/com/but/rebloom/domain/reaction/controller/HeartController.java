@@ -1,5 +1,6 @@
 package com.but.rebloom.domain.reaction.controller;
 
+import com.but.rebloom.domain.post.domain.Post;
 import com.but.rebloom.domain.reaction.dto.response.CheckHeartExistsResponse;
 import com.but.rebloom.domain.reaction.dto.response.CreateHeartResponse;
 import com.but.rebloom.domain.reaction.dto.response.FindHeartResponse;
@@ -50,14 +51,14 @@ public class HeartController {
     // 특정 게시글의 하트 수 조회
     @GetMapping("/find/post/{postId}/count")
     public ResponseEntity<ApiResponse<GetHeartCountResponse>> getHeartCount(@PathVariable Long postId) {
-        Map<String, Long> response = heartUseCase.getHeartCount(postId);
+        Map<Post, Long> response = heartUseCase.getHeartCount(postId);
         return ResponseEntity.ok(ApiResponse.success(GetHeartCountResponse.from(response)));
     }
 
     // 특정 유저가 특정 게시글에 하트를 눌렀는지 확인
     @GetMapping("/find/check")
     public ResponseEntity<ApiResponse<CheckHeartExistsResponse>> checkHeartExists(@ModelAttribute CheckHeartExistsRequest request) {
-        Map<String, Boolean> response = heartUseCase.checkHeartExists(request);
+        Map<Post, Boolean> response = heartUseCase.checkHeartExists(request);
         return ResponseEntity.ok(ApiResponse.success(CheckHeartExistsResponse.from(response)));
     }
 

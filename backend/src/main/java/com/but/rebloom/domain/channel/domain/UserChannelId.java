@@ -12,8 +12,8 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class UserChannelId implements Serializable {
     // 다중키 속성 정의
-    private String userEmail;
-    private Long channelId;
+    private String user;
+    private Long channel;
 }
 
 

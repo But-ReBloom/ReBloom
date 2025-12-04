@@ -20,7 +20,7 @@ public class UserChannelController {
     private final VerifyUserUseCase verifyUserUseCase;
 
     // 특정 채널의 가입 목록 조회
-    @PostMapping("/member/find/{channelId}")
+    @PostMapping("/find/{channelId}")
     public ResponseEntity<ApiResponse<GetUserChannelInfoResponse>> findUserChannelByChannelId(
             @PathVariable Long channelId
     ) {
@@ -29,19 +29,19 @@ public class UserChannelController {
     }
 
     // 특정 유저의 가입 목록 조회
-    @PostMapping("/member/find/{userEmail}")
+    @PostMapping("/find/email")
     public ResponseEntity<ApiResponse<GetUserChannelInfoResponse>> findUserChannelByUserEmail(
-            @PathVariable String userEmail
+            @RequestParam String userEmail
     ) {
         List<UserChannel> userChannels = verifyUserUseCase.getApplyUsersByUserEmail(userEmail);
         return ResponseEntity.ok(ApiResponse.success(GetUserChannelInfoResponse.from(userChannels)));
     }
 
     // 특정 채널, 특정 유저의 유저채널 정보 조회
-    @PostMapping("/member/find/{channelId}/{userEmail}")
+    @PostMapping("/find/{channelId}/email")
     public ResponseEntity<ApiResponse<GetUserChannelDetailedInfoResponse>> findUserChannelByIdAndEmail(
             @PathVariable Long channelId,
-            @PathVariable String userEmail
+            @RequestParam String userEmail
     ) {
         UserChannel userChannel = verifyUserUseCase.getApplyUsersByChannelIdAndUserEmail(
                 channelId,
@@ -51,9 +51,9 @@ public class UserChannelController {
     }
 
     // 특정 유저, 특정 채널의 유저채널 정보 조회
-    @PostMapping("/member/find/{userEmail}/{channelId}")
+    @PostMapping("/find/email/{channelId}")
     public ResponseEntity<ApiResponse<GetUserChannelDetailedInfoResponse>> findUserChannelByEmailAndId(
-            @PathVariable String userEmail,
+            @RequestParam String userEmail,
             @PathVariable Long channelId
     ) {
         UserChannel userChannel = verifyUserUseCase.getApplyUsersByUserEmailAndChannelId(
@@ -64,7 +64,7 @@ public class UserChannelController {
     }
 
     // 가입 요청
-    @PostMapping("/member/apply")
+    @PostMapping("/apply")
     public ResponseEntity<ApiResponse<ApplyMemberResponse>> applyChannel(
             @RequestBody ApplyMemberRequest request
     ) {
@@ -73,7 +73,7 @@ public class UserChannelController {
     }
 
     // 가입 거절
-    @PostMapping("/member/reject")
+    @PatchMapping("/reject")
     public ResponseEntity<ApiResponse<RejectMemberResponse>> rejectChannel(
             @RequestBody RejectMemberRequest request
     ) {
@@ -82,7 +82,7 @@ public class UserChannelController {
     }
 
     // 가입 승인
-    @PostMapping("/member/approve")
+    @PatchMapping("/approve")
     public ResponseEntity<ApiResponse<ApproveMemberResponse>> approveChannel(
             @RequestBody ApproveMemberRequest request
     ) {

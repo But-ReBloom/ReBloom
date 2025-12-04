@@ -19,8 +19,8 @@ public class ApproveMemberResponse {
 
     public static ApproveMemberResponse from(UserChannel userChannel) {
         return ApproveMemberResponse.builder()
-                .userEmail(userChannel.getUserEmail())
-                .channelId(userChannel.getChannelId())
+                .userEmail(userChannel.getUser().getUserEmail())
+                .channelId(userChannel.getChannel().getChannelId())
                 .verifyStatus(userChannel.getUserChannelVerifyStatus())
                 .build();
     }
