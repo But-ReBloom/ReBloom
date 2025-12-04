@@ -39,4 +39,24 @@ public class UpdateUserAchievementProgressTest {
         // When & Then
         defaultUserAchievementUseCase.updateUserAchievementProgress(userEmail, achievementTitle, progress);
     }
+
+    @Test
+    @DisplayName("유저 업적 진행도 갱신 테스트 - 성공(성공해두지 않은 경우)")
+    public void updateUserAchievementProgressSuccessIfNotSucceedInAdvanceTest() {
+        // Given
+        String userEmail = "test@test.com";
+        String achievementTitle = "achievementTitle";
+        float progress = 10f;
+
+        UserAchievement mockUserAchievement = UserAchievement.builder()
+                .isSuccess(false)
+                .userAchievementProgress(5f)
+                .build();
+
+        when(userAchievementRepository.findByUserEmailAndAchievement_AchievementTitle(userEmail, achievementTitle))
+                .thenReturn(Optional.of(mockUserAchievement));
+
+        // When & Then
+        defaultUserAchievementUseCase.updateUserAchievementProgress(userEmail, achievementTitle, progress);
+    }
 }
