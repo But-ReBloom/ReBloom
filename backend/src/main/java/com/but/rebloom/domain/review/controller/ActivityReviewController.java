@@ -1,7 +1,6 @@
 package com.but.rebloom.domain.review.controller;
 
 import com.but.rebloom.common.dto.ApiResponse;
-import com.but.rebloom.domain.review.dto.response.ReviewQuestionResponse;
 import com.but.rebloom.domain.review.usecase.ActivityReviewUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

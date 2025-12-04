@@ -3,11 +3,8 @@ package com.but.rebloom.domain.review.dto.request;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 public class ReviewAnswerRequest {
-
     @NotNull
     private String userEmail;
 
@@ -15,5 +12,17 @@ public class ReviewAnswerRequest {
     private Long hobbyId;
 
     @NotNull
-    private List<QuestionAnswerRequest> answers;
+    private String socialAnswer;
+
+    @NotNull
+    private String learningAnswer;
+
+    @NotNull
+    private String PlanningAnswer;
+
+    @NotNull
+    private String focusAnswer;
+
+    @NotNull
+    private String creativityAnswer;
 }

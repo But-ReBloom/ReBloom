@@ -68,18 +68,18 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY)
     private Activity userCurrentActivity = null;
 
-    @Column(name = "u_vector_social")
-    private String VectorSocial;
+    @Column(name = "u_social_vector")
+    private Double socialVector;
 
-    @Column(name = "u_vector_learning")
-    private String VectorLearning;
+    @Column(name = "u_learning_vector")
+    private Double learningVector;
 
-    @Column(name = "u_vector_planning")
-    private String VectorPlanning;
+    @Column(name = "u_planning_vector")
+    private Double planningVector;
 
-    @Column(name = "u_vector_focus")
-    private String VectorFocus;
+    @Column(name = "u_focus_vector")
+    private Double focusVector;
 
-    @Column(name = "u_vector_creativity")
-    private String VectorCreativity;
+    @Column(name = "u_creativity_vector")
+    private Double creativityVector;
 }

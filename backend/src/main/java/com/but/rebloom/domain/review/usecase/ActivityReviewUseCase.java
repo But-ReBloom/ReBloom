@@ -7,9 +7,6 @@ import com.but.rebloom.domain.hobby.domain.Hobby;
 import com.but.rebloom.domain.hobby.exception.HobbyNotFoundException;
 import com.but.rebloom.domain.hobby.repository.HobbyRepository;
 import com.but.rebloom.domain.hobby.usecase.HobbyTestUseCase;
-import com.but.rebloom.domain.review.dto.response.ReviewQuestionDto;
-import com.but.rebloom.domain.review.dto.response.ReviewQuestionResponse;
-import com.but.rebloom.domain.review.repository.ActivityRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +20,7 @@ import java.util.stream.Collectors;
 public class ActivityReviewUseCase {
     private final OpenAIUseCase openAIUseCase;
     private final UserRepository userRepository;
-    private final ActivityRepository activityRepository;
+    private final ActivityReviewRepository activityRepository;
     private final HobbyRepository hobbyRepository;
     private final HobbyTestUseCase hobbyTestUseCase;
     private final FindCurrentUserUseCase findCurrentUserUseCase;

@@ -1,7 +1,8 @@
 package com.but.rebloom.domain.review.domain;
 
-import com.but.rebloom.auth.domain.User;
-import com.but.rebloom.hobby.domain.HobbyWeight;
+import com.but.rebloom.domain.auth.domain.User;
+import com.but.rebloom.domain.hobby.domain.Hobby;
+import io.micrometer.core.annotation.Counted;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -28,23 +29,11 @@ public class ActivityReview {
     @Column(name = "fk_h_id", nullable = false)
     private Long hobbyId;
 
-    @Column(name = "actr_review_text", columnDefinition = "TEXT")
-    private String reviewContent;
+    @Column(name = "actr_review_question")
+    private String reviewQuestion;
 
-    @Column(name = "ar_social_delta", nullable = false)
-    private Double socialDelta;
-
-    @Column(name = "ar_learning_delta", nullable = false)
-    private Double learningDelta;
-
-    @Column(name = "ar_planning_delta", nullable = false)
-    private Double planningDelta;
-
-    @Column(name = "ar_focus_delta", nullable = false)
-    private Double focusDelta;
-
-    @Column(name = "ar_creativity_delta", nullable = false)
-    private Double creativityDelta;
+    @Column(name = "actr_review_answer")
+    private String reviewAnswer;
 
     @Column(name = "ar_created_at")
     private LocalDateTime createdAt;
@@ -57,5 +46,5 @@ public class ActivityReview {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_h_id", referencedColumnName = "h_id", insertable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private HobbyWeight hobby;
+    private Hobby hobby;
 }
