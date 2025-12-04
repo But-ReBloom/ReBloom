@@ -2,16 +2,18 @@ import { client } from "./client";
 import type { 
     InitialTest, 
     UserAnswerRequest, 
-    HobbyScoreResponse,
+    HobbyTestResponse,
     AddActivityRequest,
     AddActivityResponse,
-    FindActivityResponse
+    FindActivityResponse,
+    GetAllHobbyResponse,
+    GetHobbyResponse
 } from "../types/hobby";
 import type { ApiResponse } from "../types/common";
 
 export const hobbyApi = {
     getQuestions: () => 
-        client("/hobby-test/questions", {
+        client("/hobby-test/get/questions", {
             method: "GET",
         }) as Promise<ApiResponse<InitialTest[]>>,
 
@@ -19,7 +21,7 @@ export const hobbyApi = {
         client("/hobby-test/recommend", {
             method: "POST",
             body: JSON.stringify(data),
-        }) as Promise<ApiResponse<HobbyScoreResponse[]>>,
+        }) as Promise<ApiResponse<HobbyTestResponse>>,
 
     addActivity: (data: AddActivityRequest) =>
         client("/activity/add", {
@@ -28,12 +30,7 @@ export const hobbyApi = {
         }) as Promise<ApiResponse<AddActivityResponse>>,
 
     findActivityById: (activityId: number) =>
-        client(`/activity/find/id/${activityId}`, {
-            method: "GET",
-        }) as Promise<ApiResponse<FindActivityResponse>>,
-
-    findActivityByName: (activityName: string) =>
-        client(`/activity/find/name/${activityName}`, {
+        client(`/activity/find/activity-id/${activityId}`, {
             method: "GET",
         }) as Promise<ApiResponse<FindActivityResponse>>,
 
@@ -51,4 +48,14 @@ export const hobbyApi = {
         client("/activity/find/normal/recent/desc", {
             method: "GET",
         }) as Promise<ApiResponse<FindActivityResponse[]>>,
+
+    findAllHobbies: () =>
+        client("/hobby/find/all", {
+            method: "GET",
+        }) as Promise<ApiResponse<GetAllHobbyResponse>>,
+
+    findHobbyById: (hobbyId: number) =>
+        client(`/hobby/find/${hobbyId}`, {
+            method: "GET",
+        }) as Promise<ApiResponse<GetHobbyResponse>>,
 };

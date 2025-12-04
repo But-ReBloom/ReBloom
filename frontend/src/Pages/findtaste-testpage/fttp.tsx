@@ -135,7 +135,7 @@ export default function FT_TestPage() {
             message: "취향테스트 완료!", 
             type: "HobbyTest", 
             finalAverage,
-            recommendations: response.data 
+            recommendations: response.data.hobbyScores 
           },
         });
       } else {

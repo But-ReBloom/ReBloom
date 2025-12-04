@@ -26,19 +26,80 @@ export interface SignupResponse {
     userProvider: Provider;
 }
 
+export type VerificationPurpose = 'SIGN_UP' | 'UPDATE_INFO';
+
 export interface SendVerificationEmailRequest {
-    email: string;
+    userEmail: string;
+    purpose: VerificationPurpose;
 }
 
 export interface VerifyCodeRequest {
-    email: string;
+    userEmail: string;
     code: string;
+    purpose: VerificationPurpose;
+}
+
+export interface GoogleLoginAuthorizeCodeRequest {
+    authorizationCode: string;
+}
+
+export interface UpdateUserIdRequest {
+    updateUserId: string;
+}
+
+export interface UpdateUserPasswordRequest {
+    updateUserPassword: string;
 }
 
 export interface FindEmailRequest {
-    // Add fields based on backend if needed
+    userId: string;
+    userPassword: string;
 }
 
 export interface FindIdRequest {
-    // Add fields based on backend if needed
+    userEmail: string;
+    userPassword: string;
+}
+
+export interface ChangeActivityRequest {
+    activityId: number;
+}
+
+export interface GoogleUserInfoResponse {
+    id: string;
+    email: string;
+    name: string;
+    accessToken: string;
+    provider: Provider;
+}
+
+export interface UpdateIdResponse {
+    userEmail: string;
+    userNewId: string;
+}
+
+export interface GetUserEmailResponse {
+    userEmail: string;
+}
+
+export interface GetUserIdResponse {
+    userId: string;
+}
+
+export interface FindUserInfoResponse {
+    userEmail: string;
+    userId: string;
+    userName: string;
+    userRole: string; // Assuming Role is a string or enum
+    userTierPoint: number;
+    userPoint: number;
+    userProvider: Provider;
+}
+
+export interface ChangeActivityResponse {
+    userEmail: string;
+    userId: string;
+    userName: string;
+    activityId: number;
+    activityName: string;
 }
