@@ -1,6 +1,5 @@
 FROM gradle:8.5-jdk21 AS builder
 WORKDIR /app
-COPY build.gradle settings.gradle ./
 COPY backend ./backend
 RUN gradle :backend:build -x test --no-daemon
 

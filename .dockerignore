@@ -1,0 +1,10 @@
+.git
+.gitignore
+.gradle
+build
+backend/build
+frontend
+nginx
+db
+*.md
+docker-compose.yml
