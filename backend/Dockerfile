@@ -1,6 +1,9 @@
 FROM gradle:8.5-jdk21 AS builder
 WORKDIR /app
-COPY backend ./backend
+COPY ../settings.gradle ./
+COPY ../build.gradle ./
+COPY . ./backend
+
 RUN gradle :backend:build -x test --no-daemon
 
 FROM eclipse-temurin:21-jdk-alpine
