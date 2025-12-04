@@ -7,6 +7,7 @@ import com.but.rebloom.domain.achievement.repository.UserAchievementRepository;
 import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.Provider;
 import com.but.rebloom.domain.auth.domain.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,9 +17,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -31,7 +31,7 @@ public class CreateDefaultUserAchievementTest {
     private DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     @Test
-    @DisplayName("유저 업적 생성")
+    @DisplayName("유저 업적 생성 테스트 - 성공")
     public void createDefaultUserAchievementSuccessTest() {
         // Given
         String userEmail = "test@test.com";
