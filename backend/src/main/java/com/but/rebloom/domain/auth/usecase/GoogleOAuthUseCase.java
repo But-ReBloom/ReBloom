@@ -51,7 +51,7 @@ public class GoogleOAuthUseCase {
         String body = "code=" + code +
                 "&client_id=" + clientId +
                 "&client_secret=" + clientSecret +
-                "&redirect_uri=" + "http://localhost:8080/auth/login/google" +
+                "&redirect_uri=" + "http://localhost:5173/auth/google/callback" +
                 "&grant_type=authorization_code";
 
         HttpEntity<String> request = new HttpEntity<>(body, headers);

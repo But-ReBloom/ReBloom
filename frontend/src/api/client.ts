@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 export const client = async (endpoint: string, options: RequestInit = {}) => {
   const url = `${BASE_URL}${endpoint}`;
@@ -17,8 +17,6 @@ export const client = async (endpoint: string, options: RequestInit = {}) => {
     const response = await fetch(url, config);
     
     if (!response.ok) {
-      // Handle non-2xx responses if needed, or just throw
-      // You might want to parse the error body here
       const errorBody = await response.text();
       throw new Error(`HTTP error! status: ${response.status}, body: ${errorBody}`);
     }

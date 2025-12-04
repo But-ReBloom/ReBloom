@@ -19,12 +19,17 @@ import PostDetail from "./Pages/postPage/PostDetail";
 import TestResult from "./Pages/hobbytestresultpage/hobbytestresultpage.tsx";
 import Thankyou from "./components/thanktou/thankyou.tsx";
 import Mypage from "./Pages/mypage/Mypage.tsx";
+import GoogleCallback from "./Pages/GoogleCallback/GoogleCallback.tsx";
 
 //경로명세 라우터
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/auth/google/callback",
+    element: <GoogleCallback />,
   },
     {
     path: "/community",

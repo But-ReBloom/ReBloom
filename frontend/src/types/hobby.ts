@@ -23,10 +23,17 @@ export interface HobbyScoreResponse {
     distance: number;
 }
 
+export interface ChannelResponse {
+    channelName: string;
+}
+
+export interface HobbyTestResponse {
+    hobbyScores: HobbyScoreResponse[];
+    channels: ChannelResponse[];
+}
+
 export interface AddActivityRequest {
-    activityName: string;
-    activityStart: string;
-    activityRecent: string;
+    hobbyId: number;
     userEmail: string;
 }
 
@@ -42,3 +49,18 @@ export interface FindActivityResponse {
     activityStart: string;
     activityRecent: string;
 }
+
+export interface GetHobbyResponse {
+    hobbyId: number;
+    hobbyName: string;
+    hobbyWeightSocial: number;
+    hobbyWeightLearning: number;
+    hobbyWeightPlanning: number;
+    hobbyWeightFocus: number;
+    hobbyWeightCreativity: number;
+}
+
+export interface GetAllHobbyResponse {
+    hobbies: GetHobbyResponse[];
+}
+
