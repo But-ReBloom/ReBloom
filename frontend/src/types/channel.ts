@@ -43,7 +43,6 @@ export interface FindChannelResponse {
 }
 
 export interface FindChannelDetailedInfoResponse extends CreateChannelResponse {
-    // Add detailed fields if any different from CreateChannelResponse
 }
 
 export interface UserChannelResponse {
@@ -59,7 +58,6 @@ export interface GetUserChannelInfoResponse {
 }
 
 export interface GetUserChannelDetailedInfoResponse extends UserChannelResponse {
-    // Add detailed fields if any
 }
 
 export interface ApproveChannelResponse extends CreateChannelResponse {}
