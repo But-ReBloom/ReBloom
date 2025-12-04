@@ -1,17 +1,11 @@
-export interface CreateHeartRequest {
+export interface HeartRequest {
     userId: string;
     postId: number;
 }
 
-export interface CheckHeartExistsRequest {
-    userId: string;
-    postId: number;
-}
-
-export interface DeleteHeartRequest {
-    userId: string;
-    postId: number;
-}
+export type CreateHeartRequest = HeartRequest;
+export type CheckHeartExistsRequest = HeartRequest;
+export type DeleteHeartRequest = HeartRequest;
 
 export interface CreateHeartResponse {
     heartId: number;
@@ -24,9 +18,11 @@ export interface FindHeartResponse {
     hearts: CreateHeartResponse[];
 }
 
-export interface GetHeartCountResponse {
+export interface CountResponse {
     count: number;
 }
+
+export type GetHeartCountResponse = CountResponse;
 
 export interface CheckHeartExistsResponse {
     exists: boolean;
@@ -56,6 +52,4 @@ export interface FindCommentResponse {
     comments: CreateCommentResponse[];
 }
 
-export interface GetCommentCountResponse {
-    count: number;
-}
+export type GetCommentCountResponse = CountResponse;

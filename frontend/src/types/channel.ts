@@ -12,20 +12,14 @@ export interface SearchChannelRequest {
     keyword: string;
 }
 
-export interface ApplyMemberRequest {
+export interface ChannelMemberRequest {
     channelId: number;
     userEmail: string;
 }
 
-export interface ApproveMemberRequest {
-    channelId: number;
-    userEmail: string;
-}
-
-export interface RejectMemberRequest {
-    channelId: number;
-    userEmail: string;
-}
+export type ApplyMemberRequest = ChannelMemberRequest;
+export type ApproveMemberRequest = ChannelMemberRequest;
+export type RejectMemberRequest = ChannelMemberRequest;
 
 export interface CreateChannelResponse {
     channelId: number;
@@ -70,8 +64,6 @@ export interface GetUserChannelDetailedInfoResponse extends UserChannelResponse 
 
 export interface ApproveChannelResponse extends CreateChannelResponse {}
 
-export interface ApplyMemberResponse extends UserChannelResponse {}
-
-export interface RejectMemberResponse extends UserChannelResponse {}
-
-export interface ApproveMemberResponse extends UserChannelResponse {}
+export type ApplyMemberResponse = UserChannelResponse;
+export type RejectMemberResponse = UserChannelResponse;
+export type ApproveMemberResponse = UserChannelResponse;
