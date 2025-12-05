@@ -4,6 +4,7 @@ import com.but.rebloom.domain.auth.domain.Role;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
+import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.usecase.ChannelUseCase;
 import com.but.rebloom.global.exception.NoAuthorityException;
@@ -65,6 +66,22 @@ public class GetApprovedChannelsTest {
 
         // When & Then
         assertThrows(NoAuthorityException.class,
+                () -> channelUseCase.getApprovedChannels());
+    }
+
+    @Test
+    @DisplayName("승인된 채널 조회 테스트 - 채널 조회 실패로 인한 실패")
+    public void getApprovedChannelsFailByChannelNotFoundTest() {
+        // Given
+        User mockUser = User.builder()
+                .userRole(Role.ADMIN)
+                .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+
+        // When & Then
+        assertThrows(ChannelNotFoundException.class,
                 () -> channelUseCase.getApprovedChannels());
     }
 }
