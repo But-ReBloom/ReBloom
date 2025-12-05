@@ -28,7 +28,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: backend/Dockerfile
+      dockerfile: Dockerfile
     container_name: rebloom-backend
     environment:
       DB_PASSWORD: ${DB_PASSWORD}
