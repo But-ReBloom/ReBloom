@@ -223,7 +223,7 @@ public class ChannelUseCase {
                 );
 
         if (userChannels.isEmpty()) {
-            throw new ChannelNotFoundException("유저 채널 조회 실패");
+            throw new UserChannelNotFoundException("유저 채널 조회 실패");
         }
 
         return userChannels;
