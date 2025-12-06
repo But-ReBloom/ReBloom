@@ -61,25 +61,26 @@ public class User {
     @Builder.Default
     private Integer userStreak = 1;
 
-    @Column(name = "u_vector_updated_at")
-    private LocalDateTime vectorUpdatedAt;
     @JoinColumn(name = "u_current_act", referencedColumnName = "act_id", nullable = true)
     @Builder.Default
     @OneToOne(fetch = FetchType.LAZY)
     private Activity userCurrentActivity = null;
 
-    @Column(name = "u_social_vector")
-    private Double socialVector;
+    @Column(name = "u_score_updated_at")
+    private LocalDateTime scoreUpdatedAt;
 
-    @Column(name = "u_learning_vector")
-    private Double learningVector;
+    @Column(name = "u_social_score")
+    private Double socialScore;
 
-    @Column(name = "u_planning_vector")
-    private Double planningVector;
+    @Column(name = "u_learning_score")
+    private Double learningScore;
 
-    @Column(name = "u_focus_vector")
-    private Double focusVector;
+    @Column(name = "u_planning_score")
+    private Double planningScore;
 
-    @Column(name = "u_creativity_vector")
-    private Double creativityVector;
+    @Column(name = "u_focus_score")
+    private Double focusScore;
+
+    @Column(name = "u_creativity_score")
+    private Double creativityScore;
 }
