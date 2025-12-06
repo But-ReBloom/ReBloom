@@ -2,9 +2,11 @@ package com.but.rebloom.domain.auth.dto.request;
 
 import com.but.rebloom.domain.auth.domain.Provider;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class SignupRequest {
     @NotNull
     private String userEmail;

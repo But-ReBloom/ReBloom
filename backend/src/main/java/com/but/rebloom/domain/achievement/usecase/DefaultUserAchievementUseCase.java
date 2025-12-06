@@ -30,20 +30,6 @@ public class DefaultUserAchievementUseCase {
     // 함수 홏출
     private final DefaultTierUseCase defaultTierUseCase;
 
-    // 전체 유저 업적 조회 - 유저 아이디
-    public List<UserAchievement> finaAllUserAchievementsByUserId() {
-        User currentUser = findCurrentUserUseCase.getCurrentUser();
-        String userId = currentUser.getUserId();
-
-        List<UserAchievement> userAchievements = userAchievementRepository.findAllByUser_UserId(userId);
-
-        if (userAchievements.isEmpty()) {
-            throw new UserAchievementNotFoundException("유저 업적 조회 실패");
-        }
-
-        return userAchievements;
-    }
-
     // 전체 유저 업적 조회 - 유저 이메일
     public List<UserAchievement> finaAllUserAchievementsByUserEmail() {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
@@ -82,31 +68,6 @@ public class DefaultUserAchievementUseCase {
                 .toList();
 
         userAchievementRepository.saveAll(initialAchievements);
-    }
-
-    // 유저 업적 성공 처리 - (PK - Pk)
-    @Transactional
-    public void updateUserAchievementToSuccess(String userEmail, Long achievementId) {
-        UserAchievement userAchievement = userAchievementRepository
-                .findByUserEmailAndAchievementId(userEmail, achievementId)
-                .orElseThrow(() -> new UserAchievementNotFoundException("유저 업적이 조회되지 않음"));
-
-        userAchievement.setIsSuccess(true);
-        userAchievement.setUserAchievementProgress(100.0f);
-
-        Achievement achievement = achievementRepository.findByAchievementId(achievementId)
-                .orElseThrow(() -> new AchievementNotFoundException("업적이 조회되지 않음"));
-        int rewardPoint = achievement.getAchievementRewardPoint();
-        int rewardTierPoint = achievement.getAchievementRewardTierPoint();
-
-        User user = userRepository.findByUserEmail(userEmail)
-                .orElseThrow(() -> new UserNotFoundException("유저가 조회되지 않음"));
-        user.setUserPoint(user.getUserPoint() + rewardPoint);
-        user.setUserTierPoint(user.getUserTierPoint() + rewardTierPoint);
-
-        user.setUserTier(defaultTierUseCase.getTierEnumByPoint(user.getUserTierPoint())
-                .orElseThrow(() -> new TierNotFoundException("티어가 조회되지 않음"))
-        );
     }
 
     // 유저 업적 성공 처리 - (PK - Non-Pk)

@@ -22,7 +22,6 @@ import {
     import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
     import CloseIcon from '../../assets/images/close.svg';
     import { useNavigate } from 'react-router-dom';
-    import type { Post } from '../../types/PostTypes';
     // import Header from '../../components/normal_header/nh';
 
     function Community() {
@@ -32,22 +31,22 @@ import {
         navigate('/main');
     };
 
-    const leftPosts: Post[] = [
-        { id: 1, title: '모여라 활잽이들', description: '설명' },
-        { id: 2, title: '모여라 활잽이들', description: '설명' },
-        { id: 3, title: '모여라 활잽이들', description: '설명' },
-        { id: 4, title: '모여라 활잽이들', description: '설명' },
+    const leftPosts = [
+        { postId: 1, postTitle: '모여라 활잽이들', postContent: '설명' },
+        { postId: 2, postTitle: '모여라 활잽이들', postContent: '설명' },
+        { postId: 3, postTitle: '모여라 활잽이들', postContent: '설명' },
+        { postId: 4, postTitle: '모여라 활잽이들', postContent: '설명' },
     ];
 
-    const rightPosts: Post[] = [
+    const rightPosts = [
         {
-        id: 101,
-        title: '모여라 활잽이들',
+        postId: 101,
+        postTitle: '모여라 활잽이들',
         comments: ['안녕하세요', '안녕하세요', '반갑습니다'],
         },
         {
-        id: 102,
-        title: '모여라 활잽이들',
+        postId: 102,
+        postTitle: '모여라 활잽이들',
         comments: ['댓글1', '댓글2', '댓글3', '댓글4'],
         },
     ];
@@ -85,18 +84,18 @@ import {
 
             <ContentWrapper>
             <LeftColumn>
-                {leftPosts.map(({ id, title, description }) => (
-                <LeftPostItem key={id}>
-                    <PostTitle>{title}</PostTitle>
-                    <PostDescription>{description}</PostDescription>
+                {leftPosts.map(({ postId, postTitle, postContent }) => (
+                <LeftPostItem key={postId}>
+                    <PostTitle>{postTitle}</PostTitle>
+                    <PostDescription>{postContent}</PostDescription>
                 </LeftPostItem>
                 ))}
             </LeftColumn>
 
             <RightColumn>
-                {rightPosts.map(({ id, title, comments }) => (
-                <RightPostItem key={id}>
-                    <PostTitle>{title}</PostTitle>
+                {rightPosts.map(({ postId, postTitle, comments }) => (
+                <RightPostItem key={postId}>
+                    <PostTitle>{postTitle}</PostTitle>
                     <CommentsList>
                     {comments?.map((comment, i) => (
                         <CommentItem key={i}>{comment}</CommentItem>

@@ -8,6 +8,7 @@ import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.exception.WrongVerifiedCodeException;
 import com.but.rebloom.global.usecase.EmailSenderUseCase;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.Random;
 @Service
 public class EmailUseCase extends EmailSenderUseCase {
     // 이메일-인증코드 저장용
+    @Getter
     private final Map<String, Map<VerificationPurpose, CodeInfo>> codeMap = new HashMap<>();
     // 예외 호출
     private final AuthValidationUseCase authValidationUseCase;
@@ -80,8 +82,6 @@ public class EmailUseCase extends EmailSenderUseCase {
 
         // 코드 일치 확인
         if (!verifyCodeRequest.getCode().equals(userCode.getCode())) {
-            System.out.println(verifyCodeRequest.getCode());
-            System.out.println(userCode.getCode());
             throw new WrongVerifiedCodeException("잘못된 인증 코드");
         }
 
@@ -96,7 +96,8 @@ public class EmailUseCase extends EmailSenderUseCase {
     );
 
     @Getter
-    private static class CodeInfo {
+    @AllArgsConstructor
+    public static class CodeInfo {
         private final String code;
         private final LocalDateTime createdAt;
 
