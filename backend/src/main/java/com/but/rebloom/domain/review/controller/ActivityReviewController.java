@@ -1,6 +1,6 @@
 package com.but.rebloom.domain.review.controller;
 
-import com.but.rebloom.common.dto.ApiResponse;
+import com.but.rebloom.global.dto.ApiResponse;
 import com.but.rebloom.domain.review.usecase.ActivityReviewUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +14,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ActivityReviewController {
     private final ActivityReviewUseCase activityReviewUseCase;
-
-    // AI 생성 질문 조회
-    @GetMapping("/questions/{hobbyId}")
-    public ResponseEntity<ApiResponse<ReviewQuestionResponse>> getReviewQuestion(@PathVariable Long hobbyId) {
-        ReviewQuestionResponse reviewQuestionResponse = activityReviewUseCase.generateReviewQuestions(hobbyId);
-    }
 }

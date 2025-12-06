@@ -14,7 +14,7 @@ public class CreateReviewQuestionResponse {
     private String learningQuestion;
 
     @NotNull
-    private String PlanningQuestion;
+    private String planningQuestion;
 
     @NotNull
     private String focusQuestion;
