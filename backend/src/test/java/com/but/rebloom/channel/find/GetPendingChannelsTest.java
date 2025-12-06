@@ -6,6 +6,7 @@ import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.usecase.ChannelUseCase;
+import com.but.rebloom.global.exception.NoAuthorityException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +31,7 @@ public class GetPendingChannelsTest {
 
     @Test
     @DisplayName("대기 채널 조회 테스트 - 성공")
-    public void getApprovedChannelsSuccessTest() {
+    public void getPendingChannelsSuccessTest() {
         // Given
         User mockUser = User.builder()
                 .userRole(Role.ADMIN)
@@ -48,5 +50,21 @@ public class GetPendingChannelsTest {
 
         // Then
         assertThat(channels).isEqualTo(mockChannels);
+    }
+
+    @Test
+    @DisplayName("대기 채널 조회 테스트 - 권한 부족으로 실패")
+    public void getPendingChannelsFailByNoAuthorityTest() {
+        // Given
+        User mockUser = User.builder()
+                .userRole(Role.USER)
+                .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+
+        // When & Then
+        assertThrows(NoAuthorityException.class,
+                () -> channelUseCase.getPendingChannels());
     }
 }
