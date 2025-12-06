@@ -1,24 +1,24 @@
 package com.but.rebloom.domain.review.dto.response;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
 public class CreateReviewQuestionResponse {
-    @NotNull
+    @NotBlank
     private String socialQuestion;
 
-    @NotNull
+    @NotBlank
     private String learningQuestion;
 
-    @NotNull
+    @NotBlank
     private String planningQuestion;
 
-    @NotNull
+    @NotBlank
     private String focusQuestion;
 
-    @NotNull
+    @NotBlank
     private String creativityQuestion;
 }

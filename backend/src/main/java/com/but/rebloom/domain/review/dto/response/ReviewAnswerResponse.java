@@ -1,5 +1,6 @@
 package com.but.rebloom.domain.review.dto.response;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,12 +23,12 @@ public class ReviewAnswerResponse {
     @NotNull
     private Double creativityScore;
 
-    @NotNull
+    @NotBlank
     private String hobby1;
 
-    @NotNull
+    @NotBlank
     private String hobby2;
 
-    @NotNull
+    @NotBlank
     private String hobby3;
 }

@@ -39,12 +39,12 @@ public class ActivityReview {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email", insertable = false, updatable = false)
+    @JoinColumn(name = "fk_u_email", referencedColumnName = "u_email", updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_h_id", referencedColumnName = "h_id", insertable = false, updatable = false)
+    @JoinColumn(name = "fk_h_id", referencedColumnName = "h_id", updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Hobby hobby;
 }
