@@ -19,7 +19,7 @@ public class ActivityReviewUseCase {
     private OpenAiChatModel openAiChatModel;
 
     // 질문 5개 생성
-    public CreateReviewQuestionResponse createReviewQuestion(CreateReviewQuestionRequest request) {
+    public CreateReviewQuestionResponse createReviewQuestion(Long hobbyId) {
         String prompt = """
                  당신은 활동 리뷰 질문 생성기입니다.
                  다음 취미 활동을 기반으로 사용자의 취향 카테고리 별 평가할 질문을 생성하세요.
