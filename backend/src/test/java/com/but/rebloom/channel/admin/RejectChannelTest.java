@@ -7,6 +7,7 @@ import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.domain.ChannelStatus;
 import com.but.rebloom.domain.channel.exception.AlreadyProcessedChannelException;
+import com.but.rebloom.domain.channel.exception.AlreadyRejectedChannelException;
 import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.usecase.ChannelUseCase;
@@ -136,6 +137,37 @@ public class RejectChannelTest {
 
         // When & Then
         assertThrows(AlreadyProcessedChannelException.class,
+                () -> channelUseCase.rejectChannel(channelId));
+    }
+
+    @Test
+    @DisplayName("채널 거절 테스트 - 이미 거절된 채널로 실패")
+    public void rejectChannelFailByAlreadyRejectedChannelTest() {
+        // Given
+        Long channelId = 1L;
+
+        User mockUser = User.builder()
+                .userRole(Role.ADMIN)
+                .build();
+
+        Channel mockChannel = Channel.builder()
+                .channelStatus(ChannelStatus.REJECTED)
+                .user(
+                        User.builder()
+                                .userRole(Role.USER)
+                                .userTierPoint(1)
+                                .userPoint(1)
+                                .build()
+                )
+                .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+        when(channelRepository.findById(channelId))
+                .thenReturn(Optional.of(mockChannel));
+
+        // When & Then
+        assertThrows(AlreadyRejectedChannelException.class,
                 () -> channelUseCase.rejectChannel(channelId));
     }
 }
