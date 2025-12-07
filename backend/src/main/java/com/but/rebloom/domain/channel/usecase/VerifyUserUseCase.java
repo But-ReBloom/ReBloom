@@ -31,7 +31,7 @@ public class VerifyUserUseCase {
     // 채널의 신청 목록 확인
     public List<UserChannel> getApplyUsersByChannelId(Long channelId) {
         User user = findCurrentUserUseCase.getCurrentUser();
-        Channel channel = channelRepository.findByChannelIdAndIsAcceptedTrue(channelId)
+        Channel channel = channelRepository.findByChannelIdAndChannelStatusAccepted(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
 
         if (!(user.getUserEmail().equals(channel.getUser().getUserEmail()) || user.getUserRole().equals(Role.ADMIN))) {
@@ -75,7 +75,7 @@ public class VerifyUserUseCase {
     // 채널의 특정 유저 신청 목록 확인
     public UserChannel getApplyUsersByChannelIdAndUserEmail(Long channelId, String userEmail) {
         User user = findCurrentUserUseCase.getCurrentUser();
-        Channel channel = channelRepository.findByChannelIdAndIsAcceptedTrue(channelId)
+        Channel channel = channelRepository.findByChannelIdAndChannelStatusAccepted(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
 
         if (!(user.getUserEmail().equals(channel.getUser().getUserEmail()) || user.getUserRole().equals(Role.ADMIN))) {
@@ -97,7 +97,7 @@ public class VerifyUserUseCase {
     public UserChannel applyMemberVerification(ApplyMemberRequest applyMemberRequest) {
         User user = findCurrentUserUseCase.getCurrentUser();
 
-        Channel channel = channelRepository.findByChannelIdAndIsAcceptedTrue(applyMemberRequest.getChannelId())
+        Channel channel = channelRepository.findByChannelIdAndChannelStatusAccepted(applyMemberRequest.getChannelId())
                 .orElseThrow(() -> new ChannelNotFoundException("채널이 조회되지 않음"));
 
         if (userChannelRepository
@@ -120,7 +120,7 @@ public class VerifyUserUseCase {
     public UserChannel rejectMemberVerification(RejectMemberRequest rejectMemberRequest) {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
 
-        Channel channel = channelRepository.findByChannelIdAndIsAcceptedTrue(rejectMemberRequest.getChannelId())
+        Channel channel = channelRepository.findByChannelIdAndChannelStatusAccepted(rejectMemberRequest.getChannelId())
                 .orElseThrow(() -> new ChannelNotFoundException("채널이 조회되지 않음"));
 
         if (!(currentUser.getUserEmail().equals(channel.getUser().getUserEmail()) || currentUser.getUserRole().equals(Role.ADMIN))) {
@@ -147,7 +147,7 @@ public class VerifyUserUseCase {
     public UserChannel approveMemberVerification(ApproveMemberRequest approveMemberRequest) {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
 
-        Channel channel = channelRepository.findByChannelIdAndIsAcceptedTrue(approveMemberRequest.getChannelId())
+        Channel channel = channelRepository.findByChannelIdAndChannelStatusAccepted(approveMemberRequest.getChannelId())
                 .orElseThrow(() -> new ChannelNotFoundException("채널이 조회되지 않음"));
 
         if (!(currentUser.getUserEmail().equals(channel.getUser().getUserEmail()) || currentUser.getUserRole().equals(Role.ADMIN))) {

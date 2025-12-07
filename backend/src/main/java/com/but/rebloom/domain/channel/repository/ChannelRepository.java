@@ -13,7 +13,12 @@ import java.util.Optional;
 @Repository
 public interface ChannelRepository extends JpaRepository<Channel, Long> {
     // ID로 채널 조회
-    Optional<Channel> findByChannelIdAndIsAcceptedTrue(Long channelId);
+    @Query("""
+        select c
+        from Channel c
+        where c.channelId = :channelId and c.channelStatus = "ACCEPTED"
+    """)
+    Optional<Channel> findByChannelIdAndChannelStatusAccepted(@Param("channelId") Long channelId);
 
     // 특정 키워드를 제목이나 설명에 포함한 채널 조회
     @Query("""
@@ -21,16 +26,26 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
         where (c.channelTitle like concat('%', :keyword, '%')
             or c.channelIntro like concat('%', :keyword, '%')
             or c.channelDescription like concat('%', :keyword, '%'))
-            and c.isAccepted = true
+            and c.channelStatus = 'ACCEPTED'
         order by c.channelTitle asc
     """)
     List<Channel> searchByKeyword(@Param("keyword") String keyword);
 
     // 승인된 채널 목록 조회
-    List<Channel> findByIsAcceptedTrue();
+    @Query("""
+        select c
+        from Channel c
+        where c.channelStatus = 'ACCEPTED'
+    """)
+    List<Channel> findByChannelStatusAccepted();
 
     // 아직 승인되지 않은 채널 목록 조회
-    List<Channel> findByIsAcceptedFalse();
+    @Query("""
+        select c
+        from Channel c
+        where c.channelStatus = 'PENDING'
+    """)
+    List<Channel> findByChannelStatusPending();
 
     // 연관 취미로 채널 목록 검색
     @Query("""
@@ -45,7 +60,12 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
     List<Channel> findByChannelLinkedHobby(@Param("hobbyId") Long hobbyId);
 
     // 관리자 승인/거절 처리 (일주일 이내)
-    @Query("select c from Channel c where c.isAccepted = false and c.channelCreatedAt < :deadline")
+    @Query("""
+        select c
+        from Channel c
+        where c.channelStatus = "PENDING"
+            and c.channelCreatedAt < :deadline
+    """)
     List<Channel> findPendingChannelsOlderThan(@Param("deadline") LocalDateTime deadline);
 
     // 채널이 존재하는지 확인

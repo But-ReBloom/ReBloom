@@ -43,7 +43,7 @@ public class GetApprovedChannelsTest {
 
         when(findCurrentUserUseCase.getCurrentUser())
                 .thenReturn(mockUser);
-        when(channelRepository.findByIsAcceptedTrue())
+        when(channelRepository.findByChannelStatusAccepted())
                 .thenReturn(mockChannels);
 
         // When

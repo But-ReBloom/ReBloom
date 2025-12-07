@@ -5,6 +5,7 @@ import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
+import com.but.rebloom.domain.channel.domain.ChannelStatus;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.usecase.ChannelUseCase;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +37,7 @@ public class RejectChannelTest {
                 .build();
 
         Channel mockChannel = Channel.builder()
-                .isAccepted(false)
+                .channelStatus(ChannelStatus.PENDING)
                 .build();
     }
 }

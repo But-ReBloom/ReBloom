@@ -4,6 +4,7 @@ import com.but.rebloom.domain.auth.domain.Role;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
+import com.but.rebloom.domain.channel.domain.ChannelStatus;
 import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.domain.VerifyStatus;
 import com.but.rebloom.domain.channel.exception.AlreadyProcessedChannelException;
@@ -54,7 +55,7 @@ public class ApproveChannelTest {
                 .build();
 
         Channel mockChannel = Channel.builder()
-                .isAccepted(false)
+                .channelStatus(ChannelStatus.PENDING)
                 .channelLinkedHobby1(
                         Hobby.builder()
                         .hobbyId(1L)
@@ -96,7 +97,7 @@ public class ApproveChannelTest {
         Channel channel = channelUseCase.approveChannel(channelId);
 
         // Then
-        assertThat(channel.getIsAccepted()).isTrue();
+        assertThat(channel.getChannelStatus()).isEqualTo(ChannelStatus.ACCEPTED);
     }
 
     @Test
@@ -146,7 +147,7 @@ public class ApproveChannelTest {
                 .build();
 
         Channel mockChannel = Channel.builder()
-                .isAccepted(true)
+                .channelStatus(ChannelStatus.ACCEPTED)
                 .build();
 
         when(findCurrentUserUseCase.getCurrentUser())
@@ -170,7 +171,7 @@ public class ApproveChannelTest {
                 .build();
 
         Channel mockChannel = Channel.builder()
-                .isAccepted(false)
+                .channelStatus(ChannelStatus.PENDING)
                 .channelLinkedHobby1(Hobby.builder()
                         .hobbyId(0L)
                         .build())

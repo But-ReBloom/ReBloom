@@ -32,7 +32,7 @@ public class GetChannelTest {
 
         Channel mockChannel = Channel.builder().build();
 
-        when(channelRepository.findByChannelIdAndIsAcceptedTrue(channelId))
+        when(channelRepository.findByChannelIdAndChannelStatusAccepted(channelId))
                 .thenReturn(Optional.of(mockChannel));
 
         // When

@@ -43,7 +43,7 @@ public class GetPendingChannelsTest {
 
         when(findCurrentUserUseCase.getCurrentUser())
                 .thenReturn(mockUser);
-        when(channelRepository.findByIsAcceptedFalse())
+        when(channelRepository.findByChannelStatusPending())
                 .thenReturn(mockChannels);
 
         // When

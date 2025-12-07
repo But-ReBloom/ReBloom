@@ -114,7 +114,7 @@ public class ChannelUseCase {
             throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
-        List<Channel> channels = channelRepository.findByIsAcceptedTrue();
+        List<Channel> channels = channelRepository.findByChannelStatusAccepted();
 
         if (channels.isEmpty()) {
             throw new ChannelNotFoundException("채널 조회 실패");
@@ -131,7 +131,7 @@ public class ChannelUseCase {
             throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
-        List<Channel> channels = channelRepository.findByIsAcceptedFalse();
+        List<Channel> channels = channelRepository.findByChannelStatusPending();
 
         if (channels.isEmpty()) {
             throw new ChannelNotFoundException("채널 조회 실패");
@@ -213,7 +213,7 @@ public class ChannelUseCase {
 
     // 특정 채널 조회
     public Channel getChannel(Long channelId) {
-        return channelRepository.findByChannelIdAndIsAcceptedTrue(channelId)
+        return channelRepository.findByChannelIdAndChannelStatusAccepted(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
     }
 
