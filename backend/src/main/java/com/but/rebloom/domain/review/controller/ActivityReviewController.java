@@ -1,5 +1,7 @@
 package com.but.rebloom.domain.review.controller;
 
+import com.but.rebloom.domain.review.domain.ActivityReview;
+import com.but.rebloom.domain.review.domain.ActivityReviewResult;
 import com.but.rebloom.domain.review.dto.request.CreateReviewQuestionRequest;
 import com.but.rebloom.domain.review.dto.request.ReviewAnswerRequest;
 import com.but.rebloom.domain.review.dto.response.CreateReviewQuestionResponse;
@@ -19,14 +21,14 @@ public class ActivityReviewController {
     // 질문 생성
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<CreateReviewQuestionResponse>> createReviewQuestion(@RequestBody CreateReviewQuestionRequest request) {
-        CreateReviewQuestionResponse response = activityReviewUseCase.createReviewQuestion(request.getHobbyId());
-        return ResponseEntity.ok(ApiResponse.success(response));
+        ActivityReview activityReview = activityReviewUseCase.createReviewQuestion(request.getHobbyId());
+        return ResponseEntity.ok(ApiResponse.success(CreateReviewQuestionResponse.from(activityReview)));
     }
 
     // 활동리뷰 답변 시 점수 업데이트 및 취미 추천
     @PostMapping("/answer")
     public ResponseEntity<ApiResponse<ReviewAnswerResponse>> answerReview(@RequestBody ReviewAnswerRequest reviewAnswerRequest) {
-        ReviewAnswerResponse response = activityReviewUseCase.answerReview(reviewAnswerRequest);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        ActivityReviewResult activityReviewResult = activityReviewUseCase.answerReview(reviewAnswerRequest);
+        return ResponseEntity.ok(ApiResponse.success(ReviewAnswerResponse.of(activityReviewResult)));
     }
 }

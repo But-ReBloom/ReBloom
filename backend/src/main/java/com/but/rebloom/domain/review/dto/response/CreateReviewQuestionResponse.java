@@ -1,5 +1,6 @@
 package com.but.rebloom.domain.review.dto.response;
 
+import com.but.rebloom.domain.review.domain.ActivityReview;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,17 +9,11 @@ import lombok.Getter;
 @Builder
 public class CreateReviewQuestionResponse {
     @NotBlank
-    private String socialQuestion;
+    private String reviewQuestion;
 
-    @NotBlank
-    private String learningQuestion;
-
-    @NotBlank
-    private String planningQuestion;
-
-    @NotBlank
-    private String focusQuestion;
-
-    @NotBlank
-    private String creativityQuestion;
+    public static CreateReviewQuestionResponse from(ActivityReview activityReview) {
+        return CreateReviewQuestionResponse.builder()
+                .reviewQuestion(activityReview.getReviewQuestion())
+                .build();
+    }
 }
