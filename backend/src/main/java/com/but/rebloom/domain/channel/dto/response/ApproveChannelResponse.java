@@ -2,6 +2,7 @@ package com.but.rebloom.domain.channel.dto.response;
 
 import com.but.rebloom.domain.auth.domain.TierName;
 import com.but.rebloom.domain.channel.domain.Channel;
+import com.but.rebloom.domain.channel.domain.ChannelStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -27,7 +28,7 @@ public class ApproveChannelResponse {
     @NotNull
     private String channelDescription;
     @NotNull
-    private Boolean isAccepted;
+    private ChannelStatus channelStatus;
     @NotNull
     private LocalDateTime channelCreatedAt;
     @NotNull
@@ -47,7 +48,7 @@ public class ApproveChannelResponse {
                 .channelTitle(channel.getChannelTitle())
                 .channelIntro(channel.getChannelIntro())
                 .channelDescription(channel.getChannelDescription())
-                .isAccepted(channel.getIsAccepted())
+                .channelStatus(channel.getChannelStatus())
                 .channelCreatedAt(channel.getChannelCreatedAt())
                 .linkedHobbyId1(channel.getChannelLinkedHobby1().getHobbyId())
                 .linkedHobbyName1(channel.getChannelLinkedHobby1().getHobbyName())

@@ -147,9 +147,6 @@ public class ApproveChannelTest {
 
         Channel mockChannel = Channel.builder()
                 .isAccepted(true)
-                .channelLinkedHobby1(Hobby.builder()
-                        .hobbyId(0L)
-                        .build())
                 .build();
 
         when(findCurrentUserUseCase.getCurrentUser())
@@ -174,6 +171,9 @@ public class ApproveChannelTest {
 
         Channel mockChannel = Channel.builder()
                 .isAccepted(false)
+                .channelLinkedHobby1(Hobby.builder()
+                        .hobbyId(0L)
+                        .build())
                 .build();
 
         when(findCurrentUserUseCase.getCurrentUser())

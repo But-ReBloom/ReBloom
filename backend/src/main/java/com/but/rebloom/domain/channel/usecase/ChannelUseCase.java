@@ -6,6 +6,7 @@ import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
+import com.but.rebloom.domain.channel.domain.ChannelStatus;
 import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.domain.VerifyStatus;
 import com.but.rebloom.domain.channel.dto.request.CreateChannelRequest;
@@ -84,7 +85,7 @@ public class ChannelUseCase {
                 .channelTitle(request.getChannelTitle())
                 .channelIntro(request.getChannelIntro())
                 .channelDescription(request.getChannelDescription())
-                .isAccepted(false)
+                .channelStatus(ChannelStatus.PENDING)
                 .channelLinkedHobby1(hobby1)
                 .channelLinkedHobby2(hobby2)
                 .channelLinkedHobby3(hobby3)
@@ -151,7 +152,7 @@ public class ChannelUseCase {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
 
-        if (channel.getIsAccepted()) {
+        if (channel.getChannelStatus().equals(ChannelStatus.ACCEPTED)) {
             throw new AlreadyProcessedChannelException("이미 승인된 채널");
         }
 
@@ -166,7 +167,7 @@ public class ChannelUseCase {
                     .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
         }
 
-        channel.setIsAccepted(true);
+        channel.setChannelStatus(ChannelStatus.ACCEPTED);
 
         UserChannel userChannel = UserChannel.builder()
                 .channel(channel)
@@ -192,8 +193,11 @@ public class ChannelUseCase {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
 
-        if (channel.getIsAccepted()) {
-            throw new AlreadyProcessedChannelException("이미 거절된 채널");
+        if (channel.getChannelStatus().equals(ChannelStatus.ACCEPTED)) {
+            throw new AlreadyProcessedChannelException("이미 승인된 채널");
+        }
+        if (channel.getChannelStatus().equals(ChannelStatus.REJECTED)) {
+            throw new AlreadyRejectedChannelException("이미 거절된 채널");
         }
 
         User user = channel.getUser();
