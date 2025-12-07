@@ -88,9 +88,9 @@ public class ApproveChannelTest {
                 .thenReturn(Optional.of(mockChannel));
         when(hobbyRepository.findByHobbyId(anyLong()))
                 .thenReturn(Optional.of(mockHobby));
-        when(userChannelRepository.save(any()))
+        when(userChannelRepository.save(any(UserChannel.class)))
                 .thenReturn(mockUserChannel);
-        when(channelRepository.save(any()))
+        when(channelRepository.save(any(Channel.class)))
                 .thenReturn(mockChannel);
 
         // When

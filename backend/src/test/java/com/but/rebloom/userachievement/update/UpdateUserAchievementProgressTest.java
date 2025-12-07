@@ -4,7 +4,6 @@ import com.but.rebloom.domain.achievement.domain.UserAchievement;
 import com.but.rebloom.domain.achievement.exception.UserAchievementNotFoundException;
 import com.but.rebloom.domain.achievement.repository.UserAchievementRepository;
 import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

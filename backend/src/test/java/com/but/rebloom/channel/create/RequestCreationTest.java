@@ -70,7 +70,7 @@ public class RequestCreationTest {
                 .thenReturn(mockUser);
         when(hobbyRepository.findByHobbyId(anyLong()))
                 .thenReturn(Optional.of(mockHobby));
-        when(channelRepository.save(any()))
+        when(channelRepository.save(any(Channel.class)))
                 .thenReturn(mockChannel);
 
         // When
