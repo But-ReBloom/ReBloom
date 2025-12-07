@@ -15,6 +15,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 public class RejectChannelTest {
     @Mock
@@ -38,6 +44,28 @@ public class RejectChannelTest {
 
         Channel mockChannel = Channel.builder()
                 .channelStatus(ChannelStatus.PENDING)
+                .user(
+                    User.builder()
+                            .userRole(Role.USER)
+                            .userTierPoint(1)
+                            .userPoint(1)
+                            .build()
+                )
                 .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+        when(channelRepository.findById(channelId))
+                .thenReturn(Optional.of(mockChannel));
+        when(userRepository.save(any(User.class)))
+                .thenReturn(mockUser);
+        when(channelRepository.save(any(Channel.class)))
+                .thenReturn(mockChannel);
+
+        // When
+        channelUseCase.rejectChannel(channelId);
+
+        // Then
+        assertThat(mockChannel.getChannelStatus()).isEqualTo(ChannelStatus.REJECTED);
     }
 }

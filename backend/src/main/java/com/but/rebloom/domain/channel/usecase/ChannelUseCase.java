@@ -207,8 +207,9 @@ public class ChannelUseCase {
         user.setUserPoint(user.getUserPoint() + requiredPoints);
         userRepository.save(user);
 
-        // 삭제
-        channelRepository.delete(channel);
+        // 삭제 처리
+        channel.setChannelStatus(ChannelStatus.REJECTED);
+        channelRepository.save(channel);
     }
 
     // 특정 채널 조회
