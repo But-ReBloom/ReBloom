@@ -12,6 +12,7 @@ import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.channel.usecase.ChannelUseCase;
 import com.but.rebloom.domain.hobby.domain.Hobby;
+import com.but.rebloom.domain.hobby.exception.HobbyNotFoundException;
 import com.but.rebloom.domain.hobby.repository.HobbyRepository;
 import com.but.rebloom.global.exception.NoAuthorityException;
 import org.junit.jupiter.api.DisplayName;
@@ -146,6 +147,9 @@ public class ApproveChannelTest {
 
         Channel mockChannel = Channel.builder()
                 .isAccepted(true)
+                .channelLinkedHobby1(Hobby.builder()
+                        .hobbyId(0L)
+                        .build())
                 .build();
 
         when(findCurrentUserUseCase.getCurrentUser())
@@ -155,6 +159,30 @@ public class ApproveChannelTest {
 
         // When & Then
         assertThrows(AlreadyProcessedChannelException.class,
+                () -> channelUseCase.approveChannel(channelId));
+    }
+
+    @Test
+    @DisplayName("채널 승인 테스트 - 취미 조회 실패로 실패")
+    public void approveChannelFailByHobbyNotFoundTest() {
+        // Given
+        Long channelId = 1L;
+
+        User mockUser = User.builder()
+                .userRole(Role.ADMIN)
+                .build();
+
+        Channel mockChannel = Channel.builder()
+                .isAccepted(false)
+                .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+        when(channelRepository.findById(channelId))
+                .thenReturn(Optional.of(mockChannel));
+
+        // When & Then
+        assertThrows(HobbyNotFoundException.class,
                 () -> channelUseCase.approveChannel(channelId));
     }
 }

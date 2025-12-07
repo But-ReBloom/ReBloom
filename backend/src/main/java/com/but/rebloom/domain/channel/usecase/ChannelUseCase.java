@@ -14,7 +14,6 @@ import com.but.rebloom.domain.channel.exception.*;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.hobby.domain.Hobby;
-import com.but.rebloom.domain.hobby.exception.ActivityNotFoundException;
 import com.but.rebloom.domain.hobby.exception.HobbyNotFoundException;
 import com.but.rebloom.domain.hobby.repository.HobbyRepository;
 import com.but.rebloom.global.exception.NoAuthorityException;
@@ -161,10 +160,10 @@ public class ChannelUseCase {
 
         if (channel.getChannelLinkedHobby2() != null) {
             hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby2().getHobbyId())
-                    .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+                    .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
         } if (channel.getChannelLinkedHobby3() != null) {
             hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby3().getHobbyId())
-                    .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+                    .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
         }
 
         channel.setIsAccepted(true);
