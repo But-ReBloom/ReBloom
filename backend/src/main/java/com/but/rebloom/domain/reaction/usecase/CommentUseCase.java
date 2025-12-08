@@ -158,7 +158,7 @@ public class CommentUseCase {
             throw new NoAuthorityException("삭제할 권한이 없습니다.");
         }
 
-        Comment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findByCommentId(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("댓글이 조회되지 않음"));
         commentRepository.delete(comment);
     }
