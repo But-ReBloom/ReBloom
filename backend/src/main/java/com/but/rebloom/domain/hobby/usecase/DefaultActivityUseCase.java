@@ -35,7 +35,7 @@ public class DefaultActivityUseCase {
         Activity activity = activityRepository.findByActivityId(activityId)
                 .orElseThrow(() -> new ActivityNotFoundException("활동 조회 실패"));
 
-        if (!activity.getUser().getUserEmail().equals(userEmail)) {
+        if (activity.getUser().getUserEmail().equals(userEmail)) {
             throw new ActivityNotFoundException("활동 조회 실패");
         }
 
