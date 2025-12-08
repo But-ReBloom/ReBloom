@@ -5,11 +5,13 @@ import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
+import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.hobby.domain.Hobby;
 import com.but.rebloom.domain.hobby.domain.HobbyScore;
 import com.but.rebloom.domain.hobby.domain.InitialTest;
 import com.but.rebloom.domain.hobby.dto.request.UserAnswerRequest;
+import com.but.rebloom.domain.hobby.exception.HobbyNotFoundException;
 import com.but.rebloom.domain.hobby.exception.InitialTestNotFoundException;
 import com.but.rebloom.domain.hobby.repository.HobbyRepository;
 import com.but.rebloom.domain.hobby.repository.InitialTestRepository;
@@ -45,7 +47,7 @@ public class HobbyTestUseCase {
         double[] userClosestScore = {
                 Math.abs(hobbyRepository
                         .findByCategoryAndLimit("h_w_social", userScore[0], 1)
-                                .getFirst()
+                        .getFirst()
                         .getHobbyWeightSocial() - userScore[0]),
                 Math.abs(hobbyRepository
                         .findByCategoryAndLimit("h_w_learning", userScore[1], 1)
@@ -100,7 +102,11 @@ public class HobbyTestUseCase {
                 result = hobbyRepository.findByCategoryAndLimit("h_w_creativity", userScore[4], 3);
                 break;
             default:
-                throw new UserNotFoundException("잘못된 index값");
+                throw new IllegalArgumentException("잘못된 index값");
+        }
+
+        if (result.isEmpty()) {
+            throw new HobbyNotFoundException("취미 조회 실패");
         }
 
         HobbyScore hobbyScore1 = averageAbsoluteDistance(userScore, result.get(0));
@@ -142,6 +148,10 @@ public class HobbyTestUseCase {
         } if (channels.isEmpty()) {
             channels = channelRepository
                     .findByChannelLinkedHobby(hobbyScoreResult3.getHobby().getHobbyId());
+        }
+
+        if (channels.isEmpty()) {
+            throw new ChannelNotFoundException("채널 조회 실패");
         }
 
         User currentUser = findCurrentUserUseCase.getCurrentUser();

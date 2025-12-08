@@ -1,9 +1,11 @@
 package com.but.rebloom.domain.hobby.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class UserAnswerRequest {
     @NotNull
     private Double socialScore;
