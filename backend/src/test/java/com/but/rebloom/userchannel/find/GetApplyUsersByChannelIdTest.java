@@ -10,6 +10,7 @@ import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.channel.usecase.VerifyUserUseCase;
+import com.but.rebloom.global.exception.NoAuthorityException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,7 +72,7 @@ public class GetApplyUsersByChannelIdTest {
 
     @Test
     @DisplayName("채널 지원 유저 확인 테스트 - 채널 조회 실패로 실패")
-    public void getApplyUsersByChannelIdFailChannelNotFoundTest() {
+    public void getApplyUsersByChannelIdFailByChannelNotFoundTest() {
         // Given
         Long channelId = 1L;
 
@@ -83,8 +84,37 @@ public class GetApplyUsersByChannelIdTest {
         when(findCurrentUserUseCase.getCurrentUser())
                 .thenReturn(mockUser);
 
-        // When
+        // When & Then
         assertThrows(ChannelNotFoundException.class,
+                () -> verifyUserUseCase.getApplyUsersByChannelId(channelId));
+    }
+
+    @Test
+    @DisplayName("채널 지원 유저 확인 테스트 - 권한 부족으로 실패")
+    public void getApplyUsersByChannelIdFailByNoAuthorityTest() {
+        // Given
+        Long channelId = 1L;
+
+        User mockUser = User.builder()
+                .userEmail("test@test.com")
+                .userRole(Role.USER)
+                .build();
+
+        Channel mockChannel = Channel.builder().channelId(channelId)
+                .user(
+                        User.builder()
+                                .userEmail("useremail@email.com")
+                                .build()
+                )
+                .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+        when(channelRepository.findByChannelIdAndChannelStatusAccepted(channelId))
+                .thenReturn(Optional.of(mockChannel));
+
+        // When & Then
+        assertThrows(NoAuthorityException.class,
                 () -> verifyUserUseCase.getApplyUsersByChannelId(channelId));
     }
 }
