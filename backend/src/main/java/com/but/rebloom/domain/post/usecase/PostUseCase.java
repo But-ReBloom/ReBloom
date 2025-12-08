@@ -214,7 +214,7 @@ public class PostUseCase {
     // 게시글 삭제 (관리자)
     @Transactional
     public void deletePostByAdmin(Long postId) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         User currentUser = findCurrentUserUseCase.getCurrentUser();
