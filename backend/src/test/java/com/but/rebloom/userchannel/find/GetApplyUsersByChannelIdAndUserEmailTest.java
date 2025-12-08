@@ -6,6 +6,7 @@ import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
+import com.but.rebloom.domain.channel.exception.UserChannelNotFoundException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.channel.usecase.VerifyUserUseCase;
@@ -116,6 +117,32 @@ public class GetApplyUsersByChannelIdAndUserEmailTest {
 
         // When & Then
         assertThrows(NoAuthorityException.class,
+                () -> verifyUserUseCase.getApplyUsersByChannelIdAndUserEmail(channelId, userEmail));
+    }
+
+    @Test
+    @DisplayName("유저 신청 목록 조회 테스트 - 유저 채널 조회 실패로 실패")
+    public void getApplyUsersByChannelIdAndUserEmailFailByUserChannelNotFoundTest() {
+        // Given
+        Long channelId = 1L;
+        String userEmail = "test@test.com";
+
+        User mockUser = User.builder()
+                .userEmail(userEmail)
+                .userRole(Role.USER)
+                .build();
+
+        Channel mockChannel = Channel.builder()
+                .user(mockUser)
+                .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+        when(channelRepository.findByChannelIdAndChannelStatusAccepted(channelId))
+                .thenReturn(Optional.of(mockChannel));
+
+        // When & Then
+        assertThrows(UserChannelNotFoundException.class,
                 () -> verifyUserUseCase.getApplyUsersByChannelIdAndUserEmail(channelId, userEmail));
     }
 }
