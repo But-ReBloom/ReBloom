@@ -1,4 +1,4 @@
-package com.but.rebloom.userachievement.find;
+package com.but.rebloom.achievement.userachievement.find;
 
 import com.but.rebloom.domain.achievement.domain.UserAchievement;
 import com.but.rebloom.domain.achievement.exception.UserAchievementNotFoundException;
@@ -7,6 +7,7 @@ import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.Provider;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,25 +15,26 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class FindAllUserAchievementsByUserEmailTest {
-    @Mock
-    private FindCurrentUserUseCase findCurrentUserUseCase;
+public class FindUserAchievementByUserEmailAndAchievementIdTest {
     @Mock
     private UserAchievementRepository userAchievementRepository;
+    @Mock
+    private FindCurrentUserUseCase findCurrentUserUseCase;
     @InjectMocks
     private DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     @Test
-    @DisplayName("전체 유저 업적 조회(아이디) - 성공")
-    public void findAllUserAchievementsByUserEmailSuccessTest() {
+    @DisplayName("유저 업적 조회(이메일, 아이디) - 성공")
+    public void findUserAchievementByUserEmailAndAchievementIdSuccessTest() {
         // Given
+        Long achievementId = 1000L;
+
         User mockUser = User.builder()
                 .userEmail("userEmail")
                 .userPassword("userPasswor123!")
@@ -40,28 +42,28 @@ public class FindAllUserAchievementsByUserEmailTest {
                 .build();
 
         UserAchievement mockUserAchievement = UserAchievement.builder()
-                .achievementId(1L)
-                .user(mockUser)
-                .build();
-
-        List<UserAchievement> mockUserAchievements = List.of(mockUserAchievement);
+                        .achievementId(1L)
+                        .user(mockUser)
+                        .build();
 
         when(findCurrentUserUseCase.getCurrentUser())
                 .thenReturn(mockUser);
-        when(userAchievementRepository.findAllByUserEmail(mockUser.getUserEmail()))
-                .thenReturn(mockUserAchievements);
+        when(userAchievementRepository.findByUserEmailAndAchievementId(mockUser.getUserEmail(), achievementId))
+                .thenReturn(Optional.of(mockUserAchievement));
 
         // When
-        List<UserAchievement> userAchievements = defaultUserAchievementUseCase.finaAllUserAchievementsByUserEmail();
+        UserAchievement userAchievement = defaultUserAchievementUseCase.findUserAchievementByUserEmailAndAchievementId(achievementId);
 
         // Then
-        assertThat(userAchievements).isNotEmpty();
+        assertThat(userAchievement).isEqualTo(mockUserAchievement);
     }
 
     @Test
-    @DisplayName("전체 유저 업적 조회(아이디) - 유저 업적 조회 실패로 인해 실패")
-    public void findAllUserAchievementsByUserEmailFailByUserAchievementNotFoundTest() {
+    @DisplayName("유저 업적 조회(이메일, 아이디) - 유저 업적 조회 실패로 인한 실패")
+    public void findUserAchievementByUserEmailAndAchievementIdFailByUserAchievementNotFoundTest() {
         // Given
+        Long achievementId = 1000L;
+
         User mockUser = User.builder()
                 .userEmail("userEmail")
                 .userPassword("userPasswor123!")
@@ -72,7 +74,7 @@ public class FindAllUserAchievementsByUserEmailTest {
                 .thenReturn(mockUser);
 
         // When & Then
-        assertThrows(UserAchievementNotFoundException.class,
-                () -> defaultUserAchievementUseCase.finaAllUserAchievementsByUserEmail());
+        Assertions.assertThrows(UserAchievementNotFoundException.class,
+                () -> defaultUserAchievementUseCase.findUserAchievementByUserEmailAndAchievementId(achievementId));
     }
 }

@@ -1,4 +1,4 @@
-package com.but.rebloom.userchannel.admin;
+package com.but.rebloom.channel.userchannel.admin;
 
 import com.but.rebloom.domain.auth.domain.Role;
 import com.but.rebloom.domain.auth.domain.User;
@@ -6,7 +6,7 @@ import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.domain.VerifyStatus;
-import com.but.rebloom.domain.channel.dto.request.ApproveMemberRequest;
+import com.but.rebloom.domain.channel.dto.request.RejectMemberRequest;
 import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.domain.channel.exception.UserChannelNotFoundException;
 import com.but.rebloom.domain.channel.exception.WrongStatusException;
@@ -29,68 +29,68 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ApproveMemberVerificationTest {
-    @Mock
-    private UserChannelRepository userChannelRepository;
+public class RejectMemberVerificationTest {
     @Mock
     private FindCurrentUserUseCase findCurrentUserUseCase;
+    @Mock
+    private UserChannelRepository userChannelRepository;
     @Mock
     private ChannelRepository channelRepository;
     @InjectMocks
     private VerifyUserUseCase verifyUserUseCase;
 
     @Test
-    @DisplayName("채널 가입 승인 테스트 - 성공")
-    public void approveMemberVerificationSuccessTest() {
+    @DisplayName("채널 거절 테스트 - 성공")
+    public void rejectMemberVerificationSuccessTest() {
         // Given
-        ApproveMemberRequest approveMemberRequest = new ApproveMemberRequest(
+        RejectMemberRequest rejectMemberRequest = new RejectMemberRequest(
                 "useremail@email.com",
                 1L
         );
 
         User mockUser = User.builder()
-                .userEmail(approveMemberRequest.getUserEmail())
+                .userEmail("useremail@email.com")
                 .userRole(Role.USER)
                 .build();
 
         Channel mockChannel = Channel.builder()
                 .user(mockUser)
-                .channelId(approveMemberRequest.getChannelId())
+                .channelId(rejectMemberRequest.getChannelId())
                 .build();
 
         UserChannel mockUserChannel = UserChannel.builder()
+                .userChannelVerifyStatus(VerifyStatus.WAITING)
                 .user(mockUser)
                 .channel(mockChannel)
-                .userChannelVerifyStatus(VerifyStatus.WAITING)
                 .build();
 
         when(findCurrentUserUseCase.getCurrentUser())
                 .thenReturn(mockUser);
-        when(channelRepository.findByChannelIdAndChannelStatusAccepted(approveMemberRequest.getChannelId()))
+        when(channelRepository.findByChannelIdAndChannelStatusAccepted(rejectMemberRequest.getChannelId()))
                 .thenReturn(Optional.of(mockChannel));
-        when(userChannelRepository.findByChannel_ChannelIdAndUser_UserEmail(approveMemberRequest.getChannelId(), approveMemberRequest.getUserEmail()))
+        when(userChannelRepository.findByChannel_ChannelIdAndUser_UserEmail(rejectMemberRequest.getChannelId(), mockUser.getUserEmail()))
                 .thenReturn(Optional.of(mockUserChannel));
         when(userChannelRepository.save(any(UserChannel.class)))
                 .thenReturn(mockUserChannel);
 
         // When
-        UserChannel userChannel = verifyUserUseCase.approveMemberVerification(approveMemberRequest);
+        UserChannel userChannel = verifyUserUseCase.rejectMemberVerification(rejectMemberRequest);
 
         // Then
-        assertThat(userChannel.getUserChannelVerifyStatus()).isEqualTo(VerifyStatus.APPROVED);
+        assertThat(userChannel.getUserChannelVerifyStatus()).isEqualTo(VerifyStatus.REJECTED);
     }
 
     @Test
-    @DisplayName("채널 가입 승인 테스트 - 채널 조회 실패로 실패")
-    public void approveMemberVerificationFailByChannelNotFoundTest() {
+    @DisplayName("채널 거절 테스트 - 채널 조회 실패로 실패")
+    public void rejectMemberVerificationFailByChannelNotFoundTest() {
         // Given
-        ApproveMemberRequest approveMemberRequest = new ApproveMemberRequest(
+        RejectMemberRequest rejectMemberRequest = new RejectMemberRequest(
                 "useremail@email.com",
                 1L
         );
 
         User mockUser = User.builder()
-                .userEmail(approveMemberRequest.getUserEmail())
+                .userEmail(rejectMemberRequest.getUserEmail())
                 .userRole(Role.USER)
                 .build();
 
@@ -99,20 +99,20 @@ public class ApproveMemberVerificationTest {
 
         // When & Then
         assertThrows(ChannelNotFoundException.class,
-                () -> verifyUserUseCase.approveMemberVerification(approveMemberRequest));
+                () -> verifyUserUseCase.rejectMemberVerification(rejectMemberRequest));
     }
 
     @Test
-    @DisplayName("채널 가입 승인 테스트 - 권한 부족으로 실패")
-    public void approveMemberVerificationFailByNoAuthorityTest() {
+    @DisplayName("채널 거절 테스트 - 권한 부족으로 실패")
+    public void rejectMemberVerificationFailByNoAuthorityTest() {
         // Given
-        ApproveMemberRequest approveMemberRequest = new ApproveMemberRequest(
+        RejectMemberRequest rejectMemberRequest = new RejectMemberRequest(
                 "useremail@email.com",
                 1L
         );
 
         User mockUser = User.builder()
-                .userEmail(approveMemberRequest.getUserEmail())
+                .userEmail(rejectMemberRequest.getUserEmail())
                 .userRole(Role.USER)
                 .build();
 
@@ -120,84 +120,85 @@ public class ApproveMemberVerificationTest {
                 .user(
                         User.builder()
                                 .userEmail("channel@email.com")
+                                .userRole(Role.USER)
                                 .build()
                 )
-                .channelId(approveMemberRequest.getChannelId())
+                .channelId(rejectMemberRequest.getChannelId())
                 .build();
 
         when(findCurrentUserUseCase.getCurrentUser())
                 .thenReturn(mockUser);
-        when(channelRepository.findByChannelIdAndChannelStatusAccepted(approveMemberRequest.getChannelId()))
+        when(channelRepository.findByChannelIdAndChannelStatusAccepted(rejectMemberRequest.getChannelId()))
                 .thenReturn(Optional.of(mockChannel));
 
         // When & Then
         assertThrows(NoAuthorityException.class,
-                () -> verifyUserUseCase.approveMemberVerification(approveMemberRequest));
+                () -> verifyUserUseCase.rejectMemberVerification(rejectMemberRequest));
     }
 
     @Test
-    @DisplayName("채널 가입 승인 테스트 - 유저 채널 조회 실패로 실패")
-    public void approveMemberVerificationFailByUserChannelNotFoundTest() {
+    @DisplayName("채널 거절 테스트 - 유저 채널 조회 실패로 실패")
+        public void rejectMemberVerificationFailByUserChannelNotFoundTest() {
         // Given
-        ApproveMemberRequest approveMemberRequest = new ApproveMemberRequest(
+        RejectMemberRequest rejectMemberRequest = new RejectMemberRequest(
                 "useremail@email.com",
                 1L
         );
 
         User mockUser = User.builder()
-                .userEmail(approveMemberRequest.getUserEmail())
+                .userEmail(rejectMemberRequest.getUserEmail())
                 .userRole(Role.USER)
                 .build();
 
         Channel mockChannel = Channel.builder()
                 .user(mockUser)
-                .channelId(approveMemberRequest.getChannelId())
+                .channelId(rejectMemberRequest.getChannelId())
                 .build();
 
         when(findCurrentUserUseCase.getCurrentUser())
                 .thenReturn(mockUser);
-        when(channelRepository.findByChannelIdAndChannelStatusAccepted(approveMemberRequest.getChannelId()))
+        when(channelRepository.findByChannelIdAndChannelStatusAccepted(rejectMemberRequest.getChannelId()))
                 .thenReturn(Optional.of(mockChannel));
 
         // When & Then
         assertThrows(UserChannelNotFoundException.class,
-                () -> verifyUserUseCase.approveMemberVerification(approveMemberRequest));
+                () -> verifyUserUseCase.rejectMemberVerification(rejectMemberRequest));
     }
 
     @Test
-    @DisplayName("채널 가입 승인 테스트 - 대기 상태가 아닌 유저 채널로 인한 실패")
-    public void approveMemberVerificationFailByNotWaitingStateTest() {
+    @DisplayName("채널 거절 테스트 - 대기중이 아닌 유저 채널로 실패")
+    public void rejectMemberVerificationFailByNotWaitingStateTest() {
         // Given
-        ApproveMemberRequest approveMemberRequest = new ApproveMemberRequest(
+        RejectMemberRequest rejectMemberRequest = new RejectMemberRequest(
                 "useremail@email.com",
                 1L
         );
 
         User mockUser = User.builder()
-                .userEmail(approveMemberRequest.getUserEmail())
+                .userEmail("useremail@email.com")
                 .userRole(Role.USER)
                 .build();
 
         Channel mockChannel = Channel.builder()
                 .user(mockUser)
-                .channelId(approveMemberRequest.getChannelId())
+                .channelId(rejectMemberRequest.getChannelId())
                 .build();
 
         UserChannel mockUserChannel = UserChannel.builder()
+                .userChannelVerifyStatus(VerifyStatus.APPROVED)
                 .user(mockUser)
                 .channel(mockChannel)
-                .userChannelVerifyStatus(VerifyStatus.APPROVED)
                 .build();
 
         when(findCurrentUserUseCase.getCurrentUser())
                 .thenReturn(mockUser);
-        when(channelRepository.findByChannelIdAndChannelStatusAccepted(approveMemberRequest.getChannelId()))
+        when(channelRepository.findByChannelIdAndChannelStatusAccepted(rejectMemberRequest.getChannelId()))
                 .thenReturn(Optional.of(mockChannel));
-        when(userChannelRepository.findByChannel_ChannelIdAndUser_UserEmail(approveMemberRequest.getChannelId(), approveMemberRequest.getUserEmail()))
+        when(userChannelRepository.findByChannel_ChannelIdAndUser_UserEmail(rejectMemberRequest.getChannelId(), mockUser.getUserEmail()))
                 .thenReturn(Optional.of(mockUserChannel));
 
         // When & Then
         assertThrows(WrongStatusException.class,
-                () -> verifyUserUseCase.approveMemberVerification(approveMemberRequest));
+                () -> verifyUserUseCase.rejectMemberVerification(rejectMemberRequest));
     }
 }

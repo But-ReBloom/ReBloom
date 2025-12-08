@@ -1,4 +1,4 @@
-package com.but.rebloom.userchannel.find;
+package com.but.rebloom.channel.userchannel.find;
 
 import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.exception.UserChannelNotFoundException;

@@ -1,4 +1,4 @@
-package com.but.rebloom.activity.find;
+package com.but.rebloom.hobby.activity.find;
 
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;

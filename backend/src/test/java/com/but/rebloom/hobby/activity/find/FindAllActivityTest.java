@@ -1,4 +1,4 @@
-package com.but.rebloom.activity.find;
+package com.but.rebloom.hobby.activity.find;
 
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class FindActivityOrderByActivityRecentDescTest {
+public class FindAllActivityTest {
     @Mock
     private FindCurrentUserUseCase findCurrentUserUseCase;
     @Mock
@@ -30,7 +30,7 @@ public class FindActivityOrderByActivityRecentDescTest {
 
     @Test
     @DisplayName("활동 전체 조회 테스트 - 성공")
-    public void findActivityOrderByActivityRecentDescSuccessTest() {
+    public void findAllActivitySuccessTest() {
         // Given
         User mockUser = User.builder()
                 .userEmail("user@email.com")
@@ -41,11 +41,11 @@ public class FindActivityOrderByActivityRecentDescTest {
 
         when(findCurrentUserUseCase.getCurrentUser())
                 .thenReturn(mockUser);
-        when(activityRepository.findByUser_UserEmailOrderByActivityRecentDesc(mockUser.getUserEmail()))
+        when(activityRepository.findByUser_UserEmail(mockUser.getUserEmail()))
                 .thenReturn(mockActivities);
 
         // When
-        List<Activity> activities = defaultActivityUseCase.findActivityOrderByActivityRecentDesc();
+        List<Activity> activities = defaultActivityUseCase.findAllActivity();
 
         // Then
         assertThat(activities.size()).isEqualTo(mockActivities.size());
@@ -53,7 +53,7 @@ public class FindActivityOrderByActivityRecentDescTest {
 
     @Test
     @DisplayName("활동 전체 조회 테스트 - 활동 조회 실패로 실패")
-    public void findActivityOrderByActivityRecentDescFailByActivityNotFoundTest() {
+    public void findAllActivityFailByActivityNotFoundTest() {
         // Given
         User mockUser = User.builder()
                 .userEmail("user@email.com")
@@ -64,6 +64,6 @@ public class FindActivityOrderByActivityRecentDescTest {
 
         // When & Then
         assertThrows(ActivityNotFoundException.class,
-                () -> defaultActivityUseCase.findActivityOrderByActivityRecentDesc());
+                () -> defaultActivityUseCase.findAllActivity());
     }
 }

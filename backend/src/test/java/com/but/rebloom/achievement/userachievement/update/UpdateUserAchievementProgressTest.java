@@ -1,4 +1,4 @@
-package com.but.rebloom.userachievement.update;
+package com.but.rebloom.achievement.userachievement.update;
 
 import com.but.rebloom.domain.achievement.domain.UserAchievement;
 import com.but.rebloom.domain.achievement.exception.UserAchievementNotFoundException;

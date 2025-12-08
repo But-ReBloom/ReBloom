@@ -1,4 +1,4 @@
-package com.but.rebloom.userachievement.create;
+package com.but.rebloom.achievement.userachievement.create;
 
 import com.but.rebloom.domain.achievement.domain.Achievement;
 import com.but.rebloom.domain.achievement.domain.UserAchievement;

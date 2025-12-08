@@ -1,4 +1,4 @@
-package com.but.rebloom.activity.create;
+package com.but.rebloom.hobby.activity.create;
 
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;

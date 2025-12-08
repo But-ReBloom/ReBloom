@@ -1,4 +1,4 @@
-package com.but.rebloom.userchannel.apply;
+package com.but.rebloom.channel.userchannel.apply;
 
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;

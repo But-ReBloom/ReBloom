@@ -1,4 +1,4 @@
-package com.but.rebloom.activity.find;
+package com.but.rebloom.hobby.activity.find;
 
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
@@ -13,48 +13,53 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class FindAllActivityTest {
-    @Mock
-    private FindCurrentUserUseCase findCurrentUserUseCase;
+public class FindActivityByActivityIdTest {
     @Mock
     private ActivityRepository activityRepository;
+    @Mock
+    private FindCurrentUserUseCase findCurrentUserUseCase;
     @InjectMocks
     private DefaultActivityUseCase defaultActivityUseCase;
 
     @Test
-    @DisplayName("활동 전체 조회 테스트 - 성공")
-    public void findAllActivitySuccessTest() {
+    @DisplayName("활동 조회 테스트 - 성공")
+    public void findActivityByActivityIdSuccessTest() {
         // Given
+        Long activityId = 1L;
+
         User mockUser = User.builder()
                 .userEmail("user@email.com")
                 .build();
 
-        Activity mockActivity = Activity.builder().build();
-        List<Activity> mockActivities = List.of(mockActivity);
+        Activity mockActivity = Activity.builder()
+                .user(mockUser)
+                .build();
 
         when(findCurrentUserUseCase.getCurrentUser())
                 .thenReturn(mockUser);
-        when(activityRepository.findByUser_UserEmail(mockUser.getUserEmail()))
-                .thenReturn(mockActivities);
+        when(activityRepository.findByActivityId(activityId))
+                .thenReturn(Optional.of(mockActivity));
 
         // When
-        List<Activity> activities = defaultActivityUseCase.findAllActivity();
+        Activity activity = defaultActivityUseCase.findActivityByActivityId(activityId);
 
         // Then
-        assertThat(activities.size()).isEqualTo(mockActivities.size());
+        assertThat(activity).isEqualTo(mockActivity);
     }
 
     @Test
-    @DisplayName("활동 전체 조회 테스트 - 활동 조회 실패로 실패")
-    public void findAllActivityFailByActivityNotFoundTest() {
+    @DisplayName("활동 조회 테스트 - 활동 조회 실패로 실패")
+    public void findActivityByActivityIdFailByActivityNotFoundTest() {
         // Given
+        Long activityId = 1L;
+
         User mockUser = User.builder()
                 .userEmail("user@email.com")
                 .build();
@@ -64,6 +69,6 @@ public class FindAllActivityTest {
 
         // When & Then
         assertThrows(ActivityNotFoundException.class,
-                () -> defaultActivityUseCase.findAllActivity());
+                () -> defaultActivityUseCase.findActivityByActivityId(activityId));
     }
 }

@@ -1,11 +1,10 @@
-package com.but.rebloom.userchannel.find;
+package com.but.rebloom.channel.userchannel.find;
 
 import com.but.rebloom.domain.auth.domain.Role;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.domain.UserChannel;
-import com.but.rebloom.domain.channel.domain.VerifyStatus;
 import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.domain.channel.exception.UserChannelNotFoundException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
@@ -19,7 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class GetApplyUsersByChannelIdTest {
+public class GetApplyUsersByChannelIdAndUserEmailTest {
     @Mock
     private FindCurrentUserUseCase findCurrentUserUseCase;
     @Mock
@@ -38,48 +36,50 @@ public class GetApplyUsersByChannelIdTest {
     private VerifyUserUseCase verifyUserUseCase;
 
     @Test
-    @DisplayName("채널 지원 유저 확인 테스트 - 성공")
-    public void getApplyUsersByChannelIdSuccessTest() {
+    @DisplayName("유저 신청 목록 조회 테스트 - 성공")
+    public void getApplyUsersByChannelIdAndUserEmailSuccessTest() {
         // Given
         Long channelId = 1L;
+        String userEmail = "test@test.com";
 
         User mockUser = User.builder()
-                .userEmail("test@test.com")
-                .userRole(Role.ADMIN)
+                .userEmail(userEmail)
+                .userRole(Role.USER)
                 .build();
 
-        Channel mockChannel = Channel.builder().channelId(channelId)
+        Channel mockChannel = Channel.builder()
                 .user(mockUser)
                 .build();
 
         UserChannel mockUserChannel = UserChannel.builder()
-                .userChannelVerifyStatus(VerifyStatus.WAITING)
+                .user(mockUser)
+                .channel(mockChannel)
                 .build();
-        List<UserChannel> mockUserChannels = List.of(mockUserChannel);
 
         when(findCurrentUserUseCase.getCurrentUser())
                 .thenReturn(mockUser);
         when(channelRepository.findByChannelIdAndChannelStatusAccepted(channelId))
                 .thenReturn(Optional.of(mockChannel));
-        when(userChannelRepository.findByChannel_ChannelIdAndUserChannelVerifyStatus(channelId, VerifyStatus.WAITING))
-                .thenReturn(mockUserChannels);
+        when(userChannelRepository.findByChannel_ChannelIdAndUser_UserEmail(channelId, userEmail))
+                .thenReturn(Optional.of(mockUserChannel));
 
         // When
-        List<UserChannel> userChannels = verifyUserUseCase.getApplyUsersByChannelId(channelId);
+        UserChannel userChannel = verifyUserUseCase.getApplyUsersByChannelIdAndUserEmail(channelId, userEmail);
 
         // Then
-        assertThat(userChannels.size()).isEqualTo(mockUserChannels.size());
+        assertThat(userChannel).isEqualTo(mockUserChannel);
     }
 
     @Test
-    @DisplayName("채널 지원 유저 확인 테스트 - 채널 조회 실패로 실패")
-    public void getApplyUsersByChannelIdFailByChannelNotFoundTest() {
+    @DisplayName("유저 신청 목록 조회 테스트 - 채널 조회 실패로 실패")
+    public void getApplyUsersByChannelIdAndUserEmailFailByChannelNotFoundTest() {
         // Given
         Long channelId = 1L;
+        String userEmail = "test@test.com";
 
         User mockUser = User.builder()
-                .userEmail("test@test.com")
-                .userRole(Role.ADMIN)
+                .userEmail(userEmail)
+                .userRole(Role.USER)
                 .build();
 
         when(findCurrentUserUseCase.getCurrentUser())
@@ -87,24 +87,25 @@ public class GetApplyUsersByChannelIdTest {
 
         // When & Then
         assertThrows(ChannelNotFoundException.class,
-                () -> verifyUserUseCase.getApplyUsersByChannelId(channelId));
+                () -> verifyUserUseCase.getApplyUsersByChannelIdAndUserEmail(channelId, userEmail));
     }
 
     @Test
-    @DisplayName("채널 지원 유저 확인 테스트 - 권한 부족으로 실패")
-    public void getApplyUsersByChannelIdFailByNoAuthorityTest() {
+    @DisplayName("유저 신청 목록 조회 테스트 - 권한 부족으로 실패")
+    public void getApplyUsersByChannelIdAndUserEmailFailByNoAuthorityTest() {
         // Given
         Long channelId = 1L;
+        String userEmail = "test@test.com";
 
         User mockUser = User.builder()
-                .userEmail("test@test.com")
+                .userEmail(userEmail)
                 .userRole(Role.USER)
                 .build();
 
-        Channel mockChannel = Channel.builder().channelId(channelId)
+        Channel mockChannel = Channel.builder()
                 .user(
                         User.builder()
-                                .userEmail("useremail@email.com")
+                                .userEmail("user@test.com")
                                 .build()
                 )
                 .build();
@@ -116,21 +117,22 @@ public class GetApplyUsersByChannelIdTest {
 
         // When & Then
         assertThrows(NoAuthorityException.class,
-                () -> verifyUserUseCase.getApplyUsersByChannelId(channelId));
+                () -> verifyUserUseCase.getApplyUsersByChannelIdAndUserEmail(channelId, userEmail));
     }
 
     @Test
-    @DisplayName("채널 지원 유저 확인 테스트 - 유저 채널 조회 실패로 실패")
-    public void getApplyUsersByChannelIdFailByUserChannelNotFoundTest() {
+    @DisplayName("유저 신청 목록 조회 테스트 - 유저 채널 조회 실패로 실패")
+    public void getApplyUsersByChannelIdAndUserEmailFailByUserChannelNotFoundTest() {
         // Given
         Long channelId = 1L;
+        String userEmail = "test@test.com";
 
         User mockUser = User.builder()
-                .userEmail("test@test.com")
+                .userEmail(userEmail)
                 .userRole(Role.USER)
                 .build();
 
-        Channel mockChannel = Channel.builder().channelId(channelId)
+        Channel mockChannel = Channel.builder()
                 .user(mockUser)
                 .build();
 
@@ -141,6 +143,6 @@ public class GetApplyUsersByChannelIdTest {
 
         // When & Then
         assertThrows(UserChannelNotFoundException.class,
-                () -> verifyUserUseCase.getApplyUsersByChannelId(channelId));
+                () -> verifyUserUseCase.getApplyUsersByChannelIdAndUserEmail(channelId, userEmail));
     }
 }
