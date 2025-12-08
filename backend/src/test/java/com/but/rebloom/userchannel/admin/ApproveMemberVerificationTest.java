@@ -8,6 +8,7 @@ import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.domain.VerifyStatus;
 import com.but.rebloom.domain.channel.dto.request.ApproveMemberRequest;
 import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
+import com.but.rebloom.domain.channel.exception.UserChannelNotFoundException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.channel.usecase.VerifyUserUseCase;
@@ -130,6 +131,35 @@ public class ApproveMemberVerificationTest {
 
         // When & Then
         assertThrows(NoAuthorityException.class,
+                () -> verifyUserUseCase.approveMemberVerification(approveMemberRequest));
+    }
+
+    @Test
+    @DisplayName("채널 가입 승인 테스트 - 유저 채널 조회 실패로 실패")
+    public void approveMemberVerificationFailByUserChannelNotFoundTest() {
+        // Given
+        ApproveMemberRequest approveMemberRequest = new ApproveMemberRequest(
+                "useremail@email.com",
+                1L
+        );
+
+        User mockUser = User.builder()
+                .userEmail(approveMemberRequest.getUserEmail())
+                .userRole(Role.USER)
+                .build();
+
+        Channel mockChannel = Channel.builder()
+                .user(mockUser)
+                .channelId(approveMemberRequest.getChannelId())
+                .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+        when(channelRepository.findByChannelIdAndChannelStatusAccepted(approveMemberRequest.getChannelId()))
+                .thenReturn(Optional.of(mockChannel));
+
+        // When & Then
+        assertThrows(UserChannelNotFoundException.class,
                 () -> verifyUserUseCase.approveMemberVerification(approveMemberRequest));
     }
 }
