@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -64,4 +65,27 @@ public class User {
     @Builder.Default
     @OneToOne(fetch = FetchType.LAZY)
     private Activity userCurrentActivity = null;
+
+    @Column(name = "u_score_updated_at")
+    private LocalDateTime scoreUpdatedAt;
+
+    @Column(name = "u_social_score", nullable = false)
+    @Builder.Default
+    private Double userSocialScore = 0.0;
+
+    @Column(name = "u_learning_score", nullable = false)
+    @Builder.Default
+    private Double userLearningScore = 0.0;
+
+    @Column(name = "u_planning_score", nullable = false)
+    @Builder.Default
+    private Double userPlanningScore = 0.0;
+
+    @Column(name = "u_focus_score", nullable = false)
+    @Builder.Default
+    private Double userFocusScore = 0.0;
+
+    @Column(name = "u_creativity_score", nullable = false)
+    @Builder.Default
+    private Double userCreativityScore = 0.0;
 }

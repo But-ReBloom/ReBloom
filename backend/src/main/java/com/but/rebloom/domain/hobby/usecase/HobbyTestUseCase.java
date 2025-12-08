@@ -1,6 +1,9 @@
 package com.but.rebloom.domain.hobby.usecase;
 
+import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
+import com.but.rebloom.domain.auth.repository.UserRepository;
+import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.hobby.domain.Hobby;
@@ -13,6 +16,7 @@ import com.but.rebloom.domain.hobby.repository.InitialTestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -22,6 +26,9 @@ public class HobbyTestUseCase {
     private final InitialTestRepository initialTestRepository;
     private final HobbyRepository hobbyRepository;
     private final ChannelRepository channelRepository;
+    private final UserRepository userRepository;
+    // 현재 유저 추출
+    private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     // 결과에 따른 취미 탐색
     public Map<List<HobbyScore>, List<Channel>> findUserHobbies(UserAnswerRequest answers) {
@@ -136,6 +143,16 @@ public class HobbyTestUseCase {
             channels = channelRepository
                     .findByChannelLinkedHobby(hobbyScoreResult3.getHobby().getHobbyId());
         }
+
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
+        currentUser.setUserLearningScore(answers.getLearningScore());
+        currentUser.setUserPlanningScore(answers.getPlanningScore());
+        currentUser.setUserSocialScore(answers.getSocialScore());
+        currentUser.setUserFocusScore(answers.getFocusScore());
+        currentUser.setUserCreativityScore(answers.getCreativityScore());
+        currentUser.setScoreUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(currentUser);
 
         return Map.of(List.of(hobbyScoreResult1, hobbyScoreResult2, hobbyScoreResult3), channels);
     }
