@@ -11,6 +11,7 @@ import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.channel.usecase.VerifyUserUseCase;
+import com.but.rebloom.global.exception.NoAuthorityException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -96,6 +97,39 @@ public class ApproveMemberVerificationTest {
 
         // When & Then
         assertThrows(ChannelNotFoundException.class,
+                () -> verifyUserUseCase.approveMemberVerification(approveMemberRequest));
+    }
+
+    @Test
+    @DisplayName("채널 가입 승인 테스트 - 권한 부족으로 실패")
+    public void approveMemberVerificationFailByNoAuthorityTest() {
+        // Given
+        ApproveMemberRequest approveMemberRequest = new ApproveMemberRequest(
+                "useremail@email.com",
+                1L
+        );
+
+        User mockUser = User.builder()
+                .userEmail(approveMemberRequest.getUserEmail())
+                .userRole(Role.USER)
+                .build();
+
+        Channel mockChannel = Channel.builder()
+                .user(
+                        User.builder()
+                                .userEmail("channel@email.com")
+                                .build()
+                )
+                .channelId(approveMemberRequest.getChannelId())
+                .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+        when(channelRepository.findByChannelIdAndChannelStatusAccepted(approveMemberRequest.getChannelId()))
+                .thenReturn(Optional.of(mockChannel));
+
+        // When & Then
+        assertThrows(NoAuthorityException.class,
                 () -> verifyUserUseCase.approveMemberVerification(approveMemberRequest));
     }
 }
