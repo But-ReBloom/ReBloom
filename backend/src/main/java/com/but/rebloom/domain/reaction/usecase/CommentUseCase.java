@@ -138,7 +138,7 @@ public class CommentUseCase {
     // 댓글 삭제 (일반 유저)
     @Transactional
     public void deleteComment(Long commentId, String userId) {
-        Comment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findByCommentId(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
         // 작성자 확인
