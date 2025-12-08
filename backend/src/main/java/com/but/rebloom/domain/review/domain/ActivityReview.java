@@ -23,12 +23,6 @@ public class ActivityReview {
     @Column(name = "actr_review_id")
     private Long reviewId;
 
-    @Column(name = "fk_u_email", nullable = false)
-    private String userEmail;
-
-    @Column(name = "fk_h_id", nullable = false)
-    private Long hobbyId;
-
     @Column(name = "actr_review_question")
     private String reviewQuestion;
 

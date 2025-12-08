@@ -43,11 +43,11 @@ public class ReviewAnswerResponse {
         List<Hobby> hobbies = result.getHobbies();
 
         return ReviewAnswerResponse.builder()
-                .socialScore(user.getSocialScore())
-                .learningScore(user.getLearningScore())
-                .planningScore(user.getPlanningScore())
-                .focusScore(user.getFocusScore())
-                .creativityScore(user.getCreativityScore())
+                .socialScore(user.getUserSocialScore())
+                .learningScore(user.getUserLearningScore())
+                .planningScore(user.getUserPlanningScore())
+                .focusScore(user.getUserFocusScore())
+                .creativityScore(user.getUserCreativityScore())
                 .hobby1(hobbies.get(0).getHobbyName())
                 .hobby2(hobbies.get(1).getHobbyName())
                 .hobby3(hobbies.get(2).getHobbyName())

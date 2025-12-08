@@ -7,12 +7,12 @@ import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.hobby.domain.Hobby;
 import com.but.rebloom.domain.hobby.domain.HobbyScore;
 import com.but.rebloom.domain.hobby.dto.request.UserAnswerRequest;
+import com.but.rebloom.domain.hobby.exception.HobbyNotFoundException;
+import com.but.rebloom.domain.hobby.repository.HobbyRepository;
 import com.but.rebloom.domain.hobby.usecase.HobbyTestUseCase;
 import com.but.rebloom.domain.review.domain.ActivityReview;
 import com.but.rebloom.domain.review.domain.ActivityReviewResult;
 import com.but.rebloom.domain.review.dto.request.ReviewAnswerRequest;
-import com.but.rebloom.domain.review.dto.response.CreateReviewQuestionResponse;
-import com.but.rebloom.domain.review.dto.response.ReviewAnswerResponse;
 import com.but.rebloom.domain.review.repository.ActivityReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -27,6 +27,7 @@ import java.util.Map;
 public class ActivityReviewUseCase {
     private final ActivityReviewRepository repository;
     private final UserRepository userRepository;
+    private final HobbyRepository hobbyRepository;
     private final HobbyTestUseCase hobbyTestUseCase;
     private final OpenAiChatModel openAiChatModel;
 
@@ -70,8 +71,11 @@ public class ActivityReviewUseCase {
                         extractLine(response, "Creativity:")
                 );
 
+        Hobby hobby = hobbyRepository.findByHobbyId(hobbyId)
+                .orElseThrow(() -> new HobbyNotFoundException("취미를 찾을 수 없음"));
+
         ActivityReview activityReview = ActivityReview.builder()
-                .hobbyId(hobbyId)
+                .hobby(hobby)
                 .reviewQuestion(mergedQuestions)
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -115,20 +119,20 @@ public class ActivityReviewUseCase {
         double c = extract(aiResult, "Creativity:");
 
         // 기존 벡터 업데이트
-        user.setSocialScore(user.getSocialScore() + s);
-        user.setLearningScore(user.getLearningScore() + l);
-        user.setPlanningScore(user.getPlanningScore() + p);
-        user.setFocusScore(user.getFocusScore() + f);
-        user.setCreativityScore(user.getCreativityScore() + c);
+        user.setUserSocialScore(user.getUserSocialScore() + s);
+        user.setUserLearningScore(user.getUserLearningScore() + l);
+        user.setUserPlanningScore(user.getUserPlanningScore() + p);
+        user.setUserFocusScore(user.getUserFocusScore() + f);
+        user.setUserCreativityScore(user.getUserCreativityScore() + c);
         userRepository.save(user);
 
         // 취미 추천
         UserAnswerRequest answerScore = UserAnswerRequest.builder()
-                .socialScore(user.getSocialScore())
-                .learningScore(user.getLearningScore())
-                .planningScore(user.getPlanningScore())
-                .focusScore(user.getFocusScore())
-                .creativityScore(user.getCreativityScore())
+                .socialScore(user.getUserSocialScore())
+                .learningScore(user.getUserLearningScore())
+                .planningScore(user.getUserPlanningScore())
+                .focusScore(user.getUserFocusScore())
+                .creativityScore(user.getUserCreativityScore())
                 .build();
 
         Map<List<HobbyScore>, List<Channel>> result = hobbyTestUseCase.findUserHobbies(answerScore);
@@ -137,9 +141,12 @@ public class ActivityReviewUseCase {
         List<Hobby> hobbies = hobbyScores.stream().map(HobbyScore::getHobby).toList();
 
         // 5) 응답
+        Hobby hobby = hobbyRepository.findByHobbyId(reviewAnswerRequest.getHobbyId())
+                .orElseThrow(() -> new HobbyNotFoundException("취미를 찾을 수 없음"));
+
         ActivityReview review = ActivityReview.builder()
                 .user(user)
-                .hobbyId(reviewAnswerRequest.getHobbyId())
+                .hobby(hobby)
                 .reviewAnswer("""
                         Society: %s
                         Learning: %s

@@ -19,7 +19,7 @@ public class ReviewAnswerRequest {
     private String learningAnswer;
 
     @NotBlank
-    private String PlanningAnswer;
+    private String planningAnswer;
 
     @NotBlank
     private String focusAnswer;
