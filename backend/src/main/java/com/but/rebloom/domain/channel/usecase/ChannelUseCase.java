@@ -6,6 +6,7 @@ import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
+import com.but.rebloom.domain.channel.domain.ChannelStatus;
 import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.domain.VerifyStatus;
 import com.but.rebloom.domain.channel.dto.request.CreateChannelRequest;
@@ -14,7 +15,6 @@ import com.but.rebloom.domain.channel.exception.*;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.hobby.domain.Hobby;
-import com.but.rebloom.domain.hobby.exception.ActivityNotFoundException;
 import com.but.rebloom.domain.hobby.exception.HobbyNotFoundException;
 import com.but.rebloom.domain.hobby.repository.HobbyRepository;
 import com.but.rebloom.global.exception.NoAuthorityException;
@@ -50,7 +50,7 @@ public class ChannelUseCase {
 
         // 티어 포인트 확인
         if (user.getUserTierPoint() < requiredTierPoint) {
-            throw new InsufficientTeirPointException("티어 포인트가 부족함");
+            throw new InsufficientTierPointException("티어 포인트가 부족함");
         }
         user.setUserTierPoint(user.getUserTierPoint() - requiredTierPoint);
         //포인트 확인
@@ -85,7 +85,7 @@ public class ChannelUseCase {
                 .channelTitle(request.getChannelTitle())
                 .channelIntro(request.getChannelIntro())
                 .channelDescription(request.getChannelDescription())
-                .isAccepted(false)
+                .channelStatus(ChannelStatus.PENDING)
                 .channelLinkedHobby1(hobby1)
                 .channelLinkedHobby2(hobby2)
                 .channelLinkedHobby3(hobby3)
@@ -114,7 +114,7 @@ public class ChannelUseCase {
             throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
-        List<Channel> channels = channelRepository.findByIsAcceptedTrue();
+        List<Channel> channels = channelRepository.findByChannelStatusAccepted();
 
         if (channels.isEmpty()) {
             throw new ChannelNotFoundException("채널 조회 실패");
@@ -131,7 +131,7 @@ public class ChannelUseCase {
             throw new NoAuthorityException("조회할 권한이 없습니다.");
         }
 
-        List<Channel> channels = channelRepository.findByIsAcceptedFalse();
+        List<Channel> channels = channelRepository.findByChannelStatusPending();
 
         if (channels.isEmpty()) {
             throw new ChannelNotFoundException("채널 조회 실패");
@@ -152,7 +152,7 @@ public class ChannelUseCase {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
 
-        if (channel.getIsAccepted()) {
+        if (channel.getChannelStatus().equals(ChannelStatus.ACCEPTED)) {
             throw new AlreadyProcessedChannelException("이미 승인된 채널");
         }
 
@@ -161,13 +161,13 @@ public class ChannelUseCase {
 
         if (channel.getChannelLinkedHobby2() != null) {
             hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby2().getHobbyId())
-                    .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+                    .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
         } if (channel.getChannelLinkedHobby3() != null) {
             hobbyRepository.findByHobbyId(channel.getChannelLinkedHobby3().getHobbyId())
-                    .orElseThrow(() -> new ActivityNotFoundException("활동이 조회되지 않음"));
+                    .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
         }
 
-        channel.setIsAccepted(true);
+        channel.setChannelStatus(ChannelStatus.ACCEPTED);
 
         UserChannel userChannel = UserChannel.builder()
                 .channel(channel)
@@ -193,8 +193,11 @@ public class ChannelUseCase {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
 
-        if (channel.getIsAccepted()) {
-            throw new AlreadyProcessedChannelException("이미 거절된 채널");
+        if (channel.getChannelStatus().equals(ChannelStatus.ACCEPTED)) {
+            throw new AlreadyProcessedChannelException("이미 승인된 채널");
+        }
+        if (channel.getChannelStatus().equals(ChannelStatus.REJECTED)) {
+            throw new AlreadyRejectedChannelException("이미 거절된 채널");
         }
 
         User user = channel.getUser();
@@ -204,13 +207,14 @@ public class ChannelUseCase {
         user.setUserPoint(user.getUserPoint() + requiredPoints);
         userRepository.save(user);
 
-        // 삭제
-        channelRepository.delete(channel);
+        // 삭제 처리
+        channel.setChannelStatus(ChannelStatus.REJECTED);
+        channelRepository.save(channel);
     }
 
     // 특정 채널 조회
     public Channel getChannel(Long channelId) {
-        return channelRepository.findByChannelIdAndIsAcceptedTrue(channelId)
+        return channelRepository.findByChannelIdAndChannelStatusAccepted(channelId)
                 .orElseThrow(() -> new ChannelNotFoundException("채널 조회 실패"));
     }
 
@@ -223,7 +227,7 @@ public class ChannelUseCase {
                 );
 
         if (userChannels.isEmpty()) {
-            throw new ChannelNotFoundException("유저 채널 조회 실패");
+            throw new UserChannelNotFoundException("유저 채널 조회 실패");
         }
 
         return userChannels;

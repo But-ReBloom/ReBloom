@@ -36,8 +36,10 @@ public class Channel {
     @Column(name = "ch_created_at", nullable = false, updatable = false)
     private LocalDateTime channelCreatedAt;
 
-    @Column(name = "ch_is_accepted", nullable = false)
-    private Boolean isAccepted = false;
+    @Column(name = "ch_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private ChannelStatus channelStatus = ChannelStatus.PENDING;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ch_lk_h_1_id", referencedColumnName = "h_id", nullable = false)

@@ -5,9 +5,6 @@ import com.but.rebloom.domain.achievement.domain.UserAchievement;
 import com.but.rebloom.domain.achievement.repository.AchievementRepository;
 import com.but.rebloom.domain.achievement.repository.UserAchievementRepository;
 import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
-import com.but.rebloom.domain.auth.domain.Provider;
-import com.but.rebloom.domain.auth.domain.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,8 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -45,7 +41,7 @@ public class CreateDefaultUserAchievementTest {
 
         when(achievementRepository.findAll())
                 .thenReturn(mockAchievements);
-        when(userAchievementRepository.saveAll(anyList()))
+        when(userAchievementRepository.save(any(UserAchievement.class)))
                 .thenReturn(null); // 어짜피 저장은 안해서 null로 해둠
 
         // When & Then

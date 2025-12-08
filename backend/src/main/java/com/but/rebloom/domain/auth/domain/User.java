@@ -69,18 +69,23 @@ public class User {
     @Column(name = "u_score_updated_at")
     private LocalDateTime scoreUpdatedAt;
 
-    @Column(name = "u_social_score")
-    private Double socialScore;
+    @Column(name = "u_social_score", nullable = false)
+    @Builder.Default
+    private Double userSocialScore = 0.0;
 
-    @Column(name = "u_learning_score")
-    private Double learningScore;
+    @Column(name = "u_learning_score", nullable = false)
+    @Builder.Default
+    private Double userLearningScore = 0.0;
 
-    @Column(name = "u_planning_score")
-    private Double planningScore;
+    @Column(name = "u_planning_score", nullable = false)
+    @Builder.Default
+    private Double userPlanningScore = 0.0;
 
-    @Column(name = "u_focus_score")
-    private Double focusScore;
+    @Column(name = "u_focus_score", nullable = false)
+    @Builder.Default
+    private Double userFocusScore = 0.0;
 
-    @Column(name = "u_creativity_score")
-    private Double creativityScore;
+    @Column(name = "u_creativity_score", nullable = false)
+    @Builder.Default
+    private Double userCreativityScore = 0.0;
 }

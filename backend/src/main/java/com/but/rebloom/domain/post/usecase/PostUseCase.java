@@ -44,7 +44,7 @@ public class PostUseCase {
         User user = userRepository.findByUserId(request.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User Not Found"));
 
-        Channel channel = channelRepository.findByChannelIdAndIsAcceptedTrue(request.getChannelId())
+        Channel channel = channelRepository.findByChannelIdAndChannelStatusAccepted(request.getChannelId())
                 .orElseThrow(() -> new ChannelNotFoundException("Channel Not Found"));
 
         // 게시글 생성
