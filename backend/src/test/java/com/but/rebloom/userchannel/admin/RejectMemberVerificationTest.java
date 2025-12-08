@@ -9,6 +9,7 @@ import com.but.rebloom.domain.channel.domain.VerifyStatus;
 import com.but.rebloom.domain.channel.dto.request.RejectMemberRequest;
 import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.domain.channel.exception.UserChannelNotFoundException;
+import com.but.rebloom.domain.channel.exception.WrongStatusException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.channel.usecase.VerifyUserUseCase;
@@ -161,6 +162,43 @@ public class RejectMemberVerificationTest {
 
         // When & Then
         assertThrows(UserChannelNotFoundException.class,
+                () -> verifyUserUseCase.rejectMemberVerification(rejectMemberRequest));
+    }
+
+    @Test
+    @DisplayName("채널 거절 테스트 - 대기중이 아닌 유저 채널로 실패")
+    public void rejectMemberVerificationFailByNotWaitingStateTest() {
+        // Given
+        RejectMemberRequest rejectMemberRequest = new RejectMemberRequest(
+                "useremail@email.com",
+                1L
+        );
+
+        User mockUser = User.builder()
+                .userEmail("useremail@email.com")
+                .userRole(Role.USER)
+                .build();
+
+        Channel mockChannel = Channel.builder()
+                .user(mockUser)
+                .channelId(rejectMemberRequest.getChannelId())
+                .build();
+
+        UserChannel mockUserChannel = UserChannel.builder()
+                .userChannelVerifyStatus(VerifyStatus.APPROVED)
+                .user(mockUser)
+                .channel(mockChannel)
+                .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+        when(channelRepository.findByChannelIdAndChannelStatusAccepted(rejectMemberRequest.getChannelId()))
+                .thenReturn(Optional.of(mockChannel));
+        when(userChannelRepository.findByChannel_ChannelIdAndUser_UserEmail(rejectMemberRequest.getChannelId(), mockUser.getUserEmail()))
+                .thenReturn(Optional.of(mockUserChannel));
+
+        // When & Then
+        assertThrows(WrongStatusException.class,
                 () -> verifyUserUseCase.rejectMemberVerification(rejectMemberRequest));
     }
 }
