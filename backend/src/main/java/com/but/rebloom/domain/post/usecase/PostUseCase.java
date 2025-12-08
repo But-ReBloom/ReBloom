@@ -180,7 +180,7 @@ public class PostUseCase {
     // 게시글 수정
     @Transactional
     public Post updatePost(Long postId, UpdatePostRequest request) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         User currentUser = findCurrentUserUseCase.getCurrentUser();
