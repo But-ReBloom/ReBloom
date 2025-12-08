@@ -119,7 +119,7 @@ public class CommentUseCase {
     // 댓글 수정
     @Transactional
     public Comment updateComment(Long commentId, UpdateCommentRequest request) {
-        Comment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findByCommentId(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
