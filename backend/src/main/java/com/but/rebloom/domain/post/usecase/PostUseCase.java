@@ -148,10 +148,10 @@ public class PostUseCase {
             throw new NoAuthorityException("승인할 권한이 없습니다.");
         }
 
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
-        if(post.getPostStatus() == Status.APPROVED) {
+        if (post.getPostStatus() == Status.APPROVED) {
             throw new AlreadyProcessedChannelException("Post is already approved");
         }
         post.setPostStatus(Status.APPROVED);
