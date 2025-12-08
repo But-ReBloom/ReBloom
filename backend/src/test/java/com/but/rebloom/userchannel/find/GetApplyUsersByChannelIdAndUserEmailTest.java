@@ -9,6 +9,7 @@ import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.channel.usecase.VerifyUserUseCase;
+import com.but.rebloom.global.exception.NoAuthorityException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -85,6 +86,36 @@ public class GetApplyUsersByChannelIdAndUserEmailTest {
 
         // When & Then
         assertThrows(ChannelNotFoundException.class,
+                () -> verifyUserUseCase.getApplyUsersByChannelIdAndUserEmail(channelId, userEmail));
+    }
+
+    @Test
+    @DisplayName("유저 신청 목록 조회 테스트 - 권한 부족으로 실패")
+    public void getApplyUsersByChannelIdAndUserEmailFailByNoAuthorityTest() {
+        // Given
+        Long channelId = 1L;
+        String userEmail = "test@test.com";
+
+        User mockUser = User.builder()
+                .userEmail(userEmail)
+                .userRole(Role.USER)
+                .build();
+
+        Channel mockChannel = Channel.builder()
+                .user(
+                        User.builder()
+                                .userEmail("user@test.com")
+                                .build()
+                )
+                .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+        when(channelRepository.findByChannelIdAndChannelStatusAccepted(channelId))
+                .thenReturn(Optional.of(mockChannel));
+
+        // When & Then
+        assertThrows(NoAuthorityException.class,
                 () -> verifyUserUseCase.getApplyUsersByChannelIdAndUserEmail(channelId, userEmail));
     }
 }
