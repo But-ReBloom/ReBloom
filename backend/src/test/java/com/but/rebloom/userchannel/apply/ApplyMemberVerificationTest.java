@@ -6,6 +6,7 @@ import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.domain.UserChannel;
 import com.but.rebloom.domain.channel.domain.VerifyStatus;
 import com.but.rebloom.domain.channel.dto.request.ApplyMemberRequest;
+import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.channel.usecase.VerifyUserUseCase;
@@ -19,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -71,5 +73,25 @@ public class ApplyMemberVerificationTest {
 
         // Then
         assertThat(userChannel).isEqualTo(mockUserChannel);
+    }
+
+    @Test
+    @DisplayName("채널 가입 신청 테스트 - 채널 조회 실패로 실패")
+    public void applyMemberVerificationFailByChannelNotFoundTest() {
+        // Given
+        ApplyMemberRequest applyMemberRequest = new ApplyMemberRequest(
+                1L,
+                "applyMessage"
+        );
+
+        User mockUser = User.builder()
+                .userEmail("test@test.com")
+                .build();
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+
+        // When & Then
+        assertThrows(ChannelNotFoundException.class,
+                () -> verifyUserUseCase.applyMemberVerification(applyMemberRequest));
     }
 }
