@@ -5,6 +5,7 @@ import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.channel.domain.UserChannel;
+import com.but.rebloom.domain.channel.exception.ChannelNotFoundException;
 import com.but.rebloom.domain.channel.repository.ChannelRepository;
 import com.but.rebloom.domain.channel.repository.UserChannelRepository;
 import com.but.rebloom.domain.channel.usecase.VerifyUserUseCase;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -64,5 +66,25 @@ public class GetApplyUsersByChannelIdAndUserEmailTest {
 
         // Then
         assertThat(userChannel).isEqualTo(mockUserChannel);
+    }
+
+    @Test
+    @DisplayName("유저 신청 목록 조회 테스트 - 채널 조회 실패로 실패")
+    public void getApplyUsersByChannelIdAndUserEmailFailByChannelNotFoundTest() {
+        // Given
+        Long channelId = 1L;
+        String userEmail = "test@test.com";
+
+        User mockUser = User.builder()
+                .userEmail(userEmail)
+                .userRole(Role.USER)
+                .build();
+
+        when(findCurrentUserUseCase.getCurrentUser())
+                .thenReturn(mockUser);
+
+        // When & Then
+        assertThrows(ChannelNotFoundException.class,
+                () -> verifyUserUseCase.getApplyUsersByChannelIdAndUserEmail(channelId, userEmail));
     }
 }
