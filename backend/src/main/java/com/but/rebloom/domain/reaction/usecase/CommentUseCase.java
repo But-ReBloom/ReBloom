@@ -81,7 +81,7 @@ public class CommentUseCase {
 
     // 특정 댓글 조회
     public Comment getComment(Long commentId) {
-        return commentRepository.findById(commentId)
+        return commentRepository.findByCommentId(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("댓글을 찾을 수 없습니다."));
     }
 
