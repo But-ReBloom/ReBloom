@@ -97,8 +97,8 @@ public class HeartUseCase {
     public Map<Post, Long> getHeartCount(Long postId) {
         return Map.of(
                 postRepository.findByPostId(postId)
-                        .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음"))
-                , heartRepository.countByPost_PostId(postId)
+                        .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음")),
+                heartRepository.countByPost_PostId(postId)
         );
     }
 
