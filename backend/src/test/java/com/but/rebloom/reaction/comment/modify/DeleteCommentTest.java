@@ -66,7 +66,7 @@ public class DeleteCommentTest {
     }
 
     @Test
-    @DisplayName("댓글 삭제 테스트 - 댓글 조회 실패로 인한 실패")
+    @DisplayName("댓글 삭제 테스트 - 권한 부족으로 인한 실패")
     public void deleteCommentFailByForbiddenAccessTest() {
         // Given
         Long commentId = 1L;

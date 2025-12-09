@@ -46,6 +46,7 @@ public class GetPostTest {
 
         // Then
         assertThat(post).isEqualTo(mockPost);
+        assertThat(post.getPostViewers()).isEqualTo(2);
     }
 
     @Test
