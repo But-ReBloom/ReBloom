@@ -40,7 +40,7 @@ public class HeartUseCase {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         // 게시글 조회
-        Post post = postRepository.findById(request.getPostId())
+        Post post = postRepository.findByPostId(request.getPostId())
                 .orElseThrow(() -> new PostNotFoundException("Post not found"));
 
         // 이미 하트를 눌렀는지 확인
@@ -97,8 +97,8 @@ public class HeartUseCase {
     public Map<Post, Long> getHeartCount(Long postId) {
         return Map.of(
                 postRepository.findByPostId(postId)
-                        .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음"))
-                , heartRepository.countByPost_PostId(postId)
+                        .orElseThrow(() -> new PostNotFoundException("게시글이 조회되지 않음")),
+                heartRepository.countByPost_PostId(postId)
         );
     }
 

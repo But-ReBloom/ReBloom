@@ -44,7 +44,7 @@ public class CommentUseCase {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         // 게시글 조회
-        Post post = postRepository.findById(request.getPostId())
+        Post post = postRepository.findByPostId(request.getPostId())
                 .orElseThrow(() -> new PostNotFoundException("Post not found"));
 
         // 댓글 생성
@@ -81,7 +81,7 @@ public class CommentUseCase {
 
     // 특정 댓글 조회
     public Comment getComment(Long commentId) {
-        return commentRepository.findById(commentId)
+        return commentRepository.findByCommentId(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("댓글을 찾을 수 없습니다."));
     }
 
@@ -119,7 +119,7 @@ public class CommentUseCase {
     // 댓글 수정
     @Transactional
     public Comment updateComment(Long commentId, UpdateCommentRequest request) {
-        Comment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findByCommentId(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
         String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
@@ -138,7 +138,7 @@ public class CommentUseCase {
     // 댓글 삭제 (일반 유저)
     @Transactional
     public void deleteComment(Long commentId, String userId) {
-        Comment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findByCommentId(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
         // 작성자 확인
@@ -158,7 +158,7 @@ public class CommentUseCase {
             throw new NoAuthorityException("삭제할 권한이 없습니다.");
         }
 
-        Comment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findByCommentId(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("댓글이 조회되지 않음"));
         commentRepository.delete(comment);
     }

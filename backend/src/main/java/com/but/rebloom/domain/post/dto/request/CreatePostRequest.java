@@ -2,9 +2,11 @@ package com.but.rebloom.domain.post.dto.request;
 
 import com.but.rebloom.domain.post.domain.Type;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class CreatePostRequest {
     @NotNull
     private String userId;

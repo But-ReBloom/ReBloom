@@ -69,7 +69,7 @@ public class PostUseCase {
     // 특정 게시글 조회
     @Transactional
     public Post getPost(Long postId) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         // 조회수 증가
@@ -148,10 +148,10 @@ public class PostUseCase {
             throw new NoAuthorityException("승인할 권한이 없습니다.");
         }
 
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
-        if(post.getPostStatus() == Status.APPROVED) {
+        if (post.getPostStatus() == Status.APPROVED) {
             throw new AlreadyProcessedChannelException("Post is already approved");
         }
         post.setPostStatus(Status.APPROVED);
@@ -167,11 +167,11 @@ public class PostUseCase {
             throw new NoAuthorityException("거절할 권한이 없습니다.");
         }
 
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
-        if(post.getPostStatus() == Status.APPROVED) {
-            throw new AlreadyProcessedChannelException("Post is already approved");
+        if(post.getPostStatus() == Status.REJECTED) {
+            throw new AlreadyProcessedChannelException("Post is already rejected");
         }
         post.setPostStatus(Status.REJECTED);
         return postRepository.save(post);
@@ -180,7 +180,7 @@ public class PostUseCase {
     // 게시글 수정
     @Transactional
     public Post updatePost(Long postId, UpdatePostRequest request) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         User currentUser = findCurrentUserUseCase.getCurrentUser();
@@ -199,7 +199,7 @@ public class PostUseCase {
     // 게시글 삭제(유저 본인)
     @Transactional
     public void deletePost(Long postId) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         User currentUser = findCurrentUserUseCase.getCurrentUser();
@@ -214,7 +214,7 @@ public class PostUseCase {
     // 게시글 삭제 (관리자)
     @Transactional
     public void deletePostByAdmin(Long postId) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         User currentUser = findCurrentUserUseCase.getCurrentUser();

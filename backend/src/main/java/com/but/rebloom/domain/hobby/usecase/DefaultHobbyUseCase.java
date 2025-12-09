@@ -27,7 +27,7 @@ public class DefaultHobbyUseCase {
 
     // 취미 조회 - 아이디
     public Hobby getHobbyById(Long hobbyId) {
-        return hobbyRepository.findById(hobbyId)
+        return hobbyRepository.findByHobbyId(hobbyId)
                 .orElseThrow(() -> new HobbyNotFoundException("취미가 조회되지 않음"));
     }
 }
