@@ -98,7 +98,7 @@ public class RejectPostTest {
     }
 
     @Test
-    @DisplayName("게시글 거절 테스트 - 이미 승인된 게시글로 인한 실패")
+    @DisplayName("게시글 거절 테스트 - 이미 거절된 게시글로 인한 실패")
     public void rejectPostFailByAlreadyProceedPostTest() {
         // Given
         Long postId = 1L;

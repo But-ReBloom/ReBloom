@@ -72,7 +72,7 @@ public class DeleteCommentByAdminTest {
     }
 
     @Test
-    @DisplayName("댓글 삭제 테스트 - 댓글 조회 실패 인한 실패")
+    @DisplayName("댓글 삭제 테스트 - 댓글 조회 실패로 인한 실패")
     public void deleteCommentByAdminFailByCommentNotFoundTest() {
         // Given
         Long commentId = 1L;
