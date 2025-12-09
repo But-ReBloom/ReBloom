@@ -6,6 +6,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
+@Getter
+@Builder
 public class UserAnswerRequest {
     @NotNull
     private Double socialScore;
