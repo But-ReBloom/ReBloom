@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 "/channel/**",
                                 "/post/**",
                                 "/hobby-test/**",
+                                "/hobby-review/**",
                                 "/comment/**",
                                 "/heart/**"
                         ).permitAll()
