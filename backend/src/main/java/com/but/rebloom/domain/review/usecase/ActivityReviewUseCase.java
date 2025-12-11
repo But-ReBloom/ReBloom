@@ -3,6 +3,7 @@ package com.but.rebloom.domain.review.usecase;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
+import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.hobby.domain.Hobby;
 import com.but.rebloom.domain.hobby.domain.HobbyScore;
@@ -26,17 +27,19 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ActivityReviewUseCase {
 
-    private final ActivityReviewRepository repository;
+    private final ActivityReviewRepository activityReviewRepository;
     private final UserRepository userRepository;
     private final HobbyRepository hobbyRepository;
     private final HobbyTestUseCase hobbyTestUseCase;
     private final OpenAiChatModel openAiChatModel;
+    private final FindCurrentUserUseCase findCurrentUserUseCase;
 
     // 질문 5개 생성
     public ActivityReview createReviewQuestion(Long hobbyId) {
-
         Hobby hobby = hobbyRepository.findByHobbyId(hobbyId)
                 .orElseThrow(() -> new HobbyNotFoundException("취미를 찾을 수 없음"));
+
+        User currentUser = findCurrentUserUseCase.getCurrentUser();
 
         String prompt = """
                 당신은 활동 리뷰 질문 생성기입니다.
@@ -82,7 +85,7 @@ public class ActivityReviewUseCase {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        return repository.save(activityReview);
+        return activityReviewRepository.save(activityReview);
     }
 
 
@@ -168,7 +171,7 @@ public class ActivityReviewUseCase {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        repository.save(review);
+        activityReviewRepository.save(review);
 
         return new ActivityReviewResult(review, user, hobbies);
     }
