@@ -68,6 +68,9 @@ dependencies {
 
 	// Spring AI OpenAI Starter (M4)
 	implementation "org.springframework.ai:spring-ai-openai-spring-boot-starter:${springAiVersion}"
+
+	// Test
+//	testImplementation "org.mockito:mockito-inline"
 }
 
 tasks.named('test') {

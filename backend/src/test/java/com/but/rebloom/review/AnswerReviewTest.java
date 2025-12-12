@@ -1,8 +1,10 @@
 package com.but.rebloom.review;
 
+import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
+import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.hobby.domain.Hobby;
 import com.but.rebloom.domain.hobby.domain.HobbyScore;
@@ -30,8 +32,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +49,8 @@ public class AnswerReviewTest {
     private HobbyRepository hobbyRepository;
     @Mock
     private ActivityReviewRepository activityReviewRepository;
+    @Mock
+    private DefaultUserAchievementUseCase defaultUserAchievementUseCase;
     @InjectMocks
     private ActivityReviewUseCase activityReviewUseCase;
 
@@ -65,6 +69,7 @@ public class AnswerReviewTest {
         );
 
         User mockUser = User.builder()
+                .userEmail("useremail@email.com")
                 .userSocialScore(0d)
                 .userPlanningScore(0d)
                 .userFocusScore(0d)
@@ -96,6 +101,8 @@ public class AnswerReviewTest {
                 .thenReturn(mockResult);
         when(hobbyRepository.findByHobbyId(reviewAnswerRequest.getHobbyId()))
                 .thenReturn(Optional.of(mockHobby));
+        doNothing().when(defaultUserAchievementUseCase).updateUserAchievementToSuccess(anyString(), anyString());
+        doNothing().when(defaultUserAchievementUseCase).updateUserAchievementProgress(anyString(), anyString(), anyFloat());
         when(activityReviewRepository.save(any(ActivityReview.class)))
                 .thenReturn(mockActivityReview);
 
