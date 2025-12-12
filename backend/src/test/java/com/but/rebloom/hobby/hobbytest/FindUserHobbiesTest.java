@@ -1,5 +1,6 @@
 package com.but.rebloom.hobby.hobbytest;
 
+import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.repository.UserRepository;
 import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
@@ -26,6 +27,7 @@ import java.util.NoSuchElementException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +41,8 @@ public class FindUserHobbiesTest {
     private ChannelRepository channelRepository;
     @Mock
     private FindCurrentUserUseCase findCurrentUserUseCase;
+    @Mock
+    private DefaultUserAchievementUseCase defaultUserAchievementUseCase;
     @InjectMocks
     private HobbyTestUseCase hobbyTestUseCase;
 
@@ -83,6 +87,7 @@ public class FindUserHobbiesTest {
         List<Channel> mockChannels = List.of(mockChannel1, mockChannel2, mockChannel3);
 
         User mockUser = User.builder()
+                .userEmail("user@test.com")
                 .userCreativityScore(0.0)
                 .userLearningScore(0.0)
                 .userPlanningScore(0.0)
@@ -97,6 +102,8 @@ public class FindUserHobbiesTest {
                 .thenReturn(mockChannels);
         when(findCurrentUserUseCase.getCurrentUser())
                 .thenReturn(mockUser);
+        doNothing().when(defaultUserAchievementUseCase).updateUserAchievementToSuccess(anyString(), anyString());
+        doNothing().when(defaultUserAchievementUseCase).updateUserAchievementProgress(anyString(), anyString(), anyFloat());
         when(userRepository.save(any(User.class)))
                 .thenReturn(mockUser);
 
