@@ -177,9 +177,13 @@ public class ActivityReviewUseCase {
 
         String review1 = "첫 리뷰";
         defaultUserAchievementUseCase.updateUserAchievementToSuccess(user.getUserEmail(), review1);
-
         String review5 = "리뷰의 달인";
         defaultUserAchievementUseCase.updateUserAchievementProgress(user.getUserEmail(), review5, 100f / 5f);
+
+        String survey1 = "첫 설문조사!";
+        defaultUserAchievementUseCase.updateUserAchievementToSuccess(user.getUserEmail(), survey1);
+        String survey10 = "설문 조사의 신!";
+        defaultUserAchievementUseCase.updateUserAchievementProgress(user.getUserEmail(), survey10, 100f / 10f);
 
         return new ActivityReviewResult(review, user, hobbies);
     }
