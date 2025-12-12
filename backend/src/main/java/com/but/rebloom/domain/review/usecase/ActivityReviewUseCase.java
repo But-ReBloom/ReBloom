@@ -1,5 +1,6 @@
 package com.but.rebloom.domain.review.usecase;
 
+import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
@@ -33,6 +34,7 @@ public class ActivityReviewUseCase {
     private final HobbyTestUseCase hobbyTestUseCase;
     private final OpenAiChatModel openAiChatModel;
     private final FindCurrentUserUseCase findCurrentUserUseCase;
+    private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     // 질문 5개 생성
     public ActivityReview createReviewQuestion(Long hobbyId) {
@@ -172,6 +174,12 @@ public class ActivityReviewUseCase {
                 .build();
 
         activityReviewRepository.save(review);
+
+        String review1 = "첫 리뷰";
+        defaultUserAchievementUseCase.updateUserAchievementToSuccess(user.getUserEmail(), review1);
+
+        String review5 = "리뷰의 달인";
+        defaultUserAchievementUseCase.updateUserAchievementProgress(user.getUserEmail(), review5, 100f / 5f);
 
         return new ActivityReviewResult(review, user, hobbies);
     }
