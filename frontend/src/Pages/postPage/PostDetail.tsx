@@ -20,7 +20,8 @@ import {
     SubMenu,
     CommentItem,
     PostDivider,
-    CommentFormContainer
+    CommentFormContainer,
+    LikeButton
 } from './PD';
 import CloseIcon from '../../assets/images/close.svg';
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
@@ -29,6 +30,7 @@ import { posts as initialPosts } from './posts';
 function PostDetail() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+
     const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
     const [allPosts, setAllPosts] = useState<any[]>([]);
     const [post, setPost] = useState<any>(null);
@@ -36,13 +38,23 @@ function PostDetail() {
     const [commentAuthor, setCommentAuthor] = useState('');
     const [commentText, setCommentText] = useState('');
 
+    const [liked, setLiked] = useState(false); // 하트 클릭 상태
+
     useEffect(() => {
         const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
-        const mergedPosts = [...savedPosts, ...initialPosts];
+
+        // 중복 제거
+        const mergedPosts = [...savedPosts, ...initialPosts].filter(
+            (p, index, self) => index === self.findIndex(post => post.id === p.id)
+        );
+
         setAllPosts(mergedPosts);
 
         const currentPost = mergedPosts.find((p: any) => p.id.toString() === id);
-        setPost(currentPost);
+        if (currentPost) {
+            if (currentPost.likes === undefined) currentPost.likes = 0;
+            setPost(currentPost);
+        }
     }, [id]);
 
     const toggleCategory = (category: string) => {
@@ -64,18 +76,19 @@ function PostDetail() {
     `;
 
     const handleAddComment = () => {
-        if (!commentAuthor || !commentText) return;
+        if (!commentAuthor || !commentText || !post) return;
 
         const newComment = { author: commentAuthor, text: commentText };
         const updatedPost = { ...post };
-
         if (!updatedPost.comments) updatedPost.comments = [];
         updatedPost.comments.push(newComment);
 
+        // 상태 업데이트
+        setPost(updatedPost);
         const updatedPosts = allPosts.map(p => (p.id === post.id ? updatedPost : p));
         setAllPosts(updatedPosts);
-        setPost(updatedPost);
 
+        // 로컬스토리지 업데이트
         const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
         const index = savedPosts.findIndex((p: any) => p.id === post.id);
         if (index >= 0) {
@@ -87,6 +100,34 @@ function PostDetail() {
 
         setCommentAuthor('');
         setCommentText('');
+    };
+
+    const handleLike = () => {
+        if (!post) return;
+
+        const updatedPost = { ...post };
+        if (!updatedPost.likes) updatedPost.likes = 0;
+
+        if (liked) {
+            updatedPost.likes -= 1;
+        } else {
+            updatedPost.likes += 1;
+        }
+
+        setLiked(!liked);
+        setPost(updatedPost);
+
+        const updatedPosts = allPosts.map(p => (p.id === post.id ? updatedPost : p));
+        setAllPosts(updatedPosts);
+
+        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+        const index = savedPosts.findIndex((p: any) => p.id === post.id);
+        if (index >= 0) {
+            savedPosts[index] = updatedPost;
+        } else {
+            savedPosts.push(updatedPost);
+        }
+        localStorage.setItem('myPosts', JSON.stringify(savedPosts));
     };
 
     if (!post) {
@@ -104,13 +145,10 @@ function PostDetail() {
         <Container>
             <Sidebar>
                 <LogoImage src={RebloomLogo} alt="Rebloom Logo" onClick={() => navigate('/main')} />
-
                 <Divider />
-
                 <CafeInfo>
                     <p>Rebloom 게시글 페이지입니다.</p>
                 </CafeInfo>
-
                 <ProfileSection>
                     <img src="" alt="프로필" />
                     <div>
@@ -124,7 +162,7 @@ function PostDetail() {
                 </PostListButton>
 
                 <SearchBox>
-                    <input type="text" placeholder="게시글 검색"/>
+                    <input type="text" placeholder="게시글 검색" />
                 </SearchBox>
 
                 <NavMenu>
@@ -172,6 +210,13 @@ function PostDetail() {
                         <div>
                             <h2>{post.title}</h2>
                             <p>{post.content}</p>
+
+                            <div style={{ marginTop: '10px' }}>
+                                <LikeButton liked={liked} onClick={handleLike}>
+                                    ❤️ {post.likes || 0}
+                                </LikeButton>
+                            </div>
+
                         </div>
                     </PostItem>
                 </PostList>
@@ -206,7 +251,6 @@ function PostDetail() {
                         />
                         <button onClick={handleAddComment}>댓글 작성</button>
                     </CommentFormContainer>
-
                 </div>
             </ContentArea>
         </Container>

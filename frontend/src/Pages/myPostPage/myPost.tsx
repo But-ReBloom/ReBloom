@@ -52,7 +52,7 @@ function MyPostPage() {
             category: selectedCategory,
             favorite: false,
             notice: selectedCategory === '공지사항',
-            tag: selectedCategory, // 카테고리명으로 tag 지정
+            tag: selectedCategory, 
             comments: [],
         };
 

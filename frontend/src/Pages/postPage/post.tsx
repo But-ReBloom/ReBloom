@@ -66,10 +66,14 @@ function Post() {
     const [currentPage, setCurrentPage] = useState(1);
     const [allPosts, setAllPosts] = useState<any[]>([]);
 
-    useEffect(() => {
-        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
-        setAllPosts([...savedPosts, ...initialPosts]);
-    }, []);
+useEffect(() => {
+    const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+    const mergedPosts = [...savedPosts, ...initialPosts].filter(
+        (post, index, self) => index === self.findIndex(p => p.id === post.id)
+    );
+    setAllPosts(mergedPosts);
+}, []);
+
 
     const handleCloseClick = () => navigate('/main');
     const handleToggleNotices = () => {
