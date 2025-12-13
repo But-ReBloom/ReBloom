@@ -31,6 +31,16 @@ export const LeftSection = styled.div`
   justify-content: center;
   height: 100%;
   padding: 60px 40px;
+  overflow-y: auto;
+  
+  /* 스크롤바 커스텀 (선택) */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
 `;
 
 export const UserInfoSection = styled.div`
@@ -139,7 +149,16 @@ export const RightSection = styled.div`
   justify-content: flex-start;
   position: relative;
   flex: 1;
-  overflow: hidden;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 12px;
+  }
 `;
 
 export const DetailTitle = styled.h2`
@@ -201,11 +220,12 @@ export const Bubble = styled.div`
 `;
 
 export const ProgressBar = styled.div`
-  width: 100%;
+  width: 350px;
   height: 20px;
   background: #e5e7eb;
   border-radius: 9999px;
   overflow: hidden;
+  margin-left: 20px;
 `;
 
 export const ProgressFill = styled.div<{ progress: number }>`
@@ -219,5 +239,6 @@ export const ProgressTitle = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 8px;
+  align-items: center;
+  margin: 8px 0;
 `;
