@@ -65,15 +65,6 @@ public class SignupUseCase {
         String signupAchievementTitle = "시작이 반이다.";
         defaultUserAchievementUseCase.updateUserAchievementToSuccess(userEmail, signupAchievementTitle);
 
-        String streak2AchievementTitle = "계획적으로!";
-        defaultUserAchievementUseCase.updateUserAchievementProgress(userEmail, streak2AchievementTitle, 100.0f / 2.0f);
-
-        String streak5AchievementTitle = "5연속 접속!";
-        defaultUserAchievementUseCase.updateUserAchievementProgress(userEmail, streak5AchievementTitle, 100.0f / 5.0f);
-
-        String streak365AchievementTitle = "연속 접속의 신";
-        defaultUserAchievementUseCase.updateUserAchievementProgress(userEmail, streak365AchievementTitle, 100.0f / 365.0f);
-
         return saveUser;
     }
 }
