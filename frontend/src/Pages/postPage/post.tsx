@@ -22,7 +22,9 @@ import {
 } from './pst';
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
-import { posts as initialPosts } from './posts';
+// import { posts as initialPosts } from './posts';
+import { postApi } from '../../api/post';
+import type { CreatePostResponse } from '../../types/PostTypes';
 
 const WritePostButton = styled.button`
     width: 100%;
@@ -67,8 +69,32 @@ function Post() {
     const [allPosts, setAllPosts] = useState<any[]>([]);
 
     useEffect(() => {
-        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
-        setAllPosts([...savedPosts, ...initialPosts]);
+        const fetchPosts = async () => {
+            try {
+                const response = await postApi.searchPosts({ keyword: "" });
+                if (response.success) {
+                    // Map API response to UI format
+                    const mappedPosts = response.data.posts.map((post: CreatePostResponse) => ({
+                        id: post.postId,
+                        tag: post.postType === 'NORMAL' ? '[일반]' : '[인기]',
+                        title: post.postTitle,
+                        notice: false,
+                        category: '소통', // Default or map from channelId
+                        favorite: false,
+                        content: post.postContent,
+                        comments: [],
+                        author: post.userId,
+                        date: post.postCreatedAt,
+                        views: post.viewers,
+                        likes: 0
+                    }));
+                    setAllPosts(mappedPosts);
+                }
+            } catch (error) {
+                console.error("Failed to fetch posts", error);
+            }
+        };
+        fetchPosts();
     }, []);
 
     const handleCloseClick = () => navigate('/main');

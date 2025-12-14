@@ -81,7 +81,13 @@ function Index({ setStep, setSelectedExp }: { setStep: any, setSelectedExp: any 
   );
 }
 
-function PageNum({ myexps, itemsPerPage, setCurrentPage }) {
+interface PageNumProps {
+  myexps: any[];
+  itemsPerPage: number;
+  setCurrentPage: (page: number) => void;
+}
+
+function PageNum({ myexps, itemsPerPage, setCurrentPage }: PageNumProps) {
   const pageCount = Math.ceil(myexps.length / itemsPerPage);
   const pageArray = Array.from({ length: pageCount }, (_, i) => i + 1);
 

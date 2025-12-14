@@ -5,148 +5,37 @@ import Archive from "../../assets/images/Archive.svg";
 import React_svg from "../../assets/images/React.svg";
 import { ImageOfTier } from "../../components/determine_tier/determine_tier.ts";
 import Rebloom from "../../assets/images/Rebloom.png";
-
-/* ===============================
-   타입
-================================ */
-type Achievement = {
-  title: string;
-  description: string;
-  system_progress: number;
-  user_progress: number;
-  ach_reward_point: number;
-  ach_reward_tier_point: number;
-};
+import { useEffect, useState } from "react";
+import { authApi } from "../../api/auth";
+import { achievementApi } from "../../api/achievement";
+import type { FindUserInfoResponse } from "../../types/auth";
+import type { GetUserAchievementResponse } from "../../types/achievement";
 
 /* ===============================
    유틸 함수
 ================================ */
-const getProgressPercent = (ach: Achievement) =>
-  Math.min(Math.round((ach.user_progress / ach.system_progress) * 100), 100);
-
-const isCompleted = (ach: Achievement) =>
-  ach.user_progress >= ach.system_progress;
-
-/* ===============================
-   데이터
-================================ */
-const data = {
-  name: "오용준",
-  tier: "silver",
-  achievements: [
-    {
-      title: "첫 설문조사!",
-      description: "설문조사 1회 달성",
-      system_progress: 1,
-      user_progress: 1,
-      ach_reward_point: 100,
-      ach_reward_tier_point: 100,
-    },
-    {
-      title: "설문 조사의 신!",
-      description: "설문조사 10회 달성",
-      system_progress: 10,
-      user_progress: 6,
-      ach_reward_point: 800,
-      ach_reward_tier_point: 800,
-    },
-    {
-      title: "시작이 반이다.",
-      description: "1회 접속 후 회원가입",
-      system_progress: 1,
-      user_progress: 1,
-      ach_reward_point: 100,
-      ach_reward_tier_point: 100,
-    },
-    {
-      title: "계획적으로!",
-      description: "2일 연속 접속",
-      system_progress: 2,
-      user_progress: 1,
-      ach_reward_point: 200,
-      ach_reward_tier_point: 200,
-    },
-    {
-      title: "5연속 접속!",
-      description: "5일 연속 접속",
-      system_progress: 5,
-      user_progress: 2,
-      ach_reward_point: 500,
-      ach_reward_tier_point: 500,
-    },
-    {
-      title: "연속 접속의 신",
-      description: "365일 연속 접속",
-      system_progress: 365,
-      user_progress: 3,
-      ach_reward_point: 9000,
-      ach_reward_tier_point: 9000,
-    },
-    {
-      title: "첫 댓글",
-      description: "1회 댓글 달기",
-      system_progress: 1,
-      user_progress: 1,
-      ach_reward_point: 100,
-      ach_reward_tier_point: 100,
-    },
-    {
-      title: "좋은 댓글",
-      description: "5회 댓글 달기",
-      system_progress: 5,
-      user_progress: 3,
-      ach_reward_point: 500,
-      ach_reward_tier_point: 500,
-    },
-    {
-      title: "첫 리뷰",
-      description: "1회 활동 리뷰 달기",
-      system_progress: 1,
-      user_progress: 1,
-      ach_reward_point: 500,
-      ach_reward_tier_point: 500,
-    },
-    {
-      title: "리뷰의 달인",
-      description: "5회 활동 리뷰 달기",
-      system_progress: 5,
-      user_progress: 2,
-      ach_reward_point: 3500,
-      ach_reward_tier_point: 2500,
-    },
-    {
-      title: "커뮤니티 시작!",
-      description: "1회 커뮤니티 글 쓰기",
-      system_progress: 1,
-      user_progress: 0,
-      ach_reward_point: 100,
-      ach_reward_tier_point: 100,
-    },
-  ],
+const getTierName = (points: number): string => {
+  if (points < 1000) return "bronze";
+  if (points < 2000) return "silver";
+  if (points < 3000) return "gold";
+  if (points < 4000) return "diamond";
+  if (points < 5000) return "master";
+  return "challenger";
 };
-
-// 진행률 100% 업적 총합
-const completedAchievements = data.achievements.filter(
-  (ach) => getProgressPercent(ach) === 100
-);
-
-const completedPoints = completedAchievements.reduce(
-  (sum, ach) => sum + ach.ach_reward_point,
-  0
-);
-
-const completedTierPoints = completedAchievements.reduce(
-  (sum, ach) => sum + ach.ach_reward_tier_point,
-  0
-);
-
-const tierImage = ImageOfTier(data.tier);
 
 /* ===============================
    Left Section (완료 업적)
 ================================ */
-function LeftSection() {
-  const completed = data.achievements.filter(isCompleted);
+interface LeftSectionProps {
+  userInfo: FindUserInfoResponse | null;
+  achievements: GetUserAchievementResponse[];
+}
+
+function LeftSection({ userInfo, achievements }: LeftSectionProps) {
+  const completed = achievements.filter((ach) => ach.userAchievementIsSuccess);
+  
+  const tier = userInfo ? getTierName(userInfo.userTierPoint) : "bronze";
+  const tierImage = ImageOfTier(tier);
 
   return (
     <S.LeftSection>
@@ -154,7 +43,7 @@ function LeftSection() {
         <S.ProfileInfo>
           <S.UserImage src={React_svg} />
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <S.UserName>{data.name}</S.UserName>
+            <S.UserName>{userInfo?.userName || "Guest"}</S.UserName>
             <div
               style={{
                 display: "flex",
@@ -162,7 +51,7 @@ function LeftSection() {
                 justifyContent: "space-between",
               }}
             >
-              <S.UserTier>{data.tier}</S.UserTier>
+              <S.UserTier>{tier}</S.UserTier>
               <img src={tierImage} alt="Tier Image" width={32} />
             </div>
           </div>
@@ -171,11 +60,11 @@ function LeftSection() {
         <S.PointArchive>
           <S.PnA>
             <S.addedimage src={Point} />
-            {completedTierPoints}P
+            {userInfo?.userTierPoint || 0}P
           </S.PnA>
           <S.PnA>
             <S.addedimage src={Rebloom}></S.addedimage>
-            {completedPoints}P
+            {userInfo?.userPoint || 0}P
           </S.PnA>
           <S.PnA>
             <S.addedimage src={Archive} />
@@ -187,7 +76,7 @@ function LeftSection() {
 
         <S.ArchiveList style={{ overflowY: "auto" }}>
           {completed.map((ach) => (
-            <S.Box key={ach.title}>{ach.title}</S.Box>
+            <S.Box key={ach.achievementId}>{ach.userAchievementTitle}</S.Box>
           ))}
         </S.ArchiveList>
       </S.UserInfoSection>
@@ -198,7 +87,15 @@ function LeftSection() {
 /* ===============================
    Right Section (전체 업적 + 100% 진행률 총합)
 ================================ */
-function RightSection() {
+interface RightSectionProps {
+  achievements: GetUserAchievementResponse[];
+}
+
+function RightSection({ achievements }: RightSectionProps) {
+  const completed = achievements.filter((ach) => ach.userAchievementIsSuccess);
+  const completedPoints = completed.reduce((sum, ach) => sum + ach.userAchievementRewardPoint, 0);
+  const completedTierPoints = completed.reduce((sum, ach) => sum + ach.userAchievementTierPoint, 0);
+
   return (
     <S.RightSection style={{ overflowY: "auto" }}>
       <S.DetailTitle>전체 업적</S.DetailTitle>
@@ -219,12 +116,12 @@ function RightSection() {
         <p style={{margin: "0", color: "#777777"}}>완료 업적 포인트: {completedPoints} | 티어 포인트: {completedTierPoints}</p>
       </div>
 
-      {data.achievements.map((ach) => {
-        const percent = getProgressPercent(ach);
+      {achievements.map((ach) => {
+        const percent = ach.userAchievementIsSuccess ? 100 : 0;
 
         return (
           <div
-            key={ach.title}
+            key={ach.achievementId}
             style={{
               padding: "16px 0",
               borderBottom: "1px solid rgba(0,0,0,0.1)",
@@ -232,7 +129,7 @@ function RightSection() {
           >
             {/* 타이틀 ↔ 진행도 */}
             <S.ProgressTitle>
-              <strong>{ach.title}</strong>
+              <strong>{ach.userAchievementTitle}</strong>
               <div
                 style={{
                   display: "flex",
@@ -255,7 +152,7 @@ function RightSection() {
                 marginTop: 6,
               }}
             >
-              {ach.description} ({ach.user_progress}/{ach.system_progress})
+              {ach.userAchievementDescription} (현재: {ach.userAchievementProgress})
             </p>
           </div>
         );
@@ -268,14 +165,50 @@ function RightSection() {
    Main
 ================================ */
 export default function Mypage() {
+  const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
+  const [achievements, setAchievements] = useState<GetUserAchievementResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userRes = await authApi.findCurrentUser();
+        console.log("User Response:", userRes);
+        if (userRes.success) {
+          setUserInfo(userRes.data);
+        } else {
+          console.error("Failed to fetch user info:", userRes);
+        }
+
+        const achRes = await achievementApi.getUserAchievementsByUserEmail();
+        console.log("Achievement Response:", achRes);
+        if (achRes.success) {
+          setAchievements(achRes.data);
+        } else {
+          console.error("Failed to fetch achievements:", achRes);
+        }
+      } catch (error) {
+        console.error("Failed to fetch mypage data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Header />
       <S.Background>
         <S.Wrapper>
           <S.Container>
-            <LeftSection />
-            <RightSection />
+            <LeftSection userInfo={userInfo} achievements={achievements} />
+            <RightSection achievements={achievements} />
           </S.Container>
         </S.Wrapper>
       </S.Background>

@@ -7,18 +7,19 @@ import { useEffect } from "react";
 
 function MainPage() {
   const location = useLocation();
+  const storedUserEmail = localStorage.getItem("userEmail");
+  const userId = location.state?.id || storedUserEmail;
 
   useEffect(() => {
-    const userId = location.state?.id;
-    if (userId) {
-      toast.success(`환영합니다! ${userId}님!`);
+    if (location.state?.id) {
+      toast.success(`환영합니다! ${location.state.id}님!`);
     }
   }, [location.state]);
 
   //메인페이지
   return (
     <S.MainPage_Container>
-      <Header props={{ state: location.state }} />
+      <Header props={{ state: { id: userId } }} />
       <Body />
     </S.MainPage_Container>
   );

@@ -3,14 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import * as S from "./style.ts";
 import Menu_Bar from "../menu-bar/mb.tsx";
 
-function Header({ props }) {
+function Header({ props }: { props?: any }) {
   const navigate = useNavigate();
-  const userId = props?.state?.id; // ← 로그인 이메일/아이디
+  const userId = props?.state?.id || localStorage.getItem("userEmail"); // ← 로그인 이메일/아이디
 
   const handleLogout = () => {
-    // 필요 시 토큰 삭제
-    // localStorage.removeItem("token");
-
+    localStorage.removeItem("token");
+    localStorage.removeItem("userEmail");
     navigate("/", { state: null }); // 상태 초기화
   };
 

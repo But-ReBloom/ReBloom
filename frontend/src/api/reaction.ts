@@ -57,7 +57,7 @@ export const reactionApi = {
         }) as Promise<ApiResponse<CreateCommentResponse>>,
 
     getComment: (commentId: number) => 
-        client(`/comment/find/${commentId}`, {
+        client(`/comment/find/comment/${commentId}`, {
             method: "GET",
         }) as Promise<ApiResponse<CreateCommentResponse>>,
 

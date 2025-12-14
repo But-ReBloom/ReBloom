@@ -1,12 +1,18 @@
 import { useState } from "react";
 import * as S from "./style.ts";
 
-function FT_HobbyTest_Description_Box() {
+interface FT_HobbyTest_Description_BoxProps {
+  onSelect?: (value: number | null) => void;
+}
+
+function FT_HobbyTest_Description_Box({ onSelect }: FT_HobbyTest_Description_BoxProps) {
   // 5개의 버튼 중 하나만 선택
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const handleClick = (index: number) => {
-    setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
+    const newIndex = activeIndex === index ? null : index;
+    setActiveIndex(newIndex);
+    if (onSelect) onSelect(newIndex);
   };
 
   return (

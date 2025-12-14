@@ -1,11 +1,10 @@
-import { useState } from "react";
 import Header from "../../components/normal_header/nh.tsx";
 import FT_HobbyTest_Description_Box from "../../components/ftdescription-box/ft-d.tsx";
 import * as S from "./style.ts";
 // import { ToastContainer, toast } from "react-toastify";
 
 function FT_HobbyTest_Description() {
-  const [selectedValue, setSelectedValue] = useState<number | null>(null);
+  // const [selectedValue, setSelectedValue] = useState<number | null>(null);
 
   const handleNext = () => {
     // if (selectedValue === null) {
@@ -27,7 +26,7 @@ function FT_HobbyTest_Description() {
         <S.RowContainer>
           <div>
             <FT_HobbyTest_Description_Box
-              onSelect={(val) => setSelectedValue(val)}
+              // onSelect={(val) => setSelectedValue(val)}
             />
             <S.TextBox>
               <S.TopTextBox>

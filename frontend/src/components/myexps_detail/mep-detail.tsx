@@ -5,14 +5,21 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
-export default function MepDetail({ setStep, exp }) {
+interface MepDetailProps {
+  setStep: (step: string) => void;
+  exp: any;
+}
+
+export default function MepDetail({ setStep, exp }: MepDetailProps) {
   const navigate = useNavigate();
   const [ReviewData, setWrittenData] = useState("");
+  const [satisfaction, setSatisfaction] = useState<number | null>(null);
 
   const handleSubmit = () => {
     if (ReviewData.length < 100) {
       toast.error("리뷰는 100자 이상 작성하셔야 합니다.");
     } else {
+      console.log("Satisfaction:", satisfaction);
       // TODO: Implement API call to submit review
       navigate("/thankyou", {
         state: {
@@ -35,7 +42,7 @@ export default function MepDetail({ setStep, exp }) {
           <S.QuestionBox>
             <S.Boxing>
               <S.Title>{exp.activityName} 활동에 대해 만족하시나요?</S.Title>
-              <QuestionBox />
+              <QuestionBox onSelect={setSatisfaction} />
             </S.Boxing>
 
             <S.TextPlace>

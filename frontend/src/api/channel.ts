@@ -40,60 +40,60 @@ export const channelApi = {
         }) as Promise<ApiResponse<GetUserChannelInfoResponse>>,
 
     getApprovedChannels: () => 
-        client("/channel/admin/approve", {
+        client("/channel/admin/find/approve", {
             method: "GET",
         }) as Promise<ApiResponse<FindChannelResponse>>,
 
     getPendingChannels: () => 
-        client("/channel/admin/pending", {
+        client("/channel/admin/find/pending", {
             method: "GET",
         }) as Promise<ApiResponse<FindChannelResponse>>,
 
     approveChannel: (channelId: number) => 
-        client(`/channel/admin/${channelId}/approve`, {
+        client(`/channel/admin/approve/${channelId}`, {
             method: "PATCH",
         }) as Promise<ApiResponse<ApproveChannelResponse>>,
 
     rejectChannel: (channelId: number) => 
-        client(`/channel/admin/${channelId}/reject`, {
+        client(`/channel/admin/reject/${channelId}`, {
             method: "DELETE",
         }) as Promise<ApiResponse<void>>,
 
     findUserChannelByChannelId: (channelId: number) => 
-        client(`/channel/member/member/find/${channelId}`, {
+        client(`/channel/member/find/${channelId}`, {
             method: "POST",
         }) as Promise<ApiResponse<GetUserChannelInfoResponse>>,
 
     findUserChannelByUserEmail: (userEmail: string) => 
-        client(`/channel/member/member/find/${userEmail}`, {
+        client(`/channel/member/find/email?userEmail=${userEmail}`, {
             method: "POST",
         }) as Promise<ApiResponse<GetUserChannelInfoResponse>>,
 
     findUserChannelByIdAndEmail: (channelId: number, userEmail: string) => 
-        client(`/channel/member/member/find/${channelId}/${userEmail}`, {
+        client(`/channel/member/find/${channelId}/email?userEmail=${userEmail}`, {
             method: "POST",
         }) as Promise<ApiResponse<GetUserChannelDetailedInfoResponse>>,
 
     findUserChannelByEmailAndId: (userEmail: string, channelId: number) => 
-        client(`/channel/member/member/find/${userEmail}/${channelId}`, {
+        client(`/channel/member/find/email/${channelId}?userEmail=${userEmail}`, {
             method: "POST",
         }) as Promise<ApiResponse<GetUserChannelDetailedInfoResponse>>,
 
     applyChannel: (data: ApplyMemberRequest) => 
-        client("/channel/member/member/apply", {
+        client("/channel/member/apply", {
             method: "POST",
             body: JSON.stringify(data),
         }) as Promise<ApiResponse<ApplyMemberResponse>>,
 
     rejectMember: (data: RejectMemberRequest) => 
-        client("/channel/member/member/reject", {
-            method: "POST",
+        client("/channel/member/reject", {
+            method: "PATCH",
             body: JSON.stringify(data),
         }) as Promise<ApiResponse<RejectMemberResponse>>,
 
     approveMember: (data: ApproveMemberRequest) => 
-        client("/channel/member/member/approve", {
-            method: "POST",
+        client("/channel/member/approve", {
+            method: "PATCH",
             body: JSON.stringify(data),
         }) as Promise<ApiResponse<ApproveMemberResponse>>,
 };

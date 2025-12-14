@@ -34,8 +34,9 @@ export default function Right_box() {
       });
 
       if (response.success) {
-        // Store token if needed, e.g., localStorage.setItem('token', response.data.token);
-        navigate("/", { state: { id: response.data.userEmail } }); // Using email as ID for now since ID is not in response
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userEmail", response.data.userEmail);
+        navigate("/", { state: { id: response.data.userEmail } });
       } else {
         toast.error(
           response.message || "서버와의 통신 중 오류가 발생했습니다."

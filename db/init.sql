@@ -14,7 +14,13 @@ create table users (
 	u_provider varchar(255) default 'SELF',
 	u_tier varchar(20) not null default 'BRONZE',
 	u_recent_date date not null,
-	u_streak int not null default 1
+	u_streak int not null default 1,
+    u_score_updated_at date,
+    u_social_score double not null default 0.0,
+    u_learning_score double not null default 0.0,
+    u_planning_score double not null default 0.0,
+    u_focus_score double not null default 0.0,
+    u_creativity_score double not null default 0.0
 );
 
 create table hobbies (
@@ -39,13 +45,12 @@ create table activities (
 
 create table activity_reviews (
 	actr_review_id bigint not null auto_increment primary key,
-    actr_review_count int not null,
-	fk_act_id bigint not null,
+    actr_review_question varchar(1000),
+    actr_review_answer varchar(1000),
+    actr_created_at date,
 	fk_u_email varchar(100) not null,
-    actr_tag_1 varchar(50) not null,
-    actr_tag_2 varchar(50) not null,
-	actr_review_text text not null,
-	foreign key (fk_act_id) references activities(act_id) on delete cascade,
+    fk_h_id bigint not null,
+	foreign key (fk_h_id) references hobbies(h_id) on delete cascade,
 	foreign key (fk_u_email) references users(u_email) on delete cascade
 );
 
@@ -59,7 +64,7 @@ create table channels (
     ch_lk_h_3_id bigint,
 	ch_description text not null,
 	ch_created_at datetime not null default current_timestamp,
-	ch_is_accepted boolean not null default false,
+	ch_status varchar(20) not null default 'WAITING',
 	foreign key (fk_u_email) references users(u_email) on delete cascade,
     foreign key (ch_lk_h_1_id) references hobbies(h_id) on delete cascade,
     foreign key (ch_lk_h_2_id) references hobbies(h_id) on delete cascade,
