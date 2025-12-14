@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
 export const Background = styled.div`
   padding-top: 100px;
@@ -32,8 +32,7 @@ export const LeftSection = styled.div`
   height: 100%;
   padding: 60px 40px;
   overflow-y: auto;
-  
-  /* 스크롤바 커스텀 (선택) */
+
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -49,12 +48,11 @@ export const UserInfoSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 20px;
+  padding: 20px;
 `;
 
 export const ProfileInfo = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -78,14 +76,11 @@ export const UserTier = styled.h3`
   font-size: 12px;
   color: rgba(51, 51, 51, 0.55);
   margin: 0;
-  text-align: right;
 `;
 
 export const PointArchive = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  align-items: center;
   width: 100%;
   height: 50px;
   margin-bottom: 20px;
@@ -99,7 +94,6 @@ export const addedimage = styled.img`
 
 export const PnA = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
 `;
 
@@ -122,9 +116,6 @@ export const ArchiveList = styled.div`
   height: 400px;
 `;
 
-/* ===============================
-   업적 박스 (hover 효과 추가)
-================================ */
 export const Box = styled.div`
   display: flex;
   padding: 12px;
@@ -133,7 +124,6 @@ export const Box = styled.div`
   height: 40px;
   border-bottom: 1px solid rgba(51, 51, 51, 0.25);
   cursor: pointer;
-  transition: background-color 0.2s;
 
   &:hover {
     background-color: rgba(65, 166, 255, 0.1);
@@ -146,9 +136,6 @@ export const RightSection = styled.div`
   border-left: 1px solid rgba(51, 51, 51, 0.15);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  position: relative;
-  flex: 1;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -157,7 +144,6 @@ export const RightSection = styled.div`
   &::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 4px;
-    padding: 12px;
   }
 `;
 
@@ -166,57 +152,11 @@ export const DetailTitle = styled.h2`
   margin-bottom: 20px;
 `;
 
-export const DetailDescription = styled.p`
-  font-size: 16px;
-  color: rgba(51, 51, 51, 0.75);
-  line-height: 1.6;
-`;
-
-export const EmptyText = styled.div`
-  font-size: 16px;
-  color: rgba(51, 51, 51, 0.4);
-`;
-
-const float = keyframes`
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-`;
-
-export const Bubble = styled.div`
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #41a6ff, #3e55bf);
-  color: white;
-
+export const ProgressTitle = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 12px;
-
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-
-  /* 둥둥 */
-  animation: ${float} 3s ease-in-out infinite;
-
-  /* 🔥 핵심 */
-  will-change: left, top, transform;
-
-  /* scale만 부드럽게 */
-  transition: box-shadow 0.25s ease;
-
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-
-  &:hover {
-    transform: scale(1.08);
-    z-index: 10;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-  }
+  margin: 8px 0;
 `;
 
 export const ProgressBar = styled.div`
@@ -225,20 +165,10 @@ export const ProgressBar = styled.div`
   background: #e5e7eb;
   border-radius: 9999px;
   overflow: hidden;
-  margin-left: 20px;
 `;
-
-export const ProgressFill = styled.div<{ progress: number }>`
-  width: ${({ progress }) => progress}%;
+export const ProgressFill = styled.div`
+  width: ${(percent)}%;
   height: 100%;
   background: linear-gradient(90deg, #41a6ff, #3e55bf);
   transition: width 0.4s ease;
-`;
-
-export const ProgressTitle = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin: 8px 0;
 `;
