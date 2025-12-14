@@ -74,7 +74,7 @@ export const UserName = styled.h2`
 `;
 
 export const UserTier = styled.h3`
-  font-size: 12px;
+  font-size: 14px;
   color: rgba(51, 51, 51, 0.55);
   margin: 0;
 `;
