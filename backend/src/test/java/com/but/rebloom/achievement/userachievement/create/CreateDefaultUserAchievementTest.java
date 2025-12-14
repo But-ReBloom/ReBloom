@@ -10,14 +10,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
 public class CreateDefaultUserAchievementTest {
     @Mock
     private AchievementRepository achievementRepository;
@@ -41,8 +43,6 @@ public class CreateDefaultUserAchievementTest {
 
         when(achievementRepository.findAll())
                 .thenReturn(mockAchievements);
-        when(userAchievementRepository.save(any(UserAchievement.class)))
-                .thenReturn(null); // 어짜피 저장은 안해서 null로 해둠
 
         // When & Then
         defaultUserAchievementUseCase.createDefaultUserAchievement(userEmail);

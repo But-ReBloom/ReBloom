@@ -1,5 +1,6 @@
 package com.but.rebloom.domain.hobby.usecase;
 
+import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
@@ -31,6 +32,8 @@ public class HobbyTestUseCase {
     private final UserRepository userRepository;
     // 현재 유저 추출
     private final FindCurrentUserUseCase findCurrentUserUseCase;
+    // 업적 저장
+    private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     // 결과에 따른 취미 탐색
     public Map<List<HobbyScore>, List<Channel>> findUserHobbies(UserAnswerRequest answers) {
@@ -163,6 +166,11 @@ public class HobbyTestUseCase {
         currentUser.setScoreUpdatedAt(LocalDateTime.now());
 
         userRepository.save(currentUser);
+
+        String survey1 = "첫 설문조사!";
+        defaultUserAchievementUseCase.updateUserAchievementToSuccess(currentUser.getUserEmail(), survey1);
+        String survey10 = "설문 조사의 신!";
+        defaultUserAchievementUseCase.updateUserAchievementProgress(currentUser.getUserEmail(), survey10, 100f / 10f);
 
         return Map.of(List.of(hobbyScoreResult1, hobbyScoreResult2, hobbyScoreResult3), channels);
     }

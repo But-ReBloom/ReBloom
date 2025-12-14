@@ -39,6 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
             "/comment/create",
             "/comment/update",
             "/heart/add",
+            "/hobby-review/**",
             "/heart/find",
             "/swagger-ui/**",
             "/v3/api-docs/**",

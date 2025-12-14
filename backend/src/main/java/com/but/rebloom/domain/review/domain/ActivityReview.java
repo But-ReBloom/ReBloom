@@ -2,7 +2,6 @@ package com.but.rebloom.domain.review.domain;
 
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.hobby.domain.Hobby;
-import io.micrometer.core.annotation.Counted;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
