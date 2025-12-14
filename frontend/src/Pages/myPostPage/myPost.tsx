@@ -20,8 +20,8 @@ import {
 
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
-import { posts as initialPosts } from '../postPage/posts';
-
+// import { posts as initialPosts } from '../postPage/posts';
+import { postApi } from '../../api/post';
 
 function MyPostPage() {
     const navigate = useNavigate();
@@ -37,29 +37,34 @@ function MyPostPage() {
         setContent('');
     };
 
-    const handleSavePost = () => {
+    const handleSavePost = async () => {
         if (!title.trim() || !content.trim()) {
             alert('제목과 내용을 입력해주세요.');
             return;
         }
 
-        const existingPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+        try {
+            // Map category to channelId (placeholder logic)
+            let channelId = 1; 
+            
+            const response = await postApi.createPost({
+                userId: "testUser", // Placeholder user ID
+                channelId: channelId,
+                postTitle: title,
+                postContent: content,
+                postType: 'NORMAL'
+            });
 
-        const newPost = {
-            id: Date.now(),
-            title,
-            content,
-            category: selectedCategory,
-            favorite: false,
-            notice: selectedCategory === '공지사항',
-            tag: selectedCategory, // 카테고리명으로 tag 지정
-            comments: [],
-        };
-
-        localStorage.setItem('myPosts', JSON.stringify([newPost, ...existingPosts]));
-
-        handleClear();
-        navigate('/post');
+            if (response.success) {
+                handleClear();
+                navigate('/post');
+            } else {
+                alert('게시글 작성 실패');
+            }
+        } catch (error) {
+            console.error("Failed to create post", error);
+            alert('게시글 작성 중 오류가 발생했습니다.');
+        }
     };
 
     const categories = [
@@ -112,21 +117,7 @@ function MyPostPage() {
 
                                 {expandedCategory === category.name && (
                                     <SubMenu>
-                                        {[...initialPosts, ...JSON.parse(localStorage.getItem('myPosts') || '[]')]
-                                            .filter(post =>
-                                                category.name === '즐겨찾는 게시판'
-                                                    ? post.favorite
-                                                    : post.category === category.name
-                                            )
-                                            .map(post => (
-                                                <li
-                                                    key={post.id}
-                                                    onClick={() => navigate(`/post/${post.id}`)}
-                                                    style={{ cursor: 'pointer' }}
-                                                >
-                                                    ㄴ {post.title}
-                                                </li>
-                                            ))}
+                                        {/* Sidebar posts list removed for now */}
                                     </SubMenu>
 
                                 )}

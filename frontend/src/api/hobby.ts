@@ -7,7 +7,11 @@ import type {
     AddActivityResponse,
     FindActivityResponse,
     GetAllHobbyResponse,
-    GetHobbyResponse
+    GetHobbyResponse,
+    CreateReviewQuestionRequest,
+    CreateReviewQuestionResponse,
+    ReviewAnswerRequest,
+    ReviewAnswerResponse
 } from "../types/hobby";
 import type { ApiResponse } from "../types/common";
 
@@ -58,4 +62,16 @@ export const hobbyApi = {
         client(`/hobby/find/${hobbyId}`, {
             method: "GET",
         }) as Promise<ApiResponse<GetHobbyResponse>>,
+
+    createReviewQuestion: (data: CreateReviewQuestionRequest) =>
+        client("/activity-review/create", {
+            method: "POST",
+            body: JSON.stringify(data),
+        }) as Promise<ApiResponse<CreateReviewQuestionResponse>>,
+
+    answerReview: (data: ReviewAnswerRequest) =>
+        client("/activity-review/answer", {
+            method: "POST",
+            body: JSON.stringify(data),
+        }) as Promise<ApiResponse<ReviewAnswerResponse>>,
 };

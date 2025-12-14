@@ -3,30 +3,30 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { authApi } from "../../api/auth";
 
 export default function Ferb() {
     const navigate = useNavigate();
 
-    const users = [
-        { id: "testuser", password: "1234", email: "testuser@example.com" },
-        { id: "yongjun", password: "abcd", email: "yongjun@example.com" },
-        { id: "guest", password: "guest", email: "guest@sample.com" },
-    ];
-
     const [userID, setUserid] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if(userID.trim() && password){
-            const user = users.find(
-                (u) => u.id === userID && u.password === password
-            );
+            try {
+                const response = await authApi.findUserEmail({
+                    userId: userID,
+                    userPassword: password
+                });
 
-            if (user) {
-                toast.success(`당신의 이메일은 ${user.email} 입니다.`);
-
-            } else  {
-                toast.error("이메일 또는 아이디가 올바르지 않습니다.");
+                if (response.success) {
+                    toast.success(`당신의 이메일은 ${response.data.userEmail} 입니다.`);
+                } else {
+                    toast.error("이메일 또는 아이디가 올바르지 않습니다.");
+                }
+            } catch (error) {
+                console.error(error);
+                toast.error("정보가 올바르지 않습니다.");
             }
         }else{
             toast.error(<>빈 칸인 있어선 안됩니다.</>);

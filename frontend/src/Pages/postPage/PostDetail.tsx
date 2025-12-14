@@ -24,25 +24,55 @@ import {
 } from './PD';
 import CloseIcon from '../../assets/images/close.svg';
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
-import { posts as initialPosts } from './posts';
+// import { posts as initialPosts } from './posts';
+import { postApi } from '../../api/post';
+import { reactionApi } from '../../api/reaction';
 
 function PostDetail() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-    const [allPosts, setAllPosts] = useState<any[]>([]);
+    // const [allPosts, setAllPosts] = useState<any[]>([]);
     const [post, setPost] = useState<any>(null);
+    const [comments, setComments] = useState<any[]>([]);
 
     const [commentAuthor, setCommentAuthor] = useState('');
     const [commentText, setCommentText] = useState('');
 
     useEffect(() => {
-        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
-        const mergedPosts = [...savedPosts, ...initialPosts];
-        setAllPosts(mergedPosts);
+        const fetchPostAndComments = async () => {
+            if (!id) return;
+            try {
+                const postResponse = await postApi.findPost(Number(id));
+                if (postResponse.success) {
+                    const p = postResponse.data;
+                    setPost({
+                        id: p.postId,
+                        tag: p.postType === 'NORMAL' ? '[일반]' : '[인기]',
+                        title: p.postTitle,
+                        notice: false,
+                        category: '소통',
+                        favorite: false,
+                        content: p.postContent,
+                        author: p.userId,
+                        date: p.postCreatedAt,
+                        views: p.viewers,
+                        likes: 0
+                    });
+                }
 
-        const currentPost = mergedPosts.find((p: any) => p.id.toString() === id);
-        setPost(currentPost);
+                const commentsResponse = await reactionApi.getCommentsByPost(Number(id));
+                if (commentsResponse.success) {
+                    setComments(commentsResponse.data.comments.map((c: any) => ({
+                        author: c.userId,
+                        text: c.commentContent
+                    })));
+                }
+            } catch (error) {
+                console.error("Failed to fetch post details", error);
+            }
+        };
+        fetchPostAndComments();
     }, [id]);
 
     const toggleCategory = (category: string) => {
@@ -63,30 +93,24 @@ function PostDetail() {
         font-weight: bold;
     `;
 
-    const handleAddComment = () => {
-        if (!commentAuthor || !commentText) return;
+    const handleAddComment = async () => {
+        if (!commentAuthor || !commentText || !id) return;
 
-        const newComment = { author: commentAuthor, text: commentText };
-        const updatedPost = { ...post };
+        try {
+            const response = await reactionApi.createComment({
+                postId: Number(id),
+                userId: commentAuthor, // Assuming author input is userId for now
+                commentContent: commentText
+            });
 
-        if (!updatedPost.comments) updatedPost.comments = [];
-        updatedPost.comments.push(newComment);
-
-        const updatedPosts = allPosts.map(p => (p.id === post.id ? updatedPost : p));
-        setAllPosts(updatedPosts);
-        setPost(updatedPost);
-
-        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
-        const index = savedPosts.findIndex((p: any) => p.id === post.id);
-        if (index >= 0) {
-            savedPosts[index] = updatedPost;
-        } else {
-            savedPosts.push(updatedPost);
+            if (response.success) {
+                setComments([...comments, { author: commentAuthor, text: commentText }]);
+                setCommentAuthor('');
+                setCommentText('');
+            }
+        } catch (error) {
+            console.error("Failed to add comment", error);
         }
-        localStorage.setItem('myPosts', JSON.stringify(savedPosts));
-
-        setCommentAuthor('');
-        setCommentText('');
     };
 
     if (!post) {
@@ -136,20 +160,7 @@ function PostDetail() {
                                 </div>
                                 {expandedCategory === category.name && (
                                     <SubMenu>
-                                        {allPosts
-                                            .filter(p =>
-                                                category.name === '즐겨찾는 게시판'
-                                                    ? p.favorite
-                                                    : p.category === category.name
-                                            )
-                                            .map(p => (
-                                                <li
-                                                    key={p.id}
-                                                    onClick={() => navigate(`/post/${p.id}`)}
-                                                >
-                                                    ㄴ {p.title}
-                                                </li>
-                                            ))}
+                                        {/* Sidebar posts list removed for now */}
                                     </SubMenu>
                                 )}
                             </li>
@@ -180,8 +191,8 @@ function PostDetail() {
 
                 <div style={{ marginTop: '30px' }}>
                     <h3>💬 댓글</h3>
-                    {post.comments && post.comments.length > 0 ? (
-                        post.comments.map((comment: any, idx: number) => (
+                    {comments && comments.length > 0 ? (
+                        comments.map((comment: any, idx: number) => (
                             <CommentItem key={idx}>
                                 <strong>{comment.author}</strong>
                                 <p>{comment.text}</p>

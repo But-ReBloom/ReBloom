@@ -17,7 +17,7 @@ export const postApi = {
         }) as Promise<ApiResponse<CreatePostResponse>>,
 
     findPost: (postId: number) => 
-        client(`/post/find/${postId}`, {
+        client(`/post/find/post/${postId}`, {
             method: "GET",
         }) as Promise<ApiResponse<CreatePostResponse>>,
 
@@ -42,18 +42,18 @@ export const postApi = {
         }) as Promise<ApiResponse<FindPostResponse>>,
 
     updatePost: (postId: number, data: UpdatePostRequest) => 
-        client(`/post/update/${postId}`, {
+        client(`/post/update/post/${postId}`, {
             method: "PUT",
             body: JSON.stringify(data),
         }) as Promise<ApiResponse<CreatePostResponse>>,
 
     deletePost: (postId: number) => 
-        client(`/post/delete/${postId}`, {
+        client(`/post/delete/post/${postId}`, {
             method: "DELETE",
         }) as Promise<ApiResponse<void>>,
 
     deletePostByAdmin: (postId: number) => 
-        client(`/post/admin/${postId}`, {
+        client(`/post/admin/post/${postId}`, {
             method: "DELETE",
         }) as Promise<ApiResponse<void>>,
 
@@ -63,12 +63,12 @@ export const postApi = {
         }) as Promise<ApiResponse<FindPostResponse>>,
 
     approvePost: (postId: number) => 
-        client(`/post/admin/${postId}/approve`, {
+        client(`/post/admin/post/${postId}/approve`, {
             method: "PATCH",
         }) as Promise<ApiResponse<CreatePostResponse>>,
 
     rejectPost: (postId: number) => 
-        client(`/post/admin/${postId}/reject`, {
+        client(`/post/admin/post/${postId}/reject`, {
             method: "PATCH",
         }) as Promise<ApiResponse<CreatePostResponse>>,
 };

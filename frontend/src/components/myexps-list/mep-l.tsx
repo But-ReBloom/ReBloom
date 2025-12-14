@@ -4,7 +4,13 @@ import Clock from "../../assets/images/mi_clock.svg";
 import Tag from "../../assets/images/Tag.svg";
 import Submitimg from "../../assets/images/submitinfo.svg";
 
-export default function MepL({ myexps, setStep, setSelectedExp }) {
+interface MepLProps {
+  myexps: any[];
+  setStep: (step: string) => void;
+  setSelectedExp: (exp: any) => void;
+}
+
+export default function MepL({ myexps, setStep, setSelectedExp }: MepLProps) {
   return (
     <>
       <S.Head>
@@ -32,7 +38,13 @@ export default function MepL({ myexps, setStep, setSelectedExp }) {
   );
 }
 
-function OneExpInfo({ exp, setStep, setSelectedExp }) {
+interface OneExpInfoProps {
+  exp: any;
+  setStep: (step: string) => void;
+  setSelectedExp: (exp: any) => void;
+}
+
+function OneExpInfo({ exp, setStep, setSelectedExp }: OneExpInfoProps) {
   return (
     <S.Wrraper
       onClick={() => {

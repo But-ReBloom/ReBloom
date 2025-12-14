@@ -15,41 +15,43 @@ import {
     RightPostItem,
     PostTitle,
     PostDescription,
-    CommentsList,
-    CommentItem,
     } from './style';
 
     import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
     import CloseIcon from '../../assets/images/close.svg';
     import { useNavigate } from 'react-router-dom';
+    import { useEffect, useState } from 'react';
+    import { postApi } from '../../api/post';
+    import type { CreatePostResponse } from '../../types/PostTypes';
     // import Header from '../../components/normal_header/nh';
 
     function Community() {
     const navigate = useNavigate();
+    const [leftPosts, setLeftPosts] = useState<CreatePostResponse[]>([]);
+    const [rightPosts, setRightPosts] = useState<CreatePostResponse[]>([]);
 
     const handleCloseClick = () => {
         navigate('/main');
     };
 
-    const leftPosts = [
-        { postId: 1, postTitle: '모여라 활잽이들', postContent: '설명' },
-        { postId: 2, postTitle: '모여라 활잽이들', postContent: '설명' },
-        { postId: 3, postTitle: '모여라 활잽이들', postContent: '설명' },
-        { postId: 4, postTitle: '모여라 활잽이들', postContent: '설명' },
-    ];
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const popularRes = await postApi.getPopularPosts();
+                if (popularRes.success) {
+                    setRightPosts(popularRes.data.posts);
+                }
 
-    const rightPosts = [
-        {
-        postId: 101,
-        postTitle: '모여라 활잽이들',
-        comments: ['안녕하세요', '안녕하세요', '반갑습니다'],
-        },
-        {
-        postId: 102,
-        postTitle: '모여라 활잽이들',
-        comments: ['댓글1', '댓글2', '댓글3', '댓글4'],
-        },
-    ];
+                const searchRes = await postApi.searchPosts({ keyword: "" });
+                if (searchRes.success) {
+                    setLeftPosts(searchRes.data.posts);
+                }
+            } catch (error) {
+                console.error("Failed to fetch posts", error);
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -84,23 +86,19 @@ import {
 
             <ContentWrapper>
             <LeftColumn>
-                {leftPosts.map(({ postId, postTitle, postContent }) => (
-                <LeftPostItem key={postId}>
-                    <PostTitle>{postTitle}</PostTitle>
-                    <PostDescription>{postContent}</PostDescription>
+                {leftPosts.map((post) => (
+                <LeftPostItem key={post.postId} onClick={() => navigate(`/post/${post.postId}`)}>
+                    <PostTitle>{post.postTitle}</PostTitle>
+                    <PostDescription>{post.postContent}</PostDescription>
                 </LeftPostItem>
                 ))}
             </LeftColumn>
 
             <RightColumn>
-                {rightPosts.map(({ postId, postTitle, comments }) => (
-                <RightPostItem key={postId}>
-                    <PostTitle>{postTitle}</PostTitle>
-                    <CommentsList>
-                    {comments?.map((comment, i) => (
-                        <CommentItem key={i}>{comment}</CommentItem>
-                    ))}
-                    </CommentsList>
+                {rightPosts.map((post) => (
+                <RightPostItem key={post.postId} onClick={() => navigate(`/post/${post.postId}`)}>
+                    <PostTitle>{post.postTitle}</PostTitle>
+                    <PostDescription>조회수: {post.viewers}</PostDescription>
                 </RightPostItem>
                 ))}
             </RightColumn>

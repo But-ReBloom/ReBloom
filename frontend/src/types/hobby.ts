@@ -64,3 +64,27 @@ export interface GetAllHobbyResponse {
     hobbies: GetHobbyResponse[];
 }
 
+export interface CreateReviewQuestionRequest {
+    hobbyId: number;
+}
+
+export interface CreateReviewQuestionResponse {
+    activityReviewId: number;
+    activityReviewQuestion: string;
+}
+
+export interface ReviewAnswerRequest {
+    activityReviewId: number;
+    answer: boolean;
+}
+
+export interface ReviewAnswerResponse {
+    socialScore: number;
+    learningScore: number;
+    planningScore: number;
+    focusScore: number;
+    creativityScore: number;
+    recommendedHobbies: HobbyScoreResponse[];
+    recommendedChannels: ChannelResponse[];
+}
+

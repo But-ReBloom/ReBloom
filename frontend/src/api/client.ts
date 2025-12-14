@@ -3,8 +3,10 @@ const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 export const client = async (endpoint: string, options: RequestInit = {}) => {
   const url = `${BASE_URL}${endpoint}`;
   
+  const token = localStorage.getItem("token");
   const headers: HeadersInit = {
     "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(options.headers || {}),
   };
 
