@@ -65,6 +65,7 @@ export const UserImage = styled.img`
   border-radius: 50%;
   margin-right: 20px;
   border: 2px solid rgba(51, 51, 51, 0.25);
+  padding: 4px;
 `;
 
 export const UserName = styled.h2`
@@ -80,6 +81,7 @@ export const UserTier = styled.h3`
 
 export const PointArchive = styled.div`
   display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
   height: 50px;
@@ -166,8 +168,9 @@ export const ProgressBar = styled.div`
   border-radius: 9999px;
   overflow: hidden;
 `;
-export const ProgressFill = styled.div`
-  width: ${(percent)}%;
+
+export const ProgressFill = styled.div<{ progress: number }>`
+  width: ${({ progress }) => progress}%;
   height: 100%;
   background: linear-gradient(90deg, #41a6ff, #3e55bf);
   transition: width 0.4s ease;
