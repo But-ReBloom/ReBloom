@@ -4,11 +4,26 @@ import Clock from "../../assets/images/mi_clock.svg";
 import Tag from "../../assets/images/Tag.svg";
 import Submitimg from "../../assets/images/submitinfo.svg";
 
-interface MepLProps {
-  myexps: any[];
-  setStep: (step: string) => void;
-  setSelectedExp: (exp: any) => void;
+/* ===============================
+   타입
+================================ */
+
+interface Activity {
+  activityName: string;
+  activityDate: string;
+  tags: string[];
+  isReviewed: boolean;
 }
+
+interface MepLProps {
+  myexps: Activity[];
+  setStep: (step: "index" | "detail") => void;
+  setSelectedExp: (exp: Activity) => void;
+}
+
+/* ===============================
+   리스트 컴포넌트
+================================ */
 
 export default function MepL({ myexps, setStep, setSelectedExp }: MepLProps) {
   return (
@@ -38,58 +53,48 @@ export default function MepL({ myexps, setStep, setSelectedExp }: MepLProps) {
   );
 }
 
+/* ===============================
+   개별 활동 행
+================================ */
+
 interface OneExpInfoProps {
-  exp: any;
-  setStep: (step: string) => void;
-  setSelectedExp: (exp: any) => void;
+  exp: Activity;
+  setStep: (step: "index" | "detail") => void;
+  setSelectedExp: (exp: Activity) => void;
 }
 
 function OneExpInfo({ exp, setStep, setSelectedExp }: OneExpInfoProps) {
   return (
     <S.Wrraper
       onClick={() => {
-        setSelectedExp(exp); // 선택한 활동 저장
-        setStep("detail"); // detail 화면으로 이동
+        setSelectedExp(exp);
+        setStep("detail");
       }}
     >
       <S.Container>
-        <S.Locates style={{ textDecoration: "none" }}>
+        {/* ===== 왼쪽 ===== */}
+        <S.Locates>
           <S.ExpInfo>
-            <img
-              src={Page}
-              alt="페이지 아이콘"
-              style={{ width: "20px", height: "20px" }}
-            />
+            <img src={Page} alt="활동명" width={20} height={20} />
             {exp.activityName}
           </S.ExpInfo>
 
           <S.ExpInfo>
-            <img
-              src={Clock}
-              alt="활동 날짜"
-              style={{ width: "20px", height: "20px" }}
-            />
-            {exp.activityStart}
+            <img src={Clock} alt="활동 날짜" width={20} height={20} />
+            {exp.activityDate}
           </S.ExpInfo>
         </S.Locates>
 
+        {/* ===== 오른쪽 ===== */}
         <S.Locate>
           <S.ExpInfo>
-            <img
-              src={Tag}
-              alt="태그"
-              style={{ width: "20px", height: "20px" }}
-            />
-            관련 태그
+            <img src={Tag} alt="태그" width={20} height={20} />
+            {exp.tags.join(", ")}
           </S.ExpInfo>
 
           <S.ExpInfo>
-            <img
-              src={Submitimg}
-              alt="제출 여부"
-              style={{ width: "24px", height: "24px" }}
-            />
-            제출
+            <img src={Submitimg} alt="리뷰 여부" width={22} height={22} />
+            {exp.isReviewed ? "제출 완료" : "미제출"}
           </S.ExpInfo>
         </S.Locate>
       </S.Container>

@@ -175,3 +175,22 @@ export const ProgressFill = styled.div<{ progress: number }>`
   background: linear-gradient(90deg, #41a6ff, #3e55bf);
   transition: width 0.4s ease;
 `;
+
+export const ChoiceBtn = styled.button`
+  width: 180px;
+  height: 32px;
+  background-color: rgb(0, 106, 255);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 12px;
+
+  &:hover {
+    background-color: rgb(115, 164, 233);
+    transform: translateY(-5px);
+  }
+`;
