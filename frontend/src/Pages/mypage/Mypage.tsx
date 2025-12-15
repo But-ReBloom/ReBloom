@@ -131,7 +131,7 @@ function RightSection({ achievements }: RightSectionProps) {
         }}
       >
         <S.ChoiceBtn onClick={() => setViewMode("box")}>
-          박스 보기
+          업적 보기
         </S.ChoiceBtn>
         <S.ChoiceBtn onClick={() => setViewMode("tree")}>
           나무 보기
