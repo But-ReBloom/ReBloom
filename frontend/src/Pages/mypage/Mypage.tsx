@@ -126,7 +126,7 @@ function RightSection({ achievements }: RightSectionProps) {
           gap: 20,
           position: "fixed",
           top: 120,
-          left: 950,
+          left: 1030,
           zIndex: 10,
         }}
       >
