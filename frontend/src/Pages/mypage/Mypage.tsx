@@ -10,6 +10,7 @@ import { authApi } from "../../api/auth";
 import { achievementApi } from "../../api/achievement";
 import type { FindUserInfoResponse } from "../../types/auth";
 import type { GetUserAchievementResponse } from "../../types/achievement";
+import Tree from "../../assets/images/Tree.svg";
 
 /* ===============================
    유틸
@@ -43,7 +44,7 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
           <S.UserImage src={React_svg} />
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <S.UserName>{userInfo?.userName || "Guest"}</S.UserName>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
               <S.UserTier>{tier}</S.UserTier>
               <img src={tierImage} width={32} />
             </div>
@@ -68,7 +69,9 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
         <S.ArchiveMent>완료한 업적</S.ArchiveMent>
         <S.ArchiveList>
           {completed.map((ach) => (
-            <S.Box key={ach.achievementId}>{ach.userAchievementTitle}</S.Box>
+            <S.Box key={ach.achievementId}>
+              {ach.userAchievementTitle}
+            </S.Box>
           ))}
         </S.ArchiveList>
       </S.UserInfoSection>
@@ -127,8 +130,12 @@ function RightSection({ achievements }: RightSectionProps) {
           zIndex: 10,
         }}
       >
-        <S.ChoiceBtn onClick={() => setViewMode("box")}>박스 보기</S.ChoiceBtn>
-        <S.ChoiceBtn onClick={() => setViewMode("tree")}>나무 보기</S.ChoiceBtn>
+        <S.ChoiceBtn onClick={() => setViewMode("box")}>
+          박스 보기
+        </S.ChoiceBtn>
+        <S.ChoiceBtn onClick={() => setViewMode("tree")}>
+          나무 보기
+        </S.ChoiceBtn>
       </div>
 
       {/* ===============================
@@ -138,20 +145,10 @@ function RightSection({ achievements }: RightSectionProps) {
         <>
           <S.DetailTitle>전체 업적</S.DetailTitle>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              width: "300px",
-              marginBottom: 16,
-              fontWeight: "bold",
-              borderRight: "2px solid #777",
-              borderLeft: "2px solid #777",
-            }}
-          >
+          <S.PointSummary>
             완료 업적 포인트: {completedPoints} | 티어 포인트:{" "}
             {completedTierPoints}
-          </div>
+          </S.PointSummary>
 
           {achievements.map((ach) => {
             const percent = ach.userAchievementIsSuccess ? 100 : 0;
@@ -185,29 +182,32 @@ function RightSection({ achievements }: RightSectionProps) {
       )}
 
       {/* ===============================
-          나무 보기
+          🌳 나무 보기
       ================================ */}
       {viewMode === "tree" && (
         <>
           <S.DetailTitle>나무 보기</S.DetailTitle>
 
-          {treeActivities.length > 0 ? (
-            treeActivities.map((act, idx) => (
-              <div
+          <S.TreeWrapper>
+            <S.TreeImage src={Tree} style={{width:"700px"}}/>
+
+            {treeActivities.map((act, idx) => (
+              <S.TreeActivity
                 key={idx}
                 style={{
-                  padding: 12,
-                  marginBottom: 8,
-                  borderRadius: 8,
-                  background: "#e8f3ff",
-                  fontWeight: 500,
+                  top: `${60 + (idx % 5) * 70}px`,
+                  left: idx % 2 === 0 ? "30%" : "65%",
                 }}
               >
-                🌱 {act}
-              </div>
-            ))
-          ) : (
-            <p>아직 추가된 활동이 없습니다.</p>
+                {act}
+              </S.TreeActivity>
+            ))}
+          </S.TreeWrapper>
+
+          {treeActivities.length === 0 && (
+            <p style={{ marginTop: 16 }}>
+              아직 추가된 활동이 없습니다.
+            </p>
           )}
         </>
       )}
@@ -219,7 +219,8 @@ function RightSection({ achievements }: RightSectionProps) {
    Main
 ================================ */
 export default function Mypage() {
-  const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
+  const [userInfo, setUserInfo] =
+    useState<FindUserInfoResponse | null>(null);
   const [achievements, setAchievements] = useState<
     GetUserAchievementResponse[]
   >([]);
@@ -231,7 +232,8 @@ export default function Mypage() {
         const userRes = await authApi.findCurrentUser();
         if (userRes.success) setUserInfo(userRes.data);
 
-        const achRes = await achievementApi.getUserAchievementsByUserEmail();
+        const achRes =
+          await achievementApi.getUserAchievementsByUserEmail();
         if (achRes.success) setAchievements(achRes.data);
       } finally {
         setLoading(false);
@@ -248,7 +250,10 @@ export default function Mypage() {
       <S.Background>
         <S.Wrapper>
           <S.Container>
-            <LeftSection userInfo={userInfo} achievements={achievements} />
+            <LeftSection
+              userInfo={userInfo}
+              achievements={achievements}
+            />
             <RightSection achievements={achievements} />
           </S.Container>
         </S.Wrapper>
