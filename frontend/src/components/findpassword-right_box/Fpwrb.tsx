@@ -46,7 +46,7 @@ export default function Ferb() {
         <S.LoginContainer>
             <S.LoginTextBox>
             <S.Title>Find my password</S.Title>
-            <S.Subtitle>Please take a moment to find password</S.Subtitle>
+            {/* <S.Subtitle>Please take a moment to find password</S.Subtitle> */}
             </S.LoginTextBox>
 
             <S.InputBox>
