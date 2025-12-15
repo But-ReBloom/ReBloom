@@ -41,7 +41,7 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
     <S.LeftSection>
       <S.UserInfoSection>
         <S.ProfileInfo>
-          <S.UserImage src={React_svg} />
+          <S.UserImage src={React_svg} style={{padding:"8px"}} />
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <S.UserName>{userInfo?.userName || "Guest"}</S.UserName>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
