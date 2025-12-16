@@ -8,6 +8,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ReviewAnswerRequest {
+    @NotNull
+    private Long activityReviewId;
+
     @NotBlank
     private String userEmail;
 

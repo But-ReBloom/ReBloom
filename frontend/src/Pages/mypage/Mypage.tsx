@@ -2,9 +2,15 @@ import * as S from "./style";
 import Header from "../../components/mainpage-Header/mph";
 import Point from "../../assets/images/Point.svg";
 import Archive from "../../assets/images/Archive.svg";
+<<<<<<< HEAD
 import React_svg from "../../assets/images/React.svg";
 import { ImageOfTier } from "../../components/determine_tier/determine_tier";
 import Rebloom from "../../assets/images/Rebloom.png";
+=======
+import React_svg from "../../assets/images/react.svg";
+import { ImageOfTier } from "../../components/determine_tier/determine_tier.ts";
+import Rebloom from "../../assets/images/ReBloom.png";
+>>>>>>> origin
 import { useEffect, useState } from "react";
 import { authApi } from "../../api/auth";
 import { achievementApi } from "../../api/achievement";
@@ -37,31 +43,46 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
   const tier = userInfo ? getTierName(userInfo.userTierPoint) : "bronze";
   const tierImage = ImageOfTier(tier);
 
+  // Debugging images
+  console.log("Images:", { React_svg, Point, Rebloom, Archive, tierImage });
+
   return (
     <S.LeftSection>
       <S.UserInfoSection>
         <S.ProfileInfo>
+<<<<<<< HEAD
           <S.UserImage src={React_svg} style={{padding:"8px"}} />
+=======
+          <S.UserImage src={React_svg || ""} />
+>>>>>>> origin
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <S.UserName>{userInfo?.userName || "Guest"}</S.UserName>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
               <S.UserTier>{tier}</S.UserTier>
+<<<<<<< HEAD
               <img src={tierImage} width={32} />
+=======
+              {tierImage && <img src={tierImage} alt="Tier Image" width={32} />}
+>>>>>>> origin
             </div>
           </div>
         </S.ProfileInfo>
 
         <S.PointArchive>
           <S.PnA>
-            <S.addedimage src={Point} />
+            {Point && <S.addedimage src={Point} />}
             {userInfo?.userTierPoint || 0}P
           </S.PnA>
           <S.PnA>
+<<<<<<< HEAD
             <S.addedimage src={Rebloom} />
+=======
+            {Rebloom && <S.addedimage src={Rebloom} />}
+>>>>>>> origin
             {userInfo?.userPoint || 0}P
           </S.PnA>
           <S.PnA>
-            <S.addedimage src={Archive} />
+            {Archive && <S.addedimage src={Archive} />}
             {completed.length}개
           </S.PnA>
         </S.PointArchive>
@@ -161,6 +182,7 @@ function RightSection({ achievements }: RightSectionProps) {
                   borderBottom: "1px solid rgba(0,0,0,0.1)",
                 }}
               >
+<<<<<<< HEAD
                 <S.ProgressTitle>
                   <strong>{ach.userAchievementTitle}</strong>
                   <div style={{ display: "flex", gap: 16 }}>
@@ -170,6 +192,14 @@ function RightSection({ achievements }: RightSectionProps) {
                     <span>{percent}%</span>
                   </div>
                 </S.ProgressTitle>
+=======
+                <S.ProgressBar>
+                  <S.ProgressFill $progress={percent} />
+                </S.ProgressBar>
+                <span>{percent}%</span>
+              </div>
+            </S.ProgressTitle>
+>>>>>>> origin
 
                 <p style={{ fontSize: 14, color: "#666" }}>
                   {ach.userAchievementDescription} (현재:{" "}
