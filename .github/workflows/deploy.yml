@@ -55,18 +55,19 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            set -e
             cd /home/ubuntu/rebloom
-            # Create .env file from secrets
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" > .env
-            echo "GMAIL_PASSWORD=${{ secrets.GMAIL_PASSWORD }}" >> .env
-            echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
-            echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
-            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-            echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> .env
-            echo "VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}" >> .env
-            
-            # Stop and remove existing containers
-            docker compose down
-            
-            # Rebuild and start
+
+            cat <<EOF > .env
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            GMAIL_PASSWORD=${{ secrets.GMAIL_PASSWORD }}
+            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            VITE_API_URL=${{ secrets.VITE_API_URL }}
+            VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+            EOF
+
+            docker compose down --remove-orphans -v
+
             docker compose up -d --build
