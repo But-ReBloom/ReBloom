@@ -25,8 +25,11 @@ export const client = async (endpoint: string, options: RequestInit = {}) => {
     
     const data = await response.json();
     return data;
-  } catch (error) {
-    console.error("API request failed:", error);
+  } catch (error: any) {
+    // 404 에러는 콘솔에 출력하지 않음 (데이터 없음으로 처리)
+    if (!error.message?.includes("status: 404")) {
+      console.error("API request failed:", error);
+    }
     throw error;
   }
 };

@@ -37,13 +37,13 @@ import {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const popularRes = await postApi.getPopularPosts();
-                if (popularRes.success) {
+                const popularRes = await postApi.getPopularPosts().catch(() => null);
+                if (popularRes && popularRes.success) {
                     setRightPosts(popularRes.data.posts);
                 }
 
-                const searchRes = await postApi.searchPosts({ keyword: "" });
-                if (searchRes.success) {
+                const searchRes = await postApi.searchPosts({ keyword: "" }).catch(() => null);
+                if (searchRes && searchRes.success) {
                     setLeftPosts(searchRes.data.posts);
                 }
             } catch (error) {

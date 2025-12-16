@@ -117,7 +117,7 @@ export const Button_Box = styled.div`
   gap: 40px;
 `;
 
-export const After_button = styled.button`
+export const After_button = styled.div`
   background-color: #ffffff00;
   border: #ffffff00;
 
@@ -163,7 +163,7 @@ export const NextButton = styled.button`
   }
 `;
 
-export const Before_button = styled.button`
+export const Before_button = styled.div`
   background-color: #ffffff00;
   border: #ffffff00;
 
