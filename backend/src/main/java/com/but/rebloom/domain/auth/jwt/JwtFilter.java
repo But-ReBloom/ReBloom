@@ -53,6 +53,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
+        // Preflight 요청 허용
+        if (request.getMethod().equals("OPTIONS")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 허용 경로면 그냥 통과
         if (isPermitAllPath(path)) {
             filterChain.doFilter(request, response);
