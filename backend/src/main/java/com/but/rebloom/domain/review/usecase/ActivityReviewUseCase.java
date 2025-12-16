@@ -153,7 +153,7 @@ public class ActivityReviewUseCase {
         List<HobbyScore> hobbyScores = result.keySet().iterator().next();
         List<Hobby> hobbies = hobbyScores.stream().map(HobbyScore::getHobby).toList();
 
-        ActivityReview review = activityReviewRepository.findByReviewIdAndUser(reviewAnswerRequest.getActivityReviewId(), user)
+        ActivityReview review = activityReviewRepository.findByReviewIdAndUser_UserEmail(reviewAnswerRequest.getActivityReviewId(), user.getUserEmail())
                 .orElseThrow(() -> new ReviewNotFoundException("리뷰를 찾을 수 없음"));
 
         review.setReviewAnswer("""
