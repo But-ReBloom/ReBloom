@@ -50,7 +50,7 @@ export default function Right_box() {
 
   const handleGoogleLogin = () => {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    const redirectUri = "http://localhost:5173/auth/google/callback";
+    const redirectUri = `${window.location.origin}/auth/google/callback`;
     const scope = "email profile";
     const responseType = "code";
 

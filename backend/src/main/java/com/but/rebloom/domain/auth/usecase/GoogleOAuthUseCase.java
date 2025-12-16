@@ -26,6 +26,9 @@ public class GoogleOAuthUseCase {
     @Value("${spring.security.oauth2.client.registration.google.client-secret:}")
     private String clientSecret;
 
+    @Value("${app.google.redirect-uri:http://localhost:5173/auth/google/callback}")
+    private String redirectUri;
+
     // 인증 코드 추출
     public User execute(GoogleLoginAuthorizeCodeRequest request) {
         String accessToken = getAccessToken(request.getAuthorizationCode());
@@ -51,7 +54,7 @@ public class GoogleOAuthUseCase {
         String body = "code=" + code +
                 "&client_id=" + clientId +
                 "&client_secret=" + clientSecret +
-                "&redirect_uri=" + "http://localhost:5173/auth/google/callback" +
+                "&redirect_uri=" + redirectUri +
                 "&grant_type=authorization_code";
 
         HttpEntity<String> request = new HttpEntity<>(body, headers);
