@@ -46,7 +46,7 @@ create table activities (
 create table activity_reviews (
                                   actr_id bigint not null auto_increment primary key,
                                   actr_question varchar(1000),
-                                  actr_answecr varchar(1000),
+                                  actr_answer varchar(1000),
                                   actr_created_at date,
                                   fk_u_email varchar(100) not null,
                                   fk_h_id bigint not null,
