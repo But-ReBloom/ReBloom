@@ -15,6 +15,7 @@ import com.but.rebloom.domain.hobby.usecase.HobbyTestUseCase;
 import com.but.rebloom.domain.review.domain.ActivityReview;
 import com.but.rebloom.domain.review.domain.ActivityReviewResult;
 import com.but.rebloom.domain.review.dto.request.ReviewAnswerRequest;
+import com.but.rebloom.domain.review.exception.ReviewNotFoundException;
 import com.but.rebloom.domain.review.repository.ActivityReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -83,6 +84,7 @@ public class ActivityReviewUseCase {
 
         ActivityReview activityReview = ActivityReview.builder()
                 .hobby(hobby)
+                .user(currentUser)
                 .reviewQuestion(mergedQuestions)
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -151,27 +153,22 @@ public class ActivityReviewUseCase {
         List<HobbyScore> hobbyScores = result.keySet().iterator().next();
         List<Hobby> hobbies = hobbyScores.stream().map(HobbyScore::getHobby).toList();
 
-        Hobby hobby = hobbyRepository.findByHobbyId(reviewAnswerRequest.getHobbyId())
-                .orElseThrow(() -> new HobbyNotFoundException("취미를 찾을 수 없음"));
+        ActivityReview review = activityReviewRepository.findByReviewIdAndUser(reviewAnswerRequest.getActivityReviewId(), user)
+                .orElseThrow(() -> new ReviewNotFoundException("리뷰를 찾을 수 없음"));
 
-        ActivityReview review = ActivityReview.builder()
-                .user(user)
-                .hobby(hobby)
-                .reviewAnswer("""
-                        Society: %s
-                        Learning: %s
-                        Planning: %s
-                        Focus: %s
-                        Creativity: %s
-                        """.formatted(
-                        reviewAnswerRequest.getSocialAnswer(),
-                        reviewAnswerRequest.getLearningAnswer(),
-                        reviewAnswerRequest.getPlanningAnswer(),
-                        reviewAnswerRequest.getFocusAnswer(),
-                        reviewAnswerRequest.getCreativityAnswer()
-                ))
-                .createdAt(LocalDateTime.now())
-                .build();
+        review.setReviewAnswer("""
+            Society: %s
+            Learning: %s
+            Planning: %s
+            Focus: %s
+            Creativity: %s
+            """.formatted(
+                reviewAnswerRequest.getSocialAnswer(),
+                reviewAnswerRequest.getLearningAnswer(),
+                reviewAnswerRequest.getPlanningAnswer(),
+                reviewAnswerRequest.getFocusAnswer(),
+                reviewAnswerRequest.getCreativityAnswer()
+        ));
 
         activityReviewRepository.save(review);
 
