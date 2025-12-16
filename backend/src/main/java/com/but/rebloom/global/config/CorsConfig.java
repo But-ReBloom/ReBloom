@@ -21,9 +21,11 @@ public class CorsConfig {
                                 "http://localhost:8080",
 
                                 "http://rebloom.co.kr",
+                                "http://www.rebloom.co.kr",
                                 "http://api.rebloom.co.kr",
 
                                 "https://rebloom.co.kr",
+                                "https://www.rebloom.co.kr",
                                 "https://api.rebloom.co.kr"
 
                         )
