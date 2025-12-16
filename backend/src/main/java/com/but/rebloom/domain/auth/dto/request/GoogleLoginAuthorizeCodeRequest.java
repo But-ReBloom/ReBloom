@@ -7,4 +7,7 @@ import lombok.Getter;
 public class GoogleLoginAuthorizeCodeRequest {
     @NotBlank
     private String authorizationCode;
+
+    @NotBlank
+    private String redirectUri;
 }

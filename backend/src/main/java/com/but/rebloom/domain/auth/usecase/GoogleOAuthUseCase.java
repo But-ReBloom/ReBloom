@@ -28,7 +28,7 @@ public class GoogleOAuthUseCase {
 
     // 인증 코드 추출
     public User execute(GoogleLoginAuthorizeCodeRequest request) {
-        String accessToken = getAccessToken(request.getAuthorizationCode());
+        String accessToken = getAccessToken(request.getAuthorizationCode(), request.getRedirectUri());
         GoogleUserInfoResponse googleUser = getUserInfo(accessToken);
 
         return userRepository.findByUserEmail(googleUser.getEmail())
@@ -41,7 +41,7 @@ public class GoogleOAuthUseCase {
     }
 
     // Jwt랑 비슷하게 이해
-    private String getAccessToken(String code) {
+    private String getAccessToken(String code, String redirectUri) {
         String tokenUrl = "https://oauth2.googleapis.com/token";
         RestTemplate restTemplate = new RestTemplate();
 
@@ -51,7 +51,7 @@ public class GoogleOAuthUseCase {
         String body = "code=" + code +
                 "&client_id=" + clientId +
                 "&client_secret=" + clientSecret +
-                "&redirect_uri=" + "http://localhost:5173/auth/google/callback" +
+                "&redirect_uri=" + redirectUri +
                 "&grant_type=authorization_code";
 
         HttpEntity<String> request = new HttpEntity<>(body, headers);
