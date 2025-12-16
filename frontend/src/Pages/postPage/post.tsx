@@ -22,9 +22,12 @@ import {
 } from './pst';
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
+import React_svg from "../../assets/images/react.svg";
 // import { posts as initialPosts } from './posts';
 import { postApi } from '../../api/post';
+import { authApi } from '../../api/auth';
 import type { CreatePostResponse } from '../../types/PostTypes';
+import type { FindUserInfoResponse } from '../../types/auth';
 
 const WritePostButton = styled.button`
     width: 100%;
@@ -67,12 +70,25 @@ function Post() {
     const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [allPosts, setAllPosts] = useState<any[]>([]);
+    const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
 
     useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await authApi.findCurrentUser();
+                if (response.success) {
+                    setUserInfo(response.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch user info", error);
+            }
+        };
+        fetchUserInfo();
+
         const fetchPosts = async () => {
             try {
-                const response = await postApi.searchPosts({ keyword: "" });
-                if (response.success) {
+                const response = await postApi.searchPosts({ keyword: "" }).catch(() => null);
+                if (response && response.success) {
                     // Map API response to UI format
                     const mappedPosts = response.data.posts.map((post: CreatePostResponse) => ({
                         id: post.postId,
@@ -139,10 +155,10 @@ function Post() {
                 </CafeInfo>
 
                 <ProfileSection>
-                    <img src="" alt="프로필" />
+                    <img src={React_svg} alt="프로필" />
                     <div>
-                        <strong>홍길동</strong>
-                        <p>레벨 3</p>
+                        <strong>{userInfo?.userName || "Guest"}</strong>
+                        <p>레벨 {userInfo ? Math.floor(userInfo.userTierPoint / 1000) + 1 : 1}</p>
                     </div>
                 </ProfileSection>
 

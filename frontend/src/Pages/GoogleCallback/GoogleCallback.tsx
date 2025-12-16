@@ -13,8 +13,10 @@ export default function GoogleCallback() {
     if (code) {
       const login = async () => {
         try {
+          const redirectUri = `${window.location.origin}/auth/google/callback`;
           const response = await authApi.googleLogin({
             authorizationCode: code,
+            redirectUri,
           });
 
           if (response.success) {

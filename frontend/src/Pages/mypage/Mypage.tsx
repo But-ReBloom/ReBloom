@@ -2,9 +2,9 @@ import * as S from "./style";
 import Header from "../../components/mainpage-Header/mph";
 import Point from "../../assets/images/Point.svg";
 import Archive from "../../assets/images/Archive.svg";
-import React_svg from "../../assets/images/React.svg";
+import React_svg from "../../assets/images/react.svg";
 import { ImageOfTier } from "../../components/determine_tier/determine_tier.ts";
-import Rebloom from "../../assets/images/Rebloom.png";
+import Rebloom from "../../assets/images/ReBloom.png";
 import { useEffect, useState } from "react";
 import { authApi } from "../../api/auth";
 import { achievementApi } from "../../api/achievement";
@@ -37,11 +37,14 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
   const tier = userInfo ? getTierName(userInfo.userTierPoint) : "bronze";
   const tierImage = ImageOfTier(tier);
 
+  // Debugging images
+  console.log("Images:", { React_svg, Point, Rebloom, Archive, tierImage });
+
   return (
     <S.LeftSection>
       <S.UserInfoSection>
         <S.ProfileInfo>
-          <S.UserImage src={React_svg} />
+          <S.UserImage src={React_svg || ""} />
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <S.UserName>{userInfo?.userName || "Guest"}</S.UserName>
             <div
@@ -52,22 +55,22 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
               }}
             >
               <S.UserTier>{tier}</S.UserTier>
-              <img src={tierImage} alt="Tier Image" width={32} />
+              {tierImage && <img src={tierImage} alt="Tier Image" width={32} />}
             </div>
           </div>
         </S.ProfileInfo>
 
         <S.PointArchive>
           <S.PnA>
-            <S.addedimage src={Point} />
+            {Point && <S.addedimage src={Point} />}
             {userInfo?.userTierPoint || 0}P
           </S.PnA>
           <S.PnA>
-            <S.addedimage src={Rebloom}></S.addedimage>
+            {Rebloom && <S.addedimage src={Rebloom} />}
             {userInfo?.userPoint || 0}P
           </S.PnA>
           <S.PnA>
-            <S.addedimage src={Archive} />
+            {Archive && <S.addedimage src={Archive} />}
             {completed.length}개
           </S.PnA>
         </S.PointArchive>
@@ -139,7 +142,7 @@ function RightSection({ achievements }: RightSectionProps) {
                 }}
               >
                 <S.ProgressBar>
-                  <S.ProgressFill progress={percent} />
+                  <S.ProgressFill $progress={percent} />
                 </S.ProgressBar>
                 <span>{percent}%</span>
               </div>

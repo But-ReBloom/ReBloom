@@ -169,8 +169,8 @@ export const ProgressBar = styled.div`
   overflow: hidden;
 `;
 
-export const ProgressFill = styled.div<{ progress: number }>`
-  width: ${({ progress }) => progress}%;
+export const ProgressFill = styled.div<{ $progress: number }>`
+  width: ${({ $progress }) => $progress}%;
   height: 100%;
   background: linear-gradient(90deg, #41a6ff, #3e55bf);
   transition: width 0.4s ease;

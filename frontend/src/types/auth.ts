@@ -41,6 +41,7 @@ export interface VerifyCodeRequest {
 
 export interface GoogleLoginAuthorizeCodeRequest {
     authorizationCode: string;
+    redirectUri: string;
 }
 
 export interface UpdateUserIdRequest {

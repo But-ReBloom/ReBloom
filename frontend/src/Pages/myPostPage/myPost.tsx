@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Container,
     CloseButton,
@@ -20,16 +20,35 @@ import {
 
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
+import React_svg from "../../assets/images/react.svg";
 // import { posts as initialPosts } from '../postPage/posts';
 import { postApi } from '../../api/post';
+import { authApi } from '../../api/auth';
+import { channelApi } from '../../api/channel';
+import type { FindUserInfoResponse } from '../../types/auth';
 
 function MyPostPage() {
     const navigate = useNavigate();
     const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+    const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
 
     const [selectedCategory, setSelectedCategory] = useState('소통');
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await authApi.findCurrentUser();
+                if (response.success) {
+                    setUserInfo(response.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch user info", error);
+            }
+        };
+        fetchUserInfo();
+    }, []);
 
     const handleCloseClick = () => navigate('/');
     const handleClear = () => {
@@ -43,12 +62,39 @@ function MyPostPage() {
             return;
         }
 
+        if (!userInfo) {
+            alert('사용자 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+            return;
+        }
+
         try {
-            // Map category to channelId (placeholder logic)
-            let channelId = 1; 
+            // Find channel by selected category name
+            let channelId: number | null = null;
+            
+            // 1. Try to find exact match
+            const channelRes = await channelApi.searchChannel({ keyword: selectedCategory });
+            if (channelRes.success && channelRes.data.channels.length > 0) {
+                // Filter for exact match if possible, or take the first one
+                const match = channelRes.data.channels.find(c => c.channelTitle === selectedCategory) || channelRes.data.channels[0];
+                channelId = match.channelId;
+            }
+
+            // 2. If not found, try to find ANY channel to fallback (temporary fix for dev)
+            if (!channelId) {
+                const allChannelsRes = await channelApi.searchChannel({ keyword: "" });
+                if (allChannelsRes.success && allChannelsRes.data.channels.length > 0) {
+                    channelId = allChannelsRes.data.channels[0].channelId;
+                    console.warn(`Category '${selectedCategory}' not found. Falling back to channel '${allChannelsRes.data.channels[0].channelTitle}'`);
+                }
+            }
+
+            if (!channelId) {
+                alert(`'${selectedCategory}' 채널을 찾을 수 없으며, 사용할 수 있는 다른 채널도 없습니다.`);
+                return;
+            }
             
             const response = await postApi.createPost({
-                userId: "testUser", // Placeholder user ID
+                userId: userInfo.userId,
                 channelId: channelId,
                 postTitle: title,
                 postContent: content,
@@ -92,10 +138,10 @@ function MyPostPage() {
                 </CafeInfo>
 
                 <ProfileSection>
-                    <img src="" alt="프로필" />
+                    <img src={React_svg} alt="프로필" />
                     <div>
-                        <strong>홍길동</strong>
-                        <p>레벨 3</p>
+                        <strong>{userInfo?.userName || "Guest"}</strong>
+                        <p>레벨 {userInfo ? Math.floor(userInfo.userTierPoint / 1000) + 1 : 1}</p>
                     </div>
                 </ProfileSection>
 
