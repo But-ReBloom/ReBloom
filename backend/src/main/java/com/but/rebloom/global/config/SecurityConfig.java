@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -36,6 +37,7 @@ public class SecurityConfig {
                 .formLogin(form -> form.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Preflight 요청 허용
                         .requestMatchers("/favicon.ico").permitAll()
                         // 기본 경로
                         .requestMatchers("/",
@@ -45,7 +47,6 @@ public class SecurityConfig {
                                 "/channel/**",
                                 "/post/**",
                                 "/hobby-test/**",
-                                "/hobby-review/**",
                                 "/comment/**",
                                 "/heart/**"
                         ).permitAll()
