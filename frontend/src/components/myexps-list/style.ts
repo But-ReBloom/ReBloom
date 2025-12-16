@@ -25,8 +25,12 @@ export const Locate = styled.div`
   margin-right: 36px;
 `;
 
-export const Wrraper = styled.div`
-  background-color: rgb(255, 255, 255, 0.58);
+/* ===============================
+   🔹 변경 핵심 부분
+   제출 완료(isReviewed === true) → opacity 적용
+================================ */
+export const Wrraper = styled.div<{ isReviewed: boolean }>`
+  background-color: rgba(255, 255, 255, 0.58);
   display: flex;
   align-items: center;
   margin-top: 12px;
@@ -36,9 +40,15 @@ export const Wrraper = styled.div`
   cursor: pointer;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.26);
 
+  /* ✅ 제출 완료된 항목만 흐리게 */
+  filter: ${({ isReviewed }) => (isReviewed ? "opacity(50%)" : "none")};
+
+  transition: filter 0.2s ease, background-color 0.2s ease, border 0.2s ease;
+
   &:hover {
-    background-color: rgb(211, 241, 255);
-    border: 1px solid #3e55bf;
+    background-color: ${({ isReviewed }) =>
+      isReviewed ? "rgba(255,255,255,0.58)" : "rgb(211, 241, 255)"};
+    border: ${({ isReviewed }) => (isReviewed ? "none" : "1px solid #3e55bf")};
   }
 `;
 

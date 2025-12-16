@@ -1,4 +1,4 @@
-import * as S from "./style.ts";
+import * as S from "./style";
 import Page from "../../assets/images/page.svg";
 import Clock from "../../assets/images/mi_clock.svg";
 import Tag from "../../assets/images/Tag.svg";
@@ -66,6 +66,7 @@ interface OneExpInfoProps {
 function OneExpInfo({ exp, setStep, setSelectedExp }: OneExpInfoProps) {
   return (
     <S.Wrraper
+      isReviewed={exp.isReviewed}
       onClick={() => {
         setSelectedExp(exp);
         setStep("detail");
