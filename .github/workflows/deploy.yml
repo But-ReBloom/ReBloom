@@ -61,7 +61,6 @@ jobs:
             echo "GMAIL_PASSWORD=${{ secrets.GMAIL_PASSWORD }}" >> .env
             echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
             echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
-            echo "APP_GOOGLE_REDIRECT_URI=${{ secrets.APP_GOOGLE_REDIRECT_URI }}" >> .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
             
             # Stop and remove existing containers

@@ -35,7 +35,6 @@ services:
       GMAIL_PASSWORD: ${GMAIL_PASSWORD}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      APP_GOOGLE_REDIRECT_URI: ${APP_GOOGLE_REDIRECT_URI}
       JWT_SECRET: ${JWT_SECRET}
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ReBloom?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
     depends_on:
