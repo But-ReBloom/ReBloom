@@ -15,19 +15,9 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(Arrays.asList("*")); // 모든 Origin 허용 (패턴 사용)
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5500",
-                "http://localhost:3000",
-                "http://localhost:5173",
-                "http://localhost:8080",
-                "http://rebloom.co.kr",
-                "http://www.rebloom.co.kr",
-                "http://api.rebloom.co.kr",
-                "https://rebloom.co.kr",
-                "https://www.rebloom.co.kr",
-                "https://api.rebloom.co.kr"
-        ));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type")); // 클라이언트에서 접근 가능한 헤더 설정
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
