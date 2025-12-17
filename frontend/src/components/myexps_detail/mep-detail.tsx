@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import Godd from "../../assets/images/HelloHand.svg";
 
 interface MepDetailProps {
-  setStep: (step: string) => void;
+  setStep: (step: "index" | "detail") => void;
   exp: any;
 }
 

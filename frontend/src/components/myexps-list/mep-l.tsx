@@ -9,6 +9,7 @@ import Submitimg from "../../assets/images/submitinfo.svg";
 ================================ */
 
 interface Activity {
+  activityId: number;
   activityName: string;
   activityDate: string;
   tags: string[];

@@ -5,6 +5,7 @@ import * as S from "./style.ts";
 import Google from "../../assets/images/Google.svg";
 import { authApi } from "../../api/auth";
 
+
 export default function Right_box() {
   const navigate = useNavigate();
   const location = useLocation();

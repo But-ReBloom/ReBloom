@@ -1,7 +1,7 @@
 import * as S from "./style.ts";
 import Google from "../../assets/images/Google.svg";
-import Dodum from "../../assets/images/dodamdodam.svg";
 import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { authApi } from "../../api/auth";
