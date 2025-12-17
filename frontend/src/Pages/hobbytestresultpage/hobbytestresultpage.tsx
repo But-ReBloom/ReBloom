@@ -1,73 +1,79 @@
-import * as S from "./style.ts";
-import Header from "../../components/normal_header/nh.tsx";
+import * as S from "./style";
+import Header from "../../components/normal_header/nh";
 import { useLocation, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/blackarrow.svg";
+
+/* ===============================
+   FTTP 결과 보정 함수
+================================ */
+const normalizeToRange = (value: number) => {
+  return ((value + 1) / 4) * 4 - 2;
+};
 
 export default function TestResult() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { finalAverage, recommendations } = location.state || {};
+  const { finalAverage } = location.state || {};
+
+  if (!finalAverage) return null;
+
+  const categories = [
+    { label: "사회성", value: normalizeToRange(finalAverage.social) },
+    { label: "학습력", value: normalizeToRange(finalAverage.learning) },
+    { label: "계획력", value: normalizeToRange(finalAverage.planning) },
+    { label: "집중력", value: normalizeToRange(finalAverage.focus) },
+    { label: "창의성", value: normalizeToRange(finalAverage.creativity) },
+  ];
+
+  /* ===============================
+     그래프 최대 높이 계산
+     기준: value 2 → 350px
+  ================================ */
+  const BAR_UNIT = 175; // 1점당 px
+  const maxBarHeight =
+    Math.max(...categories.map((c) => Math.abs(c.value))) * BAR_UNIT;
 
   return (
     <S.Background>
       <Header />
+
       <S.Wrrapper>
-        <S.SemiContainer1>
+        <S.MainColumn>
           <S.Title>알고리즘 테스트 결과</S.Title>
-          <S.LeftContainer>
-            <S.ResultLeft>
-              <S.ResultBox>
-                <S.Subtitle>회원님의 사회성 점수</S.Subtitle>
-                <S.Scoretitle>{finalAverage?.social?.toFixed(1)}</S.Scoretitle>
-              </S.ResultBox>
-              <S.ResultBox>
-                <S.Subtitle>회원님의 학습력 점수</S.Subtitle>
-                <S.Scoretitle>{finalAverage?.learning?.toFixed(1)}</S.Scoretitle>
-              </S.ResultBox>
-              <S.ResultBox>
-                <S.Subtitle>회원님의 계획력 점수</S.Subtitle>
-                <S.Scoretitle>{finalAverage?.planning?.toFixed(1)}</S.Scoretitle>
-              </S.ResultBox>
-            </S.ResultLeft>
 
-            <S.ResultRight>
-              <S.ResultBox>
-                <S.Subtitle>회원님의 집중력 점수</S.Subtitle>
-                <S.Scoretitle>{finalAverage?.focus?.toFixed(1)}</S.Scoretitle>
-              </S.ResultBox>
-              <S.ResultBox>
-                <S.Subtitle>회원님의 창의성 점수</S.Subtitle>
-                <S.Scoretitle>{finalAverage?.creativity?.toFixed(1)}</S.Scoretitle>
-              </S.ResultBox>
-            </S.ResultRight>
-          </S.LeftContainer>
-        </S.SemiContainer1>
+          {/* ================= 그래프 ================= */}
+          <S.GraphSection $graphHeight={maxBarHeight}>
+            <S.GraphTitle>카테고리별 상대 점수</S.GraphTitle>
 
-        <S.SemiContainer2>
-          <S.RightContainer>
-            {recommendations && recommendations.length > 0 ? (
-              recommendations.map((rec: any, index: number) => (
-                <S.RecommaendBox key={index}>
-                  {index + 1}. {rec.hobbyName}
-                </S.RecommaendBox>
-              ))
-            ) : (
-              <S.RecommaendBox>추천 활동이 없습니다.</S.RecommaendBox>
-            )}
-          </S.RightContainer>
-          <S.ArrowImage
-            onClick={() =>
-              navigate("/thankyou", {
-                state: {
-                  type: "HobbyTest",
-                  message: "테스트에 응해주셔서 감사합니다.",
-                },
-              })
-            }
-          >
-            <img src={Arrow} alt="" />
-          </S.ArrowImage>
-        </S.SemiContainer2>
+            <S.RelativeChart>
+              {categories.map((item) => (
+                <S.RelativeBarItem key={item.label}>
+                  <S.RelativeBarWrapper $height={maxBarHeight}>
+                    <S.RelativeBar $value={item.value} $unit={BAR_UNIT} />
+                  </S.RelativeBarWrapper>
+
+                  <S.BarValue>{item.value.toFixed(2)}</S.BarValue>
+                  <S.BarLabel>{item.label}</S.BarLabel>
+                </S.RelativeBarItem>
+              ))}
+            </S.RelativeChart>
+          </S.GraphSection>
+
+          {/* ================= 추천 ================= */}
+          <S.GraphTitle>추천 활동</S.GraphTitle>
+
+          <S.RecommendSection>
+            <S.RecommendRow>
+              <S.RecommaendBox>토론 활동</S.RecommaendBox>
+              <S.RecommaendBox>문제 해결 프로젝트</S.RecommaendBox>
+              <S.RecommaendBox>집중력 강화 훈련</S.RecommaendBox>
+            </S.RecommendRow>
+
+            <S.ArrowImage onClick={() => navigate("/")}>
+              <img src={Arrow} alt="메인으로 이동" />
+            </S.ArrowImage>
+          </S.RecommendSection>
+        </S.MainColumn>
       </S.Wrrapper>
     </S.Background>
   );

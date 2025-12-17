@@ -22,15 +22,15 @@ export const LoginTextBox = styled.div`
 `;
 
 export const Title = styled.p`
-  font-size: 48px;
+  font-size: 36px;
   color: black;
   margin: 0;
 `;
 
 export const Subtitle = styled.p`
-  font-size: 20px;
-  color: black;
-  margin-top: 10px;
+  font-size: 16px;
+  color: #777;
+  margin-top: 4px;
 `;
 
 export const InputBox = styled.div`

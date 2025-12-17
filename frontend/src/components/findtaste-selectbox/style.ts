@@ -16,7 +16,7 @@ export const DesBox = styled.div`
 
     flex-direction: column;
 
-    padding: 100px;
+    padding: 50px;
 `;
 
 export const Text = styled.p`

@@ -3,7 +3,7 @@ import App from "./App";
 import LoginPage from "./Pages/LoginPage/LP.tsx";
 import SignUpPage from "./Pages/signuppage/SUP.tsx";
 import FindEmail from "./Pages/findEmailpage/FEP.tsx";
-import FindPassWord from "./Pages/findPasswordpage/FPWP.tsx";
+import FindId from "./Pages/findPasswordpage/FPWP.tsx";
 import FT_HobbyTest from "./Pages/findtastepage/ftp.tsx";
 import FT_HobbyTest_Description from "./Pages/findtaste-description-page/ft-dp.tsx";
 import FT_TestPage from "./Pages/findtaste-testpage/fttp.tsx";
@@ -20,6 +20,7 @@ import TestResult from "./Pages/hobbytestresultpage/hobbytestresultpage.tsx";
 import Thankyou from "./components/thanktou/thankyou.tsx";
 import Mypage from "./Pages/mypage/Mypage.tsx";
 import GoogleCallback from "./Pages/GoogleCallback/GoogleCallback.tsx";
+import LoadingPage from "./Pages/loadingpage/loading.tsx";
 
 //경로명세 라우터
 const router = createBrowserRouter([
@@ -64,8 +65,8 @@ const router = createBrowserRouter([
     element: <FindEmail />,
   },
   {
-    path: "/forgot/password",
-    element: <FindPassWord />,
+    path: "/forgot/id",
+    element: <FindId />,
   },
   {
     path: "/taste",
@@ -118,6 +119,9 @@ const router = createBrowserRouter([
   {
     path: "/mypage",
     element: <Mypage/>,
+  },{
+    path: "/loading",
+    element: <LoadingPage/>
   }
 ]);
 

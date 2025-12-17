@@ -1,34 +1,64 @@
 import * as S from "./style.ts";
 import BlackArrowImg from "../../assets/images/blackarrow.svg";
-import QuestionBox from "../questionbox/qb.tsx";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import Godd from "../../assets/images/HelloHand.svg";
 
 interface MepDetailProps {
   setStep: (step: string) => void;
   exp: any;
 }
 
+const QUESTIONS = [
+  "1. 이번 활동에서 가장 인상 깊었던 점은 무엇인가요?",
+  "2. 활동을 하며 어려웠던 점이 있었다면 무엇인가요?",
+  "3. 이 활동을 통해 새롭게 배운 점은 무엇인가요?",
+  "4. 다음에 이 활동을 한다면 개선하고 싶은 점은 무엇인가요?",
+  "5. 전반적인 소감이나 느낀 점을 자유롭게 작성해 주세요.",
+];
+
 export default function MepDetail({ setStep, exp }: MepDetailProps) {
   const navigate = useNavigate();
-  const [ReviewData, setWrittenData] = useState("");
-  const [satisfaction, setSatisfaction] = useState<number | null>(null);
 
-  const handleSubmit = () => {
-    if (ReviewData.length < 100) {
-      toast.error("리뷰는 100자 이상 작성하셔야 합니다.");
+  /* ===============================
+     상태
+  ================================ */
+  const [answers, setAnswers] = useState<string[]>(["", "", "", "", ""]);
+  const [page, setPage] = useState<0 | 1>(0);
+
+  const handleChange = (index: number, value: string) => {
+    const next = [...answers];
+    next[index] = value;
+    setAnswers(next);
+  };
+
+  const handleNext = () => {
+    // 첫 페이지 검증
+    if (page === 0 && answers[0].length < 100) {
+      toast.error("첫 번째 질문은 100자 이상 작성하셔야 합니다.");
+      return;
+    }
+
+    if (page === 0) {
+      setPage(1);
     } else {
-      console.log("Satisfaction:", satisfaction);
-      // TODO: Implement API call to submit review
-      navigate("/thankyou", {
-        state: {
-          message: `활동리뷰를 마무리한 사람이세요~~~`,
-          type: "ExpsReview",
-        },
-      });
+      console.log("주관식 응답:", answers);
+      // TODO: API 제출
+
+      navigate("/"); // 메인 페이지
     }
   };
+
+  /* ===============================
+     페이지별 질문 범위
+  ================================ */
+  const visibleQuestions =
+    page === 0
+      ? QUESTIONS.slice(0, 3)
+      : QUESTIONS.slice(3, 5);
+
+  const offset = page === 0 ? 0 : 3;
 
   return (
     <>
@@ -36,39 +66,47 @@ export default function MepDetail({ setStep, exp }: MepDetailProps) {
         <S.Container>
           {/* 이전 버튼 */}
           <S.Arrow onClick={() => setStep("index")}>
-            <img src={BlackArrowImg} alt="이전으로 가는 화살표" />
+            <img src={BlackArrowImg} alt="이전" />
           </S.Arrow>
 
           <S.QuestionBox>
             <S.Boxing>
-              <S.Title>{exp.activityName} 활동에 대해 만족하시나요?</S.Title>
-              <QuestionBox onSelect={setSatisfaction} />
+              <img src={Godd} style={{width: 80}} alt="" />
+              <S.Title>
+                {exp.activityName} 활동에 대해 답변해 주세요.
+              </S.Title>
             </S.Boxing>
 
             <S.TextPlace>
-              <S.DetailPlace>
-                <S.Title style={{ marginLeft: "12px", marginBottom: "12px" }}>
-                  이번 활동에 대한 리뷰를 남겨주십시오.
-                </S.Title>
-                <S.TextingBox
-                  placeholder="최소 100자 이상으로 작성해주십시오."
-                  value={ReviewData}
-                  onChange={(e) => setWrittenData(e.target.value)}
-                />
-              </S.DetailPlace>
+              {visibleQuestions.map((question, idx) => {
+                const realIndex = idx + offset;
 
-              <S.DetailPlace>
-                <S.Title style={{ marginLeft: "12px", marginBottom: "12px" }}>
-                  건의 사항
-                </S.Title>
-                <S.TextingBox placeholder="저희 사이트에 건의 사항이 있으시면 남겨주십시오." />
-              </S.DetailPlace>
+                return (
+                  <S.DetailPlace key={realIndex}>
+                    <S.Title style={{ fontSize: 16 , fontWeight: 500,marginLeft: 12, marginBottom: 12 }}>
+                      {question}
+                    </S.Title>
+                    <S.TextingBox
+                      placeholder={
+                        realIndex === 0
+                          ? "최소 100자 이상 작성해 주세요."
+                          : "자유롭게 작성해 주세요."
+                      }
+                      value={answers[realIndex]}
+                      onChange={(e) =>
+                        handleChange(realIndex, e.target.value)
+                      }
+                    />
+                  </S.DetailPlace>
+                );
+              })}
             </S.TextPlace>
           </S.QuestionBox>
         </S.Container>
 
-        <S.Arrows onClick={handleSubmit}>
-          <img src={BlackArrowImg} alt="" />
+        {/* 다음 버튼 */}
+        <S.Arrows onClick={handleNext}>
+          <img src={BlackArrowImg} alt="다음" />
         </S.Arrows>
       </S.Wrapper>
 

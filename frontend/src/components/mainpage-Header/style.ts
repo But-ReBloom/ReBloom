@@ -86,9 +86,24 @@ export const HeaderRight = styled.div`
 
   /* ========== 로그인 버튼 그룹 ========== */
   .go-login-button {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    background: linear-gradient(90deg, #41a6ff, #3e55bf);
+    color: #ffffff;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    border: 1px solid #dedede;
+    font-weight: 500;
+    border-radius: 999px;
+
+    &:hover {
+      color: #3e55bf;
+      background: white;
+      border: 2px solid #3e55bf;
+      font-size: 16px;
+      font-weight: bold;
+      transform: scale(1.01);
+    }
   }
 
   .login-button-go-lp {

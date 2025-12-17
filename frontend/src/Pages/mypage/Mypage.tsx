@@ -10,9 +10,10 @@ import { authApi } from "../../api/auth";
 import { achievementApi } from "../../api/achievement";
 import type { FindUserInfoResponse } from "../../types/auth";
 import type { GetUserAchievementResponse } from "../../types/achievement";
+import Tree from "../../assets/images/Tree.svg";
 
 /* ===============================
-   유틸 함수
+   유틸
 ================================ */
 const getTierName = (points: number): string => {
   if (points < 1000) return "bronze";
@@ -24,7 +25,7 @@ const getTierName = (points: number): string => {
 };
 
 /* ===============================
-   Left Section (완료 업적)
+   Left Section
 ================================ */
 interface LeftSectionProps {
   userInfo: FindUserInfoResponse | null;
@@ -32,8 +33,7 @@ interface LeftSectionProps {
 }
 
 function LeftSection({ userInfo, achievements }: LeftSectionProps) {
-  const completed = achievements.filter((ach) => ach.userAchievementIsSuccess);
-  
+  const completed = achievements.filter((a) => a.userAchievementIsSuccess);
   const tier = userInfo ? getTierName(userInfo.userTierPoint) : "bronze";
   const tierImage = ImageOfTier(tier);
 
@@ -50,8 +50,9 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
             <div
               style={{
                 display: "flex",
-                alignItems: "center",
                 justifyContent: "space-between",
+                alignItems: "center",
+                gap: 8,
               }}
             >
               <S.UserTier>{tier}</S.UserTier>
@@ -76,8 +77,7 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
         </S.PointArchive>
 
         <S.ArchiveMent>완료한 업적</S.ArchiveMent>
-
-        <S.ArchiveList style={{ overflowY: "auto" }}>
+        <S.ArchiveList>
           {completed.map((ach) => (
             <S.Box key={ach.achievementId}>{ach.userAchievementTitle}</S.Box>
           ))}
@@ -88,78 +88,129 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
 }
 
 /* ===============================
-   Right Section (전체 업적 + 100% 진행률 총합)
+   Right Section
 ================================ */
 interface RightSectionProps {
   achievements: GetUserAchievementResponse[];
 }
 
+type ViewMode = "box" | "tree";
+
 function RightSection({ achievements }: RightSectionProps) {
-  const completed = achievements.filter((ach) => ach.userAchievementIsSuccess);
-  const completedPoints = completed.reduce((sum, ach) => sum + ach.userAchievementRewardPoint, 0);
-  const completedTierPoints = completed.reduce((sum, ach) => sum + ach.userAchievementTierPoint, 0);
+  const [viewMode, setViewMode] = useState<ViewMode>("box");
+  const [treeActivities, setTreeActivities] = useState<string[]>([]);
+
+  /* ===============================
+     업적 계산
+  ================================ */
+  const completed = achievements.filter((a) => a.userAchievementIsSuccess);
+
+  const completedPoints = completed.reduce(
+    (sum, a) => sum + a.userAchievementRewardPoint,
+    0
+  );
+
+  const completedTierPoints = completed.reduce(
+    (sum, a) => sum + a.userAchievementTierPoint,
+    0
+  );
+
+  /* ===============================
+     나무 데이터 로드
+  ================================ */
+  useEffect(() => {
+    if (viewMode === "tree") {
+      const stored = localStorage.getItem("treeActivities");
+      setTreeActivities(stored ? JSON.parse(stored) : []);
+    }
+  }, [viewMode]);
 
   return (
-    <S.RightSection style={{ overflowY: "auto" }}>
-      <S.DetailTitle>전체 업적</S.DetailTitle>
-
-      {/* 100% 업적 총합 표시 */}
+    <S.RightSection>
+      {/* 보기 전환 버튼 */}
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
-          width: "300px",
-          marginBottom: 16,
-          fontWeight: "bold",
-          fontSize: 16,
-          borderRight: "2px solid #777777",
-          borderLeft: "2px solid #777777"
+          gap: 20,
+          position: "fixed",
+          top: 120,
+          left: 1030,
+          zIndex: 10,
         }}
       >
-        <p style={{margin: "0", color: "#777777"}}>완료 업적 포인트: {completedPoints} | 티어 포인트: {completedTierPoints}</p>
+        <S.ChoiceBtn onClick={() => setViewMode("box")}>업적 보기</S.ChoiceBtn>
+        <S.ChoiceBtn onClick={() => setViewMode("tree")}>나무 보기</S.ChoiceBtn>
       </div>
 
-      {achievements.map((ach) => {
-        const percent = ach.userAchievementIsSuccess ? 100 : 0;
+      {/* ===============================
+          박스 보기
+      ================================ */}
+      {viewMode === "box" && (
+        <>
+          <S.DetailTitle>전체 업적</S.DetailTitle>
 
-        return (
-          <div
-            key={ach.achievementId}
-            style={{
-              padding: "16px 0",
-              borderBottom: "1px solid rgba(0,0,0,0.1)",
-            }}
-          >
-            {/* 타이틀 ↔ 진행도 */}
-            <S.ProgressTitle>
-              <strong>{ach.userAchievementTitle}</strong>
-              <div
+          <S.PointSummary>
+            완료 업적 포인트: {completedPoints} | 티어 포인트:{" "}
+            {completedTierPoints}
+          </S.PointSummary>
+
+          {achievements.map((ach) => {
+            const percent = ach.userAchievementIsSuccess ? 100 : 0;
+
+            return (
+              <>
+                <S.ProgressTitle>
+                  <div
+                    key={ach.achievementId}
+                    style={{
+                      padding: "16px 0",
+                      borderBottom: "1px solid rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    <S.ProgressBar>
+                      <S.ProgressFill $progress={percent} />
+                    </S.ProgressBar>
+                    <span>{percent}%</span>
+                  </div>
+                </S.ProgressTitle>
+                <p style={{ fontSize: 14, color: "#666" }}>
+                  {ach.userAchievementDescription} (현재:{" "}
+                  {ach.userAchievementProgress})
+                </p>
+              </>
+            );
+          })}
+        </>
+      )}
+
+      {/* ===============================
+          🌳 나무 보기
+      ================================ */}
+      {viewMode === "tree" && (
+        <>
+          <S.DetailTitle>나무 보기</S.DetailTitle>
+
+          <S.TreeWrapper>
+            <S.TreeImage src={Tree} style={{ width: "700px" }} />
+
+            {treeActivities.map((act, idx) => (
+              <S.TreeActivity
+                key={idx}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  gap: 20,
+                  top: `${60 + (idx % 5) * 70}px`,
+                  left: idx % 2 === 0 ? "30%" : "65%",
                 }}
               >
-                <S.ProgressBar>
-                  <S.ProgressFill $progress={percent} />
-                </S.ProgressBar>
-                <span>{percent}%</span>
-              </div>
-            </S.ProgressTitle>
+                {act}
+              </S.TreeActivity>
+            ))}
+          </S.TreeWrapper>
 
-            <p
-              style={{
-                fontSize: "14px",
-                color: "#666",
-                marginTop: 6,
-              }}
-            >
-              {ach.userAchievementDescription} (현재: {ach.userAchievementProgress})
-            </p>
-          </div>
-        );
-      })}
+          {treeActivities.length === 0 && (
+            <p style={{ marginTop: 16 }}>아직 추가된 활동이 없습니다.</p>
+          )}
+        </>
+      )}
     </S.RightSection>
   );
 }
@@ -169,40 +220,27 @@ function RightSection({ achievements }: RightSectionProps) {
 ================================ */
 export default function Mypage() {
   const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
-  const [achievements, setAchievements] = useState<GetUserAchievementResponse[]>([]);
+  const [achievements, setAchievements] = useState<
+    GetUserAchievementResponse[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const userRes = await authApi.findCurrentUser();
-        console.log("User Response:", userRes);
-        if (userRes.success) {
-          setUserInfo(userRes.data);
-        } else {
-          console.error("Failed to fetch user info:", userRes);
-        }
+        if (userRes.success) setUserInfo(userRes.data);
 
         const achRes = await achievementApi.getUserAchievementsByUserEmail();
-        console.log("Achievement Response:", achRes);
-        if (achRes.success) {
-          setAchievements(achRes.data);
-        } else {
-          console.error("Failed to fetch achievements:", achRes);
-        }
-      } catch (error) {
-        console.error("Failed to fetch mypage data", error);
+        if (achRes.success) setAchievements(achRes.data);
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
 
   return (
     <>

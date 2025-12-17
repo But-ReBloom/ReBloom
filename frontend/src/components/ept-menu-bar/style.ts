@@ -33,22 +33,25 @@ export const MenuContent = styled.div`
 `;
 
 export const MenuBox = styled.button`
+  width: 25vh;
+  height: 60px;
   background: linear-gradient(90deg, #41a6ff, #3e55bf);
-  color: white;
-  border: 1px solid #3e55bf;
-  padding: 15px 30px;
-  font-size: 18px;
-  border-radius: 999px;
+  color: #ffffff;
+  padding: 8px 16px;
   cursor: pointer;
+  font-size: 18px;
   transition: all 0.3s ease;
+  border: 1px solid #dedede;
   font-weight: 500;
-  width: 200px;
+  border-radius: 999px;
 
   &:hover {
-    border: 1px solid #dedede;
+    color: #3e55bf;
     background: white;
-    color: #50b9ff;
-    transform: scale(1.1);
+    border: 2px solid #3e55bf;
+    font-size: 20px;
+    font-weight: bold;
+    transform: scale(1.05);
   }
 `;
 

@@ -7,8 +7,8 @@ import { useEffect } from "react";
 
 function MainPage() {
   const location = useLocation();
-  const storedUserEmail = localStorage.getItem("userEmail");
-  const userId = location.state?.id || storedUserEmail;
+  const storedUserId = localStorage.getItem("userId");
+  const userId = location.state?.id || storedUserId;
 
   useEffect(() => {
     if (location.state?.id) {

@@ -1,5 +1,8 @@
 import styled from "styled-components";
 
+/* ===============================
+   Layout
+================================ */
 export const Background = styled.div`
   padding-top: 100px;
   width: 100%;
@@ -17,19 +20,18 @@ export const Wrapper = styled.div`
 
 export const Container = styled.div`
   display: flex;
-  flex-direction: row;
   width: 1200px;
   height: 660px;
   background-color: white;
   border-radius: 20px;
-  box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.25);
 `;
 
+/* ===============================
+   Left Section
+================================ */
 export const LeftSection = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+  width: 360px;
   padding: 60px 40px;
   overflow-y: auto;
 
@@ -43,88 +45,69 @@ export const LeftSection = styled.div`
 `;
 
 export const UserInfoSection = styled.div`
-  width: 300px;
-  height: 540px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px;
 `;
 
 export const ProfileInfo = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 `;
 
 export const UserImage = styled.img`
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  margin-right: 20px;
-  border: 2px solid rgba(51, 51, 51, 0.25);
-  padding: 4px;
+  margin-right: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.25);
 `;
 
 export const UserName = styled.h2`
-  font-size: 28px;
+  font-size: 24px;
   margin: 0;
 `;
 
-export const UserTier = styled.h3`
+export const UserTier = styled.div`
   font-size: 14px;
-  color: rgba(51, 51, 51, 0.55);
-  margin: 0;
+  color: rgba(0, 0, 0, 0.55);
 `;
 
 export const PointArchive = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  width: 100%;
-  height: 50px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 `;
 
 export const addedimage = styled.img`
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
 `;
 
 export const PnA = styled.div`
   display: flex;
   align-items: center;
+  font-size: 14px;
 `;
 
 export const ArchiveMent = styled.div`
-  padding-left: 12px;
-  width: 100%;
-  height: 40px;
-  border-radius: 8px;
   background: linear-gradient(90deg, #41a6ff, #3e55bf);
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  font-weight: 500;
   color: #fff;
-  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-bottom: 8px;
 `;
 
 export const ArchiveList = styled.div`
-  width: 100%;
-  height: 400px;
+  max-height: 360px;
+  overflow-y: auto;
 `;
 
 export const Box = styled.div`
-  display: flex;
-  padding: 12px;
-  align-items: center;
-  width: 100%;
-  height: 40px;
-  border-bottom: 1px solid rgba(51, 51, 51, 0.25);
+  padding: 10px 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   cursor: pointer;
 
   &:hover {
@@ -132,40 +115,44 @@ export const Box = styled.div`
   }
 `;
 
+/* ===============================
+   Right Section
+================================ */
 export const RightSection = styled.div`
   flex: 1;
   padding: 80px 60px;
-  border-left: 1px solid rgba(51, 51, 51, 0.15);
-  display: flex;
-  flex-direction: column;
+  border-left: 1px solid rgba(0, 0, 0, 0.15);
   overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-  }
 `;
 
+/* ===============================
+   Box View
+================================ */
 export const DetailTitle = styled.h2`
   font-size: 32px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+`;
+
+export const PointSummary = styled.div`
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #f3f6fa;
 `;
 
 export const ProgressTitle = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 8px 0;
 `;
 
 export const ProgressBar = styled.div`
   width: 350px;
-  height: 20px;
+  height: 18px;
   background: #e5e7eb;
-  border-radius: 9999px;
+  border-radius: 999px;
   overflow: hidden;
 `;
 
@@ -173,5 +160,54 @@ export const ProgressFill = styled.div<{ $progress: number }>`
   width: ${({ $progress }) => $progress}%;
   height: 100%;
   background: linear-gradient(90deg, #41a6ff, #3e55bf);
-  transition: width 0.4s ease;
+  transition: width 0.3s ease;
+`;
+
+/* ===============================
+   Tree View
+================================ */
+export const TreeWrapper = styled.div`
+  position: relative;
+  margin-top: 40px;
+  width: 100%;
+  height: 420px;
+`;
+
+export const TreeImage = styled.img`
+  width: 280px;
+  display: block;
+  margin: 0 auto;
+`;
+
+export const TreeActivity = styled.div`
+  position: absolute;
+  padding: 6px 12px;
+  background: rgba(65, 166, 255, 0.9);
+  color: #fff;
+  border-radius: 16px;
+  font-size: 14px;
+  white-space: nowrap;
+`;
+
+/* ===============================
+   Buttons
+================================ */
+export const ChoiceBtn = styled.button`
+  width: 140px;
+  height: 34px;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #41a6ff, #3e55bf);
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    font-size: 16px;
+    font-weight: bold;
+    color: #3e55bf;
+    background: white;
+    border: 2px solid #3e55bf;
+  }
 `;
