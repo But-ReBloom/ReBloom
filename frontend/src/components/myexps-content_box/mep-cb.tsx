@@ -2,6 +2,7 @@ import * as S from "./style.ts";
 import List from "../myexps-list/mep-l.tsx";
 import MepDetail from "../myexps_detail/mep-detail.tsx";
 import { useState, useEffect } from "react";
+import LoadingPage from "../../Pages/loadingpage/loading.tsx";
 
 /* ===============================
    타입 정의
@@ -121,7 +122,7 @@ function Index({
   const startIdx = (currentPage - 1) * itemsPerPage;
   const currentExps = exps.slice(startIdx, startIdx + itemsPerPage);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return LoadingPage;
 
   return (
     <S.Wrapper>

@@ -20,6 +20,7 @@ import TestResult from "./Pages/hobbytestresultpage/hobbytestresultpage.tsx";
 import Thankyou from "./components/thanktou/thankyou.tsx";
 import Mypage from "./Pages/mypage/Mypage.tsx";
 import GoogleCallback from "./Pages/GoogleCallback/GoogleCallback.tsx";
+import LoadingPage from "./Pages/loadingpage/loading.tsx";
 
 //경로명세 라우터
 const router = createBrowserRouter([
@@ -118,6 +119,9 @@ const router = createBrowserRouter([
   {
     path: "/mypage",
     element: <Mypage/>,
+  },{
+    path: "/loading",
+    element: <LoadingPage/>
   }
 ]);
 
