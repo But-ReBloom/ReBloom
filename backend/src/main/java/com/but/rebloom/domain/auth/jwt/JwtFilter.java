@@ -8,21 +8,64 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtAuthenticationFilter jwtAuth;
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+
+    private static final List<String> PERMIT_ALL_PATHS = Arrays.asList(
+            "/",
+            "/auth/signup",
+            "/auth/login",
+            "/auth/login/**",
+            "/auth/email/**",
+            "/auth/email/**",
+            "/achievement/**",
+            "/channel/find/**",
+            "/post/create",
+            "/post/find/**",
+            "/hobby-test/**",
+            "/comment/find",
+            "/comment/create",
+            "/comment/update",
+            "/heart/add",
+            "/hobby-review/**",
+            "/heart/find",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/api-docs",
+            "/favicon.ico"
+    );
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+
+        // Preflight 요청 허용
+        if (request.getMethod().equals("OPTIONS")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 허용 경로면 그냥 통과
+        if (isPermitAllPath(path)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 나머지 경로는 JWT 필수
         String authHeader = request.getHeader("Authorization");
 
         if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
@@ -40,9 +83,17 @@ public class JwtFilter extends OncePerRequestFilter {
                 sendErrorResponse(response, "Invalid JWT token", e.getMessage());
                 return;
             }
+        } else {
+            sendErrorResponse(response, "Unauthorized", "JWT token is required");
+            return;
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isPermitAllPath(String path) {
+        return PERMIT_ALL_PATHS.stream()
+                .anyMatch(pattern -> pathMatcher.match(pattern, path));
     }
 
     private void sendErrorResponse(HttpServletResponse response, String error, String message) throws IOException {
