@@ -85,7 +85,7 @@ public class ChannelUseCase {
                 .channelTitle(request.getChannelTitle())
                 .channelIntro(request.getChannelIntro())
                 .channelDescription(request.getChannelDescription())
-                .channelStatus(ChannelStatus.PENDING)
+                .channelStatus(ChannelStatus.ACCEPTED)
                 .channelLinkedHobby1(hobby1)
                 .channelLinkedHobby2(hobby2)
                 .channelLinkedHobby3(hobby3)
@@ -110,9 +110,9 @@ public class ChannelUseCase {
     public List<Channel> getApprovedChannels() {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
 
-        if (!currentUser.getUserRole().equals(Role.ADMIN)) {
-            throw new NoAuthorityException("조회할 권한이 없습니다.");
-        }
+//        if (!currentUser.getUserRole().equals(Role.ADMIN)) {
+//            throw new NoAuthorityException("조회할 권한이 없습니다.");
+//        }
 
         List<Channel> channels = channelRepository.findByChannelStatusAccepted();
 
