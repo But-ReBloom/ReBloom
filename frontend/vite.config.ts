@@ -11,7 +11,7 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
         headers: {
-          Host: 'http://api.rebloom.co.kr',
+          Host: 'api.rebloom.co.kr',
         },
       },
     },
