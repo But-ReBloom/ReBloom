@@ -47,7 +47,6 @@ function ChannelJoin() {
 
         setLoading(true);
 
-        // 로컬Storage에 저장
         const localChannels = JSON.parse(localStorage.getItem('channels') || '[]');
 
         const newChannel = {
@@ -61,7 +60,7 @@ function ChannelJoin() {
         };
 
         localStorage.setItem('channels', JSON.stringify([...localChannels, newChannel]));
-        setStatus(`✅ 채널 생성 완료: ${form.channelTitle}`);
+        // setStatus(`✅ 채널 생성 완료: ${form.channelTitle}`);
         setForm({ channelTitle: '', channelIntro: '', channelDescription: '', userEmail: '' });
 
         setLoading(false);

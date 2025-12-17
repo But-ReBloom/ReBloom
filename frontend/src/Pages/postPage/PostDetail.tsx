@@ -21,11 +21,10 @@ import {
     CommentItem,
     PostDivider,
     CommentFormContainer,
-    LikeButton
+    LikeButton,
 } from './PD';
 import CloseIcon from '../../assets/images/close.svg';
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
-// import { posts as initialPosts } from './posts';
 import { postApi } from '../../api/post';
 import { reactionApi } from '../../api/reaction';
 
@@ -34,34 +33,17 @@ function PostDetail() {
     const navigate = useNavigate();
 
     const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-    // const [allPosts, setAllPosts] = useState<any[]>([]);
     const [post, setPost] = useState<any>(null);
     const [comments, setComments] = useState<any[]>([]);
 
     const [commentAuthor, setCommentAuthor] = useState('');
     const [commentText, setCommentText] = useState('');
-
-    const [liked, setLiked] = useState(false); // 하트 클릭 상태
+    const [liked, setLiked] = useState(false);
 
     useEffect(() => {
-<<<<<<< HEAD
-        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+        if (!id) return;
 
-        // 중복 제거
-        const mergedPosts = [...savedPosts, ...initialPosts].filter(
-            (p, index, self) => index === self.findIndex(post => post.id === p.id)
-        );
-
-        setAllPosts(mergedPosts);
-
-        const currentPost = mergedPosts.find((p: any) => p.id.toString() === id);
-        if (currentPost) {
-            if (currentPost.likes === undefined) currentPost.likes = 0;
-            setPost(currentPost);
-        }
-=======
         const fetchPostAndComments = async () => {
-            if (!id) return;
             try {
                 const postResponse = await postApi.findPost(Number(id));
                 if (postResponse.success) {
@@ -72,28 +54,29 @@ function PostDetail() {
                         title: p.postTitle,
                         notice: false,
                         category: '소통',
-                        favorite: false,
                         content: p.postContent,
                         author: p.userId,
                         date: p.postCreatedAt,
                         views: p.viewers,
-                        likes: 0
+                        likes: 0,
                     });
                 }
 
                 const commentsResponse = await reactionApi.getCommentsByPost(Number(id));
                 if (commentsResponse.success) {
-                    setComments(commentsResponse.data.comments.map((c: any) => ({
-                        author: c.userId,
-                        text: c.commentContent
-                    })));
+                    setComments(
+                        commentsResponse.data.comments.map((c: any) => ({
+                            author: c.userId,
+                            text: c.commentContent,
+                        }))
+                    );
                 }
             } catch (error) {
-                console.error("Failed to fetch post details", error);
+                console.error('Failed to fetch post details', error);
             }
         };
+
         fetchPostAndComments();
->>>>>>> main
     }, [id]);
 
     const toggleCategory = (category: string) => {
@@ -103,9 +86,7 @@ function PostDetail() {
     const PostListButton = styled.button`
         width: 100%;
         padding: 10px;
-        margin: 12px 0;
-        margin-top: -10px;
-        margin-bottom: -5px;
+        margin: 12px 0 -5px;
         background-color: #5db9eeff;
         color: white;
         border: none;
@@ -114,75 +95,36 @@ function PostDetail() {
         font-weight: bold;
     `;
 
-<<<<<<< HEAD
-    const handleAddComment = () => {
-        if (!commentAuthor || !commentText || !post) return;
-
-        const newComment = { author: commentAuthor, text: commentText };
-        const updatedPost = { ...post };
-        if (!updatedPost.comments) updatedPost.comments = [];
-        updatedPost.comments.push(newComment);
-
-        // 상태 업데이트
-        setPost(updatedPost);
-        const updatedPosts = allPosts.map(p => (p.id === post.id ? updatedPost : p));
-        setAllPosts(updatedPosts);
-
-        // 로컬스토리지 업데이트
-        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
-        const index = savedPosts.findIndex((p: any) => p.id === post.id);
-        if (index >= 0) {
-            savedPosts[index] = updatedPost;
-        } else {
-            savedPosts.push(updatedPost);
-=======
     const handleAddComment = async () => {
         if (!commentAuthor || !commentText || !id) return;
 
         try {
             const response = await reactionApi.createComment({
                 postId: Number(id),
-                userId: commentAuthor, // Assuming author input is userId for now
-                commentContent: commentText
+                userId: commentAuthor, // TODO: 로그인 유저 ID로 교체
+                commentContent: commentText,
             });
 
             if (response.success) {
-                setComments([...comments, { author: commentAuthor, text: commentText }]);
+                setComments(prev => [
+                    ...prev,
+                    { author: commentAuthor, text: commentText },
+                ]);
                 setCommentAuthor('');
                 setCommentText('');
             }
         } catch (error) {
-            console.error("Failed to add comment", error);
->>>>>>> main
+            console.error('Failed to add comment', error);
         }
     };
 
     const handleLike = () => {
         if (!post) return;
-
-        const updatedPost = { ...post };
-        if (!updatedPost.likes) updatedPost.likes = 0;
-
-        if (liked) {
-            updatedPost.likes -= 1;
-        } else {
-            updatedPost.likes += 1;
-        }
-
-        setLiked(!liked);
-        setPost(updatedPost);
-
-        const updatedPosts = allPosts.map(p => (p.id === post.id ? updatedPost : p));
-        setAllPosts(updatedPosts);
-
-        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
-        const index = savedPosts.findIndex((p: any) => p.id === post.id);
-        if (index >= 0) {
-            savedPosts[index] = updatedPost;
-        } else {
-            savedPosts.push(updatedPost);
-        }
-        localStorage.setItem('myPosts', JSON.stringify(savedPosts));
+        setLiked(prev => !prev);
+        setPost((prev: any) => ({
+            ...prev,
+            likes: (prev.likes || 0) + (liked ? -1 : 1),
+        }));
     };
 
     if (!post) {
@@ -199,11 +141,17 @@ function PostDetail() {
     return (
         <Container>
             <Sidebar>
-                <LogoImage src={RebloomLogo} alt="Rebloom Logo" onClick={() => navigate('/main')} />
+                <LogoImage
+                    src={RebloomLogo}
+                    alt="Rebloom Logo"
+                    onClick={() => navigate('/main')}
+                />
                 <Divider />
+
                 <CafeInfo>
                     <p>Rebloom 게시글 페이지입니다.</p>
                 </CafeInfo>
+
                 <ProfileSection>
                     <img src="" alt="프로필" />
                     <div>
@@ -227,11 +175,7 @@ function PostDetail() {
                                 <div onClick={() => toggleCategory(category.name)}>
                                     {category.emoji} {category.name}
                                 </div>
-                                {expandedCategory === category.name && (
-                                    <SubMenu>
-                                        {/* Sidebar posts list removed for now */}
-                                    </SubMenu>
-                                )}
+                                {expandedCategory === category.name && <SubMenu />}
                             </li>
                         ))}
                     </ul>
@@ -258,7 +202,6 @@ function PostDetail() {
                                     ❤️ {post.likes || 0}
                                 </LikeButton>
                             </div>
-
                         </div>
                     </PostItem>
                 </PostList>
@@ -267,8 +210,9 @@ function PostDetail() {
 
                 <div style={{ marginTop: '30px' }}>
                     <h3>💬 댓글</h3>
-                    {comments && comments.length > 0 ? (
-                        comments.map((comment: any, idx: number) => (
+
+                    {comments.length > 0 ? (
+                        comments.map((comment, idx) => (
                             <CommentItem key={idx}>
                                 <strong>{comment.author}</strong>
                                 <p>{comment.text}</p>
@@ -283,13 +227,13 @@ function PostDetail() {
                             type="text"
                             placeholder="작성자 이름"
                             value={commentAuthor}
-                            onChange={(e) => setCommentAuthor(e.target.value)}
+                            onChange={e => setCommentAuthor(e.target.value)}
                         />
                         <textarea
                             placeholder="댓글 입력"
                             rows={3}
                             value={commentText}
-                            onChange={(e) => setCommentText(e.target.value)}
+                            onChange={e => setCommentText(e.target.value)}
                         />
                         <button onClick={handleAddComment}>댓글 작성</button>
                     </CommentFormContainer>

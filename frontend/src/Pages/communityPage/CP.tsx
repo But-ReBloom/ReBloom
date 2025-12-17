@@ -12,24 +12,12 @@ import {
     LeftPostItem,
     PostTitle,
     PostDescription,
-<<<<<<< HEAD
 } from './style';
 
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-=======
-    } from './style';
-
-    import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
-    import CloseIcon from '../../assets/images/close.svg';
-    import { useNavigate } from 'react-router-dom';
-    import { useEffect, useState } from 'react';
-    import { postApi } from '../../api/post';
-    import type { CreatePostResponse } from '../../types/PostTypes';
-    // import Header from '../../components/normal_header/nh';
->>>>>>> main
 
 interface Channel {
     channelId: number;
@@ -44,13 +32,8 @@ const mockChannels: Channel[] = [
 
 function CommunityPage() {
     const navigate = useNavigate();
-<<<<<<< HEAD
     const [channels, setChannels] = useState<Channel[]>([]);
     const [loading, setLoading] = useState(true);
-=======
-    const [leftPosts, setLeftPosts] = useState<CreatePostResponse[]>([]);
-    const [rightPosts, setRightPosts] = useState<CreatePostResponse[]>([]);
->>>>>>> main
 
     useEffect(() => {
         fetchApprovedChannels();
@@ -82,28 +65,6 @@ function CommunityPage() {
         setLoading(false);
     };
 
-<<<<<<< HEAD
-=======
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const popularRes = await postApi.getPopularPosts().catch(() => null);
-                if (popularRes && popularRes.success) {
-                    setRightPosts(popularRes.data.posts);
-                }
-
-                const searchRes = await postApi.searchPosts({ keyword: "" }).catch(() => null);
-                if (searchRes && searchRes.success) {
-                    setLeftPosts(searchRes.data.posts);
-                }
-            } catch (error) {
-                console.error("Failed to fetch posts", error);
-            }
-        };
-        fetchData();
-    }, []);
-
->>>>>>> main
     return (
         <CommunityWrapper>
             <CloseButton onClick={() => navigate('/main')}>
@@ -135,7 +96,6 @@ function CommunityPage() {
                     </RightButtons>
                 </HeaderTop>
 
-<<<<<<< HEAD
                 <LeftColumn>
                     {loading && <p>로딩중...</p>}
 
@@ -146,46 +106,17 @@ function CommunityPage() {
                     {!loading &&
                         channels.map(channel => (
                             <LeftPostItem
-                                key={channel.channelId}
-                                onClick={() =>
-                                    navigate(
-                                        `/channel/detail?name=${encodeURIComponent(
-                                            channel.channelName
-                                        )}`
-                                    )
-                                }
-                                style={{ cursor: 'pointer' }}
+                            key={channel.channelId}
+                            onClick={() => navigate(`/channel/${channel.channelId}`)}
+                            style={{ cursor: 'pointer' }}
                             >
-                                <PostTitle>{channel.channelName}</PostTitle>
-                                <PostDescription>
-                                    {channel.channelIntro}
-                                </PostDescription>
+                            <PostTitle>{channel.channelName}</PostTitle>
+                            <PostDescription>{channel.channelIntro}</PostDescription>
                             </LeftPostItem>
+
                         ))}
                 </LeftColumn>
             </CentralBox>
-=======
-            <ContentWrapper>
-            <LeftColumn>
-                {leftPosts.map((post) => (
-                <LeftPostItem key={post.postId} onClick={() => navigate(`/post/${post.postId}`)}>
-                    <PostTitle>{post.postTitle}</PostTitle>
-                    <PostDescription>{post.postContent}</PostDescription>
-                </LeftPostItem>
-                ))}
-            </LeftColumn>
-
-            <RightColumn>
-                {rightPosts.map((post) => (
-                <RightPostItem key={post.postId} onClick={() => navigate(`/post/${post.postId}`)}>
-                    <PostTitle>{post.postTitle}</PostTitle>
-                    <PostDescription>조회수: {post.viewers}</PostDescription>
-                </RightPostItem>
-                ))}
-            </RightColumn>
-            </ContentWrapper>
-        </CentralBox>
->>>>>>> main
         </CommunityWrapper>
     );
 }

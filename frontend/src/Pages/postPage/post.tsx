@@ -23,18 +23,16 @@ import {
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
 import React_svg from "../../assets/images/react.svg";
-// import { posts as initialPosts } from './posts';
 import { postApi } from '../../api/post';
 import { authApi } from '../../api/auth';
 import type { CreatePostResponse } from '../../types/PostTypes';
 import type { FindUserInfoResponse } from '../../types/auth';
 
+/* styled-components */
 const WritePostButton = styled.button`
     width: 100%;
     padding: 10px;
-    margin: 12px 0;
-    margin-top: -10px;
-    margin-bottom: -5px;
+    margin: 12px 0 -5px;
     background-color: #5db9eeff;
     color: white;
     border: none;
@@ -80,24 +78,14 @@ const POSTS_PER_PAGE = 9;
 
 function Post() {
     const navigate = useNavigate();
+
     const [hideNotices, setHideNotices] = useState(false);
     const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+
     const [allPosts, setAllPosts] = useState<any[]>([]);
-<<<<<<< HEAD
-    const [isJoined, setIsJoined] = useState(false);
-
-    useEffect(() => {
-        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
-        const mergedPosts = [...savedPosts, ...initialPosts].filter(
-            (post, index, self) => index === self.findIndex(p => p.id === post.id)
-        );
-        setAllPosts(mergedPosts);
-
-        const joinedChannels = JSON.parse(localStorage.getItem('joinedChannels') || '[]');
-        setIsJoined(joinedChannels.includes('홍길동')); 
-=======
     const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
+    const [isJoined, setIsJoined] = useState(false);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -107,64 +95,53 @@ function Post() {
                     setUserInfo(response.data);
                 }
             } catch (error) {
-                console.error("Failed to fetch user info", error);
+                console.error('Failed to fetch user info', error);
             }
         };
-        fetchUserInfo();
 
         const fetchPosts = async () => {
             try {
-                const response = await postApi.searchPosts({ keyword: "" }).catch(() => null);
+                const response = await postApi.searchPosts({ keyword: '' }).catch(() => null);
                 if (response && response.success) {
-                    // Map API response to UI format
-                    const mappedPosts = response.data.posts.map((post: CreatePostResponse) => ({
-                        id: post.postId,
-                        tag: post.postType === 'NORMAL' ? '[일반]' : '[인기]',
-                        title: post.postTitle,
-                        notice: false,
-                        category: '소통', // Default or map from channelId
-                        favorite: false,
-                        content: post.postContent,
-                        comments: [],
-                        author: post.userId,
-                        date: post.postCreatedAt,
-                        views: post.viewers,
-                        likes: 0
-                    }));
+                    const mappedPosts = response.data.posts.map(
+                        (post: CreatePostResponse) => ({
+                            id: post.postId,
+                            tag: post.postType === 'NORMAL' ? '[일반]' : '[인기]',
+                            title: post.postTitle,
+                            notice: false,
+                            category: '소통',
+                            favorite: false,
+                            content: post.postContent,
+                            author: post.userId,
+                            date: post.postCreatedAt,
+                            views: post.viewers,
+                        })
+                    );
                     setAllPosts(mappedPosts);
                 }
             } catch (error) {
-                console.error("Failed to fetch posts", error);
+                console.error('Failed to fetch posts', error);
             }
         };
+
+        fetchUserInfo();
         fetchPosts();
->>>>>>> main
     }, []);
 
-    const handleCloseClick = () => navigate('/main');
-    const handleToggleNotices = () => {
-        setHideNotices(prev => !prev);
-        setCurrentPage(1);
-    };
-    const handleWritePost = () => navigate('/myPostPage');
     const handlePostClick = (id: number) => navigate(`/post/${id}`);
+    const handleWritePost = () => navigate('/myPostPage');
+    const handleCloseClick = () => navigate('/main');
 
     const handleJoinChannel = () => {
         if (!isJoined) {
-            const pending = JSON.parse(localStorage.getItem('pendingJoinRequests') || '[]');
-            if (!pending.includes('홍길동')) pending.push('홍길동');
-            localStorage.setItem('pendingJoinRequests', JSON.stringify(pending));
+            setIsJoined(true);
             alert('가입 신청 완료. 관리자의 승인을 기다려주세요.');
         }
     };
 
-    const sortedPosts = [...allPosts].sort((a, b) => {
-        if (a.notice && !b.notice) return -1;
-        if (!a.notice && b.notice) return 1;
-        return 0;
-    });
-
+    const sortedPosts = [...allPosts];
     const filteredPosts = sortedPosts.filter(post => !hideNotices || !post.notice);
+
     const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
     const currentPosts = filteredPosts.slice(
         (currentPage - 1) * POSTS_PER_PAGE,
@@ -178,24 +155,20 @@ function Post() {
         { name: '소통', emoji: '💬' },
     ];
 
-    const toggleCategory = (category: string) => {
-        setExpandedCategory(prev => (prev === category ? null : category));
-    };
-
     return (
         <Container>
             <Sidebar>
                 <LogoImage src={RebloomLogo} alt="Rebloom Logo" onClick={() => navigate('/main')} />
                 <Divider />
+
                 <CafeInfo>
                     <p>Rebloom 게시글 페이지입니다.</p>
-
                 </CafeInfo>
 
                 <ProfileSection>
                     <img src={React_svg} alt="프로필" />
                     <div>
-                        <strong>{userInfo?.userName || "Guest"}</strong>
+                        <strong>{userInfo?.userName ?? 'Guest'}</strong>
                         <p>레벨 {userInfo ? Math.floor(userInfo.userTierPoint / 1000) + 1 : 1}</p>
                     </div>
                 </ProfileSection>
@@ -210,7 +183,11 @@ function Post() {
                     <ul>
                         {categories.map(category => (
                             <li key={category.name}>
-                                <div onClick={() => toggleCategory(category.name)}>
+                                <div onClick={() =>
+                                    setExpandedCategory(prev =>
+                                        prev === category.name ? null : category.name
+                                    )
+                                }>
                                     {category.emoji} {category.name}
                                 </div>
                                 {expandedCategory === category.name && (
@@ -222,10 +199,7 @@ function Post() {
                                                     : post.category === category.name
                                             )
                                             .map(post => (
-                                                <li
-                                                    key={post.id}
-                                                    onClick={() => handlePostClick(post.id)}
-                                                >
+                                                <li key={post.id} onClick={() => handlePostClick(post.id)}>
                                                     ㄴ {post.title}
                                                 </li>
                                             ))}
@@ -235,16 +209,17 @@ function Post() {
                         ))}
                     </ul>
                 </NavMenu>
-                    <JoinChannelButton joined={isJoined} onClick={handleJoinChannel}>
-                        {isJoined ? '가입 완료' : '채널 가입 신청'}
-                    </JoinChannelButton>
+
+                <JoinChannelButton joined={isJoined} onClick={handleJoinChannel}>
+                    {isJoined ? '가입 완료' : '채널 가입 신청'}
+                </JoinChannelButton>
             </Sidebar>
 
             <ContentArea>
                 <Header>
                     <h1>전체글 보기</h1>
                     <span>총 {filteredPosts.length}개의 글</span>
-                    <HideNoticeButton onClick={handleToggleNotices}>
+                    <HideNoticeButton onClick={() => setHideNotices(p => !p)}>
                         {hideNotices ? '공지 보기' : '공지 숨기기'}
                     </HideNoticeButton>
                 </Header>
@@ -263,7 +238,7 @@ function Post() {
                 </PostList>
 
                 <PaginationWrapper>
-                    {Array.from({ length: totalPages }, (_, idx) => idx + 1).map(page => (
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
                         <PageButton
                             key={page}
                             active={page === currentPage}
