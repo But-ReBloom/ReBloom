@@ -49,8 +49,25 @@ export default function Suprb() {
     }
   };
 
+  const handleGoogleLogin = () => {
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    const redirectUri = `${window.location.origin}/auth/google/callback`;
+    const scope = "email profile";
+    const responseType = "code";
+
+    if (!clientId || clientId === "YOUR_GOOGLE_CLIENT_ID_HERE") {
+      toast.error("Google Client ID가 설정되지 않았습니다. .env 파일을 확인해주세요.");
+      return;
+    }
+
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}`;
+    
+    window.location.href = googleAuthUrl;
+  };
+
   //회원가입_오른쪽박스
   return (
+
     <>
       <S.LoginContainer>
         <S.LoginTextBox>
@@ -104,10 +121,11 @@ export default function Suprb() {
         </S.ButtonBox>
 
         <S.OAuthFamily>
-          <S.OAuthButton>
+          <S.OAuthButton onClick={handleGoogleLogin}>
             <img src={Google} alt="Google" />
           </S.OAuthButton>
         </S.OAuthFamily>
+
       </S.LoginContainer>
       <ToastContainer position="top-right" autoClose={2000} />
     </>
