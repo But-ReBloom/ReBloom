@@ -4,17 +4,16 @@ import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.exception.UserNotFoundException;
 import com.but.rebloom.domain.auth.repository.UserRepository;
-import com.but.rebloom.domain.auth.usecase.FindCurrentUserUseCase;
 import com.but.rebloom.domain.channel.domain.Channel;
 import com.but.rebloom.domain.hobby.domain.Hobby;
 import com.but.rebloom.domain.hobby.domain.HobbyScore;
 import com.but.rebloom.domain.hobby.dto.request.UserAnswerRequest;
-import com.but.rebloom.domain.hobby.exception.HobbyNotFoundException;
 import com.but.rebloom.domain.hobby.repository.HobbyRepository;
 import com.but.rebloom.domain.hobby.usecase.HobbyTestUseCase;
 import com.but.rebloom.domain.review.domain.ActivityReview;
 import com.but.rebloom.domain.review.domain.ActivityReviewResult;
 import com.but.rebloom.domain.review.dto.request.ReviewAnswerRequest;
+import com.but.rebloom.domain.review.exception.ReviewNotFoundException;
 import com.but.rebloom.domain.review.repository.ActivityReviewRepository;
 import com.but.rebloom.domain.review.usecase.ActivityReviewUseCase;
 import org.junit.jupiter.api.DisplayName;
@@ -59,6 +58,7 @@ public class AnswerReviewTest {
     public void answerReviewSuccessTest() {
         // Given
         ReviewAnswerRequest reviewAnswerRequest = new ReviewAnswerRequest(
+                1L,
                 "useremail@email.com",
                 1L,
                 "socialanswer",
@@ -99,10 +99,10 @@ public class AnswerReviewTest {
                 .thenReturn(mockUser);
         when(hobbyTestUseCase.findUserHobbies(any(UserAnswerRequest.class)))
                 .thenReturn(mockResult);
-        when(hobbyRepository.findByHobbyId(reviewAnswerRequest.getHobbyId()))
-                .thenReturn(Optional.of(mockHobby));
         doNothing().when(defaultUserAchievementUseCase).updateUserAchievementToSuccess(anyString(), anyString());
         doNothing().when(defaultUserAchievementUseCase).updateUserAchievementProgress(anyString(), anyString(), anyFloat());
+        when(activityReviewRepository.findByReviewIdAndUser_UserEmail(anyLong(), anyString()))
+                .thenReturn(Optional.of(mockActivityReview));
         when(activityReviewRepository.save(any(ActivityReview.class)))
                 .thenReturn(mockActivityReview);
 
@@ -119,6 +119,7 @@ public class AnswerReviewTest {
     public void answerReviewFailByUserNotFoundTest() {
         // Given
         ReviewAnswerRequest reviewAnswerRequest = new ReviewAnswerRequest(
+                1L,
                 "useremail@email.com",
                 1L,
                 "socialanswer",
@@ -138,6 +139,7 @@ public class AnswerReviewTest {
     public void answerReviewFailByHobbyNotFoundTest() {
         // Given
         ReviewAnswerRequest reviewAnswerRequest = new ReviewAnswerRequest(
+                1L,
                 "useremail@email.com",
                 1L,
                 "socialanswer",
@@ -175,7 +177,7 @@ public class AnswerReviewTest {
                 .thenReturn(mockResult);
 
         // When & Then
-        assertThrows(HobbyNotFoundException.class,
+        assertThrows(ReviewNotFoundException.class,
                 () -> activityReviewUseCase.answerReview(reviewAnswerRequest));
     }
 }
