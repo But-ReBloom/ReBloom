@@ -18,13 +18,17 @@ import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { channelApi } from '../../api/channel';
 
 interface Channel {
     channelId: number;
     channelName: string;
     channelIntro: string;
 }
+
+const mockChannels: Channel[] = [
+    { channelId: 1, channelName: '러닝 크루', channelIntro: '함께 달리는 러닝 커뮤니티' },
+    { channelId: 2, channelName: '홈쿠킹 연구소', channelIntro: '집에서 요리하는 사람들' },
+];
 
 function CommunityPage() {
     const navigate = useNavigate();
@@ -35,27 +39,31 @@ function CommunityPage() {
         fetchApprovedChannels();
     }, []);
 
-    const fetchApprovedChannels = async () => {
-        try {
-            const response = await channelApi.getApprovedChannels();
-            if (response.success && response.data.responses) {
-                const mappedChannels: Channel[] = response.data.responses.map((ch, idx) => ({
-                    channelId: idx + 1,
-                    channelName: ch.channelName,
-                    channelIntro: ch.channelIntro || '',
-                }));
-                setChannels(mappedChannels);
-            } else {
-                setChannels([]);
-            }
-        } catch (error) {
-            console.error('Failed to fetch approved channels', error);
-            setChannels([]);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const fetchApprovedChannels = () => {
+        const localChannels = JSON.parse(
+            localStorage.getItem('channels') || '[]'
+        );
 
+        const approvedChannels: Channel[] = localChannels
+            .filter(
+                (ch: any) =>
+                    ch.channelStatus === 'APPROVED' &&
+                    ch.requestType === 'CREATE'
+            )
+            .map((ch: any) => ({
+                channelId: ch.channelId,
+                channelName: ch.channelName,
+                channelIntro: ch.channelIntro,
+            }));
+
+        if (approvedChannels.length > 0) {
+            setChannels(approvedChannels);
+        } else {
+            setChannels(mockChannels);
+        }
+
+        setLoading(false);
+    };
 
     return (
         <CommunityWrapper>
@@ -81,6 +89,9 @@ function CommunityPage() {
                     <RightButtons>
                         <Button onClick={() => navigate('/channeljoin')}>
                             채널 생성 →
+                        </Button>
+                        <Button onClick={() => navigate('/channelApproval')}>
+                            채널 승인 →
                         </Button>
                     </RightButtons>
                 </HeaderTop>
