@@ -5,8 +5,6 @@ import Arrow from "../../assets/images/blackarrow.svg";
 
 /* ===============================
    FTTP 결과 보정 함수
-   FTTP 결과 범위: -1 ~ 3
-   그래프 범위:     -2 ~ 2
 ================================ */
 const normalizeToRange = (value: number) => {
   return ((value + 1) / 4) * 4 - 2;
@@ -27,6 +25,14 @@ export default function TestResult() {
     { label: "창의성", value: normalizeToRange(finalAverage.creativity) },
   ];
 
+  /* ===============================
+     그래프 최대 높이 계산
+     기준: value 2 → 350px
+  ================================ */
+  const BAR_UNIT = 175; // 1점당 px
+  const maxBarHeight =
+    Math.max(...categories.map((c) => Math.abs(c.value))) * BAR_UNIT;
+
   return (
     <S.Background>
       <Header />
@@ -36,42 +42,33 @@ export default function TestResult() {
           <S.Title>알고리즘 테스트 결과</S.Title>
 
           {/* ================= 그래프 ================= */}
-          <S.GraphSection>
+          <S.GraphSection $graphHeight={maxBarHeight}>
             <S.GraphTitle>카테고리별 상대 점수</S.GraphTitle>
 
             <S.RelativeChart>
               {categories.map((item) => (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "8px",
-                  }}
-                  key={item.label}
-                >
-                  <S.RelativeBarItem key={item.label}>
-                    <S.RelativeBarWrapper>
-                      <S.RelativeBar $value={item.value} />
-                    </S.RelativeBarWrapper>
-                  </S.RelativeBarItem>
+                <S.RelativeBarItem key={item.label}>
+                  <S.RelativeBarWrapper $height={maxBarHeight}>
+                    <S.RelativeBar $value={item.value} $unit={BAR_UNIT} />
+                  </S.RelativeBarWrapper>
+
                   <S.BarValue>{item.value.toFixed(2)}</S.BarValue>
                   <S.BarLabel>{item.label}</S.BarLabel>
-                </div>
+                </S.RelativeBarItem>
               ))}
             </S.RelativeChart>
           </S.GraphSection>
 
-          {/* ================= 추천 활동 ================= */}
-
+          {/* ================= 추천 ================= */}
           <S.GraphTitle>추천 활동</S.GraphTitle>
+
           <S.RecommendSection>
             <S.RecommendRow>
               <S.RecommaendBox>토론 활동</S.RecommaendBox>
               <S.RecommaendBox>문제 해결 프로젝트</S.RecommaendBox>
               <S.RecommaendBox>집중력 강화 훈련</S.RecommaendBox>
             </S.RecommendRow>
-            {/* ================= 이동 ================= */}
+
             <S.ArrowImage onClick={() => navigate("/")}>
               <img src={Arrow} alt="메인으로 이동" />
             </S.ArrowImage>

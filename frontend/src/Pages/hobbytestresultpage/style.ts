@@ -34,29 +34,33 @@ export const Title = styled.div`
 /* ===============================
    그래프 영역
 ================================ */
-export const GraphSection = styled.div`
-  height: 100%;
+export const GraphSection = styled.div<{ $graphHeight: number }>`
   background: #ffffff;
   border-radius: 16px;
-  padding: 40px;
+  padding: 60px 100px;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.12);
+
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+
+  /* 🔑 핵심 */
+  min-height: ${({ $graphHeight }) => $graphHeight + 180}px;
 `;
 
 export const GraphTitle = styled.div`
+  width: 100%;
   font-size: 24px;
   font-weight: 600;
-  margin-top: 8px;
 `;
 
 /* ===============================
    상대 막대그래프
 ================================ */
 export const RelativeChart = styled.div`
-  position: relative;
-  height: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   padding: 0 40px;
 `;
 
@@ -73,22 +77,25 @@ export const RelativeBarItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80px;
+  width: 100px;
+  height: 100%;
 `;
 
-export const RelativeBarWrapper = styled.div`
+export const RelativeBarWrapper = styled.div<{ $height: number }>`
   position: relative;
-  height: 220px;
   width: 36px;
+  height: ${({ $height }) => $height}px;
 `;
 
-export const RelativeBar = styled.div<{ $value: number }>`
+export const RelativeBar = styled.div<{
+  $value: number;
+  $unit: number;
+}>`
   position: absolute;
   bottom: 0;
   width: 100%;
-
-  /* -2 ~ 2 → 0 ~ 700px */
-  height: ${({ $value }) => (Math.abs($value) / 2) * 700}px;
+  height: ${({ $value, $unit }) =>
+    Math.abs($value) * $unit}px;
 
   background: ${({ $value }) =>
     $value >= 0
@@ -98,6 +105,7 @@ export const RelativeBar = styled.div<{ $value: number }>`
   border-radius: 8px;
   transition: height 0.6s ease;
 `;
+
 
 export const BarValue = styled.div`
   margin-top: 10px;

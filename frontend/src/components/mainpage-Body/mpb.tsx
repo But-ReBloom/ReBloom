@@ -10,14 +10,17 @@ export const Body = () => {
     <>
       <S.BodyContainer>
         <S.IntroTextBox>
-          <S.IntroBig>Taste Management Platform</S.IntroBig>
+          <S.IntroBig>
+            취미를 다시 발견하고 함께 공유하고 성장을 돕는 플랫폼
+          </S.IntroBig>
           <S.IntroSmall>
-            Find your taste, and do related activities
+            잊어버린 취향을 다시 발견하고, 이를 힘든 일상 속 쉼터로 발전시키는
+            ReBloom
           </S.IntroSmall>
         </S.IntroTextBox>
         <S.BodyButtons>
           <Link to="/explore/taste">
-            <S.GoFindTasteButton>Taste Activity</S.GoFindTasteButton>
+            <S.GoFindTasteButton>활동하러가기</S.GoFindTasteButton>
           </Link>
           <S.IntroButtons
             onClick={() => {
@@ -26,7 +29,7 @@ export const Body = () => {
             id="go-findTaste_Hobbytest"
           >
             <S.DYT>
-              <b>Discover your taste</b>
+              <b>취향테스트 바로가기</b>
             </S.DYT>
             <img src={arrow} alt="" />
           </S.IntroButtons>

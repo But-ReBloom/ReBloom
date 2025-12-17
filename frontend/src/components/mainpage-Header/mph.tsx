@@ -36,12 +36,8 @@ function Header({ props }: { props?: any }) {
             </S.LogoutContainer>
           </div>
         ) : (
-          <div className="go-login-button">
-            <Link to="/login">
-              <button className="login-button-go-lp" id="login-box_button">
-                로그인
-              </button>
-            </Link>
+          <div onClick={() => navigate("/")} className="go-login-button">
+            로그인
           </div>
         )}
       </S.HeaderRight>

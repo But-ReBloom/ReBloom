@@ -196,14 +196,18 @@ export const ChoiceBtn = styled.button`
   width: 140px;
   height: 34px;
   border-radius: 20px;
-  background: rgb(0, 106, 255);
+  background: linear-gradient(90deg, #41a6ff, #3e55bf);
   color: #fff;
   border: none;
   font-size: 14px;
   cursor: pointer;
-  transition: 0.25s;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: rgb(115, 164, 233);
+    font-size: 16px;
+    font-weight: bold;
+    color: #3e55bf;
+    background: white;
+    border: 2px solid #3e55bf;
   }
 `;

@@ -26,7 +26,7 @@ export const IntroTextBox = styled.div`
 `;
 
 export const IntroBig = styled.p`
-  font-size: 72px;
+  font-size: 48px;
   font-weight: 700;
   color: #333;
   text-align: center;
@@ -35,8 +35,8 @@ export const IntroBig = styled.p`
 `;
 
 export const IntroSmall = styled.p`
-  font-size: 24px;
-  color: #333;
+  font-size: 20px;
+  color: #666;
   text-align: center;
   margin-bottom: 40px;
   width: 60%;
@@ -51,21 +51,25 @@ export const BodyButtons = styled.div`
 `;
 
 export const GoFindTasteButton = styled.button`
+  width: 30vh;
+  height: 50px;
   background: linear-gradient(90deg, #41a6ff, #3e55bf);
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  font-size: 18px;
-  border-radius: 999px;
+  color: #ffffff;
+  padding: 8px 16px;
   cursor: pointer;
+  font-size: 18px;
   transition: all 0.3s ease;
-  width: 200px;
+  border: 1px solid #dedede;
+  font-weight: 500;
+  border-radius: 999px;
 
   &:hover {
-    border: 1px solid #dedede;
+    color: #3e55bf;
     background: white;
-    color: #50b9ff;
-    transform: scale(1.1);
+    border: 2px solid #3e55bf;
+    font-size: 20px;
+    font-weight: bold;
+    transform: scale(1.05);
   }
 `;
 
@@ -91,7 +95,7 @@ export const GoFindTasteHobbytest = styled.div`
 // `;
 
 export const IntroButtons = styled.div`
-cursor: pointer;
+  cursor: pointer;
   border: none;
   display: flex;
   flex-direction: row;
@@ -104,11 +108,11 @@ cursor: pointer;
   }
 `;
 
-export const DYT =styled.p`
-    color: #000;
-    text-decoration: none;
+export const DYT = styled.p`
+  color: #000;
+  text-decoration: none;
 
-    &:hover {
-        text-decoration: underline;
-    }
+  &:hover {
+    text-decoration: underline;
+  }
 `;
