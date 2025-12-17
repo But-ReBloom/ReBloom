@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { authApi } from "../../api/auth";
 import { toast } from "react-toastify";
@@ -6,11 +6,15 @@ import { toast } from "react-toastify";
 export default function GoogleCallback() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const processedRef = useRef(false);
 
   useEffect(() => {
     const code = searchParams.get("code");
 
     if (code) {
+      if (processedRef.current) return;
+      processedRef.current = true;
+
       const login = async () => {
         try {
           const redirectUri = `${window.location.origin}/auth/google/callback`;
