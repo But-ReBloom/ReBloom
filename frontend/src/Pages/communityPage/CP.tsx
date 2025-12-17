@@ -1,8 +1,8 @@
 import {
     CommunityWrapper,
-    // LogoImage,
-    // CloseButton,
-    // CloseIconImg,
+    LogoImage,
+    CloseButton,
+    CloseIconImg,
     CentralBox,
     HeaderTop,
     SortDropdown,
@@ -14,11 +14,10 @@ import {
     PostDescription,
 } from './style';
 
-// import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
-// import CloseIcon from '../../assets/images/close.svg';
+import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
+import CloseIcon from '../../assets/images/close.svg';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import Header from '../../components/mainpage-Header/mph';
 
 interface Channel {
     channelId: number;
@@ -40,35 +39,35 @@ function CommunityPage() {
         fetchApprovedChannels();
     }, []);
 
-const fetchApprovedChannels = () => {
-    const localChannels = JSON.parse(localStorage.getItem('channels') || '[]');
+    const fetchApprovedChannels = () => {
+        const localChannels = JSON.parse(
+            localStorage.getItem('channels') || '[]'
+        );
 
-    const approvedChannels: Channel[] = localChannels
-        .filter(
-            (ch: any) =>
-                ch.channelStatus === 'APPROVED' &&
-                ch.requestType === 'CREATE'
-        )
-        .map((ch: any) => ({
-            channelId: ch.channelId,
-            channelName: ch.channelName,
-            channelIntro: ch.channelIntro,
-        }));
+        const approvedChannels: Channel[] = localChannels
+            .filter(
+                (ch: any) =>
+                    ch.channelStatus === 'APPROVED' &&
+                    ch.requestType === 'CREATE'
+            )
+            .map((ch: any) => ({
+                channelId: ch.channelId,
+                channelName: ch.channelName,
+                channelIntro: ch.channelIntro,
+            }));
 
-    if (approvedChannels.length > 0) {
-        setChannels(approvedChannels);
-    } else {
-        localStorage.removeItem('channels');
-        setChannels(mockChannels);
-    }
+        if (approvedChannels.length > 0) {
+            setChannels(approvedChannels);
+        } else {
+            setChannels(mockChannels);
+        }
 
-    setLoading(false);
-};
-
+        setLoading(false);
+    };
 
     return (
         <CommunityWrapper>
-            {/* <CloseButton onClick={() => navigate('/main')}>
+            <CloseButton onClick={() => navigate('/main')}>
                 <CloseIconImg src={CloseIcon} alt="닫기" />
             </CloseButton>
 
@@ -76,8 +75,7 @@ const fetchApprovedChannels = () => {
                 src={RebloomLogo}
                 alt="Rebloom Logo"
                 onClick={() => navigate('/')}
-            /> */}
-            <Header />
+            />
 
             <CentralBox>
                 <HeaderTop>
