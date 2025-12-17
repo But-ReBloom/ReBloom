@@ -7,10 +7,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://3.38.132.62',
+        target: 'http://localhost',
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
         headers: {
-          Host: '3.38.132.62',
+          Host: 'api.rebloom.co.kr',
         },
       },
     },
