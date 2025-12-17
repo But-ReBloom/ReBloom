@@ -39,31 +39,31 @@ function CommunityPage() {
         fetchApprovedChannels();
     }, []);
 
-const fetchApprovedChannels = () => {
-    const localChannels = JSON.parse(localStorage.getItem('channels') || '[]');
+    const fetchApprovedChannels = () => {
+        const localChannels = JSON.parse(
+            localStorage.getItem('channels') || '[]'
+        );
 
-    const approvedChannels: Channel[] = localChannels
-        .filter(
-            (ch: any) =>
-                ch.channelStatus === 'APPROVED' &&
-                ch.requestType === 'CREATE'
-        )
-        .map((ch: any) => ({
-            channelId: ch.channelId,
-            channelName: ch.channelName,
-            channelIntro: ch.channelIntro,
-        }));
+        const approvedChannels: Channel[] = localChannels
+            .filter(
+                (ch: any) =>
+                    ch.channelStatus === 'APPROVED' &&
+                    ch.requestType === 'CREATE'
+            )
+            .map((ch: any) => ({
+                channelId: ch.channelId,
+                channelName: ch.channelName,
+                channelIntro: ch.channelIntro,
+            }));
 
-    if (approvedChannels.length > 0) {
-        setChannels(approvedChannels);
-    } else {
-        localStorage.removeItem('channels');
-        setChannels(mockChannels);
-    }
+        if (approvedChannels.length > 0) {
+            setChannels(approvedChannels);
+        } else {
+            setChannels(mockChannels);
+        }
 
-    setLoading(false);
-};
-
+        setLoading(false);
+    };
 
     return (
         <CommunityWrapper>
