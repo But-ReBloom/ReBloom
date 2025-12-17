@@ -39,6 +39,3 @@ const HandAnimation = () => {
   return <S.Hand />;
 };
 
-const Sigh = () => {
-    return <S.Sigh />;
-};
