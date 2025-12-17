@@ -122,7 +122,7 @@ function Index({
   const startIdx = (currentPage - 1) * itemsPerPage;
   const currentExps = exps.slice(startIdx, startIdx + itemsPerPage);
 
-  if (loading) return LoadingPage;
+  if (loading) return <LoadingPage/>;
 
   return (
     <S.Wrapper>
