@@ -62,6 +62,20 @@ const PageButton = styled.button<{ active?: boolean }>`
     color: ${props => (props.active ? '#fff' : '#000')};
 `;
 
+const JoinChannelButton = styled.button<{ joined?: boolean }>`
+    padding: 10px 15px;
+    margin: 12px 0;
+    background-color: ${props => (props.joined ? '#aaa' : '#5db9eeff')};
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    &:hover {
+        background-color: ${props => (props.joined ? '#888' : '#2078abac')};
+    }
+`;
+
 const POSTS_PER_PAGE = 9;
 
 function Post() {
@@ -70,6 +84,19 @@ function Post() {
     const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [allPosts, setAllPosts] = useState<any[]>([]);
+<<<<<<< HEAD
+    const [isJoined, setIsJoined] = useState(false);
+
+    useEffect(() => {
+        const savedPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+        const mergedPosts = [...savedPosts, ...initialPosts].filter(
+            (post, index, self) => index === self.findIndex(p => p.id === post.id)
+        );
+        setAllPosts(mergedPosts);
+
+        const joinedChannels = JSON.parse(localStorage.getItem('joinedChannels') || '[]');
+        setIsJoined(joinedChannels.includes('홍길동')); 
+=======
     const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
 
     useEffect(() => {
@@ -111,6 +138,7 @@ function Post() {
             }
         };
         fetchPosts();
+>>>>>>> main
     }, []);
 
     const handleCloseClick = () => navigate('/main');
@@ -120,6 +148,15 @@ function Post() {
     };
     const handleWritePost = () => navigate('/myPostPage');
     const handlePostClick = (id: number) => navigate(`/post/${id}`);
+
+    const handleJoinChannel = () => {
+        if (!isJoined) {
+            const pending = JSON.parse(localStorage.getItem('pendingJoinRequests') || '[]');
+            if (!pending.includes('홍길동')) pending.push('홍길동');
+            localStorage.setItem('pendingJoinRequests', JSON.stringify(pending));
+            alert('가입 신청 완료. 관리자의 승인을 기다려주세요.');
+        }
+    };
 
     const sortedPosts = [...allPosts].sort((a, b) => {
         if (a.notice && !b.notice) return -1;
@@ -152,6 +189,7 @@ function Post() {
                 <Divider />
                 <CafeInfo>
                     <p>Rebloom 게시글 페이지입니다.</p>
+
                 </CafeInfo>
 
                 <ProfileSection>
@@ -197,6 +235,9 @@ function Post() {
                         ))}
                     </ul>
                 </NavMenu>
+                    <JoinChannelButton joined={isJoined} onClick={handleJoinChannel}>
+                        {isJoined ? '가입 완료' : '채널 가입 신청'}
+                    </JoinChannelButton>
             </Sidebar>
 
             <ContentArea>

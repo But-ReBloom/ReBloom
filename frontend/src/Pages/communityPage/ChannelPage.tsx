@@ -12,24 +12,12 @@ import {
     LeftPostItem,
     PostTitle,
     PostDescription,
-<<<<<<< HEAD
 } from './style';
 
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-=======
-    } from './style';
-
-    import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
-    import CloseIcon from '../../assets/images/close.svg';
-    import { useNavigate } from 'react-router-dom';
-    import { useEffect, useState } from 'react';
-    import { postApi } from '../../api/post';
-    import type { CreatePostResponse } from '../../types/PostTypes';
-    // import Header from '../../components/normal_header/nh';
->>>>>>> main
 
 interface Channel {
     channelId: number;
@@ -44,23 +32,17 @@ const mockChannels: Channel[] = [
 
 function CommunityPage() {
     const navigate = useNavigate();
-<<<<<<< HEAD
     const [channels, setChannels] = useState<Channel[]>([]);
     const [loading, setLoading] = useState(true);
-=======
-    const [leftPosts, setLeftPosts] = useState<CreatePostResponse[]>([]);
-    const [rightPosts, setRightPosts] = useState<CreatePostResponse[]>([]);
->>>>>>> main
 
     useEffect(() => {
         fetchApprovedChannels();
     }, []);
 
     const fetchApprovedChannels = () => {
-        const localChannels = JSON.parse(
-            localStorage.getItem('channels') || '[]'
-        );
+        const localChannels = JSON.parse(localStorage.getItem('channels') || '[]');
 
+        // 승인된 채널 필터링
         const approvedChannels: Channel[] = localChannels
             .filter(
                 (ch: any) =>
@@ -73,37 +55,22 @@ function CommunityPage() {
                 channelIntro: ch.channelIntro,
             }));
 
-        if (approvedChannels.length > 0) {
-            setChannels(approvedChannels);
-        } else {
-            setChannels(mockChannels);
-        }
+        // mockChannels와 approvedChannels 합치기 (중복 제거)
+        const channelMap = new Map<number, Channel>();
 
+        // mockChannels 먼저 넣기
+        mockChannels.forEach(ch => channelMap.set(ch.channelId, ch));
+
+        // approvedChannels 넣기 (같은 ID면 덮어쓰기)
+        approvedChannels.forEach(ch => channelMap.set(ch.channelId, ch));
+
+        // Map -> Array
+        const combinedChannels = Array.from(channelMap.values());
+
+        setChannels(combinedChannels);
         setLoading(false);
     };
 
-<<<<<<< HEAD
-=======
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const popularRes = await postApi.getPopularPosts().catch(() => null);
-                if (popularRes && popularRes.success) {
-                    setRightPosts(popularRes.data.posts);
-                }
-
-                const searchRes = await postApi.searchPosts({ keyword: "" }).catch(() => null);
-                if (searchRes && searchRes.success) {
-                    setLeftPosts(searchRes.data.posts);
-                }
-            } catch (error) {
-                console.error("Failed to fetch posts", error);
-            }
-        };
-        fetchData();
-    }, []);
-
->>>>>>> main
     return (
         <CommunityWrapper>
             <CloseButton onClick={() => navigate('/main')}>
@@ -135,7 +102,6 @@ function CommunityPage() {
                     </RightButtons>
                 </HeaderTop>
 
-<<<<<<< HEAD
                 <LeftColumn>
                     {loading && <p>로딩중...</p>}
 
@@ -164,28 +130,6 @@ function CommunityPage() {
                         ))}
                 </LeftColumn>
             </CentralBox>
-=======
-            <ContentWrapper>
-            <LeftColumn>
-                {leftPosts.map((post) => (
-                <LeftPostItem key={post.postId} onClick={() => navigate(`/post/${post.postId}`)}>
-                    <PostTitle>{post.postTitle}</PostTitle>
-                    <PostDescription>{post.postContent}</PostDescription>
-                </LeftPostItem>
-                ))}
-            </LeftColumn>
-
-            <RightColumn>
-                {rightPosts.map((post) => (
-                <RightPostItem key={post.postId} onClick={() => navigate(`/post/${post.postId}`)}>
-                    <PostTitle>{post.postTitle}</PostTitle>
-                    <PostDescription>조회수: {post.viewers}</PostDescription>
-                </RightPostItem>
-                ))}
-            </RightColumn>
-            </ContentWrapper>
-        </CentralBox>
->>>>>>> main
         </CommunityWrapper>
     );
 }
