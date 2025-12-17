@@ -2,15 +2,9 @@ import * as S from "./style";
 import Header from "../../components/mainpage-Header/mph";
 import Point from "../../assets/images/Point.svg";
 import Archive from "../../assets/images/Archive.svg";
-<<<<<<< HEAD
-import React_svg from "../../assets/images/React.svg";
-import { ImageOfTier } from "../../components/determine_tier/determine_tier";
-import Rebloom from "../../assets/images/Rebloom.png";
-=======
 import React_svg from "../../assets/images/react.svg";
 import { ImageOfTier } from "../../components/determine_tier/determine_tier.ts";
 import Rebloom from "../../assets/images/ReBloom.png";
->>>>>>> origin
 import { useEffect, useState } from "react";
 import { authApi } from "../../api/auth";
 import { achievementApi } from "../../api/achievement";
@@ -50,20 +44,19 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
     <S.LeftSection>
       <S.UserInfoSection>
         <S.ProfileInfo>
-<<<<<<< HEAD
-          <S.UserImage src={React_svg} style={{padding:"8px"}} />
-=======
           <S.UserImage src={React_svg || ""} />
->>>>>>> origin
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <S.UserName>{userInfo?.userName || "Guest"}</S.UserName>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
               <S.UserTier>{tier}</S.UserTier>
-<<<<<<< HEAD
-              <img src={tierImage} width={32} />
-=======
               {tierImage && <img src={tierImage} alt="Tier Image" width={32} />}
->>>>>>> origin
             </div>
           </div>
         </S.ProfileInfo>
@@ -74,11 +67,7 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
             {userInfo?.userTierPoint || 0}P
           </S.PnA>
           <S.PnA>
-<<<<<<< HEAD
-            <S.addedimage src={Rebloom} />
-=======
             {Rebloom && <S.addedimage src={Rebloom} />}
->>>>>>> origin
             {userInfo?.userPoint || 0}P
           </S.PnA>
           <S.PnA>
@@ -90,9 +79,7 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
         <S.ArchiveMent>완료한 업적</S.ArchiveMent>
         <S.ArchiveList>
           {completed.map((ach) => (
-            <S.Box key={ach.achievementId}>
-              {ach.userAchievementTitle}
-            </S.Box>
+            <S.Box key={ach.achievementId}>{ach.userAchievementTitle}</S.Box>
           ))}
         </S.ArchiveList>
       </S.UserInfoSection>
@@ -151,12 +138,8 @@ function RightSection({ achievements }: RightSectionProps) {
           zIndex: 10,
         }}
       >
-        <S.ChoiceBtn onClick={() => setViewMode("box")}>
-          업적 보기
-        </S.ChoiceBtn>
-        <S.ChoiceBtn onClick={() => setViewMode("tree")}>
-          나무 보기
-        </S.ChoiceBtn>
+        <S.ChoiceBtn onClick={() => setViewMode("box")}>업적 보기</S.ChoiceBtn>
+        <S.ChoiceBtn onClick={() => setViewMode("tree")}>나무 보기</S.ChoiceBtn>
       </div>
 
       {/* ===============================
@@ -175,37 +158,26 @@ function RightSection({ achievements }: RightSectionProps) {
             const percent = ach.userAchievementIsSuccess ? 100 : 0;
 
             return (
-              <div
-                key={ach.achievementId}
-                style={{
-                  padding: "16px 0",
-                  borderBottom: "1px solid rgba(0,0,0,0.1)",
-                }}
-              >
-<<<<<<< HEAD
+              <>
                 <S.ProgressTitle>
-                  <strong>{ach.userAchievementTitle}</strong>
-                  <div style={{ display: "flex", gap: 16 }}>
+                  <div
+                    key={ach.achievementId}
+                    style={{
+                      padding: "16px 0",
+                      borderBottom: "1px solid rgba(0,0,0,0.1)",
+                    }}
+                  >
                     <S.ProgressBar>
-                      <S.ProgressFill progress={percent} />
+                      <S.ProgressFill $progress={percent} />
                     </S.ProgressBar>
                     <span>{percent}%</span>
                   </div>
                 </S.ProgressTitle>
-=======
-                <S.ProgressBar>
-                  <S.ProgressFill $progress={percent} />
-                </S.ProgressBar>
-                <span>{percent}%</span>
-              </div>
-            </S.ProgressTitle>
->>>>>>> origin
-
                 <p style={{ fontSize: 14, color: "#666" }}>
                   {ach.userAchievementDescription} (현재:{" "}
                   {ach.userAchievementProgress})
                 </p>
-              </div>
+              </>
             );
           })}
         </>
@@ -219,7 +191,7 @@ function RightSection({ achievements }: RightSectionProps) {
           <S.DetailTitle>나무 보기</S.DetailTitle>
 
           <S.TreeWrapper>
-            <S.TreeImage src={Tree} style={{width:"700px"}}/>
+            <S.TreeImage src={Tree} style={{ width: "700px" }} />
 
             {treeActivities.map((act, idx) => (
               <S.TreeActivity
@@ -235,9 +207,7 @@ function RightSection({ achievements }: RightSectionProps) {
           </S.TreeWrapper>
 
           {treeActivities.length === 0 && (
-            <p style={{ marginTop: 16 }}>
-              아직 추가된 활동이 없습니다.
-            </p>
+            <p style={{ marginTop: 16 }}>아직 추가된 활동이 없습니다.</p>
           )}
         </>
       )}
@@ -249,8 +219,7 @@ function RightSection({ achievements }: RightSectionProps) {
    Main
 ================================ */
 export default function Mypage() {
-  const [userInfo, setUserInfo] =
-    useState<FindUserInfoResponse | null>(null);
+  const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
   const [achievements, setAchievements] = useState<
     GetUserAchievementResponse[]
   >([]);
@@ -262,8 +231,7 @@ export default function Mypage() {
         const userRes = await authApi.findCurrentUser();
         if (userRes.success) setUserInfo(userRes.data);
 
-        const achRes =
-          await achievementApi.getUserAchievementsByUserEmail();
+        const achRes = await achievementApi.getUserAchievementsByUserEmail();
         if (achRes.success) setAchievements(achRes.data);
       } finally {
         setLoading(false);
@@ -280,10 +248,7 @@ export default function Mypage() {
       <S.Background>
         <S.Wrapper>
           <S.Container>
-            <LeftSection
-              userInfo={userInfo}
-              achievements={achievements}
-            />
+            <LeftSection userInfo={userInfo} achievements={achievements} />
             <RightSection achievements={achievements} />
           </S.Container>
         </S.Wrapper>

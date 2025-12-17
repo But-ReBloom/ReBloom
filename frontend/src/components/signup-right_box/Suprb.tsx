@@ -54,63 +54,58 @@ export default function Suprb() {
     <>
       <S.LoginContainer>
         <S.LoginTextBox>
-          <S.Title>Let's Sign Up</S.Title>
-          <S.Subtitle>Please take a moment to sign in</S.Subtitle>
+          <S.Title>회원가입을 진행해주세요!</S.Title>
+          <S.Subtitle>빈 칸을 입력해주십시오.</S.Subtitle>
         </S.LoginTextBox>
 
         <S.InputBox>
           <S.Input_title>
-            <S.InputLabel htmlFor="email-input">Email</S.InputLabel>
+            <S.InputLabel htmlFor="email-input">이메일</S.InputLabel>
             <S.Input
               type="text"
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}
-              placeholder="Enter your Email"
+              placeholder="이메일을 입력해주십시오."
               autoFocus
             />
           </S.Input_title>
           <S.Input_title>
-            <S.InputLabel htmlFor="ID-input">ID</S.InputLabel>
+            <S.InputLabel htmlFor="ID-input">아이디</S.InputLabel>
             <S.Input
               type="text"
               value={userID}
               onChange={(e) => setUserID(e.target.value)}
-              placeholder="Enter your ID"
+              placeholder="아이디를 입력해주십시오."
             />
           </S.Input_title>
           <S.Input_title>
-            <S.InputLabel htmlFor="paasword-input">
-              Confirm Password
-            </S.InputLabel>
+            <S.InputLabel htmlFor="paasword-input">비밀번호</S.InputLabel>
             <S.Input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder="비밀번호를 입력해주십시오."
             />
           </S.Input_title>
           <S.Input_title>
-            <S.InputLabel htmlFor="name-input">Your Name</S.InputLabel>
+            <S.InputLabel htmlFor="name-input">이름</S.InputLabel>
             <S.Input
               type="name"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              placeholder="Enter your name"
+              placeholder="이름을 입력해주십시오."
             />
           </S.Input_title>
         </S.InputBox>
 
         <S.ButtonBox>
           <S.ForgotPassword to="/"></S.ForgotPassword>
-          <S.LoginButton onClick={handleSubmit}>Sign Up</S.LoginButton>
+          <S.LoginButton onClick={handleSubmit}>회원가입</S.LoginButton>
         </S.ButtonBox>
 
         <S.OAuthFamily>
           <S.OAuthButton>
             <img src={Google} alt="Google" />
-          </S.OAuthButton>
-          <S.OAuthButton>
-            <img src={Dodum} alt="Dodum" />
           </S.OAuthButton>
         </S.OAuthFamily>
       </S.LoginContainer>

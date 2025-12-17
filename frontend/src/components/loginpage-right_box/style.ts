@@ -22,14 +22,14 @@ export const LoginTextBox = styled.div`
 `;
 
 export const Title = styled.p`
-  font-size: 48px;
+  font-size: 36px;
   color: black;
   margin: 0;
 `;
 
 export const Subtitle = styled.p`
-  font-size: 20px;
-  color: black;
+  font-size: 16px;
+  color: #777;
   margin-top: 10px;
 `;
 
@@ -150,7 +150,7 @@ export const SignUpTag = styled.a`
   font-size: 14px;
   color: black;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
 
   &:hover {
     text-decoration: underline;

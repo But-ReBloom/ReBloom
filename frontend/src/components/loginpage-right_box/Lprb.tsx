@@ -68,38 +68,38 @@ export default function Right_box() {
     <>
       <S.LoginContainer>
         <S.LoginTextBox>
-          <S.Title>Welcome to Rebloom</S.Title>
-          <S.Subtitle>Please take a moment to login</S.Subtitle>
+          <S.Title>ReBloom에 오신것을 환영합니다!</S.Title>
+          <S.Subtitle>로그인을 진행해주십시오.</S.Subtitle>
         </S.LoginTextBox>
 
         <S.InputBox>
           <div>
-            <S.InputLabel>Email</S.InputLabel>
+            <S.InputLabel>이메일</S.InputLabel>
             <S.Input
               type="text"
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}
-              placeholder="Enter your e-mail"
+              placeholder="이메일을 입력해주세요."
             />
           </div>
 
           <div>
-            <S.InputLabel>Password</S.InputLabel>
+            <S.InputLabel>비밀번호</S.InputLabel>
             <S.Input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder="비밀번호를 입력해주세요."
             />
           </div>
 
           <S.ButtonBox>
             <S.Forgots>
-              <S.Forgot_a to="/forgot/email">Forgot email?</S.Forgot_a>
-              <S.Forgot_a to="/forgot/password">Forgot password?</S.Forgot_a>
+              <S.Forgot_a to="/forgot/email">이메일을 잊으셨나요?</S.Forgot_a>
+              <S.Forgot_a to="/forgot/password">아이디를 잊으셨나요?</S.Forgot_a>
             </S.Forgots>
             <S.LoginButton onClick={handleSubmit} type="button">
-              Log In
+              로그인
             </S.LoginButton>
           </S.ButtonBox>
         </S.InputBox>
@@ -108,13 +108,10 @@ export default function Right_box() {
           <S.OAuthButton onClick={handleGoogleLogin}>
             <img src={Google} alt="Google" />
           </S.OAuthButton>
-          <S.OAuthButton>
-            <img src={Dodum} alt="Dodum" />
-          </S.OAuthButton>
         </S.OAuthFamily>
 
         <S.SignUpTag onClick={() => navigate("/signup")}>
-          Haven't you signed up yet?
+          아직 회원가입을 진행하지 않았나요?
         </S.SignUpTag>
       </S.LoginContainer>
 

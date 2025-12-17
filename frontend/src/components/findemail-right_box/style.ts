@@ -23,14 +23,14 @@ export const LoginTextBox = styled.div`
 `;
 
 export const Title = styled.p`
-  font-size: 48px;
+  font-size: 36px;
   color: black;
   margin: 0;
 `;
 
 export const Subtitle = styled.p`
-  font-size: 20px;
-  color: black;
+  font-size: 16px;
+  color: #777;
   margin-top: 10px;
 `;
 
@@ -43,18 +43,18 @@ export const InputBox = styled.div`
 `;
 
 export const Input_title = styled.button`
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    background: none;
-    margin: 0;
-    padding: 0;
-    border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  background: none;
+  margin: 0;
+  padding: 0;
+  border: none;
 `;
 
 export const InputID = styled.div`
-    display:flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const InputLabel = styled.label`
@@ -80,49 +80,41 @@ export const Input = styled.input`
 `;
 
 export const Send = styled.button`
-    width: 60vh;
-    height: 50px;
-    background: linear-gradient(90deg, #41a6ff, #3e55bf);
-    color: #ffffff;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 18px;
-    transition: all 0.3s ease;
-    border: 1px solid #dedede;
-    font-weight: 500;
-    border-radius: 16px;
-    margin-top: 80px;
-    margin-bottom: 20px;
+  width: 60vh;
+  height: 50px;
+  background: linear-gradient(90deg, #41a6ff, #3e55bf);
+  color: #ffffff;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  border: 1px solid #dedede;
+  font-weight: 500;
+  border-radius: 16px;
+  margin-top: 80px;
+  margin-bottom: 20px;
 
-    &:hover {
-        color: #3e55bf;
-        background: white;
-        border: 2px solid #3e55bf;
-        font-size: 20px;
-        font-weight: bold;
-        transform: scale(1.05);
-    }
+  &:hover {
+    color: #3e55bf;
+    background: white;
+    border: 2px solid #3e55bf;
+    font-size: 20px;
+    font-weight: bold;
+    transform: scale(1.05);
+  }
 `;
 
 export const gotoLogin = styled.button`
-    width: 20vh;
-    height: 50px;
-    background: linear-gradient(90deg, #41a6ff, #3e55bf);
-    color: #ffffff;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 18px;
-    transition: all 0.3s ease;
-    border: 1px solid #dedede;
-    font-weight: 500;
-    border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: none;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 
-    &:hover {
-        color: #3e55bf;
-        background: white;
-        border: 2px solid #3e55bf;
-        font-size: 20px;
-        font-weight: bold;
-        transform: scale(1.05);
-    }
+  &:hover {
+    text-decoration: underline;
+    color: #3e55bf;
+    transform: scale(1.01);
+  }
 `;
