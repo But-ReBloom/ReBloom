@@ -5,123 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import Header from "../../components/normal_header/nh.tsx";
 import type { InitialTest } from "../../types/hobby";
+import { hobbyApi } from "../../api/hobby";
 
-/* ===============================
-   더미 데이터 (10문항 / API 명세 기반)
-================================ */
-
-const dummyQuestions: InitialTest[] = [
-  {
-    initialTestId: 1,
-    initialTestSetNumber: 1,
-    initialTestCategory: "Social",
-    initialTestQuestion: "사람들과 어울리는 것을 즐긴다.",
-    initialTestSocialWeight: 4,
-    initialTestLearningWeight: 1,
-    initialTestPlanningWeight: 1,
-    initialTestFocusWeight: 0,
-    initialTestCreativityWeight: 1,
-  },
-  {
-    initialTestId: 2,
-    initialTestSetNumber: 1,
-    initialTestCategory: "Learning",
-    initialTestQuestion: "새로운 지식을 배우는 것이 좋다.",
-    initialTestSocialWeight: 1,
-    initialTestLearningWeight: 4,
-    initialTestPlanningWeight: 1,
-    initialTestFocusWeight: 1,
-    initialTestCreativityWeight: 2,
-  },
-  {
-    initialTestId: 3,
-    initialTestSetNumber: 2,
-    initialTestCategory: "Planning",
-    initialTestQuestion: "일을 시작하기 전 계획을 세운다.",
-    initialTestSocialWeight: 0,
-    initialTestLearningWeight: 1,
-    initialTestPlanningWeight: 4,
-    initialTestFocusWeight: 2,
-    initialTestCreativityWeight: 0,
-  },
-  {
-    initialTestId: 4,
-    initialTestSetNumber: 2,
-    initialTestCategory: "Focus",
-    initialTestQuestion: "한 가지 일에 오래 집중할 수 있다.",
-    initialTestSocialWeight: 0,
-    initialTestLearningWeight: 1,
-    initialTestPlanningWeight: 2,
-    initialTestFocusWeight: 4,
-    initialTestCreativityWeight: 0,
-  },
-  {
-    initialTestId: 5,
-    initialTestSetNumber: 3,
-    initialTestCategory: "Creativity",
-    initialTestQuestion: "창의적인 아이디어가 자주 떠오른다.",
-    initialTestSocialWeight: 1,
-    initialTestLearningWeight: 2,
-    initialTestPlanningWeight: 0,
-    initialTestFocusWeight: 1,
-    initialTestCreativityWeight: 4,
-  },
-  {
-    initialTestId: 6,
-    initialTestSetNumber: 3,
-    initialTestCategory: "Social",
-    initialTestQuestion: "팀 활동이 혼자 하는 것보다 좋다.",
-    initialTestSocialWeight: 4,
-    initialTestLearningWeight: 1,
-    initialTestPlanningWeight: 1,
-    initialTestFocusWeight: 0,
-    initialTestCreativityWeight: 1,
-  },
-  {
-    initialTestId: 7,
-    initialTestSetNumber: 4,
-    initialTestCategory: "Learning",
-    initialTestQuestion: "배운 내용을 바로 적용해보고 싶다.",
-    initialTestSocialWeight: 1,
-    initialTestLearningWeight: 4,
-    initialTestPlanningWeight: 1,
-    initialTestFocusWeight: 1,
-    initialTestCreativityWeight: 2,
-  },
-  {
-    initialTestId: 8,
-    initialTestSetNumber: 4,
-    initialTestCategory: "Planning",
-    initialTestQuestion: "목표를 세우고 관리하는 편이다.",
-    initialTestSocialWeight: 0,
-    initialTestLearningWeight: 1,
-    initialTestPlanningWeight: 4,
-    initialTestFocusWeight: 2,
-    initialTestCreativityWeight: 0,
-  },
-  {
-    initialTestId: 9,
-    initialTestSetNumber: 5,
-    initialTestCategory: "Focus",
-    initialTestQuestion: "방해 요소가 있어도 집중을 유지한다.",
-    initialTestSocialWeight: 0,
-    initialTestLearningWeight: 1,
-    initialTestPlanningWeight: 2,
-    initialTestFocusWeight: 4,
-    initialTestCreativityWeight: 0,
-  },
-  {
-    initialTestId: 10,
-    initialTestSetNumber: 5,
-    initialTestCategory: "Creativity",
-    initialTestQuestion: "기존 방식보다 새로운 방식을 선호한다.",
-    initialTestSocialWeight: 1,
-    initialTestLearningWeight: 2,
-    initialTestPlanningWeight: 0,
-    initialTestFocusWeight: 1,
-    initialTestCreativityWeight: 4,
-  },
-];
 
 /* ===============================
    컴포넌트
@@ -131,18 +16,33 @@ export default function FT_TestPage() {
   const navigate = useNavigate();
 
   const QUESTIONS_PER_PAGE = 2;
-  const TOTAL_PAGES = 5;
 
   const [page, setPage] = useState(1);
   const [questionList, setQuestionList] = useState<InitialTest[]>([]);
   const [answers, setAnswers] = useState<(number | null)[]>([]);
   const [loading, setLoading] = useState(true);
+  const [totalPages, setTotalPages] = useState(0);
 
-  /* 더미 데이터 로딩 */
+  /* API 데이터 로딩 */
   useEffect(() => {
-    setQuestionList(dummyQuestions);
-    setAnswers(Array(dummyQuestions.length).fill(null));
-    setLoading(false);
+    const fetchQuestions = async () => {
+      try {
+        const response = await hobbyApi.getQuestions();
+        if (response.success) {
+          setQuestionList(response.data);
+          setAnswers(Array(response.data.length).fill(null));
+          setTotalPages(Math.ceil(response.data.length / QUESTIONS_PER_PAGE));
+        } else {
+          toast.error("질문을 불러오는데 실패했습니다.");
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("서버 오류가 발생했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchQuestions();
   }, []);
 
   const startIndex = (page - 1) * QUESTIONS_PER_PAGE;
@@ -169,7 +69,7 @@ export default function FT_TestPage() {
       return;
     }
 
-    if (page < TOTAL_PAGES) setPage(page + 1);
+    if (page < totalPages) setPage(page + 1);
   };
 
   /* 평균 계산 */
@@ -202,24 +102,35 @@ export default function FT_TestPage() {
     );
 
     return {
-      social: sum.social / count,
-      learning: sum.learning / count,
-      planning: sum.planning / count,
-      focus: sum.focus / count,
-      creativity: sum.creativity / count,
+      socialScore: sum.social / count,
+      learningScore: sum.learning / count,
+      planningScore: sum.planning / count,
+      focusScore: sum.focus / count,
+      creativityScore: sum.creativity / count,
     };
   };
 
   /* 제출 */
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const finalAverage = calculateFinalAverage();
 
-    navigate("/test/result", {
-      state: {
-        type: "HobbyTest",
-        finalAverage,
-      },
-    });
+    try {
+      const response = await hobbyApi.recommendHobby(finalAverage);
+      if (response.success) {
+        navigate("/test/result", {
+          state: {
+            type: "HobbyTest",
+            finalAverage,
+            result: response.data,
+          },
+        });
+      } else {
+        toast.error("결과를 불러오는데 실패했습니다.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("서버 오류가 발생했습니다.");
+    }
   };
 
   if (loading) return <div>Loading...</div>;
@@ -231,7 +142,7 @@ export default function FT_TestPage() {
       <S.MainContainer>
         <S.Select_Box>
           <S.Page_num>
-            {page} / {TOTAL_PAGES}
+            {page} / {totalPages}
           </S.Page_num>
 
           {currentQuestions.map((q, idx) => {
@@ -254,7 +165,7 @@ export default function FT_TestPage() {
               </S.Before_button>
             )}
 
-            {page < TOTAL_PAGES ? (
+            {page < totalPages ? (
               <S.After_button onClick={handleNext}>
                 <S.NextButton>다음</S.NextButton>
               </S.After_button>

@@ -2,6 +2,7 @@ import * as S from "./style";
 import Header from "../../components/normal_header/nh";
 import { useLocation, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/blackarrow.svg";
+import type { HobbyTestResponse } from "../../types/hobby";
 
 /* ===============================
    FTTP 결과 보정 함수
@@ -13,16 +14,17 @@ const normalizeToRange = (value: number) => {
 export default function TestResult() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { finalAverage } = location.state || {};
+  const { finalAverage, result } = location.state || {};
+  const testResult = result as HobbyTestResponse;
 
   if (!finalAverage) return null;
 
   const categories = [
-    { label: "사회성", value: normalizeToRange(finalAverage.social) },
-    { label: "학습력", value: normalizeToRange(finalAverage.learning) },
-    { label: "계획력", value: normalizeToRange(finalAverage.planning) },
-    { label: "집중력", value: normalizeToRange(finalAverage.focus) },
-    { label: "창의성", value: normalizeToRange(finalAverage.creativity) },
+    { label: "사회성", value: normalizeToRange(finalAverage.socialScore) },
+    { label: "학습력", value: normalizeToRange(finalAverage.learningScore) },
+    { label: "계획력", value: normalizeToRange(finalAverage.planningScore) },
+    { label: "집중력", value: normalizeToRange(finalAverage.focusScore) },
+    { label: "창의성", value: normalizeToRange(finalAverage.creativityScore) },
   ];
 
   /* ===============================
@@ -64,9 +66,18 @@ export default function TestResult() {
 
           <S.RecommendSection>
             <S.RecommendRow>
-              <S.RecommaendBox>토론 활동</S.RecommaendBox>
-              <S.RecommaendBox>문제 해결 프로젝트</S.RecommaendBox>
-              <S.RecommaendBox>집중력 강화 훈련</S.RecommaendBox>
+              {testResult?.hobbyScores?.slice(0, 3).map((hobby) => (
+                <S.RecommaendBox key={hobby.hobbyName}>
+                  {hobby.hobbyName}
+                </S.RecommaendBox>
+              ))}
+              {!testResult?.hobbyScores && (
+                <>
+                  <S.RecommaendBox>토론 활동</S.RecommaendBox>
+                  <S.RecommaendBox>문제 해결 프로젝트</S.RecommaendBox>
+                  <S.RecommaendBox>집중력 강화 훈련</S.RecommaendBox>
+                </>
+              )}
             </S.RecommendRow>
 
             <S.ArrowImage onClick={() => navigate("/")}>
