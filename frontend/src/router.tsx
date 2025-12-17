@@ -21,6 +21,7 @@ import Thankyou from "./components/thanktou/thankyou.tsx";
 import Mypage from "./Pages/mypage/Mypage.tsx";
 import GoogleCallback from "./Pages/GoogleCallback/GoogleCallback.tsx";
 import LoadingPage from "./Pages/loadingpage/loading.tsx";
+import PrivateRoute from "./components/PrivateRoute";
 
 //경로명세 라우터
 const router = createBrowserRouter([
@@ -32,23 +33,15 @@ const router = createBrowserRouter([
     path: "/auth/google/callback",
     element: <GoogleCallback />,
   },
-    {
-    path: "/community",
-    element: <Community />,
+  {
+    path: "/main",
+    element: <MainPage />,
   },
   {
     path: "/post", 
     element: <Post />,
   },
-    {
-    path: "/myPostPage",
-    element: <MyPost />,
-  },
   {
-    path: "/main",
-    element: <MainPage />,
-  },
-    {
     path: "/post/:id", 
     element: <PostDetail />,
   },
@@ -81,28 +74,8 @@ const router = createBrowserRouter([
     element: <FT_TestPage />,
   },
   {
-    path:"/taste",
-    element:<FT_HobbyTest/>
-  },
-  {
-    path:"/taste/hobby",
-    element:<FT_HobbyTest_Description/>
-  },
-  {
-    path:"taste/hobby/test",
-    element:<FT_TestPage/>
-  },
-  {
-    path: "*",
-    element: <NotFound />,
-  },
-  {
     path: "/expreview",
     element: <ExpReviewPage />,
-  },
-  {
-    path: "/myexps",
-    element: <MyExps />,
   },
   {
     path: "/explore/taste",
@@ -117,12 +90,35 @@ const router = createBrowserRouter([
     element: <TestResult/>,
   },
   {
-    path: "/mypage",
-    element: <Mypage/>,
-  },{
     path: "/loading",
     element: <LoadingPage/>
-  }
+  },
+  // Protected Routes
+  {
+    element: <PrivateRoute />,
+    children: [
+      {
+        path: "/community",
+        element: <Community />,
+      },
+      {
+        path: "/mypage",
+        element: <Mypage/>,
+      },
+      {
+        path: "/myPostPage",
+        element: <MyPost />,
+      },
+      {
+        path: "/myexps",
+        element: <MyExps />,
+      },
+    ]
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
 ]);
 
 export default router;

@@ -21,7 +21,7 @@ export default function GoogleCallback() {
 
           if (response.success) {
             // Store token if needed
-            // localStorage.setItem('token', response.data.token);
+            localStorage.setItem('token', response.data.accessToken);
             toast.success(`환영합니다, ${response.data.name}님!`);
             navigate("/", { state: { id: response.data.email } });
           } else {
