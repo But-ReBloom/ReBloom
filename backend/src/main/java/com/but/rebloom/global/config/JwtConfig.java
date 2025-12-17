@@ -7,7 +7,6 @@ import com.but.rebloom.domain.auth.jwt.JwtUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -39,12 +38,5 @@ public class JwtConfig {
     @Bean
     public JwtFilter jwtFilter() {
         return new JwtFilter(jwtAuthenticationFilter());
-    }
-
-    @Bean
-    public FilterRegistrationBean<JwtFilter> jwtFilterRegistration(JwtFilter filter) {
-        FilterRegistrationBean<JwtFilter> registration = new FilterRegistrationBean<>(filter);
-        registration.setEnabled(false); // 필터의 자동 등록을 방지
-        return registration;
     }
 }
