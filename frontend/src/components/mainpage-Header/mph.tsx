@@ -36,7 +36,7 @@ function Header({ props }: { props?: any }) {
             </S.LogoutContainer>
           </div>
         ) : (
-          <div onClick={() => navigate("/login")} className="go-login-button">
+          <div onClick={() => navigate("/")} className="go-login-button">
             로그인
           </div>
         )}

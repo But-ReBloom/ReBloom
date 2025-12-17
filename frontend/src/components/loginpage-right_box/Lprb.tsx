@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import * as S from "./style.ts";
+import Dodum from "../../assets/images/dodamdodam.svg";
 import Google from "../../assets/images/Google.svg";
 import { authApi } from "../../api/auth";
 
