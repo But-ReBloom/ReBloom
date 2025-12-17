@@ -37,9 +37,9 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/favicon.ico").permitAll()
-                        .requestMatchers("/auth/**").permitAll() // Auth 경로 명시적 허용
                         // 기본 경로
                         .requestMatchers("/",
+                                "/auth/**",
                                 "/achievement/**",
                                 "/user-achievement/**",
                                 "/channel/**",
