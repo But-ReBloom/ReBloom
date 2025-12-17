@@ -3,6 +3,8 @@ import List from "../myexps-list/mep-l.tsx";
 import MepDetail from "../myexps_detail/mep-detail.tsx";
 import { useState, useEffect } from "react";
 import LoadingPage from "../../Pages/loadingpage/loading.tsx";
+import { hobbyApi } from "../../api/hobby";
+import { toast } from "react-toastify";
 
 /* ===============================
    타입 정의
@@ -15,62 +17,6 @@ export type FindActivityResponse = {
   tags: string[];           // 관련 태그
   isReviewed: boolean;      // 리뷰 여부
 };
-
-/* ===============================
-   더미 데이터
-================================ */
-
-const dummyActivities: FindActivityResponse[] = [
-  {
-    activityId: 1,
-    activityName: "봉사 활동 참여",
-    activityDate: "2024-11-20",
-    tags: ["사회성", "봉사", "팀활동"],
-    isReviewed: true,
-  },
-  {
-    activityId: 2,
-    activityName: "스터디 모임",
-    activityDate: "2024-11-18",
-    tags: ["학습", "자기계발"],
-    isReviewed: false,
-  },
-  {
-    activityId: 3,
-    activityName: "플래너 작성",
-    activityDate: "2024-11-15",
-    tags: ["계획", "자기관리"],
-    isReviewed: true,
-  },
-  {
-    activityId: 4,
-    activityName: "명상 & 요가",
-    activityDate: "2024-11-10",
-    tags: ["집중력", "휴식"],
-    isReviewed: false,
-  },
-  {
-    activityId: 5,
-    activityName: "그림 그리기",
-    activityDate: "2024-11-08",
-    tags: ["창의성", "예술"],
-    isReviewed: true,
-  },
-  {
-    activityId: 6,
-    activityName: "팀 스포츠",
-    activityDate: "2024-11-05",
-    tags: ["사회성", "운동"],
-    isReviewed: false,
-  },
-  {
-    activityId: 7,
-    activityName: "코딩 프로젝트",
-    activityDate: "2024-11-01",
-    tags: ["학습", "계획", "개발"],
-    isReviewed: true,
-  },
-];
 
 /* ===============================
    메인 컴포넌트
@@ -107,12 +53,31 @@ function Index({
   const [exps, setExps] = useState<FindActivityResponse[]>([]);
   const [loading, setLoading] = useState(true);
 
-  /* 더미 데이터 로딩 */
+  /* API 데이터 로딩 */
   useEffect(() => {
-    setTimeout(() => {
-      setExps(dummyActivities);
-      setLoading(false);
-    }, 400);
+    const fetchActivities = async () => {
+      try {
+        const response = await hobbyApi.findAllActivities();
+        if (response.success) {
+          const mappedActivities = response.data.map((item, index) => ({
+            activityId: index,
+            activityName: item.activityName,
+            activityDate: item.activityRecent,
+            tags: [],
+            isReviewed: false,
+          }));
+          setExps(mappedActivities);
+        } else {
+          toast.error("활동 목록을 불러오는데 실패했습니다.");
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("서버 오류가 발생했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchActivities();
   }, []);
 
   /* 페이지네이션 */
