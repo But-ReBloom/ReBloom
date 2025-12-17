@@ -5,7 +5,7 @@ export default function LoadingPage() {
     <S.Wrapper>
       <S.Container>
         {/* 한숨 */}
-        <S.Sigh />
+        <Sigh />
         {/* 파란 캐릭터 */}
         <S.square
           $width={100}
