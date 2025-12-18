@@ -1,5 +1,6 @@
 package com.but.rebloom.domain.auth.usecase;
 
+import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.Provider;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.dto.request.GoogleLoginAuthorizeCodeRequest;
@@ -21,6 +22,8 @@ import org.springframework.web.client.RestTemplate;
 public class GoogleOAuthUseCase {
     // 디비 접근
     private final UserRepository userRepository;
+    // 유저 업적 설정
+    private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     // yml 속성 추출
     @Value("${spring.security.oauth2.client.registration.google.client-id:}")
@@ -34,13 +37,25 @@ public class GoogleOAuthUseCase {
         GoogleUserInfoResponse googleUser = getUserInfo(accessToken);
 
         return userRepository.findByUserEmail(googleUser.getEmail())
-                .orElseGet(() -> userRepository.save(User.builder()
-                        .userEmail(googleUser.getEmail())
-                        .userId(java.util.UUID.randomUUID().toString())
-                        .userName(googleUser.getName())
-                        .userPassword("")
-                        .userProvider(Provider.GOOGLE)
-                        .build()));
+                .orElseGet(() -> {
+                    User newUser = userRepository.save(User.builder()
+                            .userEmail(googleUser.getEmail())
+                            .userId(java.util.UUID.randomUUID().toString())
+                            .userName(googleUser.getName())
+                            .userPassword("")
+                            .userProvider(Provider.GOOGLE)
+                            .build());
+                    
+                    // 구글 신규 유저에게 초기 업적 생성
+                    userRepository.flush();
+                    defaultUserAchievementUseCase.createDefaultUserAchievement(googleUser.getEmail());
+                    
+                    // 업적 성공 처리
+                    String signupAchievementTitle = "시작이 반이다.";
+                    defaultUserAchievementUseCase.updateUserAchievementToSuccess(googleUser.getEmail(), signupAchievementTitle);
+                    
+                    return newUser;
+                });
     }
 
     // Jwt랑 비슷하게 이해

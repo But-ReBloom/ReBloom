@@ -37,10 +37,7 @@ public class DefaultUserAchievementUseCase {
 
         List<UserAchievement> userAchievements = userAchievementRepository.findAllByUserEmail(userEmail);
 
-        if (userAchievements.isEmpty()) {
-            throw new UserAchievementNotFoundException("유저 업적 조회 실패");
-        }
-
+        // 빈 리스트도 정상 응답으로 처리 (신규 유저 등)
         return userAchievements;
     }
 
