@@ -19,7 +19,7 @@ interface ChannelRequest {
     channelDescription?: string;
     userId: string;
     requestType: 'JOIN' | 'CREATE';
-    channelStatus: 'PENDING' | 'APPROVED' | 'REJECTED';
+    channelStatus: 'WAITING' | 'APPROVED' | 'REJECTED';
 }
 
 function ChannelApproval() {
@@ -27,29 +27,85 @@ function ChannelApproval() {
     const [requests, setRequests] = useState<ChannelRequest[]>([]);
     const [expandedId, setExpandedId] = useState<number | null>(null);
 
+    const token = localStorage.getItem('token');
+
     useEffect(() => {
-        const localChannels: ChannelRequest[] = JSON.parse(localStorage.getItem('channels') || '[]');
-        setRequests(localChannels);
-    }, []);
+        const fetchPendingChannels = async () => {
+            try {
+                const res = await fetch('/channel/admin/find/pending', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const data = await res.json();
+                if (data.success && data.data?.responses) {
+                    const channels: ChannelRequest[] = data.data.responses.map((item: any) => ({
+                        channelId: item.channelId,
+                        channelName: item.channelName,
+                        channelIntro: item.channelIntro,
+                        channelDescription: item.channelDescription,
+                        userId: item.userId,
+                        requestType: 'CREATE', 
+                        channelStatus: 'WAITING',
+                    }));
+                    setRequests(channels);
+                }
+            } catch (err) {
+                console.error('채널 조회 실패', err);
+            }
+        };
+
+        fetchPendingChannels();
+    }, [token]);
 
     const toggleExpand = (id: number) => {
         setExpandedId(prev => (prev === id ? null : id));
     };
 
-    const handleApprove = (channelId: number) => {
-        const updated = requests.map(req =>
-            req.channelId === channelId ? { ...req, channelStatus: 'APPROVED' } : req
-        );
-        setRequests(updated);
-        localStorage.setItem('channels', JSON.stringify(updated));
+    const handleApprove = async (channelId: number) => {
+        try {
+            const res = await fetch(`/channel/admin/approve/${channelId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const data = await res.json();
+            if (data.success) {
+                setRequests(prev =>
+                    prev.map(req =>
+                        req.channelId === channelId ? { ...req, channelStatus: 'APPROVED' } : req
+                    )
+                );
+            }
+        } catch (err) {
+            console.error('승인 실패', err);
+        }
     };
 
-    const handleReject = (channelId: number) => {
-        const updated = requests.map(req =>
-            req.channelId === channelId ? { ...req, channelStatus: 'REJECTED' } : req
-        );
-        setRequests(updated);
-        localStorage.setItem('channels', JSON.stringify(updated));
+    const handleReject = async (channelId: number) => {
+        try {
+            const res = await fetch(`/channel/admin/reject/${channelId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const data = await res.json();
+            if (data.success) {
+                setRequests(prev =>
+                    prev.map(req =>
+                        req.channelId === channelId ? { ...req, channelStatus: 'REJECTED' } : req
+                    )
+                );
+            }
+        } catch (err) {
+            console.error('거절 실패', err);
+        }
     };
 
     return (
@@ -99,14 +155,14 @@ function ChannelApproval() {
                                 {req.channelDescription && <div>상세: {req.channelDescription}</div>}
 
                                 <div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
-                                    {req.channelStatus === 'PENDING' && (
+                                    {req.channelStatus === 'WAITING' && (
                                         <>
                                             <SubmitButton status="approve" onClick={() => handleApprove(req.channelId)}>승인</SubmitButton>
                                             <SubmitButton status="reject" onClick={() => handleReject(req.channelId)}>거절</SubmitButton>
                                         </>
                                     )}
-                                    {req.channelStatus === 'APPROVED' && <span>✅ 승인됨</span>}
-                                    {req.channelStatus === 'REJECTED' && <span>❌ 거절됨</span>}
+                                    {req.channelStatus === 'APPROVED' && <span>승인됨</span>}
+                                    {req.channelStatus === 'REJECTED' && <span>거절됨</span>}
                                 </div>
                             </div>
                         )}
