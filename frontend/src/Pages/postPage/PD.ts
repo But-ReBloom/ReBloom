@@ -127,6 +127,7 @@ export const PostItem = styled.div<{ $notice?: boolean }>`
     border-radius: 8px;
     padding: 20px;
     box-sizing: border-box;
+    
 
     h2 {
         margin: 0 0 10px 0;
@@ -227,7 +228,7 @@ export const Divider = styled.div`
     margin: -5px 0;
 `;
 
-    export const CommentFormContainer = styled.div`
+export const CommentFormContainer = styled.div`
     margin-top: 20px;
     display: flex;
     flex-direction: column;
@@ -266,3 +267,21 @@ export const Divider = styled.div`
         }
     }
     `;
+export const LikeButton = styled.button<{ liked?: boolean }>`
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background-color: ${({ liked }) => (liked ? '#36acecc7' : '#f0f0f0')};
+    color: ${({ liked }) => (liked ? '#fff' : '#555')};
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.2s;
+
+    &:hover {
+        background-color: ${({ liked }) => (liked ? '#2678b5' : '#e0e0e0')};
+    }
+`;

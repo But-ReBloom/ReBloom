@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const CommunityWrapper = styled.div`
-  background: radial-gradient(circle at 12% 75%, #6dc9ffe3 0%, #ffffff 55%);
+  background: radial-gradient(circle at 12% 75%, #6dc9ffe3 0%, #d7ecf9e3 55%);
   width: 100%;
   height: 100vh;
 `;
@@ -82,7 +82,7 @@ export const RightButtons = styled.div`
 
 export const Button = styled.button`
   padding: 11px 15px 10px 21px;
-  width: 130px;
+  width: 140px;
   border-radius: 60px;
   border: 1px solid #ccc;
   background-color: white;
@@ -111,6 +111,7 @@ export const LeftColumn = styled.div`
   flex-direction: column;
   gap: 20px;
   overflow-y: auto;
+  margin-top: 30px;
 `;
 
 export const RightColumn = styled.div`

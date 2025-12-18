@@ -2,55 +2,35 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
     display: flex;
-    background: radial-gradient(circle at 12% 75%, #6dc9ffe3 0%, #ffffff 55%);
-    min-height: 100vh;
-    position: relative;
+    height: 100vh;
 `;
 
-export const LogoImage = styled.img`
-    width: 160px;
-    cursor: pointer;
-`;
-
-export const CloseButton = styled.button`
-    position: absolute;
-    top: 25px;
-    right: 35px;
-    background: none;
-    border: none;
-    cursor: pointer;
-`;
-
-export const CloseIconImg = styled.img`
-    width: 34px;
-    height: 34px;
-`;
-
-export const Sidebar = styled.aside`
+export const Sidebar = styled.div`
     width: 280px;
-    background: #ffffffc6;
-    border-right: 1px solid #ddd;
-    padding: 20px 20px 30px 20px;
+    background-color: #f8f9fa;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    padding-top: 100px;
 `;
 
-export const Divider = styled.div`
-    width: 100%;
-    height: 1px;
-    background-color: #ddd;
-    margin: -5px 0;
+export const ContentArea = styled.div`
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
 `;
 
-export const CafeInfo = styled.div`
-    h3 {
-        margin: 0 0 5px;
-        font-size: 1.2rem;
-    }
-    p {
-        color: #666;
-        font-size: 0.9rem;
+/* ===== Logo ===== */
+export const LogoImage = styled.img`
+    position: absolute;
+    top: 17px;
+    left: 36px;
+    width: 160px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.1);
     }
 `;
 
@@ -58,12 +38,13 @@ export const ProfileSection = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-top: 20px;
 
     img {
         border-radius: 50%;
         width: 60px;
         height: 60px;
-        border: 0.5px solid #000000ff;
+        border: 0.5px solid #000;
     }
 
     div {
@@ -83,22 +64,36 @@ export const ProfileSection = styled.div`
 export const WritePostButton = styled.button`
     width: 100%;
     padding: 10px;
-    margin: 12px 0;
-    margin-top: -10px;
-    margin-bottom: -5px;
+    margin: 20px 0 0 0;
     background-color: #5db9eeff;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
+
     &:hover {
         background-color: #5db9eeac;
     }
 `;
 
+export const BackButton = styled.button`
+    margin-top: 10px;
+    padding: 6px 12px;
+    background-color: #eee;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #ddd;
+    }
+`;
+
+/* ===== Search ===== */
 export const SearchBox = styled.div`
-    margin-top: -10px;
+    margin-top: 15px;
+
     input {
         width: 100%;
         padding: 10px;
@@ -107,41 +102,19 @@ export const SearchBox = styled.div`
     }
 `;
 
-export const NavMenu = styled.nav`
-    margin-top: -30px;
-    ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    li > div {
-        padding: 10px 5px;
-        cursor: pointer;
-        border-radius: 5px;
-        font-size: 0.95rem;
-        font-weight: bold;
-
-        &:hover {
-            background-color: #e6f5ff;
-        }
-    }
+export const CloseButton = styled.button`
+    position: absolute;
+    top: 25px;
+    right: 35px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 `;
-export const SubMenu = styled.ul`
-    list-style: none;
-    margin-left: 7px;
-    margin-top: 1px;
-    margin-bottom: 3px;
 
-    li {
-        padding: 4px 0;
-        font-size: 0.9rem;
-        color: #555;
-        cursor: pointer;
-
-        &:hover {
-            color: #2b90d9;
-        }
-    }
+export const CloseIconImg = styled.img`
+    width: 34px;
+    height: 34px;
 `;
 
 export const PostEditorContainer = styled.div`
@@ -166,9 +139,7 @@ export const PostEditorContainer = styled.div`
         padding: 12px;
         border-radius: 6px;
         border: 1px solid #ccc;
-        background: #fff;
         font-size: 1rem;
-        transition: all 0.2s ease;
 
         &:focus {
             outline: none;
@@ -176,61 +147,68 @@ export const PostEditorContainer = styled.div`
             box-shadow: 0 0 3px #2b90d9;
         }
     }
-
-    button {
-        padding: 10px 20px;
-        background-color: #5db9ee;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: 0.2s;
-
-        &:hover {
-            background-color: #2b90d9;
-        }
-    }
 `;
 
 export const CategorySelectWrapper = styled.div`
     display: flex;
-    width: 100%;
     justify-content: flex-end;
     margin-top: 25px;
     margin-bottom: -70px;
-    position: relative;
 `;
 
 export const CategorySelect = styled.select`
     width: 180px;
-    padding: 10px 40px 10px 12px;
+    padding: 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
-    background: #fff;
     font-size: 1rem;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+`;
 
-    &:focus {
-        outline: none;
-        border-color: #2b90d9;
-        box-shadow: 0 0 4px #2b90d9;
+export const ActionButtonGroup = styled.div`
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 10px;
+`;
+
+export const ClearButton = styled.button`
+    padding: 10px 18px;
+    background-color: #ff5c5c;
+    color: #ffffffff;
+    border: 1.5px solid #ff5c5c;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: #ff5c5c;
+        color: #fff;
+        transform: translateY(-1px);
     }
 `;
 
-export const CategoryArrow = styled.div`
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    width: 14px;
-    height: 14px;
-    background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='24' width='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 14px;
+export const SubmitButton = styled.button<{ disabled?: boolean }>`
+    padding: 10px 22px;
+    background: linear-gradient(135deg, #5db9ee, #2b90d9);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(43, 144, 217, 0.25);
+
+    &:hover {
+        background: linear-gradient(135deg, #2b90d9, #1c6fb8);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(43, 144, 217, 0.35);
+    }
+
+    &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+    }
 `;
