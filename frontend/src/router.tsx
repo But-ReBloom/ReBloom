@@ -49,8 +49,6 @@ const router = createBrowserRouter([
     element: <GoogleCallback />,
   },
   {
-<<<<<<< HEAD
-=======
     path: "/main",
     element: <MainPage />,
   },
@@ -63,7 +61,7 @@ const router = createBrowserRouter([
     element: <PostDetail />,
   },
   {
->>>>>>> origin/main
+
     path: "/login",
     element: <LoginPage />,
   },
@@ -163,13 +161,7 @@ const router = createBrowserRouter([
       {
         path: "/mypage",
         element: <Mypage />,
-<<<<<<< HEAD
-=======
-      },
-      {
-        path: "/myPostPage",
-        element: <MyPost />,
->>>>>>> origin/main
+
       },
       // {
       //   path: "/myPostPage",
