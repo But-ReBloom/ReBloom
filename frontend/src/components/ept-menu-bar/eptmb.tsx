@@ -7,6 +7,7 @@ import { channelApi } from "../../api/channel";
 import type { GetHobbyResponse } from "../../types/hobby";
 import type { FindOneChannelResponse } from "../../types/channel";
 import { toast, ToastContainer } from "react-toastify";
+import LoadingPage from "../../Pages/loadingpage/loading.tsx";
 
 type ViewMode = "CHANNEL" | "HOBBY";
 
@@ -94,12 +95,7 @@ export default function EPTmenuBar() {
 
   if (loading) {
     return (
-      <S.Wrapper>
-        <S.Container />
-        <S.IntroduceUs>
-          <div style={{ padding: "40px", textAlign: "center" }}>로딩중...</div>
-        </S.IntroduceUs>
-      </S.Wrapper>
+      <LoadingPage />
     );
   }
 
