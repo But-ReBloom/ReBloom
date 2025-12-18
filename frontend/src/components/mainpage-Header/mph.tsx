@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import * as S from "./style";
 import Menu_Bar from "../menu-bar/mb";
 
-function Header() {
-  const navigate = useNavigate();
+interface HeaderProps {
+  state?: { id: string | null };
+}
 
-  // 로그인 사용자 이름
+function Header({ state }: HeaderProps) {
+  const navigate = useNavigate();
   const userName = localStorage.getItem("userName");
 
   const handleLogout = () => {
@@ -27,7 +29,7 @@ function Header() {
 
         {userName ? (
           <S.LogoutContainer>
-            <span className="user-name">{userName} 님</span>
+            <span className="user-name">{state?.id || userName} 님</span>
             <button
               className="login-button-go-lp"
               id="login-box_button"
