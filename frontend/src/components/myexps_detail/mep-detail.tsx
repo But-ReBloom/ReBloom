@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Godd from "../../assets/images/HelloHand.svg";
+import { hobbyApi } from "../../api/hobby";
+import { authApi } from "../../api/auth";
 
 interface MepDetailProps {
   setStep: (step: "index" | "detail") => void;
@@ -26,6 +28,7 @@ export default function MepDetail({ setStep, exp }: MepDetailProps) {
   ================================ */
   const [answers, setAnswers] = useState<string[]>(["", "", "", "", ""]);
   const [page, setPage] = useState<0 | 1>(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (index: number, value: string) => {
     const next = [...answers];
@@ -33,7 +36,7 @@ export default function MepDetail({ setStep, exp }: MepDetailProps) {
     setAnswers(next);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     // 첫 페이지 검증
     if (page === 0 && answers[0].length < 100) {
       toast.error("첫 번째 질문은 100자 이상 작성하셔야 합니다.");
@@ -43,10 +46,79 @@ export default function MepDetail({ setStep, exp }: MepDetailProps) {
     if (page === 0) {
       setPage(1);
     } else {
-      console.log("주관식 응답:", answers);
-      // TODO: API 제출
+      // 리뷰 제출
+      await submitReview();
+    }
+  };
 
-      navigate("/"); // 메인 페이지
+  const submitReview = async () => {
+    if (isSubmitting) return;
+    
+    try {
+      setIsSubmitting(true);
+      
+      // 사용자 정보 가져오기
+      const userRes = await authApi.findCurrentUser();
+      if (!userRes.success) {
+        toast.error("로그인이 필요합니다.");
+        navigate("/login");
+        return;
+      }
+      
+      // 리뷰 질문 생성 (activityReviewId 얻기)
+      const reviewQuestionRes = await hobbyApi.createReviewQuestion({
+        hobbyId: exp.linkedHobbyId,
+      });
+      
+      if (!reviewQuestionRes.success) {
+        toast.error("리뷰 생성에 실패했습니다.");
+        return;
+      }
+      
+      // 리뷰 답변 제출
+      const reviewRes = await hobbyApi.answerReview({
+        activityReviewId: exp.linkedHobbyId, // hobbyId를 사용
+        userEmail: userRes.data.userEmail,
+        hobbyId: exp.linkedHobbyId,
+        socialAnswer: answers[0],
+        learningAnswer: answers[1],
+        planningAnswer: answers[2],
+        focusAnswer: answers[3],
+        creativityAnswer: answers[4],
+      });
+      
+      if (reviewRes.success) {
+        toast.success("리뷰가 제출되었습니다!");
+        setTimeout(() => {
+          navigate("/test/result", {
+            state: {
+              type: "ActivityReview",
+              finalAverage: {
+                socialScore: reviewRes.data.socialScore,
+                learningScore: reviewRes.data.learningScore,
+                planningScore: reviewRes.data.planningScore,
+                focusScore: reviewRes.data.focusScore,
+                creativityScore: reviewRes.data.creativityScore,
+              },
+              result: {
+                hobbyScores: [
+                  { hobbyName: reviewRes.data.hobby1, distance: 0 },
+                  { hobbyName: reviewRes.data.hobby2, distance: 0 },
+                  { hobbyName: reviewRes.data.hobby3, distance: 0 },
+                ],
+                channels: [],
+              },
+            },
+          });
+        }, 1500);
+      } else {
+        toast.error("리뷰 제출에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("오류가 발생했습니다.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -104,9 +176,15 @@ export default function MepDetail({ setStep, exp }: MepDetailProps) {
           </S.QuestionBox>
         </S.Container>
 
-        {/* 다음 버튼 */}
-        <S.Arrows onClick={handleNext}>
-          <img src={BlackArrowImg} alt="다음" />
+        {/* 다음/제출 버튼 */}
+        <S.Arrows onClick={handleNext} style={{ opacity: isSubmitting ? 0.5 : 1, cursor: isSubmitting ? "not-allowed" : "pointer" }}>
+          {page === 1 ? (
+            <span style={{ fontSize: "16px", fontWeight: "bold", color: "#333" }}>
+              {isSubmitting ? "제출 중..." : "제출하기"}
+            </span>
+          ) : (
+            <img src={BlackArrowImg} alt="다음" />
+          )}
         </S.Arrows>
       </S.Wrapper>
 

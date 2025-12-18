@@ -196,12 +196,11 @@ export const ChoiceBtn = styled.button<{ $active?: boolean }>`
   width: 140px;
   height: 34px;
   border-radius: 20px;
-  background: ${({ $active }) => ($active ? "white" : "#333")};
-  color: ${({ $active }) => ($active ? "#3e55bf" : "#fff")};
-  border: ${({ $active }) => ($active ? "2px solid #3e55bf" : "none")};
+  background: ${({ $active }) => ($active ? '#3e55bf' : '#333')};
+  color: ${({ $active }) => ($active ? '#fff' : '#fff')};
+  border: ${({ $active }) => ($active ? '2px solid #3e55bf' : 'none')};
   font-size: 14px;
   cursor: pointer;
-  font-weight: ${({ $active }) => ($active ? "bold" : "normal")};
   transition: all 0.2s ease;
 
   &:hover {
@@ -261,21 +260,4 @@ export const PopupClose = styled.button`
   background: linear-gradient(90deg, #41a6ff, #3e55bf);
   color: white;
   cursor: pointer;
-`;
-
-export const BoxViewWrapper = styled.div`
-  margin-top: 60px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-export const BoxActivity = styled.div`
-  padding: 12px;
-  background: #f2f2f2;
-  border-radius: 8px;
-  cursor: pointer;
-  &:hover {
-    background: #e0e0e0;
-  }
 `;
