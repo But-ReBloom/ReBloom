@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Header from "../../components/normal_header/nh.tsx";
 import type { InitialTest } from "../../types/hobby";
 import { hobbyApi } from "../../api/hobby";
+import LoadingPage from "../loadingpage/loading.tsx";
 
 
 /* ===============================
@@ -21,6 +22,7 @@ export default function FT_TestPage() {
   const [questionList, setQuestionList] = useState<InitialTest[]>([]);
   const [answers, setAnswers] = useState<(number | null)[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
 
   /* API 데이터 로딩 */
@@ -113,6 +115,18 @@ export default function FT_TestPage() {
   /* 제출 */
   const handleSubmit = async () => {
     const finalAverage = calculateFinalAverage();
+    
+    // 로그인 여부 확인
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // 로그인 안 되어 있으면 점수 저장 후 로그인 페이지로 이동
+      localStorage.setItem("pendingHobbyTest", JSON.stringify(finalAverage));
+      toast.info("로그인이 필요합니다. 로그인 후 결과를 확인할 수 있습니다.");
+      navigate("/login", { state: { from: "hobby-test" } });
+      return;
+    }
+
+    setSubmitting(true);
 
     try {
       const response = await hobbyApi.recommendHobby(finalAverage);
@@ -130,10 +144,12 @@ export default function FT_TestPage() {
     } catch (error) {
       console.error(error);
       toast.error("서버 오류가 발생했습니다.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading || submitting) return <LoadingPage />;
 
   return (
     <S.Background>

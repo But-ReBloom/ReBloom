@@ -16,6 +16,8 @@ export interface SignupRequest {
 
 export interface LoginResponse {
     userEmail: string;
+    userId: string;
+    userName: string;
     userProvider: Provider;
     token: string;
 }
