@@ -13,7 +13,6 @@ import type { GetUserAchievementResponse } from "../../types/achievement";
 import Tree from "../../assets/images/Tree.svg";
 import LoadingPage from "../loadingpage/loading";
 
-
 /* ===============================
    활동 상세 더미 (API 명세 동일)
 ================================ */
@@ -118,9 +117,7 @@ function LeftSection({ userInfo, achievements }: LeftSectionProps) {
         <S.ArchiveMent>완료한 업적</S.ArchiveMent>
         <S.ArchiveList>
           {completed.map((ach) => (
-            <S.Box key={ach.achievementId}>
-              {ach.userAchievementTitle}
-            </S.Box>
+            <S.Box key={ach.achievementId}>{ach.userAchievementTitle}</S.Box>
           ))}
         </S.ArchiveList>
       </S.UserInfoSection>
@@ -143,14 +140,13 @@ function RightSection({
     useState<ActivityDetail | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-
   const completed = achievements.filter((a) => a.userAchievementIsSuccess);
 
   const completedPoints = completed.reduce(
     (sum, a) => sum + a.userAchievementRewardPoint,
     0
   );
-    
+
   void completedPoints;
 
   const completedTierPoints = completed.reduce(
@@ -162,9 +158,27 @@ function RightSection({
 
   return (
     <S.RightSection>
-      <div style={{ display: "flex", gap: 20, position: "fixed", top: 120, left: 1030 }}>
-        <S.ChoiceBtn onClick={() => setViewMode("box")}>업적 보기</S.ChoiceBtn>
-        <S.ChoiceBtn onClick={() => setViewMode("tree")}>나무 보기</S.ChoiceBtn>
+      <div
+        style={{
+          display: "flex",
+          gap: 20,
+          position: "fixed",
+          top: 120,
+          left: 1030,
+        }}
+      >
+        <S.ChoiceBtn
+          $active={viewMode === "box"}
+          onClick={() => setViewMode("box")}
+        >
+          업적 보기
+        </S.ChoiceBtn>
+        <S.ChoiceBtn
+          $active={viewMode === "tree"}
+          onClick={() => setViewMode("tree")}
+        >
+          나무 보기
+        </S.ChoiceBtn>
       </div>
 
       {viewMode === "box" && (
@@ -172,18 +186,24 @@ function RightSection({
           <S.DetailTitle>업적 보기</S.DetailTitle>
           <S.ArchiveList>
             {achievements.map((ach) => (
-              <S.Box key={ach.achievementId} style={{ opacity: ach.userAchievementIsSuccess ? 1 : 0.5 }}>
-                <div style={{ fontWeight: 'bold' }}>{ach.userAchievementTitle}</div>
-                <div style={{ fontSize: '12px', marginTop: '4px' }}>
+              <S.Box
+                key={ach.achievementId}
+                style={{ opacity: ach.userAchievementIsSuccess ? 1 : 0.5 }}
+              >
+                <div style={{ fontWeight: "bold" }}>
+                  {ach.userAchievementTitle}
+                </div>
+                <div style={{ fontSize: "12px", marginTop: "4px" }}>
                   진행률: {Math.round(ach.userAchievementProgress)}%
                 </div>
-                <div style={{ fontSize: '12px' }}>
-                  보상: {ach.userAchievementRewardPoint}P / 티어: {ach.userAchievementTierPoint}P
+                <div style={{ fontSize: "12px" }}>
+                  보상: {ach.userAchievementRewardPoint}P / 티어:{" "}
+                  {ach.userAchievementTierPoint}P
                 </div>
               </S.Box>
             ))}
             {achievements.length === 0 && (
-              <div style={{ color: '#888' }}>업적이 없습니다.</div>
+              <div style={{ color: "#888" }}>업적이 없습니다.</div>
             )}
           </S.ArchiveList>
         </>
@@ -239,9 +259,9 @@ function RightSection({
 ================================ */
 export default function Mypage() {
   const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
-  const [achievements, setAchievements] = useState<GetUserAchievementResponse[]>(
-    []
-  );
+  const [achievements, setAchievements] = useState<
+    GetUserAchievementResponse[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -252,7 +272,8 @@ export default function Mypage() {
           setUserInfo(userRes.data);
           // Fetch achievements using userEmail
           try {
-            const achRes = await achievementApi.getUserAchievementsByUserEmail();
+            const achRes =
+              await achievementApi.getUserAchievementsByUserEmail();
             if (achRes.success) setAchievements(achRes.data);
           } catch (error) {
             console.error("Failed to fetch achievements", error);
