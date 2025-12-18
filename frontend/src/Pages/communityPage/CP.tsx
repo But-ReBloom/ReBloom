@@ -1,8 +1,8 @@
 import {
     CommunityWrapper,
-    LogoImage,
-    CloseButton,
-    CloseIconImg,
+    // LogoImage,
+    // CloseButton,
+    // CloseIconImg,
     CentralBox,
     HeaderTop,
     SortDropdown,
@@ -14,10 +14,11 @@ import {
     PostDescription,
 } from './style';
 
-import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
-import CloseIcon from '../../assets/images/close.svg';
+// import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
+// import CloseIcon from '../../assets/images/close.svg';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import Header from '../../components/mainpage-Header/mph';
 
 interface Channel {
     channelId: number;
@@ -67,7 +68,7 @@ const fetchApprovedChannels = () => {
 
     return (
         <CommunityWrapper>
-            <CloseButton onClick={() => navigate('/main')}>
+            {/* <CloseButton onClick={() => navigate('/main')}>
                 <CloseIconImg src={CloseIcon} alt="닫기" />
             </CloseButton>
 
@@ -75,7 +76,8 @@ const fetchApprovedChannels = () => {
                 src={RebloomLogo}
                 alt="Rebloom Logo"
                 onClick={() => navigate('/')}
-            />
+            /> */}
+            <Header />
 
             <CentralBox>
                 <HeaderTop>
