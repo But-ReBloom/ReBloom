@@ -36,6 +36,7 @@ public class GoogleOAuthUseCase {
         return userRepository.findByUserEmail(googleUser.getEmail())
                 .orElseGet(() -> userRepository.save(User.builder()
                         .userEmail(googleUser.getEmail())
+                        .userId(java.util.UUID.randomUUID().toString())
                         .userName(googleUser.getName())
                         .userPassword("")
                         .userProvider(Provider.GOOGLE)
