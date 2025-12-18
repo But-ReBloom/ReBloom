@@ -2,7 +2,11 @@ import * as S from "./style";
 import Header from "../../components/normal_header/nh";
 import { useLocation, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/blackarrow.svg";
-import type { HobbyTestResponse, HobbyScoreResponse } from "../../types/hobby";
+import type { HobbyTestResponse, HobbyScoreResponse, ReviewAnswerResponse } from "../../types/hobby";
+import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import { hobbyApi } from "../../api/hobby";
+import { authApi } from "../../api/auth";
 
 const normalizeToRange = (value: number) => {
   return ((value + 1) / 4) * 4 - 2;
@@ -13,6 +17,25 @@ export default function TestResult() {
   const location = useLocation();
   const { finalAverage, result } = location.state || {};
   const testResult = result as HobbyTestResponse;
+
+  // 모달 상태
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedHobby, setSelectedHobby] = useState<HobbyScoreResponse | null>(null);
+  const [reviewQuestion, setReviewQuestion] = useState("");
+  const [activityReviewId, setActivityReviewId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // 5개 카테고리 답변
+  const [answers, setAnswers] = useState({
+    socialAnswer: "",
+    learningAnswer: "",
+    planningAnswer: "",
+    focusAnswer: "",
+    creativityAnswer: "",
+  });
+
+  // 새로 추천된 취미
+  const [newRecommendations, setNewRecommendations] = useState<ReviewAnswerResponse | null>(null);
 
   if (!finalAverage) return null;
 
@@ -70,33 +93,74 @@ export default function TestResult() {
 
           <S.RecommendSection>
             <S.RecommendRow>
-              {testResult?.hobbyScores
-                ?.slice(0, 3)
-                .map((hobby: HobbyScoreResponse) => (
+              {(newRecommendations ? [
+                { hobbyName: newRecommendations.hobby1, hobbyId: undefined, distance: 0 },
+                { hobbyName: newRecommendations.hobby2, hobbyId: undefined, distance: 0 },
+                { hobbyName: newRecommendations.hobby3, hobbyId: undefined, distance: 0 },
+              ] : testResult?.hobbyScores?.slice(0, 3))?.map((hobby: HobbyScoreResponse) => (
                   <S.RecommaendBox key={hobby.hobbyName}>
                     {hobby.hobbyName}
                     <S.addTree
-                      onClick={() => {
-                        // hobbyId가 없으면 임시 ID 사용
-                        const newActivity = {
-                          activityId: hobby.hobbyId ?? Date.now(),
-                          activityName: hobby.hobbyName,
-                          activityStart: new Date().toISOString().slice(0, 10),
-                          activityRecent: new Date().toISOString().slice(0, 10),
-                          linkedHobbyId: hobby.hobbyId ?? Date.now(),
-                          linkedHobbyName: hobby.hobbyName,
-                          top: "480px", // 좌표값 예시
-                          left: "45%",
-                        };
-
-                        navigate("/mypage", {
-                          state: {
-                            newActivities: [newActivity],
-                          },
-                        });
+                      onClick={async () => {
+                        try {
+                          setIsLoading(true);
+                          // 1. 사용자 정보 가져오기
+                          const userRes = await authApi.findCurrentUser();
+                          if (!userRes.success) {
+                            toast.error("로그인이 필요합니다.");
+                            navigate("/login", { state: { from: "hobby-test" } });
+                            return;
+                          }
+                          
+                          // 2. 취미 ID 찾기 (이름으로 전체 목록에서 검색)
+                          const allHobbiesRes = await hobbyApi.findAllHobbies();
+                          if (!allHobbiesRes.success) {
+                            toast.error("취미 정보를 가져오는데 실패했습니다.");
+                            return;
+                          }
+                          
+                          const foundHobby = allHobbiesRes.data.hobbies.find(
+                            (h) => h.hobbyName === hobby.hobbyName
+                          );
+                          
+                          if (!foundHobby) {
+                            toast.error("해당 취미를 찾을 수 없습니다.");
+                            return;
+                          }
+                          
+                          // 3. 활동 추가 API 호출
+                          const addRes = await hobbyApi.addActivity({
+                            hobbyId: foundHobby.hobbyId,
+                            userEmail: userRes.data.userEmail,
+                          });
+                          
+                          if (addRes.success) {
+                            toast.success(`${hobby.hobbyName} 활동이 나무에 추가되었습니다!`);
+                            
+                            // 4. 활동 리뷰 질문 생성 API 호출
+                            const reviewRes = await hobbyApi.createReviewQuestion({
+                              hobbyId: foundHobby.hobbyId,
+                            });
+                            
+                            if (reviewRes.success) {
+                              setSelectedHobby({ ...hobby, hobbyId: foundHobby.hobbyId });
+                              setReviewQuestion(reviewRes.data.reviewQuestion);
+                              setActivityReviewId(foundHobby.hobbyId); // hobbyId를 activityReviewId로 사용
+                              setIsModalOpen(true);
+                            }
+                          } else {
+                            toast.error("활동 추가에 실패했습니다.");
+                          }
+                        } catch (error) {
+                          console.error(error);
+                          toast.error("오류가 발생했습니다.");
+                        } finally {
+                          setIsLoading(false);
+                        }
                       }}
+                      disabled={isLoading}
                     >
-                      나무에 추가
+                      {isLoading ? "처리중..." : "나무에 추가"}
                     </S.addTree>
                   </S.RecommaendBox>
                 ))}
@@ -108,6 +172,130 @@ export default function TestResult() {
           </S.RecommendSection>
         </S.MainColumn>
       </S.Wrrapper>
+
+      {/* 활동 리뷰 모달 */}
+      {isModalOpen && selectedHobby && (
+        <S.ModalOverlay onClick={() => setIsModalOpen(false)}>
+          <S.ModalContent onClick={(e) => e.stopPropagation()}>
+            <S.ModalTitle>{selectedHobby.hobbyName} 활동 리뷰</S.ModalTitle>
+            <S.ModalQuestion>{reviewQuestion}</S.ModalQuestion>
+            
+            <S.ModalForm>
+              <S.ModalInputGroup>
+                <label>사회성 관련 답변</label>
+                <S.ModalTextarea
+                  placeholder="이 활동을 통해 사회적으로 어떤 경험을 했나요?"
+                  value={answers.socialAnswer}
+                  onChange={(e) => setAnswers({ ...answers, socialAnswer: e.target.value })}
+                />
+              </S.ModalInputGroup>
+              
+              <S.ModalInputGroup>
+                <label>학습 관련 답변</label>
+                <S.ModalTextarea
+                  placeholder="이 활동을 통해 무엇을 배웠나요?"
+                  value={answers.learningAnswer}
+                  onChange={(e) => setAnswers({ ...answers, learningAnswer: e.target.value })}
+                />
+              </S.ModalInputGroup>
+              
+              <S.ModalInputGroup>
+                <label>계획력 관련 답변</label>
+                <S.ModalTextarea
+                  placeholder="이 활동을 계획하고 실행하는 데 어떠셨나요?"
+                  value={answers.planningAnswer}
+                  onChange={(e) => setAnswers({ ...answers, planningAnswer: e.target.value })}
+                />
+              </S.ModalInputGroup>
+              
+              <S.ModalInputGroup>
+                <label>집중력 관련 답변</label>
+                <S.ModalTextarea
+                  placeholder="이 활동에 얼마나 집중할 수 있었나요?"
+                  value={answers.focusAnswer}
+                  onChange={(e) => setAnswers({ ...answers, focusAnswer: e.target.value })}
+                />
+              </S.ModalInputGroup>
+              
+              <S.ModalInputGroup>
+                <label>창의성 관련 답변</label>
+                <S.ModalTextarea
+                  placeholder="이 활동을 통해 창의적인 면이 어땠나요?"
+                  value={answers.creativityAnswer}
+                  onChange={(e) => setAnswers({ ...answers, creativityAnswer: e.target.value })}
+                />
+              </S.ModalInputGroup>
+            </S.ModalForm>
+            
+            <S.ModalButtonGroup>
+              <S.ModalButton onClick={() => setIsModalOpen(false)}>취소</S.ModalButton>
+              <S.ModalButton
+                $primary
+                disabled={isLoading}
+                onClick={async () => {
+                  if (!selectedHobby.hobbyId || !activityReviewId) {
+                    toast.error("리뷰 정보가 올바르지 않습니다.");
+                    return;
+                  }
+                  
+                  // 모든 답변이 입력되었는지 확인
+                  if (!answers.socialAnswer || !answers.learningAnswer || 
+                      !answers.planningAnswer || !answers.focusAnswer || 
+                      !answers.creativityAnswer) {
+                    toast.error("모든 항목을 입력해주세요.");
+                    return;
+                  }
+                  
+                  try {
+                    setIsLoading(true);
+                    const userRes = await authApi.findCurrentUser();
+                    if (!userRes.success) {
+                      toast.error("로그인이 필요합니다.");
+                      return;
+                    }
+                    
+                    const reviewRes = await hobbyApi.answerReview({
+                      activityReviewId: activityReviewId,
+                      userEmail: userRes.data.userEmail,
+                      hobbyId: selectedHobby.hobbyId,
+                      socialAnswer: answers.socialAnswer,
+                      learningAnswer: answers.learningAnswer,
+                      planningAnswer: answers.planningAnswer,
+                      focusAnswer: answers.focusAnswer,
+                      creativityAnswer: answers.creativityAnswer,
+                    });
+                    
+                    if (reviewRes.success) {
+                      toast.success("리뷰가 제출되었습니다! 새로운 취미를 추천합니다.");
+                      setNewRecommendations(reviewRes.data);
+                      setIsModalOpen(false);
+                      // 답변 초기화
+                      setAnswers({
+                        socialAnswer: "",
+                        learningAnswer: "",
+                        planningAnswer: "",
+                        focusAnswer: "",
+                        creativityAnswer: "",
+                      });
+                    } else {
+                      toast.error("리뷰 제출에 실패했습니다.");
+                    }
+                  } catch (error) {
+                    console.error(error);
+                    toast.error("오류가 발생했습니다.");
+                  } finally {
+                    setIsLoading(false);
+                  }
+                }}
+              >
+                {isLoading ? "제출중..." : "리뷰 제출"}
+              </S.ModalButton>
+            </S.ModalButtonGroup>
+          </S.ModalContent>
+        </S.ModalOverlay>
+      )}
+
+      <ToastContainer position="top-right" autoClose={2000} />
     </S.Background>
   );
 }
