@@ -146,7 +146,7 @@ export default function EPTmenuBar() {
           >
             다양한 콘텐츠!
           </p>
-          <S.MenuContent style={{ display: "flex", gap: "12px" }}>
+          <S.MenuContent style={{ display: "flex", gap: "24px" }}>
             <Link to="/taste/hobby">
               <S.MenuBox style={{ backgroundColor: "#4a90e2", color: "#fff" }}>
                 취향 테스트

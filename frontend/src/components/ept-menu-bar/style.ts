@@ -24,6 +24,7 @@ export const Menu = styled.div`
   width: 300px;
   height: 450px;
   background: #fff;
+  gap: 20px;
 `;
 
 export const MenuContent = styled.div`
