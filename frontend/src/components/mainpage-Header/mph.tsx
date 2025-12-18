@@ -5,11 +5,12 @@ import Menu_Bar from "../menu-bar/mb.tsx";
 
 function Header({ props }: { props?: any }) {
   const navigate = useNavigate();
-  const userId = props?.state?.id || localStorage.getItem("userEmail"); // ← 로그인 이메일/아이디
+  const userName = props?.state?.id || localStorage.getItem("userName"); // 로그인 사용자 이름
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userId");
     navigate("/", { state: null }); // 상태 초기화
   };
 
@@ -22,10 +23,10 @@ function Header({ props }: { props?: any }) {
       <S.HeaderRight>
         <Menu_Bar />
 
-        {userId ? (
+        {userName ? (
           <div className="user-info-box">
             <S.LogoutContainer>
-              <span className="user-name">{userId} 님</span>
+              <span className="user-name">{userName} 님</span>
               <button
                 className="login-button-go-lp"
                 id="login-box_button"

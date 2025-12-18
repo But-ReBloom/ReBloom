@@ -6,8 +6,8 @@ import React_svg from "../../assets/images/react.svg";
 import { ImageOfTier } from "../../components/determine_tier/determine_tier";
 import Rebloom from "../../assets/images/ReBloom.png";
 import { useEffect, useState } from "react";
-// import { authApi } from "../../api/auth";
-// import { achievementApi } from "../../api/achievement";
+import { authApi } from "../../api/auth";
+import { achievementApi } from "../../api/achievement";
 import type { FindUserInfoResponse } from "../../types/auth";
 import type { GetUserAchievementResponse } from "../../types/achievement";
 import Tree from "../../assets/images/Tree.svg";
@@ -141,24 +141,34 @@ function RightSection({
     useState<ActivityDetail | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const completed = achievements.filter((a) => a.userAchievementIsSuccess);
-
-  const completedPoints = completed.reduce(
-    (sum, a) => sum + a.userAchievementRewardPoint,
-    0
-  );
-
-  const completedTierPoints = completed.reduce(
-    (sum, a) => sum + a.userAchievementTierPoint,
-    0
-  );
-
   return (
     <S.RightSection>
       <div style={{ display: "flex", gap: 20, position: "fixed", top: 120, left: 1030 }}>
         <S.ChoiceBtn onClick={() => setViewMode("box")}>업적 보기</S.ChoiceBtn>
         <S.ChoiceBtn onClick={() => setViewMode("tree")}>나무 보기</S.ChoiceBtn>
       </div>
+
+      {viewMode === "box" && (
+        <>
+          <S.DetailTitle>업적 보기</S.DetailTitle>
+          <S.ArchiveList>
+            {achievements.map((ach) => (
+              <S.Box key={ach.achievementId} style={{ opacity: ach.userAchievementIsSuccess ? 1 : 0.5 }}>
+                <div style={{ fontWeight: 'bold' }}>{ach.userAchievementTitle}</div>
+                <div style={{ fontSize: '12px', marginTop: '4px' }}>
+                  진행률: {Math.round(ach.userAchievementProgress * 100)}%
+                </div>
+                <div style={{ fontSize: '12px' }}>
+                  보상: {ach.userAchievementRewardPoint}P / 티어: {ach.userAchievementTierPoint}P
+                </div>
+              </S.Box>
+            ))}
+            {achievements.length === 0 && (
+              <div style={{ color: '#888' }}>업적이 없습니다.</div>
+            )}
+          </S.ArchiveList>
+        </>
+      )}
 
       {viewMode === "tree" && (
         <>
@@ -213,20 +223,29 @@ export default function Mypage() {
   const [achievements, setAchievements] = useState<GetUserAchievementResponse[]>(
     []
   );
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // ❌ 통신 부분 주석 처리
-    /*
-    const fetch = async () => {
-      const userRes = await authApi.findCurrentUser();
-      const achRes = await achievementApi.getUserAchievementsByUserEmail();
-      if (userRes.success) setUserInfo(userRes.data);
-      if (achRes.success) setAchievements(achRes.data);
-      setLoading(false);
+    const fetchData = async () => {
+      try {
+        const userRes = await authApi.findCurrentUser();
+        if (userRes.success) {
+          setUserInfo(userRes.data);
+          // Fetch achievements using userEmail
+          try {
+            const achRes = await achievementApi.getUserAchievementsByUserEmail();
+            if (achRes.success) setAchievements(achRes.data);
+          } catch (error) {
+            console.error("Failed to fetch achievements", error);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch user info", error);
+      } finally {
+        setLoading(false);
+      }
     };
-    fetch();
-    */
+    fetchData();
   }, []);
 
   if (loading) return <div>Loading...</div>;

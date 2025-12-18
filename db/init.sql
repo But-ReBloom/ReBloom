@@ -272,3 +272,89 @@ INSERT INTO hobbies (h_name, h_w_social, h_w_learning, h_w_planning, h_w_focus, 
                                                                                                     ('작곡/작사', 0, 2, 1, 1, 2),
                                                                                                     ('공예(뜨개질/자수)', -1, 1, 1, 2, 2),
                                                                                                     ('필사', -1, 1, 1, 2, 1);
+
+-- Sample users for channel creation (add if not exists)
+INSERT IGNORE INTO users (u_email, u_id, u_password, u_name, u_role, u_tier_point, u_point, u_provider, u_tier, u_recent_date, u_streak) VALUES
+('admin@rebloom.com', 'admin', '$2a$10$dummypasswordhash', '관리자', 'ADMIN', 5000, 1000, 'SELF', 'MASTER', CURDATE(), 100),
+('user1@rebloom.com', 'coder_lover', '$2a$10$dummypasswordhash', '코딩마스터', 'USER', 3500, 500, 'SELF', 'GOLD', CURDATE(), 30),
+('user2@rebloom.com', 'book_worm', '$2a$10$dummypasswordhash', '책벌레', 'USER', 2800, 400, 'SELF', 'SILVER', CURDATE(), 25),
+('user3@rebloom.com', 'fitness_king', '$2a$10$dummypasswordhash', '헬스왕', 'USER', 4200, 600, 'SELF', 'DIAMOND', CURDATE(), 50),
+('user4@rebloom.com', 'art_creator', '$2a$10$dummypasswordhash', '예술가', 'USER', 3000, 450, 'SELF', 'GOLD', CURDATE(), 35);
+
+-- Channel dummy data
+INSERT INTO channels (fk_u_email, ch_title, ch_intro, ch_lk_h_1_id, ch_lk_h_2_id, ch_lk_h_3_id, ch_description, ch_created_at, ch_status) VALUES
+('user1@rebloom.com', '코딩 러버스', '프로그래밍을 사랑하는 사람들의 모임', 1, 32, 28, '다양한 프로그래밍 언어와 기술을 공유하고 함께 성장하는 커뮤니티입니다. 초보자부터 전문가까지 환영합니다!', '2025-11-01 10:00:00', 'APPROVED'),
+('user2@rebloom.com', '북클럽 독서모임', '매달 한 권씩 함께 읽어요', 9, 10, NULL, '매달 다른 책을 선정하여 함께 읽고 토론하는 독서 모임입니다. 다양한 장르의 책을 접하며 시야를 넓혀보세요!', '2025-11-05 14:30:00', 'APPROVED'),
+('user3@rebloom.com', '헬스&피트니스', '건강한 삶을 위한 운동 커뮤니티', 2, 25, 4, '운동 루틴 공유, 식단 정보, 운동 팁을 나누는 공간입니다. 함께 건강한 습관을 만들어가요!', '2025-11-10 09:00:00', 'APPROVED'),
+('user4@rebloom.com', '아트 크리에이터', '창작의 즐거움을 나누는 공간', 11, 20, 28, '그림, 사진, 디자인 등 다양한 예술 작품을 공유하고 피드백을 주고받는 창작자들의 커뮤니티입니다.', '2025-11-15 16:00:00', 'APPROVED'),
+('admin@rebloom.com', '요리&베이킹 클럽', '맛있는 레시피를 공유해요', 19, NULL, NULL, '집에서 만든 요리와 베이킹 레시피를 공유하고, 실패담과 성공담을 나누는 따뜻한 커뮤니티입니다.', '2025-11-20 13:00:00', 'APPROVED'),
+('user1@rebloom.com', '여행 메이트', '함께 떠나는 여행의 추억', 8, 22, 23, '여행 정보 공유, 여행 메이트 찾기, 여행 후기 등을 나누는 여행 애호가들의 모임입니다.', '2025-11-25 11:00:00', 'APPROVED'),
+('user2@rebloom.com', '악기 연주자 모임', '음악을 사랑하는 사람들', 15, 33, NULL, '다양한 악기를 연주하는 사람들이 모여 합주하고, 연주 팁을 공유하는 커뮤니티입니다.', '2025-12-01 15:00:00', 'APPROVED'),
+('user3@rebloom.com', '게임 마니아', 'e스포츠와 게임을 즐기는 모임', 6, NULL, NULL, '다양한 게임 정보 공유, 게임 팁, 팀원 모집 등 게임을 즐기는 모든 분들을 환영합니다!', '2025-12-05 18:00:00', 'APPROVED'),
+('user4@rebloom.com', '사진 동호회', '순간을 담는 사람들', 20, 8, NULL, '사진 촬영 기술, 편집 팁, 촬영 장소 추천 등을 공유하는 사진 애호가들의 커뮤니티입니다.', '2025-12-08 12:00:00', 'APPROVED'),
+('admin@rebloom.com', '영상 크리에이터', 'YouTube와 영상 제작', 32, 28, 18, '영상 편집, 촬영 기법, 유튜브 운영 팁을 공유하는 영상 크리에이터들의 모임입니다.', '2025-12-10 14:00:00', 'APPROVED'),
+('user1@rebloom.com', '캠핑 러버스', '자연과 함께하는 캠핑 라이프', 22, 8, 13, '캠핑 장소 추천, 캠핑 장비 리뷰, 캠핑 팁을 공유하는 캠핑 애호가들의 커뮤니티입니다.', '2025-12-12 10:00:00', 'APPROVED'),
+('user2@rebloom.com', '봉사 활동 모임', '나눔의 가치를 실천해요', 5, NULL, NULL, '지역사회 봉사활동 정보를 공유하고 함께 참여하는 따뜻한 커뮤니티입니다.', '2025-12-14 09:00:00', 'APPROVED'),
+('user3@rebloom.com', '댄스 크루', '춤으로 소통해요', 7, NULL, NULL, '다양한 장르의 댄스를 배우고 연습하며, 공연 정보를 공유하는 댄스 크루입니다.', '2025-12-15 17:00:00', 'PENDING'),
+('user4@rebloom.com', '보드게임 카페', '전략과 재미의 보드게임', 26, NULL, NULL, '보드게임 리뷰, 모임 공지, 게임 전략을 공유하는 보드게임 애호가들의 모임입니다.', '2025-12-16 19:00:00', 'PENDING');
+
+-- User to channel memberships
+INSERT INTO user_to_channels (fk_ch_id, fk_u_email, uc_status, uc_message) VALUES
+-- 코딩 러버스 (ch_id: 1)
+(1, 'user1@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+(1, 'user2@rebloom.com', 'APPROVED', '코딩 배우고 싶어서 가입합니다!'),
+(1, 'admin@rebloom.com', 'APPROVED', '관리 목적으로 참여합니다.'),
+
+-- 북클럽 독서모임 (ch_id: 2)
+(2, 'user2@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+(2, 'user4@rebloom.com', 'APPROVED', '책 읽는 걸 좋아합니다!'),
+(2, 'admin@rebloom.com', 'WAITING', '함께 독서하고 싶습니다.'),
+
+-- 헬스&피트니스 (ch_id: 3)
+(3, 'user3@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+(3, 'user1@rebloom.com', 'APPROVED', '운동 시작했습니다!'),
+(3, 'user4@rebloom.com', 'WAITING', '건강 관리 시작하려고 합니다.'),
+
+-- 아트 크리에이터 (ch_id: 4)
+(4, 'user4@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+(4, 'user2@rebloom.com', 'APPROVED', '그림 그리는 걸 좋아합니다!'),
+
+-- 요리&베이킹 클럽 (ch_id: 5)
+(5, 'admin@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+(5, 'user1@rebloom.com', 'APPROVED', '요리 배우고 싶어요!'),
+(5, 'user3@rebloom.com', 'APPROVED', '베이킹 좋아합니다!'),
+
+-- 여행 메이트 (ch_id: 6)
+(6, 'user1@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+(6, 'user4@rebloom.com', 'APPROVED', '여행 정보 공유하고 싶어요!'),
+
+-- 악기 연주자 모임 (ch_id: 7)
+(7, 'user2@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+(7, 'user3@rebloom.com', 'WAITING', '기타 배우고 있습니다!'),
+
+-- 게임 마니아 (ch_id: 8)
+(8, 'user3@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+(8, 'user1@rebloom.com', 'APPROVED', '게임 좋아합니다!'),
+(8, 'admin@rebloom.com', 'APPROVED', 'e스포츠 팬입니다!'),
+
+-- 사진 동호회 (ch_id: 9)
+(9, 'user4@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+(9, 'user1@rebloom.com', 'WAITING', '사진 촬영 배우고 싶습니다!'),
+
+-- 영상 크리에이터 (ch_id: 10)
+(10, 'admin@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+(10, 'user2@rebloom.com', 'APPROVED', '유튜브 시작했어요!'),
+
+-- 캠핑 러버스 (ch_id: 11)
+(11, 'user1@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+(11, 'user3@rebloom.com', 'APPROVED', '캠핑 좋아합니다!'),
+
+-- 봉사 활동 모임 (ch_id: 12)
+(12, 'user2@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+(12, 'admin@rebloom.com', 'APPROVED', '함께 나눔을 실천해요!'),
+
+-- 댄스 크루 (ch_id: 13)
+(13, 'user3@rebloom.com', 'APPROVED', '채널을 만들었습니다.'),
+
+-- 보드게임 카페 (ch_id: 14)
+(14, 'user4@rebloom.com', 'APPROVED', '채널을 만들었습니다.');

@@ -37,8 +37,9 @@ export default function Right_box() {
 
       if (response.success) {
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("userEmail", response.data.userEmail);
-        navigate("/", { state: { id: response.data.userEmail } });
+        localStorage.setItem("userName", response.data.userName);
+        localStorage.setItem("userId", response.data.userId);
+        navigate("/", { state: { id: response.data.userName } });
       } else {
         toast.error(
           response.message || "서버와의 통신 중 오류가 발생했습니다."
