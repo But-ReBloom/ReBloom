@@ -79,7 +79,7 @@ export const RelativeBarWrapper = styled.div<{ $height: number }>`
 
 /* ===== 기준선 ===== */
 export const ZeroLine = styled.div`
-  width: 100%;
+  width: 70px;
   height: 2px;
   background-color: #444;
   margin: 12px 0;
@@ -87,7 +87,7 @@ export const ZeroLine = styled.div`
 
 export const PositiveArea = styled.div`
   flex: 1;
-  width: 100%;
+  width: 70px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -103,7 +103,7 @@ export const PositiveBar = styled.div<{ $value: number; $unit: number }>`
 
 export const NegativeArea = styled.div`
   flex: 1;
-  width: 100%;
+  width: 70px;
   display: flex;
   align-items: flex-start;
   justify-content: center;
