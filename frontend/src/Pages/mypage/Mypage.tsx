@@ -28,37 +28,54 @@ interface ActivityDetail {
 const activityDummyList: ActivityDetail[] = [
   {
     activityId: 1,
-    activityName: "텀블러 사용 챌린지",
-    activityStart: "2025-12-01",
+    activityName: "매일 알고리즘 한 문제 풀기",
+    activityStart: "2025-11-25",
     activityRecent: "2025-12-03",
     linkedHobbyId: 1,
-    linkedHobbyName: "환경 보호 활동",
+    linkedHobbyName: "코딩",
   },
   {
     activityId: 2,
-    activityName: "주 3회 독서 기록",
+    activityName: "주 3회 독서 기록 남기기",
     activityStart: "2025-11-20",
     activityRecent: "2025-12-02",
-    linkedHobbyId: 2,
-    linkedHobbyName: "자기계발",
+    linkedHobbyId: 9,
+    linkedHobbyName: "독서",
   },
   {
     activityId: 3,
-    activityName: "아침 스트레칭 루틴",
-    activityStart: "2025-11-15",
+    activityName: "아침 러닝 20분 루틴",
+    activityStart: "2025-11-18",
     activityRecent: "2025-12-01",
-    linkedHobbyId: 3,
-    linkedHobbyName: "건강 관리",
+    linkedHobbyId: 25,
+    linkedHobbyName: "러닝",
   },
   {
     activityId: 4,
     activityName: "주말 사진 산책",
     activityStart: "2025-11-10",
     activityRecent: "2025-11-30",
-    linkedHobbyId: 4,
+    linkedHobbyId: 20,
     linkedHobbyName: "사진 촬영",
   },
+  {
+    activityId: 5,
+    activityName: "하루 한 페이지 글쓰기",
+    activityStart: "2025-11-22",
+    activityRecent: "2025-12-03",
+    linkedHobbyId: 10,
+    linkedHobbyName: "글쓰기",
+  },
+  {
+    activityId: 6,
+    activityName: "주 2회 요가로 몸 풀기",
+    activityStart: "2025-11-19",
+    activityRecent: "2025-12-02",
+    linkedHobbyId: 29,
+    linkedHobbyName: "요가/명상",
+  },
 ];
+
 
 /* ===============================
    유틸
