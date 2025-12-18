@@ -12,7 +12,7 @@ import {
     ChannelIntro,
     ChannelDescription,
     HobbyTag,
-    SearchBox,
+    // SearchBox,
     ProfileSection,
     WritePostButton,
     ChannelContainer,
@@ -96,21 +96,9 @@ function ChannelPage() {
     const navigate = useNavigate();
 
     const [channels] = useState<Channel[]>(initialChannels);
-    const [posts, setPosts] = useState<Post[]>([]);
+    const [posts, setPosts] = useState<Post[]>(initialPosts);
     const [channel, setChannel] = useState<Channel | null>(null);
     const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
-
-    // ✅ 가입 여부 검사 (핵심)
-    useEffect(() => {
-        const joinedChannels: number[] = JSON.parse(
-            localStorage.getItem('joinedChannels') || '[]'
-        );
-
-        if (!joinedChannels.includes(Number(id))) {
-            alert('가입한 채널만 접근할 수 있습니다.');
-            navigate('/community');
-        }
-    }, [id, navigate]);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -128,13 +116,24 @@ function ChannelPage() {
         const currentChannel = channels.find(ch => String(ch.channelId) === id);
         if (currentChannel) {
             setChannel(currentChannel);
-            setPosts(
-                initialPosts.filter(post => post.channelId === currentChannel.channelId)
-            );
+        } else {
+            setChannel({
+                channelId: Number(id),
+                channelName: '알 수 없는 채널',
+                channelIntro: '',
+                description: '',
+                hobbies: [],
+            });
         }
     }, [id, channels]);
 
-    if (!channel) return null;
+    useEffect(() => {
+        if (channel) {
+            setPosts(initialPosts.filter(post => post.channelId === channel.channelId));
+        }
+    }, [channel]);
+
+    if (!channel) return <p>로딩중...</p>;
 
     return (
         <Container>
@@ -152,19 +151,16 @@ function ChannelPage() {
                 <WritePostButton
                     onClick={() =>
                         navigate('/myPostPage', {
-                            state: {
-                                channelId: channel.channelId,
-                                channelName: channel.channelName,
-                            },
+                            state: { channelId: channel.channelId, channelName: channel.channelName },
                         })
                     }
                 >
                     글 작성
                 </WritePostButton>
 
-                <SearchBox>
+                {/* <SearchBox>
                     <input placeholder="채널 검색..." />
-                </SearchBox>
+                </SearchBox> */}
 
                 <BackButton onClick={() => navigate('/community')}>
                     ← 커뮤니티로 돌아가기
@@ -202,9 +198,18 @@ function ChannelPage() {
                                     padding: '10px',
                                     marginBottom: '10px',
                                     borderRadius: '5px',
+                                    cursor: 'pointer',
                                 }}
+                                onClick={() =>
+                                    navigate(`/post/${post.postId}`, {
+                                        state: { channelId: channel.channelId },
+                                    })
+                                }
                             >
-                                <strong>{post.author}</strong>
+                                <strong>{post.author}</strong>{' '}
+                                <span style={{ fontSize: '12px', color: '#999' }}>
+                                    {post.createdAt}
+                                </span>
                                 <p>{post.content}</p>
                             </div>
                         ))
