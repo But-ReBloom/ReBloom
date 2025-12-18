@@ -130,12 +130,12 @@
                 value={form.channelDescription}
                 onChange={handleChange}
             />
-            <Input
+            {/* <Input
                 name="userEmail"
                 placeholder="사용자 이메일"
                 value={form.userEmail}
                 onChange={handleChange}
-            />
+            /> */}
 
             <HobbySelectorWrapper>
                 {hobbyOptions.map((hobby) => (
