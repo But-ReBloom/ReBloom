@@ -12,6 +12,7 @@ import type { FindUserInfoResponse } from "../../types/auth";
 import type { GetUserAchievementResponse } from "../../types/achievement";
 import Tree from "../../assets/images/Tree.svg";
 
+
 /* ===============================
    활동 상세 더미 (API 명세 동일)
 ================================ */
@@ -147,11 +148,15 @@ function RightSection({
     (sum, a) => sum + a.userAchievementRewardPoint,
     0
   );
+    
+  void completedPoints;
 
   const completedTierPoints = completed.reduce(
     (sum, a) => sum + a.userAchievementTierPoint,
     0
   );
+
+  void completedTierPoints;
 
   return (
     <S.RightSection>
@@ -214,6 +219,10 @@ export default function Mypage() {
     []
   );
   const [loading, setLoading] = useState(false);
+
+  void userInfo;
+  void achievements;
+  void loading;
 
   useEffect(() => {
     // ❌ 통신 부분 주석 처리
