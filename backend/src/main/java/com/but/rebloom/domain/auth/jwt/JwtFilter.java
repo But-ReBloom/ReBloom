@@ -88,6 +88,10 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private boolean isPermitAllPath(String path) {
+        // /auth로 시작하는 경로는 무조건 허용
+        if (path.startsWith("/auth")) {
+            return true;
+        }
         return PERMIT_ALL_PATHS.stream()
                 .anyMatch(pattern -> pathMatcher.match(pattern, path));
     }
