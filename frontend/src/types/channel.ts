@@ -25,6 +25,19 @@ export interface ApplyMemberRequest {
 export type ApproveMemberRequest = ChannelMemberRequest;
 export type RejectMemberRequest = ChannelMemberRequest;
 
+export interface FindOneChannelResponse {
+    channelName: string;
+    userId: string;
+    userTier: string;
+    channelIntro: string;
+    linkedHobbyId1: number;
+    linkedHobbyName1: string;
+    linkedHobbyId2?: number;
+    linkedHobbyName2?: string;
+    linkedHobbyId3?: number;
+    linkedHobbyName3?: string;
+}
+
 export interface CreateChannelResponse {
     channelId: number;
     userId: string;
@@ -43,7 +56,8 @@ export interface CreateChannelResponse {
 }
 
 export interface FindChannelResponse {
-    channels: CreateChannelResponse[];
+    responses: FindOneChannelResponse[];
+    totalCount: number;
 }
 
 export interface FindChannelDetailedInfoResponse extends CreateChannelResponse {

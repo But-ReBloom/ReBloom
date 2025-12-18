@@ -1,5 +1,11 @@
 import {
     CommunityWrapper,
+<<<<<<< HEAD
+=======
+    LogoImage,
+    CloseButton,
+    CloseIconImg,
+>>>>>>> main
     CentralBox,
     HeaderTop,
     SortDropdown,
@@ -11,20 +17,20 @@ import {
     PostDescription,
 } from './style';
 
+<<<<<<< HEAD
+=======
+import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
+import CloseIcon from '../../assets/images/close.svg';
+>>>>>>> main
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import Header from '../../components/mainpage-Header/mph';
+import { channelApi } from '../../api/channel';
 
 interface Channel {
     channelId: number;
     channelName: string;
     channelIntro: string;
 }
-
-const mockChannels: Channel[] = [
-    { channelId: 1, channelName: '러닝 크루', channelIntro: '함께 달리는 러닝 커뮤니티' },
-    { channelId: 2, channelName: '홈쿠킹 연구소', channelIntro: '집에서 요리하는 사람들' },
-];
 
 function CommunityPage() {
     const navigate = useNavigate();
@@ -37,8 +43,31 @@ function CommunityPage() {
         setJoinedChannels(joined);
     }, []);
 
+<<<<<<< HEAD
     const handleJoin = (channelId: number) => {
         if (joinedChannels.includes(channelId)) return;
+=======
+    const fetchApprovedChannels = async () => {
+        try {
+            const response = await channelApi.getApprovedChannels();
+            if (response.success && response.data.responses) {
+                const mappedChannels: Channel[] = response.data.responses.map((ch, idx) => ({
+                    channelId: idx + 1,
+                    channelName: ch.channelName,
+                    channelIntro: ch.channelIntro || '',
+                }));
+                setChannels(mappedChannels);
+            } else {
+                setChannels([]);
+            }
+        } catch (error) {
+            console.error('Failed to fetch approved channels', error);
+            setChannels([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+>>>>>>> main
 
         const updated = [...joinedChannels, channelId];
         setJoinedChannels(updated);
@@ -48,7 +77,19 @@ function CommunityPage() {
 
     return (
         <CommunityWrapper>
+<<<<<<< HEAD
             <Header />
+=======
+            <CloseButton onClick={() => navigate('/main')}>
+                <CloseIconImg src={CloseIcon} alt="닫기" />
+            </CloseButton>
+
+            <LogoImage
+                src={RebloomLogo}
+                alt="Rebloom Logo"
+                onClick={() => navigate('/')}
+            />
+>>>>>>> main
 
             <CentralBox>
                 <HeaderTop>

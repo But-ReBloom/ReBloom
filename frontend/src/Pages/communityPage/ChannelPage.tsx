@@ -12,7 +12,7 @@ import {
     ChannelIntro,
     ChannelDescription,
     HobbyTag,
-    // SearchBox,
+    SearchBox,
     ProfileSection,
     WritePostButton,
     ChannelContainer,
@@ -145,8 +145,8 @@ function ChannelPage() {
                     <img src={React_svg} alt="프로필" />
                     <div>
                         <strong>{userInfo?.userName || '사용자 이름'}</strong>
+                        <p>레벨 {userInfo ? Math.floor(userInfo.userTierPoint / 1000) + 1 : 1}</p>
                     </div>
-
                 </ProfileSection>
 
                 <WritePostButton
@@ -162,9 +162,9 @@ function ChannelPage() {
                     글 작성
                 </WritePostButton>
 
-                {/* <SearchBox>
+                <SearchBox>
                     <input placeholder="채널 검색..." />
-                </SearchBox> */}
+                </SearchBox>
 
                 <BackButton onClick={() => navigate('/community')}>
                     ← 커뮤니티로 돌아가기

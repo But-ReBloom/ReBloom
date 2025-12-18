@@ -63,6 +63,11 @@ export const hobbyApi = {
             method: "GET",
         }) as Promise<ApiResponse<GetHobbyResponse>>,
 
+    findHobbyByName: (hobbyName: string) =>
+        client(`/hobby/find/name/${encodeURIComponent(hobbyName)}`, {
+            method: "GET",
+        }) as Promise<ApiResponse<GetHobbyResponse>>,
+
     createReviewQuestion: (data: CreateReviewQuestionRequest) =>
         client("/activity-review/create", {
             method: "POST",
@@ -74,4 +79,9 @@ export const hobbyApi = {
             method: "POST",
             body: JSON.stringify(data),
         }) as Promise<ApiResponse<ReviewAnswerResponse>>,
+
+    resetActivity: () =>
+        client("/activity/reset", {
+            method: "DELETE",
+        }) as Promise<ApiResponse<void>>,
 };

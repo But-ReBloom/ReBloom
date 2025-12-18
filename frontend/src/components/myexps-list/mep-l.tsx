@@ -14,6 +14,7 @@ interface Activity {
   activityDate: string;
   tags: string[];
   isReviewed: boolean;
+  linkedHobbyId?: number;
 }
 
 interface MepLProps {
