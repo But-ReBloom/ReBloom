@@ -41,8 +41,7 @@ public class ChannelUseCase {
     @Transactional
     public Channel requestCreation(CreateChannelRequest request) {
         // 유저 조회
-        User user = userRepository.findByUserEmail(request.getUserEmail())
-                .orElseThrow(() -> new UserNotFoundException("유저 조회 실패"));
+        User user = findCurrentUserUseCase.getCurrentUser();
 
         if (channelRepository.existsByChannelTitle(request.getChannelTitle())) {
             throw new AlreadyUsingChannelException("이미 존재하는 채널 이름");
