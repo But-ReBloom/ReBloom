@@ -8,7 +8,6 @@ import type { InitialTest } from "../../types/hobby";
 import { hobbyApi } from "../../api/hobby";
 import LoadingPage from "../loadingpage/loading.tsx";
 
-
 /* ===============================
    컴포넌트
 ================================ */
@@ -115,7 +114,7 @@ export default function FT_TestPage() {
   /* 제출 */
   const handleSubmit = async () => {
     const finalAverage = calculateFinalAverage();
-    
+
     // 로그인 여부 확인
     const token = localStorage.getItem("token");
     if (!token) {
