@@ -11,15 +11,14 @@ function MainPage() {
   const userId = location.state?.id || storedUserId;
 
   useEffect(() => {
-    if (location.state?.id) {
-      toast.success(`환영합니다! ${location.state.id}님!`);
+    if (userId) {
+      toast.success(`환영합니다! ${userId}님!`);
     }
-  }, [location.state]);
+  }, [userId]);
 
-  //메인페이지
   return (
     <S.MainPage_Container>
-      <Header props={{ state: { id: userId } }} />
+      <Header state={{ id: userId }} />
       <Body />
     </S.MainPage_Container>
   );

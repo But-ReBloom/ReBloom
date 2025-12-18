@@ -92,7 +92,7 @@ export default function Suprb() {
               type="text"
               value={userID}
               onChange={(e) => setUserID(e.target.value)}
-              placeholder="아이디를 입력해주십시오."
+              placeholder="아이디에는 숫자를 포함하여 입력해주십시오."
             />
           </S.Input_title>
           <S.Input_title>
@@ -101,7 +101,7 @@ export default function Suprb() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="비밀번호를 입력해주십시오."
+              placeholder="대문자, 숫자, 특수문자 포함 8자 이상 입력해주십시오."
             />
           </S.Input_title>
           <S.Input_title>
