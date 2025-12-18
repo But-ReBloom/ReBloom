@@ -175,7 +175,7 @@ function RightSection({
               <S.Box key={ach.achievementId} style={{ opacity: ach.userAchievementIsSuccess ? 1 : 0.5 }}>
                 <div style={{ fontWeight: 'bold' }}>{ach.userAchievementTitle}</div>
                 <div style={{ fontSize: '12px', marginTop: '4px' }}>
-                  진행률: {Math.round(ach.userAchievementProgress * 100)}%
+                  진행률: {Math.round(ach.userAchievementProgress)}%
                 </div>
                 <div style={{ fontSize: '12px' }}>
                   보상: {ach.userAchievementRewardPoint}P / 티어: {ach.userAchievementTierPoint}P
