@@ -32,7 +32,7 @@ export const HeaderRight = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 860px;
+  width: 855px;
 
   .header-menu {
     display: block;

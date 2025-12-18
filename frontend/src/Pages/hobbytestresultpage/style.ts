@@ -34,22 +34,18 @@ export const Title = styled.div`
 /* ===============================
    그래프 영역
 ================================ */
-export const GraphSection = styled.div<{ $graphHeight: number }>`
+export const GraphSection = styled.div`
   background: #ffffff;
   border-radius: 16px;
   padding: 60px 100px;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.12);
-
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 48px;
-
-  /* 🔑 핵심 */
-  min-height: ${({ $graphHeight }) => $graphHeight + 180}px;
 `;
 
 export const GraphTitle = styled.div`
-  width: 100%;
   font-size: 24px;
   font-weight: 600;
 `;
@@ -62,15 +58,7 @@ export const RelativeChart = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   padding: 0 40px;
-`;
-
-export const ZeroLine = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: 2px;
-  background-color: #555;
+  height: 100%;
 `;
 
 export const RelativeBarItem = styled.div`
@@ -82,39 +70,67 @@ export const RelativeBarItem = styled.div`
 `;
 
 export const RelativeBarWrapper = styled.div<{ $height: number }>`
-  position: relative;
   width: 36px;
-  height: ${({ $height }) => $height}px;
+  height: ${({ $height }) => $height * 2}px;
+
+  display: flex;
+  flex-direction: column;
 `;
 
-export const RelativeBar = styled.div<{
-  $value: number;
-  $unit: number;
-}>`
-  position: absolute;
-  bottom: 0;
+/* ===== 기준선 ===== */
+export const ZeroLine = styled.div`
   width: 100%;
-  height: ${({ $value, $unit }) =>
-    Math.abs($value) * $unit}px;
+  height: 2px;
+  background-color: #444;
+  margin: 12px 0;
+`;
 
-  background: ${({ $value }) =>
-    $value >= 0
-      ? "linear-gradient(180deg, #006aff, #73a4e9)"
-      : "linear-gradient(180deg, #ff6b6b, #ff9a9a)"};
+export const PositiveArea = styled.div`
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+`;
 
+export const PositiveBar = styled.div<{ $value: number; $unit: number }>`
+  width: 100%;
+  height: ${({ $value, $unit }) => $value * $unit}px;
+  background: linear-gradient(180deg, #006aff, #73a4e9);
   border-radius: 8px;
   transition: height 0.6s ease;
 `;
 
+export const NegativeArea = styled.div`
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+`;
+
+export const NegativeBar = styled.div<{ $value: number; $unit: number }>`
+  width: 100%;
+  height: ${({ $value, $unit }) => Math.abs($value) * $unit}px;
+  background: linear-gradient(180deg, #ff9a9a, #ff6b6b);
+  border-radius: 8px;
+  transition: height 0.6s ease;
+`;
+
+export const ScoreArea = styled.div`
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+`;
 
 export const BarValue = styled.div`
-  margin-top: 10px;
   font-size: 15px;
   font-weight: 600;
 `;
 
 export const BarLabel = styled.div`
-  margin-top: 4px;
   font-size: 14px;
   color: #555;
 `;
@@ -124,12 +140,12 @@ export const BarLabel = styled.div`
 ================================ */
 export const RecommendSection = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
 `;
 
 export const RecommendRow = styled.div`
   display: flex;
+  align-items: center;
   gap: 32px;
 `;
 
@@ -139,10 +155,11 @@ export const RecommaendBox = styled.div`
   background: #ffffff;
   border-radius: 14px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
+  gap: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   font-size: 20px;
   font-weight: 600;
 `;
@@ -157,14 +174,41 @@ export const ArrowImage = styled.button`
   border: 2px solid #ccc;
   background: #ffffff;
   cursor: pointer;
-  align-self: center;
 
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease;
 
   &:hover {
     transform: scale(1.15);
+  }
+`;
+
+export const BarContainer = styled.div<{ $height: number }>`
+  width: 36px;
+  height: ${({ $height }) => $height * 2 + 40}px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const addTree = styled.button`
+  height: 30px;
+  background-color: rgb(60, 99, 255);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: rgb(43, 83, 240);
   }
 `;

@@ -48,7 +48,6 @@ export const MenuBox = styled.button`
   &:hover {
     color: #3e55bf;
     background: white;
-    border: 2px solid #3e55bf;
     font-size: 20px;
     font-weight: bold;
     transform: scale(1.05);
@@ -76,6 +75,7 @@ export const IntroCon = styled.div`
 export const IntroTexting = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 0 40px;
 `;
 
 export const IntroduceUs = styled.div`

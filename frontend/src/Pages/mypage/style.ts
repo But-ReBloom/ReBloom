@@ -196,7 +196,7 @@ export const ChoiceBtn = styled.button`
   width: 140px;
   height: 34px;
   border-radius: 20px;
-  background: linear-gradient(90deg, #41a6ff, #3e55bf);
+  background: #333;
   color: #fff;
   border: none;
   font-size: 14px;
@@ -260,4 +260,21 @@ export const PopupClose = styled.button`
   background: linear-gradient(90deg, #41a6ff, #3e55bf);
   color: white;
   cursor: pointer;
+`;
+
+export const BoxViewWrapper = styled.div`
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+export const BoxActivity = styled.div`
+  padding: 12px;
+  background: #f2f2f2;
+  border-radius: 8px;
+  cursor: pointer;
+  &:hover {
+    background: #e0e0e0;
+  }
 `;
