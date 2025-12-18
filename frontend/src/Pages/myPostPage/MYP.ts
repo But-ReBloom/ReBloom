@@ -212,3 +212,40 @@ export const SubmitButton = styled.button<{ disabled?: boolean }>`
         transform: none;
     }
 `;
+
+/* ===== Sidebar Components ===== */
+export const Divider = styled.hr`
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+`;
+
+export const CafeInfo = styled.div`
+    padding: 15px 0;
+    font-size: 0.9rem;
+    color: #666;
+`;
+
+export const NavMenu = styled.nav`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+`;
+
+export const SubMenu = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 15px;
+    font-size: 0.9rem;
+    color: #555;
+
+    a {
+        text-decoration: none;
+        color: inherit;
+        &:hover {
+            color: #2b90d9;
+        }
+    }
+`;

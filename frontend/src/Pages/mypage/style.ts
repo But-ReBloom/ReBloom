@@ -192,13 +192,13 @@ export const TreeActivity = styled.div`
 /* ===============================
    Buttons
 ================================ */
-export const ChoiceBtn = styled.button`
+export const ChoiceBtn = styled.button<{ $active?: boolean }>`
   width: 140px;
   height: 34px;
   border-radius: 20px;
-  background: #333;
-  color: #fff;
-  border: none;
+  background: ${({ $active }) => ($active ? '#3e55bf' : '#333')};
+  color: ${({ $active }) => ($active ? '#fff' : '#fff')};
+  border: ${({ $active }) => ($active ? '2px solid #3e55bf' : 'none')};
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;

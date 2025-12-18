@@ -79,9 +79,9 @@ function MyPostPage() {
             const channelRes = await channelApi.searchChannel({ keyword: selectedCategory });
             let channelId: number | null = null;
 
-            if (channelRes.success && channelRes.data.channels.length > 0) {
-                const exactMatch = channelRes.data.channels.find(c => c.channelTitle === selectedCategory);
-                channelId = exactMatch ? exactMatch.channelId : channelRes.data.channels[0].channelId;
+            if (channelRes.success && channelRes.data.responses && channelRes.data.responses.length > 0) {
+                const matchIndex = channelRes.data.responses.findIndex((c: { channelName: string }) => c.channelName === selectedCategory);
+                channelId = matchIndex >= 0 ? matchIndex + 1 : 1;
             }
 
             if (!channelId) {

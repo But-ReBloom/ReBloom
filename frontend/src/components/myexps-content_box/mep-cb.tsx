@@ -16,7 +16,7 @@ export type FindActivityResponse = {
   activityDate: string;     // 활동 날짜
   tags: string[];           // 관련 태그
   isReviewed: boolean;      // 리뷰 여부
-  linkedHobbyId: number;    // 연결된 취미 ID
+  linkedHobbyId?: number;   // 연결된 취미 ID (선택적)
 };
 
 /* ===============================
