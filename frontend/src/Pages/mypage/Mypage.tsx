@@ -8,13 +8,14 @@ import Rebloom from "../../assets/images/ReBloom.png";
 import { useEffect, useState } from "react";
 import { authApi } from "../../api/auth";
 import { achievementApi } from "../../api/achievement";
+import { hobbyApi } from "../../api/hobby";
 import type { FindUserInfoResponse } from "../../types/auth";
 import type { GetUserAchievementResponse } from "../../types/achievement";
 import Tree from "../../assets/images/Tree.svg";
 import LoadingPage from "../loadingpage/loading";
 
 /* ===============================
-   활동 상세 더미 (API 명세 동일)
+   활동 상세 타입 (API 응답 기반)
 ================================ */
 interface ActivityDetail {
   activityId: number;
@@ -24,57 +25,6 @@ interface ActivityDetail {
   linkedHobbyId: number;
   linkedHobbyName: string;
 }
-
-const activityDummyList: ActivityDetail[] = [
-  {
-    activityId: 1,
-    activityName: "매일 알고리즘 한 문제 풀기",
-    activityStart: "2025-11-25",
-    activityRecent: "2025-12-03",
-    linkedHobbyId: 1,
-    linkedHobbyName: "코딩",
-  },
-  {
-    activityId: 2,
-    activityName: "주 3회 독서 기록 남기기",
-    activityStart: "2025-11-20",
-    activityRecent: "2025-12-02",
-    linkedHobbyId: 9,
-    linkedHobbyName: "독서",
-  },
-  {
-    activityId: 3,
-    activityName: "아침 러닝 20분 루틴",
-    activityStart: "2025-11-18",
-    activityRecent: "2025-12-01",
-    linkedHobbyId: 25,
-    linkedHobbyName: "러닝",
-  },
-  {
-    activityId: 4,
-    activityName: "주말 사진 산책",
-    activityStart: "2025-11-10",
-    activityRecent: "2025-11-30",
-    linkedHobbyId: 20,
-    linkedHobbyName: "사진 촬영",
-  },
-  {
-    activityId: 5,
-    activityName: "하루 한 페이지 글쓰기",
-    activityStart: "2025-11-22",
-    activityRecent: "2025-12-03",
-    linkedHobbyId: 10,
-    linkedHobbyName: "글쓰기",
-  },
-  {
-    activityId: 6,
-    activityName: "주 2회 요가로 몸 풀기",
-    activityStart: "2025-11-19",
-    activityRecent: "2025-12-02",
-    linkedHobbyId: 29,
-    linkedHobbyName: "요가/명상",
-  },
-];
 
 
 /* ===============================
@@ -149,8 +99,10 @@ type ViewMode = "box" | "tree";
 
 function RightSection({
   achievements,
+  activities,
 }: {
   achievements: GetUserAchievementResponse[];
+  activities: ActivityDetail[];
 }) {
   const [viewMode, setViewMode] = useState<ViewMode>("box");
   const [selectedActivity, setSelectedActivity] =
@@ -232,22 +184,28 @@ function RightSection({
           <S.TreeWrapper>
             <S.TreeImage src={Tree} style={{ width: "700px" }} />
 
-            {activityDummyList.map((act, idx) => (
-              <S.TreeActivity
-                key={act.activityId}
-                onClick={() => {
-                  setSelectedActivity(act);
-                  setIsPopupOpen(true);
-                }}
-                style={{
-                  top: `${60 + idx * 70}px`,
-                  left: idx % 2 === 0 ? "30%" : "65%",
-                  cursor: "pointer",
-                }}
-              >
-                {act.activityName}
-              </S.TreeActivity>
-            ))}
+            {activities.length === 0 ? (
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", color: "#888" }}>
+                아직 추가된 활동이 없습니다.
+              </div>
+            ) : (
+              activities.map((act, idx) => (
+                <S.TreeActivity
+                  key={act.activityId}
+                  onClick={() => {
+                    setSelectedActivity(act);
+                    setIsPopupOpen(true);
+                  }}
+                  style={{
+                    top: `${60 + idx * 70}px`,
+                    left: idx % 2 === 0 ? "30%" : "65%",
+                    cursor: "pointer",
+                  }}
+                >
+                  {act.activityName}
+                </S.TreeActivity>
+              ))
+            )}
           </S.TreeWrapper>
         </>
       )}
@@ -279,6 +237,7 @@ export default function Mypage() {
   const [achievements, setAchievements] = useState<
     GetUserAchievementResponse[]
   >([]);
+  const [activities, setActivities] = useState<ActivityDetail[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -294,6 +253,24 @@ export default function Mypage() {
             if (achRes.success) setAchievements(achRes.data);
           } catch (error) {
             console.error("Failed to fetch achievements", error);
+          }
+          
+          // Fetch activities from API
+          try {
+            const actRes = await hobbyApi.findAllActivities();
+            if (actRes.success) {
+              const mappedActivities: ActivityDetail[] = actRes.data.map((item) => ({
+                activityId: item.activityId,
+                activityName: item.activityName,
+                activityStart: item.activityStart,
+                activityRecent: item.activityRecent,
+                linkedHobbyId: item.linkedHobbyId,
+                linkedHobbyName: item.linkedHobbyName,
+              }));
+              setActivities(mappedActivities);
+            }
+          } catch (error) {
+            console.error("Failed to fetch activities", error);
           }
         }
       } catch (error) {
@@ -314,7 +291,7 @@ export default function Mypage() {
         <S.Wrapper>
           <S.Container>
             <LeftSection userInfo={userInfo} achievements={achievements} />
-            <RightSection achievements={achievements} />
+            <RightSection achievements={achievements} activities={activities} />
           </S.Container>
         </S.Wrapper>
       </S.Background>

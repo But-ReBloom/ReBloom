@@ -70,13 +70,18 @@ export interface CreateReviewQuestionRequest {
 }
 
 export interface CreateReviewQuestionResponse {
-    activityReviewId: number;
-    activityReviewQuestion: string;
+    reviewQuestion: string;
 }
 
 export interface ReviewAnswerRequest {
     activityReviewId: number;
-    answer: boolean;
+    userEmail: string;
+    hobbyId: number;
+    socialAnswer: string;
+    learningAnswer: string;
+    planningAnswer: string;
+    focusAnswer: string;
+    creativityAnswer: string;
 }
 
 export interface ReviewAnswerResponse {
@@ -85,7 +90,17 @@ export interface ReviewAnswerResponse {
     planningScore: number;
     focusScore: number;
     creativityScore: number;
-    recommendedHobbies: HobbyScoreResponse[];
-    recommendedChannels: ChannelResponse[];
+    hobby1: string;
+    hobby2: string;
+    hobby3: string;
+}
+
+export interface FindActivityResponse {
+    activityId: number;
+    activityName: string;
+    activityStart: string;
+    activityRecent: string;
+    linkedHobbyId: number;
+    linkedHobbyName: string;
 }
 

@@ -67,15 +67,29 @@ export default function Right_box() {
         userProvider: "SELF",
       });
 
-      if (response.success) {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("userName", response.data.userName);
-        localStorage.setItem("userId", response.data.userId);
+      console.log("Login response:", response);
+
+      if (response.success && response.data) {
+        const token = response.data.token;
+        const userName = response.data.userName;
+        const userId = response.data.userId;
         
-        // 저장된 취향 테스트가 있으면 처리
-        const processed = await processPendingHobbyTest();
-        if (!processed) {
-          navigate("/", { state: { id: response.data.userName } });
+        console.log("Token received:", token ? "Yes" : "No");
+        
+        if (token) {
+          localStorage.setItem("token", token);
+          localStorage.setItem("userName", userName);
+          localStorage.setItem("userId", userId);
+          
+          console.log("Token saved to localStorage:", localStorage.getItem("token") ? "Yes" : "No");
+          
+          // 저장된 취향 테스트가 있으면 처리
+          const processed = await processPendingHobbyTest();
+          if (!processed) {
+            navigate("/", { state: { id: userName } });
+          }
+        } else {
+          toast.error("로그인 응답에 토큰이 없습니다.");
         }
       } else {
         toast.error(

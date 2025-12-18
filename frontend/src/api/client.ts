@@ -7,6 +7,8 @@ export const client = async (endpoint: string, options: RequestInit = {}) => {
   const requiresAuth = !endpoint.startsWith("/auth") || endpoint === "/auth/find/current-user";
   const token = requiresAuth ? localStorage.getItem("token") : null;
   
+  console.log(`API Request: ${endpoint}, requiresAuth: ${requiresAuth}, hasToken: ${token ? 'Yes' : 'No'}, tokenValue: ${token?.substring(0, 30)}...`);
+  
   const headers: HeadersInit = {
     "Content-Type": "application/json",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),

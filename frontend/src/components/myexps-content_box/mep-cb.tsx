@@ -16,6 +16,7 @@ export type FindActivityResponse = {
   activityDate: string;     // 활동 날짜
   tags: string[];           // 관련 태그
   isReviewed: boolean;      // 리뷰 여부
+  linkedHobbyId: number;    // 연결된 취미 ID
 };
 
 /* ===============================
@@ -59,12 +60,13 @@ function Index({
       try {
         const response = await hobbyApi.findAllActivities();
         if (response.success) {
-          const mappedActivities = response.data.map((item, index) => ({
-            activityId: index,
+          const mappedActivities = response.data.map((item) => ({
+            activityId: item.activityId,
             activityName: item.activityName,
             activityDate: item.activityRecent,
             tags: [],
             isReviewed: false,
+            linkedHobbyId: item.linkedHobbyId,
           }));
           setExps(mappedActivities);
         } else {

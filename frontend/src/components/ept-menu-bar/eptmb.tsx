@@ -1,55 +1,89 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import * as S from "./style.ts";
 import NextPButton from "../nextpage-button/nxt-p-b.tsx";
+import { hobbyApi } from "../../api/hobby";
+import { channelApi } from "../../api/channel";
+import type { GetHobbyResponse } from "../../types/hobby";
+import type { FindOneChannelResponse } from "../../types/channel";
+import { toast, ToastContainer } from "react-toastify";
 
 type ViewMode = "CHANNEL" | "HOBBY";
 
+interface ChannelDisplay {
+  channelId: number;
+  channelTitle: string;
+  channelIntro: string;
+}
+
+interface HobbyDisplay {
+  hobbyId: number;
+  hobbyName: string;
+}
+
 export default function EPTmenuBar() {
-  const hobbyFindAllDummy = {
-    data: {
-      hobbies: [
-        { hobbyId: 1, hobbyName: "독서" },
-        { hobbyId: 2, hobbyName: "사진 촬영" },
-        { hobbyId: 3, hobbyName: "코딩" },
-        { hobbyId: 4, hobbyName: "요리" },
-        { hobbyId: 5, hobbyName: "운동" },
-        { hobbyId: 6, hobbyName: "게임" },
-        { hobbyId: 7, hobbyName: "영화 감상" },
-        { hobbyId: 8, hobbyName: "악기 연주" },
-      ],
-    },
-  };
-
-  const channelListDummy = [
-    {
-      channelId: 1,
-      channelTitle: "혼자서도 즐기는 취미 채널",
-      channelIntro: "몰입형 취미 중심",
-    },
-    {
-      channelId: 2,
-      channelTitle: "액티브 라이프 채널",
-      channelIntro: "활동적인 취미 공유",
-    },
-    {
-      channelId: 3,
-      channelTitle: "크리에이티브 채널",
-      channelIntro: "창작 중심 커뮤니티",
-    },
-    {
-      channelId: 4,
-      channelTitle: "음악/영상 채널",
-      channelIntro: "창작 및 감상 중심",
-    },
-    {
-      channelId: 5,
-      channelTitle: "운동/헬스 채널",
-      channelIntro: "건강과 활동 중심",
-    },
-  ];
-
+  const navigate = useNavigate();
+  const [hobbies, setHobbies] = useState<HobbyDisplay[]>([]);
+  const [channels, setChannels] = useState<ChannelDisplay[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [resetting, setResetting] = useState(false);
   const [mode, setMode] = useState<ViewMode>("CHANNEL");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch hobbies (12개만 표시)
+        const hobbyRes = await hobbyApi.findAllHobbies();
+        if (hobbyRes.success && hobbyRes.data.hobbies) {
+          setHobbies(hobbyRes.data.hobbies.slice(0, 12).map((h: GetHobbyResponse) => ({
+            hobbyId: h.hobbyId,
+            hobbyName: h.hobbyName,
+          })));
+        }
+
+        // Fetch approved channels
+        const channelRes = await channelApi.getApprovedChannels();
+        if (channelRes.success && channelRes.data.responses) {
+          setChannels(channelRes.data.responses.map((ch: FindOneChannelResponse, idx: number) => ({
+            channelId: idx + 1,
+            channelTitle: ch.channelName,
+            channelIntro: ch.channelIntro,
+          })));
+        }
+      } catch (error) {
+        console.error("Failed to fetch data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleResetActivity = async () => {
+    if (resetting) return;
+    
+    const confirmed = window.confirm("정말로 취향을 초기화하시겠습니까?\n모든 활동 기록이 삭제됩니다.");
+    if (!confirmed) return;
+    
+    try {
+      setResetting(true);
+      const response = await hobbyApi.resetActivity();
+      if (response.success) {
+        toast.success("취향이 초기화되었습니다!");
+        // 취향 테스트 페이지로 이동
+        setTimeout(() => {
+          navigate("/taste/hobby");
+        }, 1500);
+      } else {
+        toast.error("초기화에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Failed to reset activity", error);
+      toast.error("초기화 중 오류가 발생했습니다.");
+    } finally {
+      setResetting(false);
+    }
+  };
 
   const next = () => {
     if (mode === "CHANNEL") setMode("HOBBY");
@@ -57,6 +91,17 @@ export default function EPTmenuBar() {
   const prev = () => {
     if (mode === "HOBBY") setMode("CHANNEL");
   };
+
+  if (loading) {
+    return (
+      <S.Wrapper>
+        <S.Container />
+        <S.IntroduceUs>
+          <div style={{ padding: "40px", textAlign: "center" }}>로딩중...</div>
+        </S.IntroduceUs>
+      </S.Wrapper>
+    );
+  }
 
   return (
     <S.Wrapper>
@@ -84,7 +129,7 @@ export default function EPTmenuBar() {
             }}
           >
             {mode === "CHANNEL"
-              ? channelListDummy.map((ch) => (
+              ? (channels.length > 0 ? channels : [{ channelId: 0, channelTitle: "채널이 없습니다", channelIntro: "" }]).map((ch) => (
                   <button
                     key={`ch-${ch.channelId}`}
                     style={{
@@ -107,7 +152,7 @@ export default function EPTmenuBar() {
                     </p>
                   </button>
                 ))
-              : hobbyFindAllDummy.data.hobbies.map((hb) => (
+              : (hobbies.length > 0 ? hobbies : [{ hobbyId: 0, hobbyName: "취미가 없습니다" }]).map((hb) => (
                   <div
                     key={`hb-${hb.hobbyId}`}
                     style={{
@@ -157,12 +202,16 @@ export default function EPTmenuBar() {
                 활동 리뷰
               </S.MenuBox>
             </Link>
-            <S.MenuBox style={{ backgroundColor: "#f5a623", color: "#fff" }}>
-              취향 초기화
+            <S.MenuBox 
+              style={{ backgroundColor: "#f5a623", color: "#fff", cursor: resetting ? "not-allowed" : "pointer" }}
+              onClick={handleResetActivity}
+            >
+              {resetting ? "초기화 중..." : "취향 초기화"}
             </S.MenuBox>
           </S.MenuContent>
         </S.Menu>
       </S.IntroduceUs>
+      <ToastContainer position="top-right" autoClose={2000} />
     </S.Wrapper>
   );
 }

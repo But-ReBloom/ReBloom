@@ -18,6 +18,7 @@ import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { channelApi } from '../../api/channel';
 
 interface Channel {
     channelId: number;
@@ -25,44 +26,48 @@ interface Channel {
     channelIntro: string;
 }
 
-const mockChannels: Channel[] = [
-    { channelId: 1, channelName: '러닝 크루', channelIntro: '함께 달리는 러닝 커뮤니티' },
-    { channelId: 2, channelName: '홈쿠킹 연구소', channelIntro: '집에서 요리하는 사람들' },
-];
-
 function CommunityPage() {
     const navigate = useNavigate();
     const [channels, setChannels] = useState<Channel[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // 로그인 여부 확인
+        const token = localStorage.getItem('token');
+        console.log('Community page - Token from localStorage:', token ? 'Yes (length: ' + token.length + ')' : 'No');
+        if (!token) {
+            navigate('/login', { state: { from: 'community' } });
+            return;
+        }
         fetchApprovedChannels();
-    }, []);
+    }, [navigate]);
 
-const fetchApprovedChannels = () => {
-    const localChannels = JSON.parse(localStorage.getItem('channels') || '[]');
-
-    const approvedChannels: Channel[] = localChannels
-        .filter(
-            (ch: any) =>
-                ch.channelStatus === 'APPROVED' &&
-                ch.requestType === 'CREATE'
-        )
-        .map((ch: any) => ({
-            channelId: ch.channelId,
-            channelName: ch.channelName,
-            channelIntro: ch.channelIntro,
-        }));
-
-    if (approvedChannels.length > 0) {
-        setChannels(approvedChannels);
-    } else {
-        localStorage.removeItem('channels');
-        setChannels(mockChannels);
-    }
-
-    setLoading(false);
-};
+    const fetchApprovedChannels = async () => {
+        try {
+            const response = await channelApi.getApprovedChannels();
+            if (response.success && response.data.responses) {
+                const mappedChannels: Channel[] = response.data.responses.map((ch, idx) => ({
+                    channelId: ch.channelId || idx + 1,
+                    channelName: ch.channelName,
+                    channelIntro: ch.channelIntro || '',
+                }));
+                setChannels(mappedChannels);
+            } else {
+                setChannels([]);
+            }
+        } catch (error: any) {
+            console.error('Failed to fetch approved channels', error);
+            // 401 에러인 경우 로그인 페이지로 이동
+            if (error.message?.includes('401')) {
+                localStorage.removeItem('token');
+                navigate('/login', { state: { from: 'community' } });
+                return;
+            }
+            setChannels([]);
+        } finally {
+            setLoading(false);
+        }
+    };
 
 
     return (
@@ -89,9 +94,6 @@ const fetchApprovedChannels = () => {
                     <RightButtons>
                         <Button onClick={() => navigate('/channeljoin')}>
                             채널 생성 →
-                        </Button>
-                        <Button onClick={() => navigate('/channelApproval')}>
-                            채널 승인 →
                         </Button>
                     </RightButtons>
                 </HeaderTop>
