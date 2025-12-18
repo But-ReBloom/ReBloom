@@ -1,5 +1,5 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
 import {
     Container,
     LogoImage,
@@ -16,9 +16,15 @@ import {
     SearchBox,
     ProfileSection,
     WritePostButton,
-    ChannelContainer,
-    HobbyTagContainer,
-} from './cstyle';
+    LikeButton,
+    PostAuthor,
+    CommentSection,
+    // SectionTitle,
+    CommentFormContainer,
+    CommentItem,
+    PostList,
+    PostItem,
+} from './PDP';
 
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
@@ -43,10 +49,10 @@ interface Post {
     content: string;
     createdAt: string;
     likes: number;
-    comments: string[];
+    comments: { author: string; text: string }[];
 }
 
-const initialChannels: Channel[] = [
+const mockChannels: Channel[] = [
     {
         channelId: 1,
         channelName: '러닝 크루',
@@ -65,7 +71,7 @@ const initialChannels: Channel[] = [
     },
 ];
 
-const initialPosts: Post[] = [
+const mockPosts: Post[] = [
     {
         postId: 1,
         channelId: 1,
@@ -73,7 +79,10 @@ const initialPosts: Post[] = [
         content: '이번 주말에 러닝 같이 하실 분?',
         createdAt: '2025-12-17 10:00',
         likes: 3,
-        comments: ['좋아요!', '같이 뛰어요!']
+        comments: [
+            { author: '사용자1', text: '좋아요!' },
+            { author: '사용자2', text: '같이 뛰어요!' },
+        ],
     },
     {
         postId: 2,
@@ -82,7 +91,7 @@ const initialPosts: Post[] = [
         content: '새로운 러닝 코스 추천해요!',
         createdAt: '2025-12-16 14:30',
         likes: 1,
-        comments: ['좋아요']
+        comments: [{ author: '사용자3', text: '좋아요' }],
     },
     {
         postId: 3,
@@ -91,23 +100,29 @@ const initialPosts: Post[] = [
         content: '최근에 만든 초콜릿 케이크 레시피 공유합니다.',
         createdAt: '2025-12-15 12:00',
         likes: 2,
-        comments: ['맛있겠다!']
+        comments: [{ author: '사용자4', text: '맛있겠다!' }],
     },
 ];
 
-function ChannelPage() {
-    const { id } = useParams<{ id: string }>();
+function PostDetailPage() {
+    const { postId } = useParams<{ postId: string }>();
+    const location = useLocation();
     const navigate = useNavigate();
+    const channelId = location.state?.channelId;
 
-    // ✅ mockChannels를 상태로 관리
-    const [channels, setChannels] = useState<Channel[]>(initialChannels);
-    const [posts, setPosts] = useState<Post[]>(initialPosts);
+    const [post, setPost] = useState<Post | null>(null);
+    const [liked, setLiked] = useState(false);
+    const [comments, setComments] = useState<Post['comments']>([]);
     const [channel, setChannel] = useState<Channel | null>(null);
     const [loading, setLoading] = useState(false);
     const [joinStatus, setJoinStatus] = useState<'NONE' | 'PENDING' | 'APPROVED'>('NONE');
     const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
+    const [commentAuthor, setCommentAuthor] = useState('');
+    const [commentText, setCommentText] = useState('');
 
-    // 사용자 정보 불러오기
+    const initialized = useRef(false);
+
+    // 사용자 정보 조회
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
@@ -120,43 +135,43 @@ function ChannelPage() {
         fetchUserInfo();
     }, []);
 
-    // 채널 정보 설정
     useEffect(() => {
-        const currentChannel = channels.find(ch => String(ch.channelId) === id);
+        const currentChannel = mockChannels.find(ch => ch.channelId === channelId);
         if (currentChannel) {
             setChannel(currentChannel);
             setJoinStatus(currentChannel.joined ? 'APPROVED' : 'NONE');
-        } else {
-            setChannel({
-                channelId: Number(id),
-                channelName: '알 수 없는 채널',
-                channelIntro: '',
-                description: '',
-                hobbies: [],
-                joined: false,
-            });
         }
-    }, [id, channels]);
+    }, [channelId]);
 
-    // 채널 게시글 필터링
     useEffect(() => {
-        if (channel) {
-            setPosts(initialPosts.filter(post => post.channelId === channel.channelId));
+        if (initialized.current) return;
+        const found = mockPosts.find(p => p.postId === Number(postId));
+        if (found) {
+            setPost(found);
+            setComments([...found.comments]);
+            initialized.current = true;
         }
-    }, [channel]);
+    }, [postId]);
 
-    // 채널 가입 신청
+    const handleLike = () => setLiked(prev => !prev);
+
+    const handleAddComment = () => {
+        if (!commentAuthor.trim() || !commentText.trim()) return;
+        const newComment = { author: commentAuthor.trim(), text: commentText.trim() };
+        setComments(prev => [...prev, newComment]);
+        setCommentAuthor('');
+        setCommentText('');
+    };
+
     const handleJoinChannel = async () => {
         if (!channel || joinStatus !== 'NONE') return;
 
-        const applyMessage = prompt('가입 신청 메시지를 입력하세요', '안녕하세요! 가입 요청드립니다.');
-        if (!applyMessage) return;
-
         setLoading(true);
+        setJoinStatus('PENDING');
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('/channel/member/apply', {
+            const response = await fetch(`/channel/join`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -164,39 +179,24 @@ function ChannelPage() {
                 },
                 body: JSON.stringify({
                     channelId: channel.channelId,
-                    applyMessage,
+                    userEmail: localStorage.getItem('userEmail'),
                 }),
             });
-
             const data = await response.json();
-
-            if (data.success) {
-                alert('가입 신청이 완료되었습니다.');
-                setJoinStatus('PENDING');
-
-                // ✅ 채널 상태 업데이트
-                setChannels(prev =>
-                    prev.map(ch =>
-                        ch.channelId === channel.channelId ? { ...ch, joined: true } : ch
-                    )
-                );
-            } else {
-                if (data.error_name === 'AlreadyUsingIdException') {
-                    alert('이미 가입 신청한 채널입니다.');
-                    setJoinStatus('PENDING');
-                } else {
-                    alert(data.message || '가입 신청 실패');
-                }
+            if (!data.success) {
+                alert(data.message || '가입 요청 실패');
+                setJoinStatus('NONE');
             }
         } catch (error) {
             console.error(error);
-            alert('가입 신청 중 오류가 발생했습니다.');
+            alert('가입 요청 중 오류 발생');
+            setJoinStatus('NONE');
         } finally {
             setLoading(false);
         }
     };
 
-    if (!channel) return <p>로딩중...</p>;
+    if (!post) return <p>게시글 로딩중...</p>;
 
     return (
         <Container>
@@ -214,7 +214,7 @@ function ChannelPage() {
                 <WritePostButton
                     onClick={() =>
                         navigate('/myPostPage', {
-                            state: { channelId: channel.channelId, channelName: channel.channelName },
+                            state: { channelId: channel?.channelId, channelName: channel?.channelName },
                         })
                     }
                 >
@@ -231,66 +231,90 @@ function ChannelPage() {
                     <JoinChannelButton
                         onClick={handleJoinChannel}
                         joined={joinStatus === 'APPROVED'}
-                        disabled={loading || joinStatus === 'APPROVED' || joinStatus === 'PENDING'}
+                        disabled={loading}
                     >
                         {joinStatus === 'APPROVED'
                             ? '가입됨'
                             : joinStatus === 'PENDING'
-                            ? '가입 대기중'
-                            : '가입하기'}
+                                ? '가입 대기중'
+                                : '가입하기'}
                     </JoinChannelButton>
                 </div>
             </Sidebar>
 
             <ContentArea>
-                <CloseButton onClick={() => navigate('/main')}>
+                <CloseButton onClick={() => navigate(`/channel/${channelId}`)}>
                     <CloseIconImg src={CloseIcon} alt="닫기" />
                 </CloseButton>
 
-                <ChannelContainer>
-                    <ChannelTitle>{channel?.channelName}</ChannelTitle>
-                    <ChannelIntro>{channel?.channelIntro}</ChannelIntro>
-                    <ChannelDescription>{channel?.description}</ChannelDescription>
+                <ChannelTitle>{channel?.channelName}</ChannelTitle>
+                <ChannelIntro>{channel?.channelIntro}</ChannelIntro>
+                <ChannelDescription>{channel?.description}</ChannelDescription>
 
-                    <HobbyTagContainer>
-                        {channel?.hobbies?.map((hobby, idx) => (
-                            <HobbyTag key={idx}>{hobby}</HobbyTag>
-                        ))}
-                    </HobbyTagContainer>
-                </ChannelContainer>
+                <div>
+                    {channel?.hobbies?.map((hobby, idx) => (
+                        <HobbyTag key={idx}>{hobby}</HobbyTag>
+                    ))}
+                </div>
 
                 <div style={{ marginTop: '30px' }}>
-                    <h3>게시글</h3>
-                    {posts.length === 0 ? (
-                        <p>등록된 게시글이 없습니다.</p>
-                    ) : (
-                        posts.map(post => (
-                            <div
-                                key={post.postId}
-                                style={{
-                                    border: '1px solid #ffffff',
-                                    background: '#ffffffff',
-                                    padding: '10px',
-                                    marginBottom: '10px',
-                                    borderRadius: '5px',
-                                    cursor: 'pointer',
+                    <PostList>
+                    <PostItem>
+                        <PostAuthor>
+                        {post.author}
+                        <span>{post.createdAt}</span>
+                        </PostAuthor>
+                        <p>{post.content}</p>
+
+                        <div style={{ marginTop: '10px' }}>
+                        <LikeButton liked={liked} onClick={handleLike}>
+                            ❤️ {liked ? post.likes + 1 : post.likes || 0}
+                        </LikeButton>
+                        </div>
+                    </PostItem>
+                    </PostList>
+
+
+                    <CommentSection>
+                        {/* <SectionTitle>💬 댓글</SectionTitle> */}
+
+                        {comments.length > 0 ? (
+                            comments.map((comment, idx) => (
+                                <CommentItem key={idx}>
+                                    <strong>{comment.author}</strong>
+                                    <p>{comment.text}</p>
+                                </CommentItem>
+                            ))
+                        ) : (
+                            <p>아직 댓글이 없습니다.</p>
+                        )}
+
+                        <CommentFormContainer>
+                            <input
+                                type="text"
+                                placeholder="작성자 이름"
+                                value={commentAuthor}
+                                onChange={e => setCommentAuthor(e.target.value)}
+                            />
+                            <textarea
+                                placeholder="댓글 입력"
+                                rows={3}
+                                value={commentText}
+                                onChange={e => setCommentText(e.target.value)}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleAddComment();
+                                    }
                                 }}
-                                onClick={() =>
-                                    navigate(`/post/${post.postId}`, {
-                                        state: { channelId: channel.channelId },
-                                    })
-                                }
-                            >
-                                <strong>{post.author}</strong>{' '}
-                                <span style={{ fontSize: '12px', color: '#999' }}>{post.createdAt}</span>
-                                <p>{post.content}</p>
-                            </div>
-                        ))
-                    )}
+                            />
+                            <button onClick={handleAddComment}>댓글 작성</button>
+                        </CommentFormContainer>
+                    </CommentSection>
                 </div>
             </ContentArea>
         </Container>
     );
 }
 
-export default ChannelPage;
+export default PostDetailPage;

@@ -228,7 +228,7 @@ export const Divider = styled.div`
     margin: -5px 0;
 `;
 
-    export const CommentFormContainer = styled.div`
+export const CommentFormContainer = styled.div`
     margin-top: 20px;
     display: flex;
     flex-direction: column;
