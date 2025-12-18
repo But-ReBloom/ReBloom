@@ -38,4 +38,6 @@ out/
 .vscode/
 
 .DS_Storenode_modules/
-.envnode_modules/
+.env
+
+node_modules/
