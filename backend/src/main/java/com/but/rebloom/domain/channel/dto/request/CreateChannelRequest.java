@@ -17,9 +17,6 @@ public class CreateChannelRequest {
     private String channelDescription;
 
     @NotNull
-    private String userEmail;
-
-    @NotNull
     private Long channelLinkedHobby1;
 
     private Long channelLinkedHobby2;
