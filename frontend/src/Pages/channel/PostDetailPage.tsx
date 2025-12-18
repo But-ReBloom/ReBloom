@@ -13,7 +13,6 @@ import {
     ChannelDescription,
     HobbyTag,
     JoinChannelButton,
-    SearchBox,
     ProfileSection,
     WritePostButton,
     LikeButton,
@@ -220,10 +219,10 @@ function PostDetailPage() {
                 >
                     글 작성
                 </WritePostButton>
-
+{/* 
                 <SearchBox>
                     <input placeholder="채널 검색..." />
-                </SearchBox>
+                </SearchBox> */}
 
                 <BackButton onClick={() => navigate('/community')}>← 커뮤니티로 돌아가기</BackButton>
 

@@ -78,12 +78,31 @@ function ChannelJoin() {
                 <HeaderTop>
                     <h2>채널 생성</h2>
                 </HeaderTop>
-
-                <FormWrapper>
-                    <Input name="channelTitle" placeholder="채널 이름" value={form.channelTitle} onChange={handleChange} />
-                    <Input name="channelIntro" placeholder="채널 소개" value={form.channelIntro} onChange={handleChange} />
-                    <TextArea name="channelDescription" placeholder="채널 상세 설명" value={form.channelDescription} onChange={handleChange} />
-                    <Input name="userEmail" placeholder="사용자 이메일" value={form.userEmail} onChange={handleChange} />
+            <FormWrapper>
+            <Input
+                name="channelTitle"
+                placeholder="채널 이름"
+                value={form.channelTitle}
+                onChange={handleChange}
+            />
+            <Input
+                name="channelIntro"
+                placeholder="채널 소개"
+                value={form.channelIntro}
+                onChange={handleChange}
+            />
+            <TextArea
+                name="channelDescription"
+                placeholder="채널 상세 설명"
+                value={form.channelDescription}
+                onChange={handleChange}
+            />
+            {/* <Input
+                name="userEmail"
+                placeholder="사용자 이메일"
+                value={form.userEmail}
+                onChange={handleChange}
+            /> */}
 
                     <SubmitButton onClick={handleSubmit} disabled={loading}>
                         {loading ? '생성 중...' : '채널 생성하기'}
