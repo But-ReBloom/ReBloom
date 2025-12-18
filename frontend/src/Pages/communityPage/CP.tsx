@@ -1,95 +1,113 @@
 import {
     CommunityWrapper,
+    LogoImage,
+    CloseButton,
+    CloseIconImg,
     CentralBox,
     HeaderTop,
     SortDropdown,
     RightButtons,
     Button,
-    ContentWrapper,
     LeftColumn,
-    RightColumn,
     LeftPostItem,
-    RightPostItem,
     PostTitle,
     PostDescription,
-    } from './style';
+} from './style';
 
-    import Header from '../../components/mainpage-Header/mph';
-    import { useNavigate } from 'react-router-dom';
-    import { useEffect, useState } from 'react';
-    import { postApi } from '../../api/post';
-    import type { CreatePostResponse } from '../../types/PostTypes';
-    // import Header from '../../components/normal_header/nh';
+import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
+import CloseIcon from '../../assets/images/close.svg';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { channelApi } from '../../api/channel';
 
-    function Community() {
+interface Channel {
+    channelId: number;
+    channelName: string;
+    channelIntro: string;
+}
+
+function CommunityPage() {
     const navigate = useNavigate();
-    const [leftPosts, setLeftPosts] = useState<CreatePostResponse[]>([]);
-    const [rightPosts, setRightPosts] = useState<CreatePostResponse[]>([]);
+    const [channels, setChannels] = useState<Channel[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const popularRes = await postApi.getPopularPosts().catch(() => null);
-                if (popularRes && popularRes.success) {
-                    setRightPosts(popularRes.data.posts);
-                }
-
-                const searchRes = await postApi.searchPosts({ keyword: "" }).catch(() => null);
-                if (searchRes && searchRes.success) {
-                    setLeftPosts(searchRes.data.posts);
-                }
-            } catch (error) {
-                console.error("Failed to fetch posts", error);
-            }
-        };
-        fetchData();
+        fetchApprovedChannels();
     }, []);
 
+    const fetchApprovedChannels = async () => {
+        try {
+            const response = await channelApi.getApprovedChannels();
+            if (response.success && response.data.responses) {
+                const mappedChannels: Channel[] = response.data.responses.map((ch, idx) => ({
+                    channelId: idx + 1,
+                    channelName: ch.channelName,
+                    channelIntro: ch.channelIntro || '',
+                }));
+                setChannels(mappedChannels);
+            } else {
+                setChannels([]);
+            }
+        } catch (error) {
+            console.error('Failed to fetch approved channels', error);
+            setChannels([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     return (
-        <>
-        {/* <Header/> */}
         <CommunityWrapper>
+            <CloseButton onClick={() => navigate('/main')}>
+                <CloseIconImg src={CloseIcon} alt="닫기" />
+            </CloseButton>
 
-        <Header/>
-        <CentralBox>
-            <HeaderTop>
-            <SortDropdown>
-                <select>
-                <option value="latest">인기순</option>
-                <option value="popular">최신순</option>
-                <option value="oldest">오래된순</option>
-                </select>
-            </SortDropdown>
+            <LogoImage
+                src={RebloomLogo}
+                alt="Rebloom Logo"
+                onClick={() => navigate('/')}
+            />
 
-            <RightButtons>
-                <Button onClick={() => navigate('/myPostPage')}>내 게시글 →</Button>
-                <Button onClick={() => navigate('/post')}>게시글 보기 →</Button>
-            </RightButtons>
-            </HeaderTop>
+            <CentralBox>
+                <HeaderTop>
+                    <SortDropdown>
+                        <select>
+                            <option>인기순</option>
+                            <option>최신순</option>
+                        </select>
+                    </SortDropdown>
 
-            <ContentWrapper>
-            <LeftColumn>
-                {leftPosts.map((post) => (
-                <LeftPostItem key={post.postId} onClick={() => navigate(`/post/${post.postId}`)}>
-                    <PostTitle>{post.postTitle}</PostTitle>
-                    <PostDescription>{post.postContent}</PostDescription>
-                </LeftPostItem>
-                ))}
-            </LeftColumn>
+                    <RightButtons>
+                        <Button onClick={() => navigate('/channeljoin')}>
+                            채널 생성 →
+                        </Button>
+                    </RightButtons>
+                </HeaderTop>
 
-            <RightColumn>
-                {rightPosts.map((post) => (
-                <RightPostItem key={post.postId} onClick={() => navigate(`/post/${post.postId}`)}>
-                    <PostTitle>{post.postTitle}</PostTitle>
-                    <PostDescription>조회수: {post.viewers}</PostDescription>
-                </RightPostItem>
-                ))}
-            </RightColumn>
-            </ContentWrapper>
-        </CentralBox>
+                <LeftColumn>
+                    {loading && <p>로딩중...</p>}
+
+                    {!loading && channels.length === 0 && (
+                        <p>표시할 채널이 없습니다.</p>
+                    )}
+
+                    {!loading &&
+                        channels.map(channel => (
+                            <LeftPostItem
+                            key={channel.channelId}
+                            onClick={() => navigate(`/channel/${channel.channelId}`)}
+                            style={{ cursor: 'pointer' }}
+                            >
+                            <PostTitle>{channel.channelName}</PostTitle>
+                            <PostDescription>{channel.channelIntro}</PostDescription>
+                            </LeftPostItem>
+
+                        ))}
+                </LeftColumn>
+            </CentralBox>
         </CommunityWrapper>
-        </>
     );
 }
 
-export default Community;
+export default CommunityPage;
