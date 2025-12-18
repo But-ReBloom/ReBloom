@@ -196,7 +196,7 @@ export const ChoiceBtn = styled.button`
   width: 140px;
   height: 34px;
   border-radius: 20px;
-  background: linear-gradient(90deg, #41a6ff, #3e55bf);
+  background: #333;
   color: #fff;
   border: none;
   font-size: 14px;

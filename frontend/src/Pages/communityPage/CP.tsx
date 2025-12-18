@@ -1,8 +1,5 @@
 import {
     CommunityWrapper,
-    LogoImage,
-    CloseButton,
-    CloseIconImg,
     CentralBox,
     HeaderTop,
     SortDropdown,
@@ -17,8 +14,7 @@ import {
     PostDescription,
     } from './style';
 
-    import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
-    import CloseIcon from '../../assets/images/close.svg';
+    import Header from '../../components/mainpage-Header/mph';
     import { useNavigate } from 'react-router-dom';
     import { useEffect, useState } from 'react';
     import { postApi } from '../../api/post';
@@ -29,10 +25,6 @@ import {
     const navigate = useNavigate();
     const [leftPosts, setLeftPosts] = useState<CreatePostResponse[]>([]);
     const [rightPosts, setRightPosts] = useState<CreatePostResponse[]>([]);
-
-    const handleCloseClick = () => {
-        navigate('/main');
-    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,17 +49,8 @@ import {
         <>
         {/* <Header/> */}
         <CommunityWrapper>
-        <CloseButton onClick={handleCloseClick}>
-            <CloseIconImg src={CloseIcon} alt="닫기" />
-        </CloseButton>
 
-        <LogoImage
-        src={RebloomLogo}
-        alt="Rebloom Logo"
-        style={{ cursor: 'pointer' }}
-        onClick={() => navigate('/')}
-        />
-
+        <Header/>
         <CentralBox>
             <HeaderTop>
             <SortDropdown>
