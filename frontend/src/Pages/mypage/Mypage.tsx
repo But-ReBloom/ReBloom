@@ -13,6 +13,7 @@ import type { GetUserAchievementResponse } from "../../types/achievement";
 import Tree from "../../assets/images/Tree.svg";
 import LoadingPage from "../loadingpage/loading";
 
+
 /* ===============================
    활동 상세 더미 (API 명세 동일)
 ================================ */
@@ -141,6 +142,23 @@ function RightSection({
   const [selectedActivity, setSelectedActivity] =
     useState<ActivityDetail | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+
+  const completed = achievements.filter((a) => a.userAchievementIsSuccess);
+
+  const completedPoints = completed.reduce(
+    (sum, a) => sum + a.userAchievementRewardPoint,
+    0
+  );
+    
+  void completedPoints;
+
+  const completedTierPoints = completed.reduce(
+    (sum, a) => sum + a.userAchievementTierPoint,
+    0
+  );
+
+  void completedTierPoints;
 
   return (
     <S.RightSection>
