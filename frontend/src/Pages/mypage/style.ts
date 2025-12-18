@@ -211,3 +211,53 @@ export const ChoiceBtn = styled.button`
     border: 2px solid #3e55bf;
   }
 `;
+
+export const PopupOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+`;
+
+export const PopupBox = styled.div`
+  width: 360px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  animation: popup 0.25s ease-out;
+
+  @keyframes popup {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+`;
+
+export const PopupTitle = styled.h3`
+  margin-bottom: 12px;
+`;
+
+export const PopupContent = styled.p`
+  font-size: 14px;
+  line-height: 1.6;
+  color: #444;
+`;
+
+export const PopupClose = styled.button`
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(90deg, #41a6ff, #3e55bf);
+  color: white;
+  cursor: pointer;
+`;

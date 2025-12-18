@@ -1,5 +1,6 @@
 package com.but.rebloom.domain.auth.usecase;
 
+import com.but.rebloom.domain.achievement.usecase.DefaultUserAchievementUseCase;
 import com.but.rebloom.domain.auth.domain.Provider;
 import com.but.rebloom.domain.auth.domain.User;
 import com.but.rebloom.domain.auth.dto.request.GoogleLoginAuthorizeCodeRequest;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -19,6 +22,8 @@ import org.springframework.web.client.RestTemplate;
 public class GoogleOAuthUseCase {
     // 디비 접근
     private final UserRepository userRepository;
+    // 유저 업적 설정
+    private final DefaultUserAchievementUseCase defaultUserAchievementUseCase;
 
     // yml 속성 추출
     @Value("${spring.security.oauth2.client.registration.google.client-id:}")
@@ -32,12 +37,25 @@ public class GoogleOAuthUseCase {
         GoogleUserInfoResponse googleUser = getUserInfo(accessToken);
 
         return userRepository.findByUserEmail(googleUser.getEmail())
-                .orElseGet(() -> userRepository.save(User.builder()
-                        .userEmail(googleUser.getEmail())
-                        .userName(googleUser.getName())
-                        .userPassword("")
-                        .userProvider(Provider.GOOGLE)
-                        .build()));
+                .orElseGet(() -> {
+                    User newUser = userRepository.save(User.builder()
+                            .userEmail(googleUser.getEmail())
+                            .userId(java.util.UUID.randomUUID().toString())
+                            .userName(googleUser.getName())
+                            .userPassword("")
+                            .userProvider(Provider.GOOGLE)
+                            .build());
+                    
+                    // 구글 신규 유저에게 초기 업적 생성
+                    userRepository.flush();
+                    defaultUserAchievementUseCase.createDefaultUserAchievement(googleUser.getEmail());
+                    
+                    // 업적 성공 처리
+                    String signupAchievementTitle = "시작이 반이다.";
+                    defaultUserAchievementUseCase.updateUserAchievementToSuccess(googleUser.getEmail(), signupAchievementTitle);
+                    
+                    return newUser;
+                });
     }
 
     // Jwt랑 비슷하게 이해
@@ -48,13 +66,14 @@ public class GoogleOAuthUseCase {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        String body = "code=" + code +
-                "&client_id=" + clientId +
-                "&client_secret=" + clientSecret +
-                "&redirect_uri=" + redirectUri +
-                "&grant_type=authorization_code";
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("code", code);
+        params.add("client_id", clientId);
+        params.add("client_secret", clientSecret);
+        params.add("redirect_uri", redirectUri);
+        params.add("grant_type", "authorization_code");
 
-        HttpEntity<String> request = new HttpEntity<>(body, headers);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
         ResponseEntity<String> response = restTemplate.exchange(tokenUrl, HttpMethod.POST, request, String.class);
 
         return extractAccessToken(response.getBody());

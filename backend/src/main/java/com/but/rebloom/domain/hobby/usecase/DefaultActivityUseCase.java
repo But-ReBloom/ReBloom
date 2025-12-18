@@ -106,4 +106,11 @@ public class DefaultActivityUseCase {
         // 활동 추가
         return activityRepository.save(activity);
     }
+
+    // Activity 초기화
+    @Transactional
+    public void resetActivity() {
+        String userEmail = findCurrentUserUseCase.getCurrentUser().getUserEmail();
+        activityRepository.deleteActivityByUser_UserEmail(userEmail);
+    }
 }

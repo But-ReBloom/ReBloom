@@ -50,6 +50,8 @@ public class SignupUseCase {
                 .userId(userId)
                 .userPassword(passwordEncoder.encode(userPassword))
                 .userName(userName)
+                .userTierPoint(10000)
+                .userPoint(10000)
                 .userProvider(signupRequest.getUserProvider())
                 .userCurrentActivity(null)
                 .build();

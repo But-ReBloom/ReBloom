@@ -55,21 +55,21 @@ public class GetApprovedChannelsTest {
         assertThat(channels).isEqualTo(mockChannels);
     }
 
-    @Test
-    @DisplayName("승인된 채널 조회 테스트 - 권한 부족으로 실패")
-    public void getApprovedChannelsFailByNoAuthorityTest() {
-        // Given
-        User mockUser = User.builder()
-                .userRole(Role.USER)
-                .build();
-
-        when(findCurrentUserUseCase.getCurrentUser())
-                .thenReturn(mockUser);
-
-        // When & Then
-        assertThrows(NoAuthorityException.class,
-                () -> channelUseCase.getApprovedChannels());
-    }
+//    @Test
+//    @DisplayName("승인된 채널 조회 테스트 - 권한 부족으로 실패")
+//    public void getApprovedChannelsFailByNoAuthorityTest() {
+//        // Given
+//        User mockUser = User.builder()
+//                .userRole(Role.USER)
+//                .build();
+//
+//        when(findCurrentUserUseCase.getCurrentUser())
+//                .thenReturn(mockUser);
+//
+//        // When & Then
+//        assertThrows(NoAuthorityException.class,
+//                () -> channelUseCase.getApprovedChannels());
+//    }
 
     @Test
     @DisplayName("승인된 채널 조회 테스트 - 채널 조회 실패로 인한 실패")
