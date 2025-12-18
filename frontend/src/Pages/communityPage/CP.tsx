@@ -92,9 +92,9 @@ const fetchApprovedChannels = () => {
                         <Button onClick={() => navigate('/channeljoin')}>
                             채널 생성 →
                         </Button>
-                        <Button onClick={() => navigate('/channelApproval')}>
+                        {/* <Button onClick={() => navigate('/channelApproval')}>
                             채널 승인 →
-                        </Button>
+                        </Button> */}
                     </RightButtons>
                 </HeaderTop>
 
