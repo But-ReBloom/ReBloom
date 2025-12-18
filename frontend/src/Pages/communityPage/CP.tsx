@@ -1,8 +1,5 @@
 import {
     CommunityWrapper,
-    LogoImage,
-    CloseButton,
-    CloseIconImg,
     CentralBox,
     HeaderTop,
     SortDropdown,
@@ -14,11 +11,9 @@ import {
     PostDescription,
 } from './style';
 
-import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
-import CloseIcon from '../../assets/images/close.svg';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { channelApi } from '../../api/channel';
+import Header from '../../components/mainpage-Header/mph';
 
 interface Channel {
     channelId: number;
@@ -26,48 +21,34 @@ interface Channel {
     channelIntro: string;
 }
 
+const mockChannels: Channel[] = [
+    { channelId: 1, channelName: '러닝 크루', channelIntro: '함께 달리는 러닝 커뮤니티' },
+    { channelId: 2, channelName: '홈쿠킹 연구소', channelIntro: '집에서 요리하는 사람들' },
+];
+
 function CommunityPage() {
     const navigate = useNavigate();
     const [channels, setChannels] = useState<Channel[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [joinedChannels, setJoinedChannels] = useState<number[]>([]);
 
     useEffect(() => {
-        fetchApprovedChannels();
+        setChannels(mockChannels);
+        const joined = JSON.parse(localStorage.getItem('joinedChannels') || '[]');
+        setJoinedChannels(joined);
     }, []);
 
-    const fetchApprovedChannels = async () => {
-        try {
-            const response = await channelApi.getApprovedChannels();
-            if (response.success && response.data.responses) {
-                const mappedChannels: Channel[] = response.data.responses.map((ch, idx) => ({
-                    channelId: idx + 1,
-                    channelName: ch.channelName,
-                    channelIntro: ch.channelIntro || '',
-                }));
-                setChannels(mappedChannels);
-            } else {
-                setChannels([]);
-            }
-        } catch (error) {
-            console.error('Failed to fetch approved channels', error);
-            setChannels([]);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const handleJoin = (channelId: number) => {
+        if (joinedChannels.includes(channelId)) return;
 
+        const updated = [...joinedChannels, channelId];
+        setJoinedChannels(updated);
+        localStorage.setItem('joinedChannels', JSON.stringify(updated));
+        alert('채널에 가입되었습니다!');
+    };
 
     return (
         <CommunityWrapper>
-            <CloseButton onClick={() => navigate('/main')}>
-                <CloseIconImg src={CloseIcon} alt="닫기" />
-            </CloseButton>
-
-            <LogoImage
-                src={RebloomLogo}
-                alt="Rebloom Logo"
-                onClick={() => navigate('/')}
-            />
+            <Header />
 
             <CentralBox>
                 <HeaderTop>
@@ -86,24 +67,39 @@ function CommunityPage() {
                 </HeaderTop>
 
                 <LeftColumn>
-                    {loading && <p>로딩중...</p>}
+                    {channels.map(channel => {
+                        const joined = joinedChannels.includes(channel.channelId);
 
-                    {!loading && channels.length === 0 && (
-                        <p>표시할 채널이 없습니다.</p>
-                    )}
-
-                    {!loading &&
-                        channels.map(channel => (
+                        return (
                             <LeftPostItem
-                            key={channel.channelId}
-                            onClick={() => navigate(`/channel/${channel.channelId}`)}
-                            style={{ cursor: 'pointer' }}
+                                key={channel.channelId}
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}
                             >
-                            <PostTitle>{channel.channelName}</PostTitle>
-                            <PostDescription>{channel.channelIntro}</PostDescription>
-                            </LeftPostItem>
+                                <div
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() =>
+                                        navigate(`/channel/${channel.channelId}`)
+                                    }
+                                >
+                                    <PostTitle>{channel.channelName}</PostTitle>
+                                    <PostDescription>
+                                        {channel.channelIntro}
+                                    </PostDescription>
+                                </div>
 
-                        ))}
+                                <Button
+                                    disabled={joined}
+                                    onClick={() => handleJoin(channel.channelId)}
+                                >
+                                    {joined ? '가입됨' : '가입하기'}
+                                </Button>
+                            </LeftPostItem>
+                        );
+                    })}
                 </LeftColumn>
             </CentralBox>
         </CommunityWrapper>
