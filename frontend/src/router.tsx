@@ -32,19 +32,36 @@ import GoogleCallback from "./Pages/GoogleCallback/GoogleCallback.tsx";
 import LoadingPage from "./Pages/loadingpage/loading.tsx";
 
 import PrivateRoute from "./components/PrivateRoute";
+import PostDetailPage from './Pages/channel/PostDetailPage.tsx';
+
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
   },
-
-  /* Auth */
+  {
+    path: "/post/:postId",
+    element: <PostDetailPage />,
+  },
   {
     path: "/auth/google/callback",
     element: <GoogleCallback />,
   },
   {
+    path: "/main",
+    element: <MainPage />,
+  },
+  {
+    path: "/post",
+    element: <Post />,
+  },
+  {
+    path: "/post/:id",
+    element: <PostDetail />,
+  },
+  {
+
     path: "/login",
     element: <LoginPage />,
   },
@@ -144,6 +161,7 @@ const router = createBrowserRouter([
       {
         path: "/mypage",
         element: <Mypage />,
+
       },
       // {
       //   path: "/myPostPage",
