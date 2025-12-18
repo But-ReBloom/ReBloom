@@ -36,7 +36,7 @@ spring:
             scope:
               - email
               - profile
-            redirect-uri: "http://rebloom.co.kr/auth/google/callback"
+            redirect-uri: "http://www.rebloom.co.kr/auth/google/callback"
         provider:
           google:
             authorization-uri: https://accounts.google.com/o/oauth2/auth
