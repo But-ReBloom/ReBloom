@@ -7,10 +7,7 @@ import com.but.rebloom.domain.hobby.dto.response.AddActivityResponse;
 import com.but.rebloom.domain.hobby.usecase.DefaultActivityUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,5 +21,12 @@ public class ActivityController {
     public ResponseEntity<ApiResponse<AddActivityResponse>> addActivity(@RequestBody AddActivityRequest request) {
         Activity activity = defaultActivityUseCase.addActivity(request);
         return ResponseEntity.ok(ApiResponse.success(AddActivityResponse.from(activity)));
+    }
+
+    // Activity 초기화
+    @DeleteMapping("/reset")
+    public ResponseEntity<ApiResponse<Void>> resetActivity() {
+        defaultActivityUseCase.resetActivity();
+        return ResponseEntity.ok(ApiResponse.success());
     }
 }
