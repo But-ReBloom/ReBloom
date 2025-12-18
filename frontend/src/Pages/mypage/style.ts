@@ -261,3 +261,20 @@ export const PopupClose = styled.button`
   color: white;
   cursor: pointer;
 `;
+
+export const BoxViewWrapper = styled.div`
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+export const BoxActivity = styled.div`
+  padding: 12px;
+  background: #f2f2f2;
+  border-radius: 8px;
+  cursor: pointer;
+  &:hover {
+    background: #e0e0e0;
+  }
+`;

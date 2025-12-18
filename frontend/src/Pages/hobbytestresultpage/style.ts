@@ -145,6 +145,7 @@ export const RecommendSection = styled.div`
 
 export const RecommendRow = styled.div`
   display: flex;
+  align-items: center;
   gap: 32px;
 `;
 

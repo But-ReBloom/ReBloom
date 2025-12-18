@@ -4,9 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/blackarrow.svg";
 import type { HobbyTestResponse } from "../../types/hobby";
 
-/* ===============================
-   FTTP 결과 보정 함수
-================================ */
 const normalizeToRange = (value: number) => {
   return ((value + 1) / 4) * 4 - 2;
 };
@@ -40,23 +37,18 @@ export default function TestResult() {
 
           {/* ================= 그래프 ================= */}
           <S.GraphSection>
-            {/* <S.GraphTitle>카테고리별 상대 점수</S.GraphTitle> */}
-
             <S.RelativeChart>
               {categories.map((item) => (
                 <S.RelativeBarItem key={item.label}>
                   <S.BarContainer $height={maxAbsValue * BAR_UNIT}>
-                    {/* 양수 영역 */}
                     <S.PositiveArea>
                       {item.value > 0 && (
                         <S.PositiveBar $value={item.value} $unit={BAR_UNIT} />
                       )}
                     </S.PositiveArea>
 
-                    {/* 기준선 */}
                     <S.ZeroLine />
 
-                    {/* 음수 영역 */}
                     <S.NegativeArea>
                       {item.value < 0 && (
                         <S.NegativeBar $value={item.value} $unit={BAR_UNIT} />
@@ -64,7 +56,6 @@ export default function TestResult() {
                     </S.NegativeArea>
                   </S.BarContainer>
 
-                  {/* score 영역 */}
                   <S.ScoreArea>
                     <S.BarValue>{item.value.toFixed(2)}</S.BarValue>
                     <S.BarLabel>{item.label}</S.BarLabel>
@@ -82,14 +73,37 @@ export default function TestResult() {
               {testResult?.hobbyScores?.slice(0, 3).map((hobby) => (
                 <S.RecommaendBox key={hobby.hobbyName}>
                   {hobby.hobbyName}
-                  <S.addTree>나무에 추가</S.addTree>
+                  <S.addTree
+                    onClick={() => {
+                      // 선택된 hobby를 activity 형태로 만들어서 전달
+                      const newActivity = {
+                        activityId: Date.now(), // 임시 ID
+                        activityName: hobby.hobbyName,
+                        activityStart: new Date().toISOString().slice(0, 10),
+                        activityRecent: new Date().toISOString().slice(0, 10),
+                        linkedHobbyId: hobby.hobbyId,
+                        linkedHobbyName: hobby.hobbyName,
+                        // 추가: 좌표값 지정 (원하는 위치로)
+                        top: "480px", // 예: 원하는 top 값
+                        left: "45%", // 예: 원하는 left 값
+                      };
+
+                      navigate("/mypage", {
+                        state: {
+                          newActivities: [newActivity], // 배열로 전달
+                        },
+                      });
+                    }}
+                  >
+                    나무에 추가
+                  </S.addTree>
                 </S.RecommaendBox>
               ))}
-            </S.RecommendRow>
 
-            <S.ArrowImage onClick={() => navigate("/")}>
-              <img src={Arrow} alt="메인으로 이동" />
-            </S.ArrowImage>
+              <S.ArrowImage onClick={() => navigate("/explore/taste")}>
+                <img src={Arrow} alt="메인으로 이동" />
+              </S.ArrowImage>
+            </S.RecommendRow>
           </S.RecommendSection>
         </S.MainColumn>
       </S.Wrrapper>
