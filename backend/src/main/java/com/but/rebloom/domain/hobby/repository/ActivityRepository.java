@@ -26,4 +26,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     // activityRecent를 기준으로 내림차순 정렬하여 조회
     List<Activity> findByUser_UserEmailOrderByActivityRecentDesc(String userEmail);
+
+    // 유저 이메일로 Activity 삭제
+    void deleteActivityByUser_UserEmail(String userEmail);
 }
