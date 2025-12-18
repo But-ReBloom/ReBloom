@@ -11,6 +11,7 @@ import { achievementApi } from "../../api/achievement";
 import type { FindUserInfoResponse } from "../../types/auth";
 import type { GetUserAchievementResponse } from "../../types/achievement";
 import Tree from "../../assets/images/Tree.svg";
+import LoadingPage from "../loadingpage/loading";
 
 /* ===============================
    활동 상세 더미 (API 명세 동일)
@@ -248,7 +249,7 @@ export default function Mypage() {
     fetchData();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingPage />;
 
   return (
     <>

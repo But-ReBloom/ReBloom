@@ -4,8 +4,8 @@ import { toast, ToastContainer } from "react-toastify";
 import * as S from "./style.ts";
 import Google from "../../assets/images/Google.svg";
 
-
 import { authApi } from "../../api/auth";
+import { hobbyApi } from "../../api/hobby";
 
 
 export default function Right_box() {
@@ -17,10 +17,42 @@ export default function Right_box() {
 
   useEffect(() => {
     const userId = location.state?.id;
+    const fromHobbyTest = location.state?.from === "hobby-test";
+    
     if (userId) {
       toast.success(`로그인을 진행해주세요! ${userId}님!`);
     }
+    if (fromHobbyTest) {
+      toast.info("취향 테스트 결과를 보려면 로그인해주세요!");
+    }
   }, [location.state]); // state가 바뀔 때만 실행
+
+  // 저장된 취향 테스트 점수 처리
+  const processPendingHobbyTest = async () => {
+    const pendingTest = localStorage.getItem("pendingHobbyTest");
+    if (pendingTest) {
+      try {
+        const finalAverage = JSON.parse(pendingTest);
+        const response = await hobbyApi.recommendHobby(finalAverage);
+        localStorage.removeItem("pendingHobbyTest");
+        
+        if (response.success) {
+          navigate("/test/result", {
+            state: {
+              type: "HobbyTest",
+              finalAverage,
+              result: response.data,
+            },
+          });
+          return true;
+        }
+      } catch (error) {
+        console.error("Failed to process pending hobby test", error);
+        localStorage.removeItem("pendingHobbyTest");
+      }
+    }
+    return false;
+  };
 
   const handleSubmit = async () => {
     if (!userEmail.trim() || !password.trim()) {
@@ -39,7 +71,12 @@ export default function Right_box() {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("userName", response.data.userName);
         localStorage.setItem("userId", response.data.userId);
-        navigate("/", { state: { id: response.data.userName } });
+        
+        // 저장된 취향 테스트가 있으면 처리
+        const processed = await processPendingHobbyTest();
+        if (!processed) {
+          navigate("/", { state: { id: response.data.userName } });
+        }
       } else {
         toast.error(
           response.message || "서버와의 통신 중 오류가 발생했습니다."
