@@ -5,16 +5,13 @@ import Achieve from "../../assets/images/Archive.svg";
 import React_svg from "../../assets/images/react.svg";
 import { ImageOfTier } from "../../components/determine_tier/determine_tier";
 import Rebloom from "../../assets/images/ReBloom.png";
-import { useEffect, useState } from "react";
-// import { authApi } from "../../api/auth";
-// import { achievementApi } from "../../api/achievement";
+import { useState } from "react";
 import type { FindUserInfoResponse } from "../../types/auth";
 import type { GetUserAchievementResponse } from "../../types/achievement";
 import Tree from "../../assets/images/Tree.svg";
 
-
 /* ===============================
-   활동 상세 더미 (API 명세 동일)
+   활동 상세 더미
 ================================ */
 interface ActivityDetail {
   activityId: number;
@@ -61,6 +58,44 @@ const activityDummyList: ActivityDetail[] = [
 ];
 
 /* ===============================
+   업적 더미
+================================ */
+const achievementDummyList: GetUserAchievementResponse[] = [
+  {
+    achievementId: 1,
+    userAchievementTitle: "첫 활동 시작",
+    userAchievementDescription: "처음으로 활동을 시작했어요",
+    userAchievementRewardPoint: 100,
+    userAchievementTierPoint: 50,
+    userAchievementIsSuccess: true,
+  },
+  {
+    achievementId: 2,
+    userAchievementTitle: "연속 3일 활동",
+    userAchievementDescription: "3일 연속 활동을 기록했어요",
+    userAchievementRewardPoint: 200,
+    userAchievementTierPoint: 100,
+    userAchievementIsSuccess: true,
+  },
+  {
+    achievementId: 3,
+    userAchievementTitle: "연속 7일 활동",
+    userAchievementDescription: "7일 연속 활동 달성",
+    userAchievementRewardPoint: 300,
+    userAchievementTierPoint: 150,
+    userAchievementIsSuccess: false,
+  },
+  {
+    achievementId: 4,
+    userAchievementTitle: "환경 보호 실천가",
+    userAchievementDescription: "환경 관련 활동 5회 달성",
+    userAchievementRewardPoint: 250,
+    userAchievementTierPoint: 120,
+    userAchievementIsSuccess: true,
+  },
+];
+
+/* ===============================
    유틸
 ================================ */
 const getTierName = (points: number): string => {
@@ -75,54 +110,51 @@ const getTierName = (points: number): string => {
 /* ===============================
    Left Section
 ================================ */
-interface LeftSectionProps {
-  userInfo: FindUserInfoResponse | null;
+function LeftSection({
+  userInfo,
+  achievements,
+}: {
+  userInfo: FindUserInfoResponse;
   achievements: GetUserAchievementResponse[];
-}
-
-function LeftSection({ userInfo, achievements }: LeftSectionProps) {
+}) {
   const completed = achievements.filter((a) => a.userAchievementIsSuccess);
-  const tier = userInfo ? getTierName(userInfo.userTierPoint) : "bronze";
+  const tier = getTierName(userInfo.userTierPoint);
   const tierImage = ImageOfTier(tier);
 
   return (
     <S.LeftSection>
-      <S.UserInfoSection>
-        <S.ProfileInfo>
-          <S.UserImage src={React_svg} style={{ padding: 12 }} />
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <S.UserName>{userInfo?.userName || "Guest"}</S.UserName>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <S.UserTier>{tier}</S.UserTier>
-              {tierImage && <img src={tierImage} width={32} />}
-            </div>
+      <S.ProfileInfo>
+        <S.UserImage src={React_svg} style={{ padding: 12 }} />
+        <div>
+          <S.UserName>{userInfo.userName}</S.UserName>
+          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+            {tierImage && <img src={tierImage} width={28} />}
+            <S.UserTier>{tier}</S.UserTier>
           </div>
-        </S.ProfileInfo>
+        </div>
+      </S.ProfileInfo>
 
-        <S.PointArchive>
-          <S.PnA>
-            <S.addedimage src={Point} />
-            {userInfo?.userTierPoint ?? 0}P
-          </S.PnA>
-          <S.PnA>
-            <S.addedimage src={Rebloom} />
-            {userInfo?.userPoint ?? 0}P
-          </S.PnA>
-          <S.PnA>
-            <S.addedimage src={Achieve} />
-            {completed.length}개
-          </S.PnA>
-        </S.PointArchive>
+      <S.PointArchive>
+        <S.PnA>
+          <S.addedimage src={Point} />
+          {userInfo.userTierPoint}P
+        </S.PnA>
+        <S.PnA>
+          <S.addedimage src={Rebloom} />
+          {userInfo.userPoint}P
+        </S.PnA>
+        <S.PnA>
+          <S.addedimage src={Achieve} />
+          {completed.length}개
+        </S.PnA>
+      </S.PointArchive>
 
-        <S.ArchiveMent>완료한 업적</S.ArchiveMent>
-        <S.ArchiveList>
-          {completed.map((ach) => (
-            <S.Box key={ach.achievementId}>
-              {ach.userAchievementTitle}
-            </S.Box>
-          ))}
-        </S.ArchiveList>
-      </S.UserInfoSection>
+      <S.ArchiveMent>완료한 업적</S.ArchiveMent>
+      <S.ArchiveList>
+        {completed.map((ach) => (
+          <S.Box key={ach.achievementId}>{ach.userAchievementTitle}</S.Box>
+        ))}
+      </S.ArchiveList>
     </S.LeftSection>
   );
 }
@@ -141,26 +173,11 @@ function RightSection({
   const [selectedActivity, setSelectedActivity] =
     useState<ActivityDetail | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-  const completed = achievements.filter((a) => a.userAchievementIsSuccess);
-
-  const completedPoints = completed.reduce(
-    (sum, a) => sum + a.userAchievementRewardPoint,
-    0
-  );
-    
-  void completedPoints;
-
-  const completedTierPoints = completed.reduce(
-    (sum, a) => sum + a.userAchievementTierPoint,
-    0
-  );
-
-  void completedTierPoints;
+  const [isChangePopupOpen, setIsChangePopupOpen] = useState(false);
 
   return (
     <S.RightSection>
-      <div style={{ display: "flex", gap: 20, position: "fixed", top: 120, left: 1030 }}>
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: 20 }}>
         <S.ChoiceBtn onClick={() => setViewMode("box")}>업적 보기</S.ChoiceBtn>
         <S.ChoiceBtn onClick={() => setViewMode("tree")}>나무 보기</S.ChoiceBtn>
       </div>
@@ -169,19 +186,17 @@ function RightSection({
         <>
           <S.DetailTitle>나무 보기</S.DetailTitle>
           <S.TreeWrapper>
-            <S.TreeImage src={Tree} style={{ width: "700px" }} />
-
+            <S.TreeImage src={Tree} />
             {activityDummyList.map((act, idx) => (
               <S.TreeActivity
                 key={act.activityId}
-                onClick={() => {
-                  setSelectedActivity(act);
-                  setIsPopupOpen(true);
-                }}
                 style={{
                   top: `${60 + idx * 70}px`,
                   left: idx % 2 === 0 ? "30%" : "65%",
-                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  setSelectedActivity(act);
+                  setIsPopupOpen(true);
                 }}
               >
                 {act.activityName}
@@ -191,16 +206,61 @@ function RightSection({
         </>
       )}
 
+      {/* 활동 상세 팝업 */}
       {isPopupOpen && selectedActivity && (
         <S.PopupOverlay onClick={() => setIsPopupOpen(false)}>
           <S.PopupBox onClick={(e) => e.stopPropagation()}>
             <S.PopupTitle>{selectedActivity.activityName}</S.PopupTitle>
-            <S.PopupContent>
-              <p>취미: {selectedActivity.linkedHobbyName}</p>
-              <p>시작일: {selectedActivity.activityStart}</p>
-              <p>최근 활동일: {selectedActivity.activityRecent}</p>
-            </S.PopupContent>
-            <S.PopupClose onClick={() => setIsPopupOpen(false)}>
+            <p>취미: {selectedActivity.linkedHobbyName}</p>
+            <p>시작일: {selectedActivity.activityStart}</p>
+            <p>최근 활동일: {selectedActivity.activityRecent}</p>
+
+            <S.PopupClose
+              onClick={() => {
+                setIsPopupOpen(false);
+                setIsChangePopupOpen(true);
+              }}
+            >
+              활동 변경
+            </S.PopupClose>
+          </S.PopupBox>
+        </S.PopupOverlay>
+      )}
+
+      {/* 활동 변경 팝업 */}
+      {isChangePopupOpen && (
+        <S.PopupOverlay onClick={() => setIsChangePopupOpen(false)}>
+          <S.PopupBox onClick={(e) => e.stopPropagation()}>
+            <S.PopupTitle>활동 변경</S.PopupTitle>
+
+            {activityDummyList.map((act) => (
+              <button
+                key={act.activityId}
+                style={{
+                  width: "100%",
+                  padding: 10,
+                  marginBottom: 8,
+                  borderRadius: 8,
+                  border: "1px solid #ddd",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  if (
+                    selectedActivity &&
+                    selectedActivity.activityId === act.activityId
+                  )
+                    return;
+
+                  setSelectedActivity(act);
+                  setIsChangePopupOpen(false);
+                  setIsPopupOpen(true);
+                }}
+              >
+                {act.activityName}
+              </button>
+            ))}
+
+            <S.PopupClose onClick={() => setIsChangePopupOpen(false)}>
               닫기
             </S.PopupClose>
           </S.PopupBox>
@@ -214,31 +274,11 @@ function RightSection({
    Main
 ================================ */
 export default function Mypage() {
-  const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
-  const [achievements, setAchievements] = useState<GetUserAchievementResponse[]>(
-    []
-  );
-  const [loading, setLoading] = useState(false);
-
-  void userInfo;
-  void achievements;
-  void loading;
-
-  useEffect(() => {
-    // ❌ 통신 부분 주석 처리
-    /*
-    const fetch = async () => {
-      const userRes = await authApi.findCurrentUser();
-      const achRes = await achievementApi.getUserAchievementsByUserEmail();
-      if (userRes.success) setUserInfo(userRes.data);
-      if (achRes.success) setAchievements(achRes.data);
-      setLoading(false);
-    };
-    fetch();
-    */
-  }, []);
-
-  if (loading) return <div>Loading...</div>;
+  const userDummy: FindUserInfoResponse = {
+    userName: "ReBloom User",
+    userPoint: 1200,
+    userTierPoint: 1800,
+  };
 
   return (
     <>
@@ -246,8 +286,11 @@ export default function Mypage() {
       <S.Background>
         <S.Wrapper>
           <S.Container>
-            <LeftSection userInfo={userInfo} achievements={achievements} />
-            <RightSection achievements={achievements} />
+            <LeftSection
+              userInfo={userDummy}
+              achievements={achievementDummyList}
+            />
+            <RightSection achievements={achievementDummyList} />
           </S.Container>
         </S.Wrapper>
       </S.Background>
