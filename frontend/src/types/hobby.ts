@@ -20,6 +20,7 @@ export interface UserAnswerRequest {
 
 export interface HobbyScoreResponse {
     hobbyName: string;
+    hobbyId?: number; 
     distance: number;
 }
 
