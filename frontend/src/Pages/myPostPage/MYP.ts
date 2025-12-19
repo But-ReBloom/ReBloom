@@ -51,7 +51,8 @@ export const ProfileSection = styled.div`
         strong {
             display: block;
             font-size: 1rem;
-            margin-top: 13px;
+            margin-bottom: 5px;
+            margin-left: 5px;
         }
         p {
             font-size: 0.8rem;
@@ -77,20 +78,6 @@ export const WritePostButton = styled.button`
     }
 `;
 
-export const BackButton = styled.button`
-    margin-top: 10px;
-    padding: 6px 12px;
-    background-color: #eee;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-
-    &:hover {
-        background-color: #ddd;
-    }
-`;
-
-/* ===== Search ===== */
 export const SearchBox = styled.div`
     margin-top: 15px;
 
@@ -213,7 +200,6 @@ export const SubmitButton = styled.button<{ disabled?: boolean }>`
     }
 `;
 
-/* ===== Sidebar Components ===== */
 export const Divider = styled.hr`
     border: none;
     border-top: 1px solid #ddd;
@@ -247,5 +233,18 @@ export const SubMenu = styled.div`
         &:hover {
             color: #2b90d9;
         }
+    }
+`;
+export const BackButton = styled.button`
+    margin-top: 10px;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    background-color: #eee;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #ddd;
     }
 `;

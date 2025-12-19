@@ -6,16 +6,12 @@ import {
     CloseIconImg,
     LogoImage,
     Sidebar,
-    Divider,
-    CafeInfo,
     ProfileSection,
     WritePostButton,
-    SearchBox,
-    NavMenu,
-    SubMenu,
     PostEditorContainer,
     CategorySelectWrapper,
     CategorySelect,
+    BackButton,
 } from './MYP';
 
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
@@ -28,7 +24,7 @@ import type { FindUserInfoResponse } from '../../types/auth';
 
 function MyPostPage() {
     const navigate = useNavigate();
-    const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+    // const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
     const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
     const [selectedCategory, setSelectedCategory] = useState('소통');
     const [title, setTitle] = useState('');
@@ -54,9 +50,9 @@ function MyPostPage() {
         fetchUserInfo();
     }, []);
 
-    const toggleCategory = (category: string) => {
-        setExpandedCategory(prev => (prev === category ? null : category));
-    };
+    // const toggleCategory = (category: string) => {
+    //     setExpandedCategory(prev => (prev === category ? null : category));
+    // };
 
     const handleCloseClick = () => navigate('/');
     const handleClear = () => {
@@ -111,31 +107,30 @@ function MyPostPage() {
             setLoading(false);
         }
     };
+    
 
     return (
         <Container>
             <Sidebar>
                 <LogoImage src={RebloomLogo} alt="Rebloom Logo" onClick={() => navigate('/')} />
-                <Divider />
-                <CafeInfo><p>Rebloom 게시글 페이지입니다.</p></CafeInfo>
-
+                
                 <ProfileSection>
                     <img src={React_svg} alt="프로필" />
                     <div>
-                        <strong>{userInfo?.userName || "Guest"}</strong>
-                        <p>레벨 {userInfo ? Math.floor(userInfo.userTierPoint / 1000) + 1 : 1}</p>
+                        <strong>{userInfo?.userName || '사용자 이름'}</strong>
                     </div>
+
                 </ProfileSection>
 
-                <WritePostButton onClick={() => navigate('/post')}>
-                    게시글 보기
-                </WritePostButton>
+            <WritePostButton onClick={() => navigate(-1)}>
+                채널로 돌아가기
+            </WritePostButton>
+                <BackButton onClick={() => navigate('/community')}>
+                    ← 커뮤니티로 돌아가기
+                </BackButton>
 
-                <SearchBox>
-                    <input type="text" placeholder="게시글 검색" />
-                </SearchBox>
 
-                <NavMenu>
+                {/* <NavMenu>
                     <ul>
                         {categories.map(category => (
                             <li key={category.name}>
@@ -146,7 +141,7 @@ function MyPostPage() {
                             </li>
                         ))}
                     </ul>
-                </NavMenu>
+                </NavMenu> */}
             </Sidebar>
 
             <PostEditorContainer>
