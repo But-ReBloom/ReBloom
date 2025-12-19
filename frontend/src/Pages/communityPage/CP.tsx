@@ -14,13 +14,56 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Header from '../../components/mainpage-Header/mph';
-import { channelApi } from '../../api/channel';
 
 interface Channel {
     channelId: number;
     channelName: string;
     channelIntro: string;
 }
+
+// 더미 채널 데이터 (시현용)
+const dummyChannels: Channel[] = [
+    {
+        channelId: 1,
+        channelName: '러닝 크루',
+        channelIntro: '함께 달리며 건강을 챙기는 러닝 커뮤니티입니다.',
+    },
+    {
+        channelId: 2,
+        channelName: '홈쿠킹 연구소',
+        channelIntro: '집에서 새로운 요리 레시피를 공유하는 공간입니다.',
+    },
+    {
+        channelId: 3,
+        channelName: '독서 모임',
+        channelIntro: '매주 책을 읽고 이야기를 나누는 독서 동아리입니다.',
+    },
+    {
+        channelId: 4,
+        channelName: '사진 찍는 사람들',
+        channelIntro: '일상의 순간을 카메라에 담는 사진 동호회입니다.',
+    },
+    {
+        channelId: 5,
+        channelName: '영화 리뷰 클럽',
+        channelIntro: '최신 영화부터 명작까지 리뷰를 공유하는 모임입니다.',
+    },
+    {
+        channelId: 6,
+        channelName: '캠핑 어디까지 가봤니',
+        channelIntro: '캠핑 장소와 장비 정보를 공유하는 캠핑 마니아 모임입니다.',
+    },
+    {
+        channelId: 7,
+        channelName: '보드게임 카페',
+        channelIntro: '다양한 보드게임을 함께 즐기는 게이머들의 공간입니다.',
+    },
+    {
+        channelId: 8,
+        channelName: '식물 집사 모임',
+        channelIntro: '반려식물 키우기 팁과 경험을 나누는 모임입니다.',
+    },
+];
 
 function CommunityPage() {
     const navigate = useNavigate();
@@ -29,27 +72,13 @@ function CommunityPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchChannels = async () => {
-            try {
-                setLoading(true);
-                const response = await channelApi.getAllChannels();
-                if (response.success && response.data) {
-                    const channelList = response.data.responses.map((ch) => ({
-                        channelId: ch.channelId,
-                        channelName: ch.channelName,
-                        channelIntro: ch.channelIntro,
-                    }));
-                    setChannels(channelList);
-                }
-            } catch (error) {
-                console.error('채널 목록 조회 실패:', error);
-                // API 실패 시 빈 배열 유지
-            } finally {
-                setLoading(false);
-            }
-        };
+        // 더미 데이터 사용 (시현용)
+        setLoading(true);
+        setTimeout(() => {
+            setChannels(dummyChannels);
+            setLoading(false);
+        }, 300); // 살짝 로딩 효과
         
-        fetchChannels();
         const joined = JSON.parse(localStorage.getItem('joinedChannels') || '[]');
         setJoinedChannels(joined);
     }, []);
