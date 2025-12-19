@@ -108,7 +108,7 @@ public class ChannelUseCase {
     // 승인된 채널 목록
     public List<Channel> getApprovedChannels() {
 //        User currentUser = findCurrentUserUseCase.getCurrentUser();
-
+//
 //        if (!currentUser.getUserRole().equals(Role.ADMIN)) {
 //            throw new NoAuthorityException("조회할 권한이 없습니다.");
 //        }
