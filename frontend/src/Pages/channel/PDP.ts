@@ -52,7 +52,8 @@ export const ProfileSection = styled.div`
         strong {
             display: block;
             font-size: 1rem;
-            margin-top: 13px;
+            margin-bottom: 5px;
+            margin-left: 5px;
         }
         p {
             font-size: 0.8rem;
