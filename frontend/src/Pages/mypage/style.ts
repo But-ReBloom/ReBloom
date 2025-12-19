@@ -148,14 +148,6 @@ export const ProgressTitle = styled.div`
   align-items: center;
 `;
 
-export const ProgressBar = styled.div`
-  width: 350px;
-  height: 18px;
-  background: #e5e7eb;
-  border-radius: 999px;
-  overflow: hidden;
-`;
-
 export const ProgressFill = styled.div<{ $progress: number }>`
   width: ${({ $progress }) => $progress}%;
   height: 100%;
@@ -260,4 +252,20 @@ export const PopupClose = styled.button`
   background: linear-gradient(90deg, #41a6ff, #3e55bf);
   color: white;
   cursor: pointer;
+`;
+
+export const ProgressWrapper = styled.div`
+  width: 100%;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 4px;
+`;
+
+export const ProgressBar = styled.div<{ progress: number }>`
+  width: ${({ progress }) => progress}%;
+  height: 100%;
+  background-color: #4caf50;
+  transition: width 0.3s ease;
 `;
