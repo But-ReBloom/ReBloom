@@ -26,7 +26,6 @@ import React_svg from '../../assets/images/react.svg';
 import { authApi } from '../../api/auth';
 import { channelApi } from '../../api/channel';
 import type { FindUserInfoResponse } from '../../types/auth';
-import type { FindChannelDetailedInfoResponse } from '../../types/channel';
 
 interface Channel {
     channelId: number;

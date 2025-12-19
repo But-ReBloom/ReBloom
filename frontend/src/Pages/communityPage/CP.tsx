@@ -27,7 +27,6 @@ function CommunityPage() {
     const [channels, setChannels] = useState<Channel[]>([]);
     const [joinedChannels, setJoinedChannels] = useState<number[]>([]);
     const [loading, setLoading] = useState(true);
-    const [searchKeyword, setSearchKeyword] = useState('');
 
     useEffect(() => {
         const fetchChannels = async () => {
@@ -54,36 +53,6 @@ function CommunityPage() {
         const joined = JSON.parse(localStorage.getItem('joinedChannels') || '[]');
         setJoinedChannels(joined);
     }, []);
-
-    const handleSearch = async () => {
-        if (!searchKeyword.trim()) {
-            // 검색어가 없으면 전체 목록 다시 로드
-            const response = await channelApi.getApprovedChannels();
-            if (response.success && response.data) {
-                const channelList = response.data.responses.map((ch) => ({
-                    channelId: ch.channelId,
-                    channelName: ch.channelName,
-                    channelIntro: ch.channelIntro,
-                }));
-                setChannels(channelList);
-            }
-            return;
-        }
-        
-        try {
-            const response = await channelApi.searchChannel({ keyword: searchKeyword });
-            if (response.success && response.data) {
-                const channelList = response.data.responses.map((ch) => ({
-                    channelId: ch.channelId,
-                    channelName: ch.channelName,
-                    channelIntro: ch.channelIntro,
-                }));
-                setChannels(channelList);
-            }
-        } catch (error) {
-            console.error('채널 검색 실패:', error);
-        }
-    };
 
     const handleJoin = (channelId: number) => {
         if (joinedChannels.includes(channelId)) return;

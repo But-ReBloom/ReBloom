@@ -98,10 +98,6 @@ public class ChannelUseCase {
         List<Channel> channels = channelRepository
                 .searchByKeyword(request.getKeyword());
 
-        if (channels.isEmpty()) {
-            throw new ChannelNotFoundException("채널 조회 실패");
-        }
-
         return channels;
     }
 
@@ -114,10 +110,6 @@ public class ChannelUseCase {
 //        }
 
         List<Channel> channels = channelRepository.findByChannelStatusAccepted();
-
-        if (channels.isEmpty()) {
-            throw new ChannelNotFoundException("채널 조회 실패");
-        }
 
         return channels;
     }
