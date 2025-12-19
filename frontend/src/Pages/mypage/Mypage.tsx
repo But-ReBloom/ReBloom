@@ -15,7 +15,7 @@ import Tree from "../../assets/images/Tree.svg";
 import LoadingPage from "../loadingpage/loading";
 
 /* ===============================
-   활동 상세 타입 (API 응답 기반)
+   활동 상세 타입
 ================================ */
 interface ActivityDetail {
   activityId: number;
@@ -25,7 +25,6 @@ interface ActivityDetail {
   linkedHobbyId: number;
   linkedHobbyName: string;
 }
-
 
 /* ===============================
    유틸
@@ -115,14 +114,12 @@ function RightSection({
     (sum, a) => sum + a.userAchievementRewardPoint,
     0
   );
-
   void completedPoints;
 
   const completedTierPoints = completed.reduce(
     (sum, a) => sum + a.userAchievementTierPoint,
     0
   );
-
   void completedTierPoints;
 
   return (
@@ -154,23 +151,58 @@ function RightSection({
         <>
           <S.DetailTitle>업적 보기</S.DetailTitle>
           <S.ArchiveList>
-            {achievements.map((ach) => (
-              <S.Box
-                key={ach.achievementId}
-                style={{ opacity: ach.userAchievementIsSuccess ? 1 : 0.5 }}
-              >
-                <div style={{ fontWeight: "bold" }}>
-                  {ach.userAchievementTitle}
-                </div>
-                <div style={{ fontSize: "12px", marginTop: "4px" }}>
-                  진행률: {Math.round(ach.userAchievementProgress)}%
-                </div>
-                <div style={{ fontSize: "12px" }}>
-                  보상: {ach.userAchievementRewardPoint}P / 티어:{" "}
-                  {ach.userAchievementTierPoint}P
-                </div>
-              </S.Box>
-            ))}
+            {achievements.map((ach) => {
+              const progress = Math.min(
+                100,
+                Math.max(0, Math.round(ach.userAchievementProgress))
+              );
+
+              return (
+                <S.Box
+                  key={ach.achievementId}
+                  style={{
+                    opacity: ach.userAchievementIsSuccess ? 1 : 0.5,
+                  }}
+                >
+                  <div style={{ fontWeight: "bold" }}>
+                    {ach.userAchievementTitle}
+                  </div>
+
+                  <div style={{ fontSize: "12px", marginTop: "4px" }}>
+                    진행률: {progress}%
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "12px",
+                      backgroundColor: "#e0e0e0",
+                      borderRadius: "4px",
+                      margin: "4px 0",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${progress}%`,
+                        height: "100%",
+                        backgroundColor: ach.userAchievementIsSuccess
+                          ? "rgb(0, 198, 89)"
+                          : "rgb(0, 68, 255)",
+                        transition: "width 0.3s ease",
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ fontSize: "12px" }}>
+                    보상: {ach.userAchievementRewardPoint}P / 티어:{" "}
+                    {ach.userAchievementTierPoint}P
+                  </div>
+                </S.Box>
+              );
+            })}
+
             {achievements.length === 0 && (
               <div style={{ color: "#888" }}>업적이 없습니다.</div>
             )}
@@ -185,7 +217,15 @@ function RightSection({
             <S.TreeImage src={Tree} style={{ width: "700px" }} />
 
             {activities.length === 0 ? (
-              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", color: "#888" }}>
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  color: "#888",
+                }}
+              >
                 아직 추가된 활동이 없습니다.
               </div>
             ) : (
@@ -246,39 +286,32 @@ export default function Mypage() {
         const userRes = await authApi.findCurrentUser();
         if (userRes.success) {
           setUserInfo(userRes.data);
-          // Fetch achievements using userEmail
-          try {
-            const achRes =
-              await achievementApi.getUserAchievementsByUserEmail();
-            if (achRes.success) setAchievements(achRes.data);
-          } catch (error) {
-            console.error("Failed to fetch achievements", error);
-          }
-          
-          // Fetch activities from API
-          try {
-            const actRes = await hobbyApi.findAllActivities();
-            if (actRes.success) {
-              const mappedActivities: ActivityDetail[] = actRes.data.map((item) => ({
+
+          const achRes =
+            await achievementApi.getUserAchievementsByUserEmail();
+          if (achRes.success) setAchievements(achRes.data);
+
+          const actRes = await hobbyApi.findAllActivities();
+          if (actRes.success) {
+            setActivities(
+              actRes.data.map((item) => ({
                 activityId: item.activityId,
                 activityName: item.activityName,
                 activityStart: item.activityStart,
                 activityRecent: item.activityRecent,
                 linkedHobbyId: item.linkedHobbyId,
                 linkedHobbyName: item.linkedHobbyName,
-              }));
-              setActivities(mappedActivities);
-            }
-          } catch (error) {
-            console.error("Failed to fetch activities", error);
+              }))
+            );
           }
         }
       } catch (error) {
-        console.error("Failed to fetch user info", error);
+        console.error("Failed to fetch mypage data", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
