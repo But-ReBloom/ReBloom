@@ -50,7 +50,7 @@ public class ChannelController {
     }
 
     // 승인된 채널 목록 조회
-    @GetMapping("/admin/find/approve")
+    @GetMapping("/find/all")
     public ResponseEntity<ApiResponse<FindChannelResponse>> getApprovedChannels() {
         List<Channel> responses = channelUseCase.getApprovedChannels();
         return ResponseEntity.ok(ApiResponse.success(FindChannelResponse.from(responses)));
