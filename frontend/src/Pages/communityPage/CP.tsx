@@ -42,27 +42,7 @@ const dummyChannels: Channel[] = [
         channelId: 4,
         channelName: '사진 찍는 사람들',
         channelIntro: '일상의 순간을 카메라에 담는 사진 동호회입니다.',
-    },
-    {
-        channelId: 5,
-        channelName: '영화 리뷰 클럽',
-        channelIntro: '최신 영화부터 명작까지 리뷰를 공유하는 모임입니다.',
-    },
-    {
-        channelId: 6,
-        channelName: '캠핑 어디까지 가봤니',
-        channelIntro: '캠핑 장소와 장비 정보를 공유하는 캠핑 마니아 모임입니다.',
-    },
-    {
-        channelId: 7,
-        channelName: '보드게임 카페',
-        channelIntro: '다양한 보드게임을 함께 즐기는 게이머들의 공간입니다.',
-    },
-    {
-        channelId: 8,
-        channelName: '식물 집사 모임',
-        channelIntro: '반려식물 키우기 팁과 경험을 나누는 모임입니다.',
-    },
+    }
 ];
 
 function CommunityPage() {
