@@ -32,7 +32,7 @@ function CommunityPage() {
         const fetchChannels = async () => {
             try {
                 setLoading(true);
-                const response = await channelApi.getApprovedChannels();
+                const response = await channelApi.getAllChannels();
                 if (response.success && response.data) {
                     const channelList = response.data.responses.map((ch) => ({
                         channelId: ch.channelId,

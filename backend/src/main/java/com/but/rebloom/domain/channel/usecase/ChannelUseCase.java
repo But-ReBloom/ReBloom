@@ -101,7 +101,13 @@ public class ChannelUseCase {
         return channels;
     }
 
-    // 승인된 채널 목록
+    // 일반 사용자용 승인된 채널 목록 (권한 체크 없음)
+    public List<Channel> getAllApprovedChannels() {
+        List<Channel> channels = channelRepository.findByChannelStatusAccepted();
+        return channels;
+    }
+
+    // 승인된 채널 목록 (관리자용)
     public List<Channel> getApprovedChannels() {
         User currentUser = findCurrentUserUseCase.getCurrentUser();
 

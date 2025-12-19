@@ -39,6 +39,13 @@ export const channelApi = {
             method: "GET",
         }) as Promise<ApiResponse<GetUserChannelInfoResponse>>,
 
+    // 일반 사용자용 채널 목록 조회
+    getAllChannels: () =>
+        client("/channel/find/all", {
+            method: "GET",
+        }) as Promise<ApiResponse<FindChannelResponse>>,
+
+    // 관리자용 승인된 채널 목록 조회
     getApprovedChannels: () => 
         client("/channel/admin/find/approve", {
             method: "GET",

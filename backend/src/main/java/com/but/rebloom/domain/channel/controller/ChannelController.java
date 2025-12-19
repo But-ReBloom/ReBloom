@@ -49,7 +49,14 @@ public class ChannelController {
         return ResponseEntity.ok(ApiResponse.success(GetUserChannelInfoResponse.from(userChannels)));
     }
 
-    // 승인된 채널 목록 조회
+    // 일반 사용자용 채널 목록 조회 (승인된 채널)
+    @GetMapping("/find/all")
+    public ResponseEntity<ApiResponse<FindChannelResponse>> getAllChannels() {
+        List<Channel> responses = channelUseCase.getAllApprovedChannels();
+        return ResponseEntity.ok(ApiResponse.success(FindChannelResponse.from(responses)));
+    }
+
+    // 승인된 채널 목록 조회 (관리자용)
     @GetMapping("/admin/find/approve")
     public ResponseEntity<ApiResponse<FindChannelResponse>> getApprovedChannels() {
         List<Channel> responses = channelUseCase.getApprovedChannels();
