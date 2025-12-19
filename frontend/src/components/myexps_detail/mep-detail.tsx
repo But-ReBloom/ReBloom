@@ -179,9 +179,7 @@ export default function MepDetail({ setStep, exp }: MepDetailProps) {
         {/* 다음/제출 버튼 */}
         <S.Arrows onClick={handleNext} style={{ opacity: isSubmitting ? 0.5 : 1, cursor: isSubmitting ? "not-allowed" : "pointer" }}>
           {page === 1 ? (
-            <span style={{ fontSize: "16px", fontWeight: "bold", color: "#333" }}>
-              {isSubmitting ? "제출 중..." : "제출하기"}
-            </span>
+            <img src={BlackArrowImg} alt="제출하기" />
           ) : (
             <img src={BlackArrowImg} alt="다음" />
           )}
