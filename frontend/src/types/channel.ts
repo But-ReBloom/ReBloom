@@ -2,7 +2,6 @@ export interface CreateChannelRequest {
     channelTitle: string;
     channelIntro: string;
     channelDescription: string;
-    userEmail: string;
     channelLinkedHobby1: number;
     channelLinkedHobby2?: number;
     channelLinkedHobby3?: number;
@@ -26,6 +25,7 @@ export type ApproveMemberRequest = ChannelMemberRequest;
 export type RejectMemberRequest = ChannelMemberRequest;
 
 export interface FindOneChannelResponse {
+    channelId: number;
     channelName: string;
     userId: string;
     userTier: string;

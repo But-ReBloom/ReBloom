@@ -11,6 +11,7 @@ import {
 import RebloomLogo from '../../assets/images/Rebloom-logo.svg';
 import CloseIcon from '../../assets/images/close.svg';
 import { useNavigate } from 'react-router-dom';
+import { channelApi } from '../../api/channel';
 
 interface ChannelRequest {
     channelId: number;
@@ -27,25 +28,16 @@ function ChannelApproval() {
     const [requests, setRequests] = useState<ChannelRequest[]>([]);
     const [expandedId, setExpandedId] = useState<number | null>(null);
 
-    const token = localStorage.getItem('token');
-
     useEffect(() => {
         const fetchPendingChannels = async () => {
             try {
-                const res = await fetch('/channel/admin/find/pending', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                const data = await res.json();
-                if (data.success && data.data?.responses) {
-                    const channels: ChannelRequest[] = data.data.responses.map((item: any) => ({
+                const response = await channelApi.getPendingChannels();
+                if (response.success && response.data?.responses) {
+                    const channels: ChannelRequest[] = response.data.responses.map((item) => ({
                         channelId: item.channelId,
                         channelName: item.channelName,
                         channelIntro: item.channelIntro,
-                        channelDescription: item.channelDescription,
+                        channelDescription: '',
                         userId: item.userId,
                         requestType: 'CREATE', 
                         channelStatus: 'WAITING',
@@ -58,7 +50,7 @@ function ChannelApproval() {
         };
 
         fetchPendingChannels();
-    }, [token]);
+    }, []);
 
     const toggleExpand = (id: number) => {
         setExpandedId(prev => (prev === id ? null : id));
@@ -66,15 +58,8 @@ function ChannelApproval() {
 
     const handleApprove = async (channelId: number) => {
         try {
-            const res = await fetch(`/channel/admin/approve/${channelId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            const data = await res.json();
-            if (data.success) {
+            const response = await channelApi.approveChannel(channelId);
+            if (response.success) {
                 setRequests(prev =>
                     prev.map(req =>
                         req.channelId === channelId ? { ...req, channelStatus: 'APPROVED' } : req
@@ -88,15 +73,8 @@ function ChannelApproval() {
 
     const handleReject = async (channelId: number) => {
         try {
-            const res = await fetch(`/channel/admin/reject/${channelId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            const data = await res.json();
-            if (data.success) {
+            const response = await channelApi.rejectChannel(channelId);
+            if (response.success) {
                 setRequests(prev =>
                     prev.map(req =>
                         req.channelId === channelId ? { ...req, channelStatus: 'REJECTED' } : req
