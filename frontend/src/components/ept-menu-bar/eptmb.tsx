@@ -45,8 +45,8 @@ export default function EPTmenuBar() {
         // Fetch approved channels
         const channelRes = await channelApi.getApprovedChannels();
         if (channelRes.success && channelRes.data.responses) {
-          setChannels(channelRes.data.responses.map((ch: FindOneChannelResponse, idx: number) => ({
-            channelId: idx + 1,
+          setChannels(channelRes.data.responses.map((ch: FindOneChannelResponse) => ({
+            channelId: ch.channelId,
             channelTitle: ch.channelName,
             channelIntro: ch.channelIntro,
           })));
