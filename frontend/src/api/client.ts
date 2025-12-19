@@ -1,10 +1,18 @@
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
+// 토큰이 필요 없는 공개 엔드포인트
+const publicEndpoints = [
+  "/channel/find/all",
+  "/channel/find/keyword",
+  "/hobby/find/all",
+];
+
 export const client = async (endpoint: string, options: RequestInit = {}) => {
   const url = `${BASE_URL}${endpoint}`;
   
-  // /auth 경로 중 current-user는 토큰 필요
-  const requiresAuth = !endpoint.startsWith("/auth") || endpoint === "/auth/find/current-user";
+  // /auth 경로 중 current-user는 토큰 필요, 공개 엔드포인트는 토큰 불필요
+  const isPublicEndpoint = publicEndpoints.some(pe => endpoint.startsWith(pe));
+  const requiresAuth = (!endpoint.startsWith("/auth") || endpoint === "/auth/find/current-user") && !isPublicEndpoint;
   const token = requiresAuth ? localStorage.getItem("token") : null;
   
   console.log(`API Request: ${endpoint}, requiresAuth: ${requiresAuth}, hasToken: ${token ? 'Yes' : 'No'}, tokenValue: ${token?.substring(0, 30)}...`);
