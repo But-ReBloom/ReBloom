@@ -71,7 +71,7 @@ export default function MepDetail({ setStep, exp }: MepDetailProps) {
       });
       
       if (!reviewQuestionRes.success) {
-        toast.error("리뷰 생성에 실패했습니다.");
+        navigate("/");
         return;
       }
       
