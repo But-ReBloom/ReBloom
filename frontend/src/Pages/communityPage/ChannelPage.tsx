@@ -24,6 +24,7 @@ import CloseIcon from '../../assets/images/close.svg';
 import React_svg from '../../assets/images/react.svg';
 
 import { authApi } from '../../api/auth';
+import { channelApi } from '../../api/channel';
 import type { FindUserInfoResponse } from '../../types/auth';
 
 interface Channel {
@@ -43,23 +44,6 @@ interface Post {
     likes: number;
     comments: string[];
 }
-
-const initialChannels: Channel[] = [
-    {
-        channelId: 1,
-        channelName: '러닝 크루',
-        channelIntro: '함께 달리는 러닝 커뮤니티',
-        description: '주말마다 함께 달리며 건강을 챙기는 크루입니다.',
-        hobbies: ['러닝', '운동', '건강'],
-    },
-    {
-        channelId: 2,
-        channelName: '홈쿠킹 연구소',
-        channelIntro: '집에서 요리하는 사람들',
-        description: '집에서 새로운 요리 레시피를 공유하는 공간입니다.',
-        hobbies: ['요리', '베이킹', '레시피'],
-    },
-];
 
 const initialPosts: Post[] = [
     {
@@ -95,10 +79,10 @@ function ChannelPage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
-    const [channels] = useState<Channel[]>(initialChannels);
     const [posts, setPosts] = useState<Post[]>(initialPosts);
     const [channel, setChannel] = useState<Channel | null>(null);
     const [userInfo, setUserInfo] = useState<FindUserInfoResponse | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -113,19 +97,43 @@ function ChannelPage() {
     }, []);
 
     useEffect(() => {
-        const currentChannel = channels.find(ch => String(ch.channelId) === id);
-        if (currentChannel) {
-            setChannel(currentChannel);
-        } else {
-            setChannel({
-                channelId: Number(id),
-                channelName: '알 수 없는 채널',
-                channelIntro: '',
-                description: '',
-                hobbies: [],
-            });
-        }
-    }, [id, channels]);
+        const fetchChannel = async () => {
+            if (!id) return;
+            
+            try {
+                setLoading(true);
+                const response = await channelApi.getChannel(Number(id));
+                if (response.success && response.data) {
+                    const data = response.data;
+                    const hobbies: string[] = [];
+                    if (data.linkedHobbyName1) hobbies.push(data.linkedHobbyName1);
+                    if (data.linkedHobbyName2) hobbies.push(data.linkedHobbyName2);
+                    if (data.linkedHobbyName3) hobbies.push(data.linkedHobbyName3);
+                    
+                    setChannel({
+                        channelId: data.channelId,
+                        channelName: data.channelTitle,
+                        channelIntro: data.channelIntro,
+                        description: data.channelDescription,
+                        hobbies: hobbies,
+                    });
+                }
+            } catch (error) {
+                console.error('채널 정보 조회 실패:', error);
+                setChannel({
+                    channelId: Number(id),
+                    channelName: '알 수 없는 채널',
+                    channelIntro: '',
+                    description: '',
+                    hobbies: [],
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        fetchChannel();
+    }, [id]);
 
     useEffect(() => {
         if (channel) {
@@ -133,7 +141,8 @@ function ChannelPage() {
         }
     }, [channel]);
 
-    if (!channel) return <p>로딩중...</p>;
+    if (loading) return <p>로딩중...</p>;
+    if (!channel) return <p>채널을 찾을 수 없습니다.</p>;
 
     return (
         <Container>
