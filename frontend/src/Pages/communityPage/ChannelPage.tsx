@@ -153,8 +153,8 @@ function ChannelPage() {
                     <img src={React_svg} alt="프로필" />
                     <div>
                         <strong>{userInfo?.userName || '사용자 이름'}</strong>
-                        <p>레벨 {userInfo ? Math.floor(userInfo.userTierPoint / 1000) + 1 : 1}</p>
                     </div>
+
                 </ProfileSection>
 
                 <WritePostButton
