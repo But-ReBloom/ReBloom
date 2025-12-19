@@ -94,7 +94,7 @@ function ChannelJoin() {
             const response = await channelApi.createChannel(request);
             
             if (response.success) {
-                setStatus('✅ 채널 생성 요청이 완료되었습니다. 관리자 승인을 기다려주세요.');
+                setStatus('✅ 채널이 생성되었습니다!');
                 setForm({
                     channelTitle: '',
                     channelIntro: '',
