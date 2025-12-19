@@ -27,19 +27,20 @@ public class JwtFilter extends OncePerRequestFilter {
             "/",
             "/auth/signup",
             "/auth/login",
-            "/auth/login/google",
-            "/auth/find/email",
+            "/auth/login/**",
+            "/auth/email/**",
             "/auth/email/**",
             "/achievement/**",
+            "/channel/create",
             "/channel/find/**",
             "/post/create",
             "/post/find/**",
-            "/hobby-test/get/**",
-            "/comment/find",
+            "/hobby-test/**",
+            "/comment/**",
+            "/heart/**",
             "/comment/create",
-            "/comment/update",
+            "/comment/find",
             "/heart/add",
-            "/hobby-review/**",
             "/heart/find",
             "/swagger-ui/**",
             "/v3/api-docs/**",
@@ -52,12 +53,6 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
-
-        // Preflight 요청 허용
-        if (request.getMethod().equals("OPTIONS")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         // 허용 경로면 그냥 통과
         if (isPermitAllPath(path)) {
